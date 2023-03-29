@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="1">
+        <file>
+            <url>src/th/co/cbank/project/view/PrintSavingBook.java</url>
+            <bookmark id="1">
+                <name/>
+                <line>308</line>
+                <key/>
+            </bookmark>
+        </file>
+    </editor-bookmarks>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group name="POS-SOFTPOS">
+            <file>file:/D:/NetbeansProjects/CBMartSave/src/cbmart/hoon/report/BuyHoonReport.jrxml</file>
+        </group>
+        <group name="test"/>
+        <group name="POS-SOFPOST"/>
+        <group name="CBMART">
+            <file>file:/D:/NetbeansProjects/CBankSystem/src/th/co/cbank/project/view/MainDialog.java</file>
+            <file>file:/D:/NetbeansProjects/CBankSystem/src/th/co/cbank/project/control/SaveAccountControl.java</file>
+            <file>file:/D:/NetbeansProjects/CBankSystem/src/th/co/cbank/project/report/PassBook_PSiPR9.java</file>
+        </group>
+        <group name="OSTHER"/>
+        <group name="INSALE"/>
+        <group name="CB">
+            <file>file:/D:/NetbeansProjects/CBankSystem/src/th/co/cbank/project/control/SaveSummaryControl.java</file>
+            <file>file:/D:/NetbeansProjects/CBankSystem/src/th/co/cbank/project/view/MainDialog.java</file>
+            <file>file:/D:/NetbeansProjects/CBankSystem/src/th/co/cbank/project/report/Transaction_Green_2.jrxml</file>
+            <file>file:/D:/NetbeansProjects/CBankSystem/src/th/co/cbank/project/model/SaveSummaryBean.java</file>
+        </group>
+        <group name="SaveProject"/>
+        <group name="POS_SOFTSET"/>
+        <group name="CBProject"/>
+        <group name="ProjectOther1">
+            <file>file:/D:/NetbeansProjects/CBankSystem/src/th/co/cbank/project/view/MainDialog.java</file>
+        </group>
+        <group name="Jeffer_Group"/>
+        <group name="ProjectCAT"/>
+        <group name="CBMart">
+            <file>file:/D:/NetbeansProjects/CBankSystem/src/th/co/cbank/project/view/MainDialog.java</file>
+            <file>file:/D:/NetbeansProjects/CBankSystem/src/th/co/cbank/project/view/ProfileListDialog.java</file>
+        </group>
+        <group name="INSALE_GROUP">
+            <file>file:/D:/NetbeansProjects/CBankSystem/src/th/co/cbank/project/control/MySQLConnect.java</file>
+            <file>file:/D:/NetbeansProjects/CBankSystem/src/th/co/cbank/project/control/BalanceControl.java</file>
+        </group>
+        <group/>
+    </open-files>
+</project-private>

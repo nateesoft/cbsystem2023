@@ -1,0 +1,22 @@
+V 1.0.7-2021.10.15
+
+V 1.0.7-2023.01.30 (use jre1.7)
+1. add table add_credit_limit
+create table add_credit_limit(
+id int NOT NULL AUTO_INCREMENT,
+system_create datetime,
+emp_code varchar(20),
+cust_code varchar(20),
+credit_amount double(10,2),
+PRIMARY KEY (id)
+);
+2. add columns for int_balance
+alter table cb_loan_account add column int_balance double(10,2) default 0.00;
+
+
+2023/03/29
+delete from cb_loan_account 
+where cust_code='3610400295040' and loan_docno='1030000002';
+delete from cb_transaction_loan 
+where t_custcode='3610400295040' and t_docno='1030000002';
+

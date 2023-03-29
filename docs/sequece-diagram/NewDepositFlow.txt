@@ -1,0 +1,30 @@
+title New Deposit Flow
+
+actor Employee
+fontawesome5solid f815 LoginSearchProfile
+fontawesome5solid f815 MainPage
+fontawesome5solid f815 ListMenuDialog
+database cbsystem
+fontawesome5solid f02f Printer
+
+Employee->LoginSearchProfile:login
+LoginSearchProfile->ListMenuDialog:<background:#yellow>go to Menu Popup</background>
+Employee->ListMenuDialog:select deposit menu
+Employee->ListMenuDialog:select account to deposit
+ListMenuDialog-->MainPage:load deposit account detail
+Employee->MainPage:input deposit amount
+Employee->MainPage:save data
+MainPage->cbsystem:save data
+activate MainPage
+cbsystem-->MainPage:result add db
+MainPage->MainPage:show success alert
+MainPage->MainPage:show list report popup
+deactivate MainPage
+opt select print slip
+Employee->Printer:do print slip
+Printer-->Employee:show popup menu list
+end
+opt select print transactoin
+Employee->Printer:do print transaction
+Printer-->Employee:show popup menu list
+end

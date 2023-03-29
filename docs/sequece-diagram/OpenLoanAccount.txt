@@ -1,0 +1,79 @@
+title Open Loan Account
+
+actor Employee
+fontawesome5solid f815 LoginSearchProfile
+fontawesome5solid f815 MainPage
+fontawesome5solid f815 ListMenuDialog
+fontawesome5solid f815 CreditLoanPopup
+database cbsystem
+fontawesome5solid f02f Printer
+
+Employee->LoginSearchProfile:login
+LoginSearchProfile->ListMenuDialog:<background:#yellow>go to Menu Popup</background>
+Employee->ListMenuDialog:select open loan menu
+ListMenuDialog-->MainPage:load profile account detail
+MainPage->MainPage:show detail tab
+Employee->MainPage:input loan amount
+MainPage->MainPage:verify loan amount
+alt loan limit not enough
+Employee->CreditLoanPopup:add more loan credit amount
+Employee->CreditLoanPopup:input credit limit
+Employee->CreditLoanPopup:input credit limit adjustment
+Employee->CreditLoanPopup:save data to db
+CreditLoanPopup->cbsystem:save data to db
+cbsystem-->CreditLoanPopup:result from db
+CreditLoanPopup->CreditLoanPopup:success alert
+CreditLoanPopup->MainPage:show new limit detail
+end
+Employee->MainPage:input date loan
+activate MainPage
+Employee->MainPage:input fee amount
+Employee->MainPage:input period month
+Employee->MainPage:input date start
+deactivate MainPage
+MainPage->MainPage:automate amount per month
+Employee->MainPage:save data
+MainPage->MainPage:verify data loan\ncheck guarantor
+alt add guarantor
+Employee->MainPage:add guarantor tab
+activate MainPage
+Employee->MainPage:input gurantor code
+Employee->MainPage:input Title deed data (option)
+Employee->MainPage:input evidence data (option)
+Employee->MainPage:save data
+deactivate MainPage
+MainPage->cbsystem:save in db
+cbsystem-->MainPage:result save
+end
+Employee->MainPage:save new loan account
+MainPage->cbsystem:save data to db
+activate MainPage
+cbsystem-->MainPage:result add db
+MainPage->MainPage:show success alert
+MainPage->MainPage:confirm to print front book
+deactivate MainPage
+alt yes to print front book
+MainPage->Printer:print loan front book
+MainPage->Printer:Auto print hoon paper preview
+MainPage<--Printer:print to preview
+end
+MainPage->MainPage:confirm to print transaction
+alt yes to print transaction
+MainPage->Printer:print loan front book
+MainPage->Printer:Auto print hoon paper preview
+MainPage<--Printer:print to preview
+end
+MainPage->MainPage:alert success save data
+MainPage->MainPage:Show printer option\n1. Print loan agreement\n2. Print the guarantor contract, sheet 1\n3. Print the guarantor contract, sheet 2
+alt option1
+Employee->MainPage:select option1
+MainPage->Printer:print loan agreement
+end
+alt option2
+Employee->MainPage:select option2
+MainPage->Printer:print guarantor contract sheet1
+end
+alt option3
+Employee->MainPage:select option3
+MainPage->Printer:print guarantor contract sheet2
+end

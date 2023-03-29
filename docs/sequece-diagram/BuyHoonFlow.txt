@@ -1,0 +1,25 @@
+title New Buy Hoon Flow
+
+actor Employee
+fontawesome5solid f815 LoginSearchProfile
+fontawesome5solid f815 MainPage
+fontawesome5solid f815 ListMenuDialog
+database cbsystem
+fontawesome5solid f02f Printer
+
+Employee->LoginSearchProfile:login
+LoginSearchProfile->ListMenuDialog:<background:#yellow>go to ListMenuDialog</background>
+Employee->ListMenuDialog:select buy hoon menu
+ListMenuDialog-->MainPage:load profile account detail
+Employee->MainPage:input hoon qty
+activate MainPage
+Employee->MainPage:input payment amount
+deactivate MainPage
+Employee->MainPage:save data
+MainPage->cbsystem:save data to db
+activate MainPage
+cbsystem-->MainPage:result add db
+MainPage->MainPage:show success alert
+deactivate MainPage
+MainPage->Printer:Auto print hoon paper preview
+MainPage<--Printer:print to preview

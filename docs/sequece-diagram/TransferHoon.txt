@@ -1,0 +1,29 @@
+title Transfer Hoon Flow
+
+actor Employee
+fontawesome5solid f815 LoginSearchProfile
+fontawesome5solid f815 MainPage
+fontawesome5solid f815 ListMenuDialog
+database cbsystem
+fontawesome5solid f02f Printer
+
+Employee->LoginSearchProfile:login
+LoginSearchProfile->ListMenuDialog:<background:#yellow>go to Menu Popup</background>
+Employee->ListMenuDialog:select buy hoon menu
+ListMenuDialog-->MainPage:load profile account detail
+Employee->MainPage:input member code
+activate MainPage
+Employee->MainPage:input account no
+Employee->MainPage:input hoon qty to transfer
+Employee->MainPage:input cid to transfer
+Employee->MainPage:input approve code
+deactivate MainPage
+Employee->MainPage:save data
+MainPage->MainPage:verify data to transfer hoon
+MainPage->cbsystem:save data to db
+activate MainPage
+cbsystem-->MainPage:result add db
+MainPage->MainPage:show success alert
+deactivate MainPage
+MainPage->Printer:Auto print hoon paper preview
+MainPage<--Printer:print to preview

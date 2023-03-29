@@ -1,0 +1,37 @@
+select concat('\'',p.p_custcode), p.p_custName, concat(' ',p.p_custsurname), 
+p.loan_balance,sum(l.loan_amount) loan_amount 
+from cb_profile p 
+inner join cb_loan_account l on p.p_custcode=l.cust_code 
+group by p.p_custcode into outfile 'C:/result2.csv' 
+FIELDS TERMINATED BY ',' OPTIONALLY ENCLOSED BY '"'
+LINES TERMINATED BY '\n';
+
+select * from cb_profile;
+select loan_balance from cb_profile where p_custcode='1101800445382';
+select sum(loan_amount) loan_amount from cb_loan_account where cust_code='1101800445382';
+
+update cb_profile p 
+set p.loan_balance=(select sum(l.loan_amount) from cb_loan_account l where l.cust_code=p.p_custcode) 
+where p_custcode='3610400463619';
+
+// 10/03/2023
+update cb_transaction_loan set 
+t_amount = (t_amount-t_loan_int_ar_int),
+t_loan_int_ar_int = 0
+where t_booktype='PM';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

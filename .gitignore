@@ -1,0 +1,12 @@
+/build
+/database
+/dist
+/issue-feature
+/lib
+/lib_dll
+/plugins
+/process
+/tools
+*.log
+*.zip
+*.xlsx

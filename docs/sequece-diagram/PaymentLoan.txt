@@ -1,0 +1,12 @@
+title Payment Loan Flow
+
+actor Employee
+fontawesome5solid f815 LoginSearchProfile
+fontawesome5solid f815 MainPage
+fontawesome5solid f815 ListMenuDialog
+database cbsystem
+fontawesome5solid f02f Printer
+
+Employee->LoginSearchProfile:login
+LoginSearchProfile->ListMenuDialog:<background:#yellow>go to Menu Popup</background>
+Employee->ListMenuDialog:select open payment loan menu

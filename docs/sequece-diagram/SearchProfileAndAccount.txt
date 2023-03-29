@@ -1,0 +1,32 @@
+title Search profile and account
+
+actor Employee
+fontawesome5solid f815 Login
+fontawesome5solid f815 MainPage
+fontawesome5solid f815 FindAccountPage
+fontawesome5solid f815 ListMenuDialog
+database cbsystem
+
+Employee->Login:
+Employee->Login:user+pass
+Login->Login:validate login
+Employee->Login:submit form
+Login->MainPage:submit form
+alt search profile account
+Employee->FindAccountPage:open page
+Employee->FindAccountPage:input data search
+FindAccountPage->cbsystem:findAccount
+FindAccountPage<--cbsystem:result listAccount
+Employee->FindAccountPage:select account
+FindAccountPage-->FindAccountPage: show account list
+Employee->FindAccountPage:select account to withdraw
+FindAccountPage->ListMenuDialog:show all menu
+end
+alt find by cid
+Employee->MainPage:input cid number
+MainPage->ListMenuDialog:show all menu
+end
+alt find by account no
+Employee->MainPage:input account no
+MainPage->ListMenuDialog:show all menu
+end

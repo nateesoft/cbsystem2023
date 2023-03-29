@@ -1,0 +1,32 @@
+title Open account Flow
+
+actor Employee
+fontawesome5solid f815 Login
+fontawesome5solid f815 MainPage
+fontawesome5solid f815 FindAccountPage
+fontawesome5solid f815 ListMenuDialog
+database cbsystem
+fontawesome5solid f02f Printer
+
+Employee->Login:
+Login->MainPage:user+pass
+alt case 1
+Employee->FindAccountPage:open page
+Employee->FindAccountPage:input data search
+FindAccountPage->cbsystem:findAccount
+FindAccountPage<--cbsystem:result listAccount
+Employee->FindAccountPage:select account
+end
+alt case 2
+Employee->MainPage:input cid number
+end
+FindAccountPage->ListMenuDialog:show all menu
+Employee->ListMenuDialog:select open account menu
+ListMenuDialog-->MainPage:load account form\nshow open account tab
+Employee->MainPage:input feeAmt\nand save data
+MainPage->cbsystem:save account data
+alt condition print front book
+MainPage-->Printer:[Yes] to print front book
+end
+Printer-->ListMenuDialog:show all menu
+Employee->ListMenuDialog:click exit
