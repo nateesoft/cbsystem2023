@@ -26,11 +26,9 @@ import th.co.cbank.project.control.CbLoanTablePaymentControl;
 import th.co.cbank.project.control.CbTransactionLoanControl;
 import th.co.cbank.project.control.ConfigControl;
 import th.co.cbank.project.control.DocumentGarunteeControl;
-import th.co.cbank.project.control.MySQLConnect;
 import th.co.cbank.project.control.PassBook_PSiPR9;
 import th.co.cbank.project.control.ProfileControl;
 import th.co.cbank.project.control.Value;
-import th.co.cbank.project.log.Log;
 import th.co.cbank.project.model.AddressBean;
 import th.co.cbank.project.model.BranchBean;
 import th.co.cbank.project.model.CbBondsmanBean;
@@ -1952,7 +1950,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btnChooseGuarantorActionPerformed
 
     private void btnDelSaveGuarantorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDelSaveGuarantorActionPerformed
-        btnDelGuarantor(txtLoanDocCode.getText());
+        btnDelGuarantor();
     }//GEN-LAST:event_btnDelSaveGuarantorActionPerformed
 
     private void btn4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn4ActionPerformed
@@ -2666,32 +2664,15 @@ public class NewLoanPanel extends javax.swing.JPanel {
             documentGarunteeBean.setIMAGE3(txtImg3.getText().replace("\\", "/"));
             documentGarunteeControl.saveDocumentGaruntee(documentGarunteeBean);
 
-            try {
-                //update running
-                String sql = "update cb_loan_config set "
-                        + "LoanRunning=LoanRunning+1,"
-                        + "BookNo=BookNo+1 "
-                        + "where LoanCode='" + cbLoanAccountBean.getLoan_type() + "'";
-                MySQLConnect.exeUpdate(sql);
-
-                sql = "update cb_profile set "
-                        + "Loan_Credit_Balance=Loan_Credit_Balance-" + cbLoanAccountBean.getLoan_amount() + ","
-                        + "Loan_Balance=Loan_Balance+" + cbLoanAccountBean.getLoan_amount() + " "
-                        + "where p_CustCode='" + cbLoanAccountBean.getCust_code() + "'";
-                MySQLConnect.exeUpdate(sql);
-
-                String sql1 = "update cb_config set LoanDocRunning=LoanDocRunning+1";
-                MySQLConnect.exeUpdate(sql1);
-
-                int confrim = JOptionPane.showConfirmDialog(this, "ท่านต้องการพิมพ์หน้าสมุดเงินกู้ใช่หรือไม่ ?");
-                if (confrim == JOptionPane.YES_OPTION) {
-                    printLoanFrontBook(loanDocNo);
-                }
-                isStep1 = true;
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, e.getMessage());
-                Log.write.error(e.getMessage());
+            //update running
+            loanConfigControl.updateRunningBookNo(cbLoanAccountBean.getLoan_type());
+            profileControl.updateLoanBalance(cbLoanAccountBean.getLoan_amount(),cbLoanAccountBean.getLoan_amount(),cbLoanAccountBean.getCust_code());
+            configControl.updateLoanDocRunning();
+            int confrim = JOptionPane.showConfirmDialog(this, "ท่านต้องการพิมพ์หน้าสมุดเงินกู้ใช่หรือไม่ ?");
+            if (confrim == JOptionPane.YES_OPTION) {
+                printLoanFrontBook(loanDocNo);
             }
+            isStep1 = true;
 
             //ถ้าข้อมูลถูกอัพเดตเรียบร้อย
             if (isStep1) {
@@ -2994,20 +2975,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
         return true;
     }
 
-    private void btnAssetGaruntee() {
-        DocumentGarunteeBean dBean = new DocumentGarunteeBean();
-        dBean.setDOC_NO("");
-        dBean.setDOC_DESC(ThaiUtil.Unicode2ASCII(txtAssetGaruntee1.getText()));
-        dBean.setIMAGE1(txtImg1.getText().replace("\\", "/"));
-        dBean.setIMGAE2(txtImg2.getText().replace("\\", "/"));
-        dBean.setIMAGE3(txtImg3.getText().replace("\\", "/"));
-
-        if (documentGarunteeControl.saveDocumentGaruntee(dBean)) {
-            JOptionPane.showMessageDialog(this, "บันทึกข้อมูลโฉนดเรียบร้อยแล้ว");
-        }
-    }
-
-    private void btnDelGuarantor(String loanDocNo) {
+    private void btnDelGuarantor() {
         int rowSel = tbGuarantor.getSelectedRow();
         if (rowSel == -1) {
             JOptionPane.showMessageDialog(this, "กรุณาเลือกรายการผู้ค้ำประกันที่ท่านต้องการลบ ?");

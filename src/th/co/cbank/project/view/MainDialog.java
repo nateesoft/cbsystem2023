@@ -1674,6 +1674,7 @@ public class MainDialog extends BaseSwing {
 
     private void clearFormAll() {
         txtAccCode.setEditable(true);
+        txtAccCode.setFocusable(true);
         menuHide();
         clearProfileForm();
         showTime();

@@ -3,7 +3,6 @@ package th.co.cbank.project.view;
 import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
-import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +13,7 @@ import org.apache.log4j.Logger;
 import th.co.cbank.util.JTableUtil;
 import th.co.cbank.util.NumberFormat;
 import th.co.cbank.project.constants.AppConstants;
-import th.co.cbank.project.control.MySQLConnect;
+import th.co.cbank.project.control.CbTransactionSaveControl;
 import th.co.cbank.project.log.Log;
 import th.co.cbank.project.model.CbSaveAccountBean;
 import th.co.cbank.project.model.CbSaveConfigBean;
@@ -27,6 +26,7 @@ import th.co.cbank.util.TableUtil;
 public class PrintSavingBookDialog extends BaseDialogSwing {
 
     private final Logger logger = Logger.getLogger(PrintSavingBookDialog.class);
+    private final CbTransactionSaveControl transactionSaveControl = new CbTransactionSaveControl();
 
     public PrintSavingBookDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -324,27 +324,23 @@ public class PrintSavingBookDialog extends BaseDialogSwing {
                 DefaultTableModel model = (DefaultTableModel) tbTransaction.getModel();
                 clearModel(model);
                 SimpleDateFormat simp = new SimpleDateFormat("dd/MM/yy", Locale.ENGLISH);
-                String sql = "select * from cb_transaction_save "
-                        + "where t_acccode='" + txtAccCode.getText() + "' "
-                        + "and t_status in('2','3','8', '11') "
-                        + "order by t_date, t_time, LineNo";
-                ResultSet rs = MySQLConnect.getResultSet(sql);
+                List<CbTransactionSaveBean> transactionSave = transactionSaveControl.listSavingBookTransactionByAcccode(txtAccCode.getText());
                 int backupLineNo = 0;
                 int backupIndex = 0;
-                while (rs.next()) {
+                for (CbTransactionSaveBean bean : transactionSave) {
                     Object[] p = new Object[12];
-                    p[0] = simp.format(rs.getDate("t_date"));//01/05/58
-                    p[1] = rs.getString("t_booktype");//DM
-                    if (rs.getDouble("money_out") > 0) {
-                        p[2] = "<html><font color=red>" + NumberFormat.showDouble2(rs.getDouble("money_out")) + "</font></html>";
+                    p[0] = simp.format(bean.getT_date());//01/05/58
+                    p[1] = bean.getT_booktype();//DM
+                    if (bean.getMoney_out() > 0) {
+                        p[2] = "<html><font color=red>" + NumberFormat.showDouble2(bean.getMoney_out()) + "</font></html>";
                     } else {
-                        p[2] = NumberFormat.showDouble2(rs.getDouble("money_out"));
+                        p[2] = NumberFormat.showDouble2(bean.getMoney_out());
                     }
-                    p[3] = NumberFormat.showDouble2(rs.getDouble("money_in"));//99,999,999.99
-                    p[4] = NumberFormat.showDouble2(rs.getDouble("t_balance"));//99,999,999.99
-                    p[5] = rs.getInt("t_hoon");//9,999.99;
-                    int lineNo = rs.getInt(("lineNo"));
-                    boolean isCheck = rs.getString("printChk").equals("N");
+                    p[3] = NumberFormat.showDouble2(bean.getMoney_in());//99,999,999.99
+                    p[4] = NumberFormat.showDouble2(bean.getT_balance());//99,999,999.99
+                    p[5] = bean.getT_hoon();//9,999.99;
+                    int lineNo = bean.getLineNo();
+                    boolean isCheck = bean.getPrintChk().equals("N");
                     if (lineNo == 0) {
                         lineNo = (backupLineNo + 1) > 24 ? 1 : (backupLineNo + 1);
                         isCheck = true;
@@ -354,10 +350,10 @@ public class PrintSavingBookDialog extends BaseDialogSwing {
                     }
                     p[6] = lineNo; //24;
                     p[7] = isCheck;
-                    p[8] = rs.getString("t_docno");//เลขที่เอกสาร
-                    p[9] = rs.getString("t_date");//เลขที่เอกสาร
-                    p[10] = rs.getString("lineNo");//เลขที่เอกสาร
-                    int index = rs.getInt("t_index");
+                    p[8] = bean.getT_docno();//เลขที่เอกสาร
+                    p[9] = bean.getT_date();//เลขที่เอกสาร
+                    p[10] = bean.getLineNo();//เลขที่เอกสาร
+                    int index = bean.getT_index();
                     if (index == 0 || index == backupIndex) {
                         index = backupIndex + 1;
                     }
@@ -492,35 +488,18 @@ public class PrintSavingBookDialog extends BaseDialogSwing {
             int lineNoOld = Integer.parseInt("" + tbTransaction.getValueAt(i, 10));
             int t_index = Integer.parseInt("" + tbTransaction.getValueAt(i, 11));
 
+            CbTransactionSaveBean bean = new CbTransactionSaveBean();
+            bean.setLineNo(lineNo);
+            bean.setT_index(t_index);
+            bean.setT_acccode(txtAccCode.getText());
+            bean.setLineNo(lineNoOld);
+            bean.setT_docno(t_docno);
+            bean.setT_booktype(t_booktype);
+
             if (isCheck) {
-                try {
-                    String sql = "UPDATE cb_transaction_save "
-                            + "SET PrintChk= 'N',"
-                            + "LineNo='" + lineNo + "',"
-                            + "t_index='" + t_index + "' "
-                            + "WHERE t_acccode='" + txtAccCode.getText() + "' "
-                            + "AND LineNo='" + lineNoOld + "' "
-                            + "AND t_docno='" + t_docno + "' "
-                            + "AND t_booktype='" + t_booktype + "' "
-                            + "AND t_date='" + t_date + "'";
-                    MySQLConnect.exeUpdate(sql);
-                } catch (Exception e) {
-                    MessageAlert.infoPopup(this.getClass(), e.getMessage());
-                }
+                transactionSaveControl.updateStateTable(bean, lineNoOld, t_date);
             } else {
-                try {
-                    String sql = "UPDATE cb_transaction_save "
-                            + "SET LineNo='" + lineNo + "', "
-                            + "t_index='" + t_index + "' "
-                            + "WHERE t_acccode='" + txtAccCode.getText() + "' "
-                            + "AND LineNo='" + lineNoOld + "' "
-                            + "AND t_docno='" + t_docno + "' "
-                            + "AND t_booktype='" + t_booktype + "' "
-                            + "AND t_date='" + t_date + "'";
-                    MySQLConnect.exeUpdate(sql);
-                } catch (Exception e) {
-                    MessageAlert.infoPopup(this.getClass(), e.getMessage());
-                }
+                transactionSaveControl.updateStateTable2(bean, lineNoOld, t_date);
             }
         }
     }

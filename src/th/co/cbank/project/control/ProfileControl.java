@@ -250,7 +250,38 @@ public class ProfileControl extends BaseControl {
             return null;
         }
     }
-    
+
+    public List<ProfileBean> getProfileByApproveLimitMoreThanZero(String P_custCode) {
+        try {
+            String sql = "select p_custCode, p_custName,p_custsurname,ApproveLimit "
+                    + "from cb_profile "
+                    + "where ApproveLimit>0 "
+                    + "and p_custCode<>'" + P_custCode + "'";
+            ResultSet rs = MySQLConnect.getResultSet(sql);
+            return mappingBean(rs);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
+    public List<ProfileBean> getProfileByApproveAndCustName(String P_custCode, String custName) {
+        try {
+            String sql = "select p_custCode, p_custName,p_custsurname,ApproveLimit "
+                    + "from cb_profile "
+                    + "where ApproveLimit>0 "
+                    + "and p_custCode<>'" + P_custCode + "' "
+                    + "and p_custName like '%" + ThaiUtil.Unicode2ASCII(custName) + "%'";
+            ResultSet rs = MySQLConnect.getResultSet(sql);
+            return mappingBean(rs);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+            return new ArrayList<>();
+        }
+    }
+
     public ProfileBean getPIndex(String pIndex) {
         try {
             String sql = "select * from cb_profile where p_index='" + pIndex + "'";
@@ -501,8 +532,36 @@ public class ProfileControl extends BaseControl {
             return mappingBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList<>();
+        }
+    }
+
+    public boolean updateLoanBalance(double loan_amount, double loan_amount0, String cust_code) {
+        try {
+            String sql = "update cb_profile set "
+                    + "Loan_Credit_Balance=Loan_Credit_Balance-" + loan_amount + ","
+                    + "Loan_Balance=Loan_Balance+" + loan_amount0 + " "
+                    + "where p_CustCode='" + cust_code + "'";
+            return MySQLConnect.exeUpdate(sql) > 0;
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+            return false;
+        }
+    }
+
+    public int updateLoanCreditBalance(String custCode, double LOAN_CREDIT_AMT) {
+        try {
+            String sql = "update cb_profile set "
+                    + "loan_credit_amt='" + LOAN_CREDIT_AMT + "', "
+                    + "loan_credit_balance=(loan_credit_amt-loan_balance) "
+                    + "where p_custcode='" + custCode + "'";
+            return MySQLConnect.exeUpdate(sql);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+            return -1;
         }
     }
 }

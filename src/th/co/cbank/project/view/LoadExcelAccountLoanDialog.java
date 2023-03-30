@@ -14,7 +14,6 @@ import org.apache.log4j.Logger;
 import th.co.cbank.util.DateFormat;
 import th.co.cbank.util.ThaiUtil;
 import th.co.cbank.project.constants.AppConstants;
-import th.co.cbank.project.control.MySQLConnect;
 import th.co.cbank.project.control.Value;
 import th.co.cbank.project.model.BranchBean;
 import th.co.cbank.project.model.CbLoanTablePaymentBean;
@@ -282,27 +281,21 @@ public class LoadExcelAccountLoanDialog extends BaseDialogSwing {
                     //update credit limit
                     lbMsg.setText("Loading.. " + idCard + " : update loan credit: " + loanAmt);
                     taLog.append(lbMsg.getText() + "\n");
-//                    System.out.println("-- update loan limit --");
                     update(proBean.getP_custCode());
-//                    System.out.println("-- finish loan limit --");
                 } else {
                     //create new profile
                     lbMsg.setText("Loading.. " + line + " : create profile: " + idCard);
                     taLog.append(lbMsg.getText() + "\n");
-//                    System.out.println("-- Start new profile --");
                     proBean = getProfileControl().initBean();
                     proBean.setP_custCode(idCard);
                     proBean.setP_custName("");
                     proBean.setP_custSurname("");
                     getProfileControl().saveProfile(proBean);
-//                    System.out.println("-- Finish new profile --");
 
                     //update credit limit
                     lbMsg.setText("Loading.. " + idCard + " : update loan credit: " + loanAmt);
                     taLog.append(lbMsg.getText() + "\n");
-//                    System.out.println("-- update loan limit --");
                     update(proBean.getP_custCode());
-//                    System.out.println("-- finish loan limit --");
                 }
 
                 //save loan account
@@ -321,14 +314,8 @@ public class LoadExcelAccountLoanDialog extends BaseDialogSwing {
                 lbMsg.setText("Loading.. " + idCard + " : save loan account: " + loanDocNo);
                 taLog.append(lbMsg.getText() + "\n");
                 if (getLoanAccountControl().saveLoanAccount(loanBean)) {
-                    String sql = "update cb_profile set "
-                            + "Loan_Credit_Balance=Loan_Credit_Balance-" + loanAmt + ","
-                            + "Loan_Balance=Loan_Balance+" + loanAmt + " "
-                            + "where p_CustCode='" + proBean.getP_custCode() + "'";
-                    MySQLConnect.exeUpdate(sql);
-
-                    sql = "update cb_config set LoanDocRunning=LoanDocRunning+1";
-                    MySQLConnect.exeUpdate(sql);
+                    getProfileControl().updateLoanBalance(loanAmt, loanAmt, proBean.getP_custCode());
+                    getConfigControl().updateLoanDocRunning();
 
                     lbMsg.setText("Loading.. " + idCard + " : init(), loan transaction: " + loanDocNo);
                     taLog.append(lbMsg.getText() + "\n");
@@ -364,9 +351,7 @@ public class LoadExcelAccountLoanDialog extends BaseDialogSwing {
                     //save loan table
                     lbMsg.setText("Loading.. " + idCard + " : save table payment: " + loanDocNo);
                     taLog.append(lbMsg.getText() + "\n");
-//                    System.out.println("-- Start save table payment --");
                     CbLoanTablePaymentBean loanTbPayBean = getCbLoanTablePaymentControl().initBean();
-//                    System.out.println("-- LOAN DOC NO (" + loanDocNo + ")");
                     loanTbPayBean.setLoan_doc_no(loanDocNo);
                     loanTbPayBean.setNet_total_pay(loanAmt);
                     loanTbPayBean.setBase_total_amount(loanAmt);
@@ -374,7 +359,6 @@ public class LoadExcelAccountLoanDialog extends BaseDialogSwing {
                     loanTbPayBean.setBranch_code(bBean.getCode());
 
                     getCbLoanTablePaymentControl().saveCbLoanTablePayment(loanTbPayBean);
-//                    System.out.println("-- Finish save table payment --");
                     lbMsg.setText("Loading.. Finish... ("+i+")" + idCard);
                     taLog.append(lbMsg.getText() + "\n");
                 }
@@ -405,27 +389,15 @@ public class LoadExcelAccountLoanDialog extends BaseDialogSwing {
     }
 
     public int update(String custCode) throws Exception {
-        String sql = "update cb_profile set "
-                + "loan_credit_amt='" + LOAN_CREDIT_AMT + "', "
-                + "loan_credit_balance=(loan_credit_amt-loan_balance) "
-                + "where p_custcode='" + custCode + "'";
-
-        return MySQLConnect.exeUpdate(sql);
+        return getProfileControl().updateLoanCreditBalance(custCode, LOAN_CREDIT_AMT);
     }
 
-    public void resetLoanConfig() throws Exception {
-        MySQLConnect.exeUpdate("update cb_config set loanDocRunning='1'");
-        MySQLConnect.exeUpdate("update cb_loan_config set loanRunning='1',bookNo='1' where loanCode='" + loanCode + "'");
-        MySQLConnect.exeUpdate("delete from cb_loan_account");
-        MySQLConnect.exeUpdate("delete from cb_loan_table_payment");
-        MySQLConnect.exeUpdate("delete from cb_transaction_loan");
-        MySQLConnect.exeUpdate("update cb_profile set loan_balance=0, loan_credit_amt=0, loan_credit_balance=0");
+    public void resetLoanConfig() {
+        getConfigControl().resetLoanConfig(loanCode);
     }
 
     private int getLainMax() {
-        String idCard1 = "";
         double loanAmt = 0.0;
-        double loanIntAmt = 0.0;
         try {
             File f = new File(fileName);
             BufferedReader br;
@@ -433,20 +405,12 @@ public class LoadExcelAccountLoanDialog extends BaseDialogSwing {
             br = new BufferedReader(new FileReader(f));
             int count = 0;
             while ((line = br.readLine()) != null) {
-                idCard1 = line;
                 if (line.equals("")) {
                     continue;
                 }
                 String[] lineData = line.split("=");
-                String idCard = "";
-                if (lineData.length > 0) {
-                    idCard = lineData[0];
-                }
                 if (lineData.length > 1) {
                     loanAmt = Double.parseDouble(lineData[1]);
-                }
-                if (lineData.length > 2) {
-                    loanIntAmt = Double.parseDouble(lineData[2]);
                 }
                 if(loanAmt==0){
                     continue;
@@ -456,7 +420,7 @@ public class LoadExcelAccountLoanDialog extends BaseDialogSwing {
             br.close();
 
             return count;
-        } catch (Exception e) {
+        } catch (IOException | NumberFormatException e) {
             return 0;
         }
     }

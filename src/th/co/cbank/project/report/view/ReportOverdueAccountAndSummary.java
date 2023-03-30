@@ -6,7 +6,7 @@ import java.util.Date;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import th.co.cbank.project.control.CbLoanAccountControl;
-import th.co.cbank.project.modal.ArListDialog;
+import th.co.cbank.project.view.ArListDialog;
 import th.co.cbank.project.model.CbLoanAccountBean;
 import th.co.cbank.util.ClipboardUtil;
 import th.co.cbank.util.DateChooseDialog;

@@ -68,7 +68,35 @@ public class CbSaveAccountControl extends BaseControl {
             MessageAlert.infoPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
+    }
 
+    public List<CbSaveAccountBean> listCbSaveAccountStatus(String accountStatus) {
+        try {
+            String sql = "select * from cb_save_account "
+                    + "where account_status='" + accountStatus + "' order by account_code";
+            ResultSet rs = MySQLConnect.getResultSet(sql);
+            List<CbSaveAccountBean> listBean = mappingBean(rs);
+            return listBean;
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            return new ArrayList();
+        }
+    }
+    
+    public List<CbSaveAccountBean> searchByCustNameCustCodeAccSts(String accountStatus, String custName, String custCode) {
+        try {
+            String sql = "select * from cb_save_account s where account_status='" + accountStatus + "' "
+                    + "and B_CUST_NAME like '%" + custName + "%' or account_code like '%" + custCode + "%' "
+                    + "order by account_code";
+            ResultSet rs = MySQLConnect.getResultSet(sql);
+            List<CbSaveAccountBean> listBean = mappingBean(rs);
+            return listBean;
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            return new ArrayList();
+        }
     }
 
     public List<CbSaveAccountBean> listSaveAccount(String orderBy) {
@@ -1143,7 +1171,7 @@ public class CbSaveAccountControl extends BaseControl {
                     bean.setBalanceAmt(rs.getDouble("b_balance"));
                     bean.setIntAmt(rs.getDouble("int_amount"));
                     bean.setCustCode(rs.getString("t_custcode"));
-                    
+
                     listData.add(bean);
                     count++;
                 }

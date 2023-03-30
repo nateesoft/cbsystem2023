@@ -1,4 +1,4 @@
-package th.co.cbank.project.modal;
+package th.co.cbank.project.view;
 
 import java.util.List;
 import javax.swing.JTextField;

@@ -2,21 +2,23 @@ package th.co.cbank.project.view;
 
 import java.awt.Font;
 import java.awt.event.KeyEvent;
-import java.sql.ResultSet;
-import javax.swing.JOptionPane;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import org.apache.log4j.Logger;
 import th.co.cbank.util.NumberFormat;
 import th.co.cbank.util.ThaiUtil;
 import th.co.cbank.project.constants.AppConstants;
-import th.co.cbank.project.control.MySQLConnect;
+import th.co.cbank.project.control.CbSaveAccountControl;
 import th.co.cbank.project.control.Value;
+import th.co.cbank.project.model.CbSaveAccountBean;
 import th.co.cbank.util.TableUtil;
 
 public class ShowAccountPrintDialog extends BaseDialogSwing {
+
     private final Logger logger = Logger.getLogger(ShowAccountPrintDialog.class);
     private String selectItem = null;
+    private final CbSaveAccountControl saveAccountControl = new CbSaveAccountControl();
 
     public ShowAccountPrintDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -204,63 +206,41 @@ public class ShowAccountPrintDialog extends BaseDialogSwing {
         JTableHeader tHeader = tbAccountList.getTableHeader();
         tHeader.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, AppConstants.DEFAULT_FONT_SIZE));
 
-        try {
-            String sql = "select * "
-                    + "from cb_save_account "
-                    + "where account_status='1' "
-                    + "order by account_code";
-            ResultSet rs = MySQLConnect.getResultSet(sql);
-            int count = 0;
-            while (rs.next()) {
-                count++;
-                model.addRow(new Object[]{
-                    count,
-                    rs.getString("ACCOUNT_CODE"),
-                    NumberFormat.showDouble2(rs.getDouble("B_BALANCE")),
-                    ThaiUtil.ASCII2Unicode(rs.getString("B_CUST_NAME")),
-                    ThaiUtil.ASCII2Unicode(rs.getString("B_CUST_LASTNAME"))
-                });
-            }
-
-            rs.close();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
+        List<CbSaveAccountBean> listAccount = saveAccountControl.listCbSaveAccountStatus("1");
+        int count = 0;
+        for (CbSaveAccountBean bean : listAccount) {
+            count++;
+            model.addRow(new Object[]{
+                count,
+                bean.getAccount_code(),
+                NumberFormat.showDouble2(bean.getB_BALANCE()),
+                bean.getB_CUST_NAME(),
+                bean.getB_CUST_LASTNAME()
+            });
         }
     }
 
     private void loadListAccount(String text) {
         DefaultTableModel model = (DefaultTableModel) tbAccountList.getModel();
         TableUtil.clearModel(model);
-        
+
         text = ThaiUtil.Unicode2ASCII(text);
         tbAccountList.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
         tbAccountList.setRowHeight(30);
         JTableHeader tHeader = tbAccountList.getTableHeader();
         tHeader.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, AppConstants.DEFAULT_FONT_SIZE));
 
-        try {
-            String sql = "select * "
-                    + "from cb_save_account s "
-                    + "where account_status='1' "
-                    + "and B_CUST_NAME like '%" + text + "%' "
-                    + "or account_code like '%"+text+"%' "
-                    + "order by account_code";
-            ResultSet rs = MySQLConnect.getResultSet(sql);
-            int count = 0;
-            while (rs.next()) {
-                count++;
-                model.addRow(new Object[]{
-                    count,
-                    rs.getString("ACCOUNT_CODE"),
-                    NumberFormat.showDouble2(rs.getDouble("B_BALANCE")),
-                    ThaiUtil.ASCII2Unicode(rs.getString("B_CUST_NAME")),
-                    ThaiUtil.ASCII2Unicode(rs.getString("B_CUST_LASTNAME"))
-                });
-            }
-
-            rs.close();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
+        List<CbSaveAccountBean> listAccount = saveAccountControl.searchByCustNameCustCodeAccSts("1", text, text);
+        int count = 0;
+        for (CbSaveAccountBean bean : listAccount) {
+            count++;
+            model.addRow(new Object[]{
+                count,
+                bean.getAccount_code(),
+                NumberFormat.showDouble2(bean.getB_BALANCE()),
+                bean.getB_CUST_NAME(),
+                bean.getB_CUST_LASTNAME()
+            });
         }
     }
 }

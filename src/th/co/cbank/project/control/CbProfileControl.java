@@ -112,4 +112,17 @@ public class CbProfileControl {
 
         return list;
     }
+
+    public boolean updateCancelStatus(String custCode) {
+        try {
+            String sql = "update cb_profile set "
+                    + "status='Cancel' "
+                    + "where p_custCode='" + custCode + "'";
+            return MySQLConnect.exeUpdate(sql) > 0;
+        } catch (Exception e) {
+            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            logger.error(e.getMessage());
+        }
+        return false;
+    }
 }

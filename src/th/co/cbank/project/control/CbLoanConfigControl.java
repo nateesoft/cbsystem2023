@@ -9,6 +9,7 @@ import th.co.cbank.project.model.CbLoanConfigBean;
 import th.co.cbank.util.MessageAlert;
 
 public class CbLoanConfigControl extends BaseControl {
+
     private final Logger logger = Logger.getLogger(CbLoanConfigControl.class);
 
     public int getMaxInt(String LoanCode) {
@@ -87,7 +88,7 @@ public class CbLoanConfigControl extends BaseControl {
             String sql = "select * from cb_loan_config where LoanCode='" + loanCode + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             List<CbLoanConfigBean> listBean = mappingBean(rs);
-            if(listBean.isEmpty()){
+            if (listBean.isEmpty()) {
                 return null;
             }
             return listBean.get(0);
@@ -176,6 +177,21 @@ public class CbLoanConfigControl extends BaseControl {
                     + "where LoanCode='" + LoanCode + "';";
             update(sql);
             return true;
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            return false;
+        }
+
+    }
+
+    public boolean updateRunningBookNo(String loan_type) {
+        try {
+            String sql = "update cb_loan_config set "
+                    + "LoanRunning=LoanRunning+1,"
+                    + "BookNo=BookNo+1 "
+                    + "where LoanCode='" + loan_type + "'";
+            return MySQLConnect.exeUpdate(sql) > 0;
         } catch (Exception e) {
             logger.error(e.getMessage());
             MessageAlert.infoPopup(this.getClass(), e.getMessage());

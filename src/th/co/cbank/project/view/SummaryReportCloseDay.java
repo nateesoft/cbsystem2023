@@ -166,11 +166,6 @@ public class SummaryReportCloseDay extends BaseDialogSwing {
         txtSaveINT.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
         txtSaveINT.setText("0.00");
         txtSaveINT.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
-        txtSaveINT.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtSaveINTActionPerformed(evt);
-            }
-        });
 
         jLabel19.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel19.setText("บาท");
@@ -606,11 +601,6 @@ public class SummaryReportCloseDay extends BaseDialogSwing {
 
         jButton2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jButton2.setText("บันทึก/พิมพ์รายงาน");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
-            }
-        });
 
         jButton3.setBackground(new java.awt.Color(204, 0, 0));
         jButton3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -778,10 +768,6 @@ public class SummaryReportCloseDay extends BaseDialogSwing {
         }
     }//GEN-LAST:event_txtDate1KeyPressed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        reportCloseDay();
-    }//GEN-LAST:event_jButton2ActionPerformed
-
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         dispose();
     }//GEN-LAST:event_jButton3ActionPerformed
@@ -797,10 +783,6 @@ public class SummaryReportCloseDay extends BaseDialogSwing {
             txtDate1.requestFocus();
         }
     }//GEN-LAST:event_jButton4ActionPerformed
-
-    private void txtSaveINTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSaveINTActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtSaveINTActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
@@ -985,10 +967,6 @@ public class SummaryReportCloseDay extends BaseDialogSwing {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
-    }
-
-    private void reportCloseDay() {
-
     }
 
 }

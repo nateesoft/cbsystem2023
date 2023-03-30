@@ -104,7 +104,7 @@ public class CbTransactionLoanControl extends BaseControl {
         try {
             String sql = "select * from cb_transaction_loan "
                     + "where t_acccode='" + t_acccode + "' "
-                    + "and t_custcode='"+custCode+"' "
+                    + "and t_custcode='" + custCode + "' "
                     + "and t_status in('7') "
                     + "order by LineNo";
             ResultSet rs = MySQLConnect.getResultSet(sql);
@@ -119,7 +119,7 @@ public class CbTransactionLoanControl extends BaseControl {
     public List<CbTransactionLoanBean> listCbTransactionLoanAll(String accCode, boolean filterPrintCheck) {
         try {
             String addSql = "";
-            if(filterPrintCheck){
+            if (filterPrintCheck) {
                 addSql = " and PrintChk='N' ";
             }
             String sql = "select * "
@@ -271,5 +271,22 @@ public class CbTransactionLoanControl extends BaseControl {
         }
 
         return list;
+    }
+
+    public boolean updateLoanState(CbTransactionLoanBean bean) {
+        try {
+            String sql = "UPDATE cb_transaction_loan "
+                    + "SET PrintChk= 'N' "
+                    + "WHERE t_acccode='" + bean.getT_acccode() + "' "
+                    + "AND LineNo='" + bean.getLineNo() + "' "
+                    + "and t_status in('10','7') "
+                    + "AND t_docno='" + bean.getT_docno() + "' "
+                    + "AND t_booktype='" + bean.getT_booktype() + "'";
+            return MySQLConnect.exeUpdate(sql) > 0;
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+        }
+        return false;
     }
 }

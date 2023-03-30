@@ -5,10 +5,12 @@ import java.awt.Frame;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
@@ -19,12 +21,13 @@ import org.apache.log4j.Logger;
 import th.co.cbank.util.DateFormat;
 import th.co.cbank.util.ThaiUtil;
 import th.co.cbank.project.constants.AppConstants;
-import th.co.cbank.project.control.MySQLConnect;
 import th.co.cbank.project.control.ViewReport;
+import th.co.cbank.project.report.model.HoonReportAllBean;
 import th.co.cbank.util.DateChooseDialog;
 import th.co.cbank.util.TableUtil;
 
 public class HoonReportAllDialog extends BaseDialogSwing {
+
     private final Logger logger = Logger.getLogger(HoonReportAllDialog.class);
     private SimpleDateFormat simp = new SimpleDateFormat("dd/MM/yyyy");
     private DecimalFormat dec = new DecimalFormat("#,##0.00");
@@ -585,100 +588,67 @@ public class HoonReportAllDialog extends BaseDialogSwing {
     private void showAll() {
         DefaultTableModel model = (DefaultTableModel) tbTransaction.getModel();
         TableUtil.clearModel(model);
+        ViewReport viewReport = new ViewReport();
+        List<HoonReportAllBean> listBean = viewReport.findShowAllReport(cbAccItem.getSelectedIndex(), txtDate1.getText(), txtDate2.getText(), txtCustCode.getText());
 
-        String t_status;
-        if (cbAccItem.getSelectedIndex() == 1) {
-            t_status = " and t_status in ('4') ";
-        } else if (cbAccItem.getSelectedIndex() == 2) {
-            t_status = " and t_status in ('5') ";
-        } else {
-            t_status = " and t_status in ('4','5') ";
+        double balance = 0;
+        int count = 0;
+        double totalDeposit = 0;
+        double totalWithdraw = 0;
+        for (HoonReportAllBean bean : listBean) {
+            count++;
+            model.addRow(new Object[]{
+                count,
+                bean.getT_docno(),
+                simp.format(bean.getT_date()),
+                bean.getT_time(),
+                bean.getT_description(),
+                bean.getT_amount(),
+                bean.getT_custcode(),
+                bean.getP_custName() + " " + bean.getP_custSurname(),
+                bean.getT_empcode(),
+                bean.getCode()
+            });
+
+            double amount = bean.getT_amount();
+            switch (bean.getT_description()) {
+                case "ซื้อหุ้น":
+                    totalDeposit += amount;
+                    break;
+                case "ขายหุ้น":
+                    totalWithdraw += amount;
+                    break;
+            }
+
+            balance += amount;
+        }
+        txtHoonQty.setText("" + balance);
+        txtTotalDeposit.setText("" + totalDeposit);
+
+        String tempCust = "";
+        int countCust = 0;
+        for (HoonReportAllBean bean : listBean) {
+            if (tempCust.equals("")) {
+                tempCust = bean.getT_custcode();
+                countCust++;
+            } else if (!tempCust.equals(bean.getT_custcode())) {
+                tempCust = bean.getT_custcode();
+                countCust++;
+            }
         }
 
-        try {
-            String sql = "select b.code, t.*, p_custName,p_custSurname "
-                    + "from cb_transaction_save t, cb_profile p, cb_branch b "
-                    + "where t.t_custcode=p.p_custcode ";
-            sql += t_status;
+        txtTotalPeople.setText("" + countCust);
 
-            if (!txtDate1.getText().equals("") && !txtDate2.getText().equals("")) {
-                sql += " and t_date between '" + getDateText(txtDate1.getText()) + "' "
-                        + "and '" + getDateText(txtDate2.getText()) + "' ";
-            }
-            
-            if(!txtCustCode.getText().trim().equals("")){
-                sql += " and t_custcode='"+txtCustCode.getText().trim()+"' ";
-            }
-
-            ResultSet rs = MySQLConnect.getResultSet(sql);
-            int count = 0;
-            double balance = 0;
-            double totalDeposit = 0;
-            double totalWithdraw = 0;
-
-            sql += " order by t_custcode";
-            sqlShow = sql;
-            String tempCust = "";
-            ResultSet rs2 = MySQLConnect.getResultSet(sql);
-            int countCust = 0;
-            while (rs2.next()) {
-                if (tempCust.equals("")) {
-                    tempCust = rs2.getString("t_custcode");
-                    countCust++;
-                } else if (!tempCust.equals(rs2.getString("t_custcode"))) {
-                    tempCust = rs2.getString("t_custcode");
-                    countCust++;
-                }
-            }
-            rs2.close();
-
-            while (rs.next()) {
-                count++;
-                model.addRow(new Object[]{
-                    count,
-                    rs.getString("t_docno"),
-                    simp.format(rs.getDate("t_date")),
-                    rs.getString("t_time"),
-                    ThaiUtil.ASCII2Unicode(rs.getString("t_description")),
-                    rs.getDouble("t_amount"),
-                    rs.getString("t_custcode"),
-                    ThaiUtil.ASCII2Unicode(rs.getString("p_custName") + " " + rs.getString("p_custSurname")),
-                    rs.getString("t_empcode"),
-                    rs.getString("code")
-                });
-
-                String checkType = ThaiUtil.ASCII2Unicode(rs.getString("t_description"));
-                double amount = rs.getDouble("t_amount");
-                switch (checkType) {
-                    case "ซื้อหุ้น":
-                        totalDeposit += amount;
-                        break;
-                    case "ขายหุ้น":
-                        totalWithdraw += amount;
-                        break;
-                }
-
-                balance += amount;
-            }
-
-            txtTotalPeople.setText("" + countCust);
-            txtTotalDeposit.setText("" + totalDeposit);
-            txtHoonQty.setText("" + balance);
-            if (totalWithdraw < 0) {
-                totalWithdraw *= -1;
-            }
-            txtTotalWithdraw.setText(dec.format(totalWithdraw));
-
-            rs.close();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
+        if (totalWithdraw < 0) {
+            totalWithdraw *= -1;
         }
+        txtTotalWithdraw.setText(dec.format(totalWithdraw));
     }
 
     private void exportReport() {
         ViewReport v = new ViewReport();
         if (!sqlShow.equals("")) {
-            v.printReportHoonAllTran(sqlShow, "ช่วงวันที่ "+txtDate1.getText()+" - "+txtDate2.getText());
+            v.printReportHoonAllTran(sqlShow, "ช่วงวันที่ " + txtDate1.getText() + " - " + txtDate2.getText());
         }
     }
 
@@ -688,21 +658,5 @@ public class HoonReportAllDialog extends BaseDialogSwing {
         cbAccItem.setSelectedIndex(0);
 
         txtAccCode.requestFocus();
-    }
-
-    private String getDateText(String date) {
-        SimpleDateFormat sssEng = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-        try {
-            Calendar c = Calendar.getInstance();
-            String[] d = date.split("/");
-            int year = Integer.parseInt(d[2]);
-            int month = Integer.parseInt(d[1]) - 1;
-            int day = Integer.parseInt(d[0]);
-            c.set(year, month, day);
-            return sssEng.format(c.getTime());
-        } catch (NumberFormatException e) {
-            return sssEng.format(new Date());
-        }
-
     }
 }

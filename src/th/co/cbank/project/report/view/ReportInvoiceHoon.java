@@ -2,7 +2,6 @@ package th.co.cbank.project.report.view;
 
 import java.awt.Font;
 import java.awt.event.KeyEvent;
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -15,10 +14,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import th.co.cbank.util.DateFormat;
 import th.co.cbank.util.NumberFormat;
-import th.co.cbank.util.ThaiUtil;
 import th.co.cbank.project.constants.AppConstants;
-import th.co.cbank.project.control.MySQLConnect;
 import th.co.cbank.project.control.ViewReport;
+import th.co.cbank.project.report.model.ReportInvoiceHoonModel;
 import th.co.cbank.util.TableUtil;
 
 public class ReportInvoiceHoon extends javax.swing.JDialog {
@@ -290,63 +288,40 @@ public class ReportInvoiceHoon extends javax.swing.JDialog {
     }
 
     private void printAll() {
-        ViewReport view = new ViewReport();
+        ViewReport viewReport = new ViewReport();
         List<Map> listMap = new ArrayList<>();
         for (int i = 0; i < tableData.getRowCount(); i++) {
-            Map m = new HashMap();
-            m.put("date", DateFormat.getEnglish_ddMMyyyy(new Date()));
-            m.put("idCard", "" + tableData.getValueAt(i, 9));
-            m.put("accountNo", "" + tableData.getValueAt(i, 1));
-            m.put("address", "" + tableData.getValueAt(i, 10));
-            listMap.add(m);
+            Map param = new HashMap();
+            param.put("date", DateFormat.getEnglish_ddMMyyyy(new Date()));
+            param.put("idCard", "" + tableData.getValueAt(i, 9));
+            param.put("accountNo", "" + tableData.getValueAt(i, 1));
+            param.put("address", "" + tableData.getValueAt(i, 10));
+            listMap.add(param);
         }
 
-        view.printReport(listMap, AppConstants.JASPER_INVOICE_HOON_REPORT);
+        viewReport.printReport(listMap, AppConstants.JASPER_INVOICE_HOON_REPORT);
     }
 
     private void find() {
         TableUtil.clearModel(model);
+        ViewReport viewReport = new ViewReport();
+        List<ReportInvoiceHoonModel> reportInvoices = viewReport.findReportInvoiceHoon(txtIdCard.getText(), txtAccountCode.getText());
 
-        String sql = "select p.p_custcode, concat(p_custname, ' ', p_custsurname) name, "
-                + "loan_docno, loan_docdate, loan_amount, loan_interest, loan_datepay, "
-                + "pay_amount, (select concat(addr_no, ' " + toStr("หมู่") + "', addr_moo, ' ', addr_road, ' ', addr_soi, "
-                + "' " + toStr("ตำบล") + "', addr_tambon, ' " + toStr("อำเภอ") + "', addr_aumphur, ' " + toStr("จังหวัด") + "', addr_province, ' " + toStr("รหัสไปรษณีย์") + " ', addr_post) address "
-                + "from cb_profile_address where cust_code=a.cust_code limit 0,1 "
-                + ") address, hoon_qty,"
-                + "(select hoonrate from cb_hoon_config limit 0,1) hoonrate, "
-                + "(select l.LoanINT from cb_loan_config l where l.loanCode=a.loan_type) loanINT, \"0.00\" loanIntAmt "
-                + "from cb_loan_account a "
-                + "inner join cb_profile p on a.cust_code=p.p_custcode "
-                + "where 1=1 ";
-        try {
-            if (!txtIdCard.getText().equals("")) {
-                sql += "and a.cust_code='" + txtIdCard.getText() + "' ";
-            }
-            if (!txtAccountCode.getText().equals("")) {
-                sql += "and a.loan_docno='" + txtAccountCode.getText() + "' ";
-            }
-
-            sql += "order by p_custcode, loan_docno";
-            ResultSet rs = MySQLConnect.getResultSet(sql);
-            while (rs.next()) {
-                model.addRow(new Object[]{
-                    ThaiUtil.ASCII2Unicode(rs.getString("name")),
-                    rs.getString("loan_docno"),
-                    rs.getDate("loan_docdate"),
-                    rs.getDate("loan_datepay"),
-                    NumberFormat.showDouble2(rs.getDouble("loan_amount")),
-                    NumberFormat.showDouble2(rs.getDouble("pay_amount")),
-                    NumberFormat.showDouble2(rs.getDouble("loanINT")),
-                    NumberFormat.showDouble2(0),
-                    NumberFormat.showDouble2(rs.getInt("hoon_qty")),
-                    NumberFormat.showDouble2(rs.getInt("hoon_qty") * rs.getInt("hoonrate")),
-                    rs.getString("p_custcode"),
-                    ThaiUtil.ASCII2Unicode(rs.getString("address"))
-                });
-            }
-            rs.close();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
+        for (ReportInvoiceHoonModel bean : reportInvoices) {
+            model.addRow(new Object[]{
+                bean.getName(),
+                bean.getLoan_docno(),
+                bean.getLoan_docdate(),
+                bean.getLoan_datepay(),
+                NumberFormat.showDouble2(bean.getLoan_amount()),
+                NumberFormat.showDouble2(bean.getPay_amount()),
+                NumberFormat.showDouble2(bean.getLoanINT()),
+                NumberFormat.showDouble2(bean.getBalanceIntRate()),
+                NumberFormat.showDouble2(bean.getHoon_qty()),
+                NumberFormat.showDouble2(bean.getHoon_qty() * bean.getHoonrate()),
+                bean.getP_custcode(),
+                bean.getAddress()
+            });
         }
 
         lbMsg.setText("ข้อมูลทั้งหมด " + model.getRowCount() + " รายการ");
@@ -381,9 +356,5 @@ public class ReportInvoiceHoon extends javax.swing.JDialog {
         } else {
             JOptionPane.showMessageDialog(this, "กรุณาเลือกข้อมูลที่ต้องการพิมพ์");
         }
-    }
-
-    private String toStr(String str) {
-        return ThaiUtil.Unicode2ASCII(str);
     }
 }

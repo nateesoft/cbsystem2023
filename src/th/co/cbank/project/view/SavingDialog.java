@@ -27,10 +27,10 @@ import th.co.cbank.util.DateFormat;
 import th.co.cbank.util.NumberFormat;
 import th.co.cbank.util.ThaiUtil;
 import th.co.cbank.project.constants.AppConstants;
-import th.co.cbank.project.control.MySQLConnect;
+import th.co.cbank.project.control.CbProfileControl;
+import th.co.cbank.project.control.ConfigControl;
 import th.co.cbank.project.model.ConfigBean;
 import th.co.cbank.project.control.PrintCOM;
-import th.co.cbank.project.log.Log;
 import th.co.cbank.project.model.AddressBean;
 import th.co.cbank.project.model.BranchBean;
 import th.co.cbank.project.model.CbWithdrawAllowBean;
@@ -49,6 +49,8 @@ public class SavingDialog extends BaseDialogSwing {
     boolean isRegister = true;
     private Frame parent;
     private String profileCode;
+    private final CbProfileControl profileControl = new CbProfileControl();
+    private final ConfigControl configControl = new ConfigControl();
 
     public SavingDialog(java.awt.Frame parent, boolean modal, boolean isRegister, String profileCode) {
         super(parent, modal);
@@ -3480,18 +3482,7 @@ public class SavingDialog extends BaseDialogSwing {
     }
 
     private boolean processCancelMember() {
-        try {
-            String sql = "update cb_profile set "
-                    + "status='Cancel' "
-                    + "where p_custCode='" + txtCode.getText() + "'";
-            MySQLConnect.exeUpdate(sql);
-            return true;
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Error MySQL !", JOptionPane.ERROR_MESSAGE);
-
-        }
-
-        return false;
+        return profileControl.updateCancelStatus(txtCode.getText());
     }
 
     private void printFee() {
@@ -3506,15 +3497,8 @@ public class SavingDialog extends BaseDialogSwing {
         }
 
         if (pc.printMemberFee(txtCode.getText(), txtFeeMember.getText(), docNo, txtFeeProject.getText())) {
-            try {
-                String sql = "update cb_config set FeeRunning=FeeRunning+1";
-                MySQLConnect.exeUpdate(sql);
-            } catch (Exception e) {
-                JOptionPane.showMessageDialog(this, e.getMessage(), "Error MySQL !", JOptionPane.ERROR_MESSAGE);
-                Log.write.error(e.getMessage());
-            }
+            configControl.updateFeeRunning();
         }
-
     }
 
     private String getRunning(int run) {

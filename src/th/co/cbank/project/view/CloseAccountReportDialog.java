@@ -4,13 +4,12 @@ import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
-import java.sql.ResultSet;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -20,9 +19,9 @@ import th.co.cbank.util.DateFormat;
 import th.co.cbank.util.NumberFormat;
 import th.co.cbank.util.ThaiUtil;
 import th.co.cbank.project.constants.AppConstants;
-import th.co.cbank.project.control.MySQLConnect;
 import th.co.cbank.project.control.ViewReport;
 import th.co.cbank.project.model.BranchBean;
+import th.co.cbank.project.report.model.CloseAccountReportModel;
 import th.co.cbank.util.DateChooseDialog;
 import th.co.cbank.util.TableUtil;
 
@@ -403,44 +402,28 @@ public class CloseAccountReportDialog extends BaseDialogSwing {
         DefaultTableModel model = (DefaultTableModel) tableData.getModel();
         TableUtil.clearModel(model);
 
-        String sql = " select t_date, t_time, t_acccode, t_amount, t_balance,"
-                + " concat(s.b_cust_name, ' ', s.b_cust_lastname) cust_name, t.t_empcode, t.branch_code "
-                + " from cb_transaction_save t "
-                + " inner join cb_save_account s on t.t_acccode = s.account_code "
-                + " where 1=1 "
-                + " and t_status='" + AppConstants.CB_STATUS_CLOSE_SAVE + "' ";
-        if (!txtDate1.getText().equals("") && !txtDate2.getText().equals("")) {
-            Date date1 = DateFormat.getLocal_ddMMyyyy(txtDate1.getText());
-            Date date2 = DateFormat.getLocal_ddMMyyyy(txtDate2.getText());
-            sql += " and t_date between '" + DateFormat.getMySQL_Date(date1) + "' and '" + DateFormat.getMySQL_Date(date2) + "' ";
-        }
+        ViewReport viewReport = new ViewReport();
+        List<CloseAccountReportModel> listReport = viewReport.showAllCloseAccountReport(txtDate1.getText(), txtDate2.getText());
 
-        sqlAll = sql;
+        sqlAll = viewReport.getSqlQuery();
 
         double totalFee = 0.0;
         int countCust = 0;
-        try {
-            ResultSet rs = MySQLConnect.getResultSet(sql);
-            int count = 0;
-            while (rs.next()) {
-                count++;
-                countCust++;
-                model.addRow(new Object[]{
-                    count,
-                    DateFormat.getLocale_ddMMyyyy(rs.getDate("t_date")),
-                    rs.getString("t_time"),
-                    ThaiUtil.ASCII2Unicode(rs.getString("cust_name")),
-                    rs.getString("t_acccode"),
-                    NumberFormat.showDouble2(Math.abs(rs.getDouble("t_amount"))),
-                    NumberFormat.showDouble2(rs.getDouble("t_balance")),
-                    rs.getString("t_empcode"),
-                    rs.getString("branch_code")
-                });
-            }
-
-            rs.close();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
+        int count = 0;
+        for (CloseAccountReportModel bean : listReport) {
+            count++;
+            countCust++;
+            model.addRow(new Object[]{
+                count,
+                DateFormat.getLocale_ddMMyyyy(bean.getT_date()),
+                bean.getT_time(),
+                ThaiUtil.ASCII2Unicode(bean.getCust_name()),
+                bean.getT_acccode(),
+                NumberFormat.showDouble2(Math.abs(bean.getT_amount())),
+                NumberFormat.showDouble2(bean.getT_balance()),
+                bean.getT_empcode(),
+                bean.getBranch_code()
+            });
         }
 
         txtTotalFee.setText(NumberFormat.showDouble2(totalFee));

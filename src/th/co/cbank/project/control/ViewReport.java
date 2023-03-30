@@ -10,6 +10,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.view.JasperViewer;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRPrintPage;
 import net.sf.jasperreports.engine.JasperReport;
@@ -22,6 +23,10 @@ import th.co.cbank.util.ThaiUtil;
 import th.co.cbank.project.model.BranchBean;
 import th.co.cbank.project.model.CbSaveAccountBean;
 import th.co.cbank.project.model.CbSaveConfigBean;
+import th.co.cbank.project.report.model.CloseAccountReportModel;
+import th.co.cbank.project.report.model.HoonReportAllBean;
+import th.co.cbank.project.report.model.ReportInvoiceHoonModel;
+import th.co.cbank.util.DateFormat;
 import th.co.cbank.util.MessageAlert;
 
 public class ViewReport extends BaseControl {
@@ -29,6 +34,7 @@ public class ViewReport extends BaseControl {
     private final Logger logger = Logger.getLogger(ViewReport.class);
     private final DecimalFormat doubleFmt = new DecimalFormat("##,###,##0.00");
     private final SimpleDateFormat sFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
+    private String sqlQuery = "";
 
     // USED
     public void printReportBuyHoon(String CustCode, String DocNo) {
@@ -285,14 +291,14 @@ public class ViewReport extends BaseControl {
                         rs2.close();
                     } catch (Exception e) {
                         logger.error(e.getMessage());
-                        MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                        MessageAlert.errorPopup(this.getClass(), e.getMessage());
                     }
                 }
 
                 rs.close();
             } catch (Exception e) {
                 logger.error(e.getMessage());
-                MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                MessageAlert.errorPopup(this.getClass(), e.getMessage());
             }
 
             try {
@@ -323,9 +329,9 @@ public class ViewReport extends BaseControl {
             j.setLocationRelativeTo(null);
             j.setVisible(true);
             v.setTitle("Loan Report");
-        } catch (Exception e) {
+        } catch (HeadlessException | JRException e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
     }
@@ -412,9 +418,9 @@ public class ViewReport extends BaseControl {
             j.setLocationRelativeTo(null);
             j.setVisible(true);
             v.setTitle("Loan Report");
-        } catch (Exception e) {
+        } catch (HeadlessException | JRException e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
     }
@@ -432,7 +438,7 @@ public class ViewReport extends BaseControl {
             j.setVisible(true);
         } catch (HeadlessException | JRException e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -455,7 +461,7 @@ public class ViewReport extends BaseControl {
 
             } catch (JRException e) {
                 logger.error(e.getMessage());
-                MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                MessageAlert.errorPopup(this.getClass(), e.getMessage());
             }
         }
 
@@ -486,9 +492,9 @@ public class ViewReport extends BaseControl {
             j.setLocationRelativeTo(null);
             j.setVisible(true);
             v.setTitle("Deposit Report");
-        } catch (Exception e) {
+        } catch (HeadlessException | JRException e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -518,9 +524,9 @@ public class ViewReport extends BaseControl {
             j.setLocationRelativeTo(null);
             j.setVisible(true);
             v.setTitle("Report Saving by");
-        } catch (Exception e) {
+        } catch (HeadlessException | JRException e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -543,9 +549,9 @@ public class ViewReport extends BaseControl {
             j.setLocationRelativeTo(null);
             j.setVisible(true);
             v.setTitle("Report Saving All");
-        } catch (Exception e) {
+        } catch (HeadlessException | JRException e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -567,9 +573,9 @@ public class ViewReport extends BaseControl {
             j.setLocationRelativeTo(null);
             j.setVisible(true);
             v.setTitle("Report Saving All");
-        } catch (Exception e) {
+        } catch (HeadlessException | JRException e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -592,9 +598,9 @@ public class ViewReport extends BaseControl {
             j.setLocationRelativeTo(null);
             j.setVisible(true);
             v.setTitle("Report Saving All");
-        } catch (Exception e) {
+        } catch (HeadlessException | JRException e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -617,9 +623,184 @@ public class ViewReport extends BaseControl {
             j.setLocationRelativeTo(null);
             j.setVisible(true);
             v.setTitle("Report Saving All");
+        } catch (HeadlessException | JRException e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+    }
+
+    public void printReport(String titleReport, String filePath, Map params) {
+        try {
+            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResource(filePath));
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, MySQLConnect.conn);
+            JasperViewer v = new JasperViewer(jasperPrint, false);
+            JDialog j = new JDialog(new JFrame(), true);
+            j.setSize(1024, 768);
+            j.getContentPane().add(v.getContentPane());
+            j.setLocationRelativeTo(null);
+            j.setVisible(true);
+            v.setTitle(titleReport);
+        } catch (HeadlessException | JRException e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+
+    }
+
+    public List<ReportInvoiceHoonModel> findReportInvoiceHoon(String idCard, String accountCode) {
+        String sql = "select p.p_custcode, concat(p_custname, ' ', p_custsurname) name, "
+                + "loan_docno, loan_docdate, loan_amount, loan_interest, loan_datepay, "
+                + "pay_amount, (select concat(addr_no, ' " + ThaiUtil.Unicode2ASCII("หมู่") + "', "
+                + "addr_moo, ' ', addr_road, ' ', addr_soi, "
+                + "' " + ThaiUtil.Unicode2ASCII("ตำบล") + "', addr_tambon, ' " + ThaiUtil.Unicode2ASCII("อำเภอ") + "', "
+                + "addr_aumphur, ' " + ThaiUtil.Unicode2ASCII("จังหวัด") + "', "
+                + "addr_province, ' " + ThaiUtil.Unicode2ASCII("รหัสไปรษณีย์") + " ', addr_post) address "
+                + "from cb_profile_address where cust_code=a.cust_code limit 0,1 "
+                + ") address, hoon_qty,"
+                + "(select hoonrate from cb_hoon_config limit 0,1) hoonrate, "
+                + "(select l.LoanINT from cb_loan_config l where l.loanCode=a.loan_type) loanINT, \"0.00\" loanIntAmt "
+                + "from cb_loan_account a "
+                + "inner join cb_profile p on a.cust_code=p.p_custcode "
+                + "where 1=1 ";
+        if (!idCard.equals("")) {
+            sql += "and a.cust_code='" + idCard + "' ";
+        }
+        if (!accountCode.equals("")) {
+            sql += "and a.loan_docno='" + accountCode + "' ";
+        }
+
+        List<ReportInvoiceHoonModel> listModel = new ArrayList<>();
+        sql += "order by p_custcode, loan_docno";
+        try (ResultSet rs = MySQLConnect.getResultSet(sql)) {
+            while (rs.next()) {
+                ReportInvoiceHoonModel model = new ReportInvoiceHoonModel();
+                model.setName(ThaiUtil.ASCII2Unicode(rs.getString("name")));
+                model.setLoan_docno(rs.getString("loan_docno"));
+                model.setLoan_docdate(rs.getDate("loan_docdate"));
+                model.setLoan_datepay(rs.getDate("loan_datepay"));
+                model.setLoan_amount(rs.getDouble("loan_amount"));
+                model.setPay_amount(rs.getDouble("pay_amount"));
+                model.setLoanINT(rs.getDouble("loanINT"));
+                model.setBalanceIntRate(0);
+                model.setHoon_qty(rs.getInt("hoon_qty"));
+                model.setHoonrate(rs.getInt("hoonrate"));
+                model.setP_custcode(rs.getString("p_custcode"));
+                model.setAddress(ThaiUtil.ASCII2Unicode(rs.getString("address")));
+
+                listModel.add(model);
+            }
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+
+        return listModel;
+    }
+
+    public List<CloseAccountReportModel> showAllCloseAccountReport(String txtDate1, String txtDate2) {
+        List<CloseAccountReportModel> listModel = new ArrayList<>();
+        String sql = " select t_date, t_time, t_acccode, t_amount, t_balance,"
+                + " concat(s.b_cust_name, ' ', s.b_cust_lastname) cust_name, t.t_empcode, t.branch_code "
+                + " from cb_transaction_save t "
+                + " inner join cb_save_account s on t.t_acccode = s.account_code "
+                + " where 1=1 "
+                + " and t_status='" + AppConstants.CB_STATUS_CLOSE_SAVE + "' ";
+        if (!txtDate1.equals("") && !txtDate2.equals("")) {
+            Date date1 = DateFormat.getLocal_ddMMyyyy(txtDate1);
+            Date date2 = DateFormat.getLocal_ddMMyyyy(txtDate2);
+            sql += " and t_date between '" + DateFormat.getMySQL_Date(date1) + "' "
+                    + "and '" + DateFormat.getMySQL_Date(date2) + "' ";
+            this.sqlQuery = sql;
+        }
+        try (ResultSet rs = MySQLConnect.getResultSet(sql)) {
+            while (rs.next()) {
+                CloseAccountReportModel bean = new CloseAccountReportModel();
+                bean.setT_date(rs.getDate("t_date"));
+                bean.setT_time(rs.getString("t_time"));
+                bean.setCust_name(ThaiUtil.ASCII2Unicode(rs.getString("cust_name")));
+                bean.setT_acccode(rs.getString("t_acccode"));
+                bean.setT_amount(rs.getDouble("t_amount"));
+                bean.setT_balance(rs.getDouble("t_balance"));
+                bean.setT_empcode(rs.getString("t_empcode"));
+                bean.setBranch_code(rs.getString("branch_code"));
+
+                listModel.add(bean);
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+
+        return listModel;
+    }
+
+    public String getSqlQuery() {
+        return sqlQuery;
+    }
+
+    public List<HoonReportAllBean> findShowAllReport(int selectedIndex, String txtDate1, String txtDate2, String custCode) {
+        List<HoonReportAllBean> listBean = new ArrayList<>();
+        String sql = "";
+        switch (selectedIndex) {
+            case 1:
+                sql += " and t_status in ('4') ";
+                break;
+            case 2:
+                sql += " and t_status in ('5') ";
+                break;
+            default:
+                sql += " and t_status in ('4','5') ";
+                break;
+        }
+        if (!txtDate1.equals("") && !txtDate2.equals("")) {
+            sql += " and t_date between '" + getDateText(txtDate1) + "' "
+                    + "and '" + getDateText(txtDate2) + "' ";
+        }
+        if (!custCode.trim().equals("")) {
+            sql += " and t_custcode='" + custCode.trim() + "' ";
+        }
+        
+        sql += " order by t_custcode";
+        
+        this.sqlQuery = sql;
+
+        try {
+            ResultSet rs = MySQLConnect.getResultSet(sql);
+            while (rs.next()) {
+                HoonReportAllBean bean = new HoonReportAllBean();
+                bean.setT_docno(rs.getString("t_docno"));
+                bean.setT_date(rs.getDate("t_date"));
+                bean.setT_time(rs.getString("t_time"));
+                bean.setT_description(rs.getString("t_description"));
+                bean.setT_amount(rs.getDouble("t_amount"));
+                bean.setT_custcode(rs.getString("t_custcode"));
+                bean.setP_custName(ThaiUtil.ASCII2Unicode(rs.getString("p_custName")));
+                bean.setP_custSurname(ThaiUtil.ASCII2Unicode(rs.getString("p_custSurname")));
+                bean.setT_empcode(rs.getString("t_empcode"));
+                bean.setCode(rs.getString("code"));
+
+                listBean.add(bean);
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+
+        return listBean;
+    }
+
+    private String getDateText(String date) {
+        SimpleDateFormat sssEng = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        try {
+            Calendar c = Calendar.getInstance();
+            String[] d = date.split("/");
+            int year = Integer.parseInt(d[2]);
+            int month = Integer.parseInt(d[1]) - 1;
+            int day = Integer.parseInt(d[0]);
+            c.set(year, month, day);
+            return sssEng.format(c.getTime());
+        } catch (NumberFormatException e) {
+            return sssEng.format(new Date());
         }
     }
 

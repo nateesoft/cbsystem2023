@@ -11,7 +11,7 @@ import javax.swing.table.DefaultTableModel;
 import org.apache.log4j.Logger;
 import th.co.cbank.util.NumberFormat;
 import th.co.cbank.project.constants.AppConstants;
-import th.co.cbank.project.control.MySQLConnect;
+import th.co.cbank.project.control.CbTransactionLoanControl;
 import th.co.cbank.project.log.Log;
 import th.co.cbank.project.model.CbTransactionLoanBean;
 import th.co.cbank.project.model.CbLoanAccountBean;
@@ -26,12 +26,11 @@ import th.co.cbank.util.TableUtil;
 public class PrintLoanBookDialog extends BaseDialogSwing {
 
     private final Logger logger = Logger.getLogger(PrintLoanBookDialog.class);
+    private final CbTransactionLoanControl transactionLoanControl = new CbTransactionLoanControl();
 
     public PrintLoanBookDialog(java.awt.Frame parent, boolean modal, String accCode) {
         super(parent, modal);
         initComponents();
-        
-        initTable();
 
         if (StringUtil.isNotNullString(accCode)) {
             txtLoanCode.setText(accCode);
@@ -262,7 +261,7 @@ public class PrintLoanBookDialog extends BaseDialogSwing {
         if (rd1.isSelected()) {
             printLoanFrontBook();
         } else if (rd3.isSelected()) {
-            if(txtLoanCode.getText().trim().equals("")){
+            if (txtLoanCode.getText().trim().equals("")) {
                 return;
             }
             try {
@@ -281,7 +280,7 @@ public class PrintLoanBookDialog extends BaseDialogSwing {
                         dataRow[2] = NumberFormat.showDouble2(transactionLoanBean.getT_amount());//99,999,999.99
                         dataRow[3] = "";
                     } else {// ชำระเงิน
-                        dataRow[2] = NumberFormat.showDouble2(listTran.get(i-1).getT_balance());// เงินต้นคงเหลือ
+                        dataRow[2] = NumberFormat.showDouble2(listTran.get(i - 1).getT_balance());// เงินต้นคงเหลือ
                         dataRow[3] = NumberFormat.showDouble2(transactionLoanBean.getT_amount());//99,999,999.99
                     }
                     dataRow[4] = NumberFormat.showDouble2(transactionLoanBean.getT_interest());//99,999,999.99
@@ -401,21 +400,12 @@ public class PrintLoanBookDialog extends BaseDialogSwing {
         String t_booktype = "" + tbTransaction.getValueAt(selectRow, 1);
         String t_docno = "" + tbTransaction.getValueAt(selectRow, 11);
 
-        try {
-            String sql = "UPDATE cb_transaction_loan "
-                    + "SET PrintChk= 'N' "
-                    + "WHERE t_acccode='" + txtLoanCode.getText() + "' "
-                    + "AND LineNo='" + lineNo + "' "
-                    + "and t_status in('10','7') "
-                    + "AND t_docno='" + t_docno + "' "
-                    + "AND t_booktype='" + t_booktype + "'";
-            MySQLConnect.exeUpdate(sql);
-        } catch (Exception e) {
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
-        }
-    }
+        CbTransactionLoanBean bean = new CbTransactionLoanBean();
+        bean.setT_acccode(txtLoanCode.getText());
+        bean.setLineNo(lineNo);
+        bean.setT_docno(t_docno);
+        bean.setT_booktype(t_booktype);
 
-    private void initTable() {
-        
+        transactionLoanControl.updateLoanState(bean);
     }
 }

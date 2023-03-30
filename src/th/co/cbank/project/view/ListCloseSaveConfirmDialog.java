@@ -1,23 +1,21 @@
 package th.co.cbank.project.view;
 
 import java.awt.Frame;
-import java.awt.HeadlessException;
-import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import javax.swing.JOptionPane;
 import org.apache.log4j.Logger;
-import th.co.cbank.project.control.MySQLConnect;
+import th.co.cbank.project.control.CbTransactionSaveControl;
 import th.co.cbank.util.NumberFormat;
-import th.co.cbank.project.log.Log;
 import th.co.cbank.project.model.ConfigBean;
 import th.co.cbank.project.model.PrintSlipBean;
 import th.co.cbank.project.control.PassBook_PSiPR9;
+import th.co.cbank.project.model.CbTransactionSaveBean;
 import th.co.cbank.project.model.ReportGreenBean;
 
 public class ListCloseSaveConfirmDialog extends BaseDialogSwing {
+
     private final Logger logger = Logger.getLogger(ListCloseSaveConfirmDialog.class);
     private PrintSlipBean psBean;
     private Frame parent;
@@ -133,64 +131,41 @@ public class ListCloseSaveConfirmDialog extends BaseDialogSwing {
 
     private void printTransactionCloseBook(String txtAccCode) {
         //print รายการลงในสมุด
-        PassBook_PSiPR9 v = new PassBook_PSiPR9();
-        ConfigBean cBean = getConfigControl().getConfigBean();
+        PassBook_PSiPR9 passbookPsi = new PassBook_PSiPR9();
+        ConfigBean configBean = getConfigControl().getConfigBean();
 
         List<ReportGreenBean> listBean = new ArrayList<>();
-        try {
-            String sql1 = "select * from "
-                    + "cb_transaction_save "
-                    + "where t_acccode='" + txtAccCode + "' "
-                    + "and LineNo>0 "
-                    + "and printchk='N' and t_booktype<>'" + cBean.getLoanDocPrefix() + "' "
-                    + "order by t_index";
-            try (ResultSet rs = MySQLConnect.getResultSet(sql1)) {
-                SimpleDateFormat sim = new SimpleDateFormat("dd/MM/yy");
-                while (rs.next()) {
-                    ReportGreenBean bean1 = new ReportGreenBean();
-                    bean1.setDate(sim.format(new Date()));
-                    bean1.setType(rs.getString("t_booktype"));
-                    double money_in = rs.getDouble("money_in");
-                    double money_out = rs.getDouble("money_out");
-                    if (money_in == 0) {
-                        bean1.setDp("");
-                    } else {
-                        bean1.setDp(NumberFormat.showDouble2(money_in));
-                    }
-                    if (money_out == 0) {
-                        bean1.setWd("");
-                    } else {
-                        bean1.setWd(NumberFormat.showDouble2(money_out));
-                    }
-
-                    bean1.setBalance(NumberFormat.showDouble2(0));
-                    bean1.setIn("" + rs.getInt("t_hoon"));
-                    bean1.setLine(rs.getString("lineNo"));
-
-                    listBean.add(bean1);
-
-                    //update book
-                    try {
-                        String sql = "update cb_transaction_save "
-                                + "set PrintChk='Y' "
-                                + "where t_acccode='" + txtAccCode + "' "
-                                + "and printChk='N' and t_booktype not in"
-                                + "('" + cBean.getLoanDocPrefix() + "','" + cBean.getPaymentDocPrefix() + "') ";
-                        MySQLConnect.exeUpdate(sql);
-                    } catch (Exception e) {
-                        JOptionPane.showMessageDialog(this, e.getMessage());
-                        Log.write.error(e.getMessage());
-                    }
-                }
-            } catch (Exception ex) {
-                
+        SimpleDateFormat sim = new SimpleDateFormat("dd/MM/yy");
+        CbTransactionSaveControl transactionSaveControl = new CbTransactionSaveControl();
+        List<CbTransactionSaveBean> listTransactionSaveBean = transactionSaveControl.listAllByAccountCode(txtAccCode, configBean.getLoanDocPrefix());
+        for (CbTransactionSaveBean bean : listTransactionSaveBean) {
+            ReportGreenBean reportGreenBean = new ReportGreenBean();
+            reportGreenBean.setDate(sim.format(new Date()));
+            reportGreenBean.setType(bean.getT_booktype());
+            double money_in = bean.getMoney_in();
+            double money_out = bean.getMoney_out();
+            if (money_in == 0) {
+                reportGreenBean.setDp("");
+            } else {
+                reportGreenBean.setDp(NumberFormat.showDouble2(money_in));
+            }
+            if (money_out == 0) {
+                reportGreenBean.setWd("");
+            } else {
+                reportGreenBean.setWd(NumberFormat.showDouble2(money_out));
             }
 
-            //print passbook
-            v.printTransactionGreen2(listBean, true);
-        } catch (HeadlessException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
-            Log.write.error(e.getMessage());
+            reportGreenBean.setBalance(NumberFormat.showDouble2(0));
+            reportGreenBean.setIn("" + bean.getT_hoon());
+            reportGreenBean.setLine("" + bean.getLineNo());
+
+            listBean.add(reportGreenBean);
+
+            //update book
+            transactionSaveControl.updateWhereBookTypeNotIn(txtAccCode, configBean.getLoanDocPrefix(), configBean.getPaymentDocPrefix());
         }
+
+        //print passbook
+        passbookPsi.printTransactionGreen2(listBean, true);
     }
 }

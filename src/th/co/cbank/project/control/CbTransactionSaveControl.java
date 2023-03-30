@@ -126,6 +126,23 @@ public class CbTransactionSaveControl extends BaseControl {
         }
     }
 
+    public List<CbTransactionSaveBean> getTransactionByBookType(String acccode, String booktype1, String booktype2) {
+        try {
+            String sql = "select * from "
+                    + "cb_transaction_save "
+                    + "where t_acccode='" + acccode + "' "
+                    + "and printchk='N' and LineNo>0 and t_booktype not in"
+                    + "('" + booktype1 + "','" + booktype2 + "') "
+                    + "order by t_index;";
+            ResultSet rs = MySQLConnect.getResultSet(sql);
+            return mappingBean(rs);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+            return new ArrayList();
+        }
+    }
+
     public List<CbTransactionSaveBean> listCbTransactionSaveAll(String accCode) {
         try {
             String sql = "select * "
@@ -139,7 +156,7 @@ public class CbTransactionSaveControl extends BaseControl {
             return mappingBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }
@@ -156,7 +173,7 @@ public class CbTransactionSaveControl extends BaseControl {
             return mappingBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }
@@ -173,7 +190,7 @@ public class CbTransactionSaveControl extends BaseControl {
             return listBean.get(0);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return null;
         }
     }
@@ -189,7 +206,7 @@ public class CbTransactionSaveControl extends BaseControl {
             return listBean.get(0);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return null;
         }
     }
@@ -236,7 +253,7 @@ public class CbTransactionSaveControl extends BaseControl {
             return true;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return false;
         }
     }
@@ -258,7 +275,7 @@ public class CbTransactionSaveControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         if (LineMax == 0) {
@@ -282,7 +299,7 @@ public class CbTransactionSaveControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         if (LineMax == 0) {
@@ -302,7 +319,7 @@ public class CbTransactionSaveControl extends BaseControl {
             update(sql);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -316,7 +333,7 @@ public class CbTransactionSaveControl extends BaseControl {
             update(sql);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -329,7 +346,7 @@ public class CbTransactionSaveControl extends BaseControl {
             update(sql1);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -357,10 +374,106 @@ public class CbTransactionSaveControl extends BaseControl {
             rs1.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return list;
     }
 
+    public List<CbTransactionSaveBean> listSavingBookTransactionByAcccode(String accCode) {
+        try {
+            String sql = "select * from cb_transaction_save "
+                    + "where t_acccode='" + accCode + "' "
+                    + "and t_status in('2','3','8', '11') "
+                    + "order by t_date, t_time, LineNo";
+            ResultSet rs = MySQLConnect.getResultSet(sql);
+            return mappingBean(rs);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+            return new ArrayList();
+        }
+    }
+
+    public boolean updateStateTable(CbTransactionSaveBean bean, int lineNoOld, String t_date) {
+        try {
+            String sql = "UPDATE cb_transaction_save "
+                    + "SET PrintChk= 'N',"
+                    + "LineNo='" + bean.getLineNo() + "',"
+                    + "t_index='" + bean.getT_index() + "' "
+                    + "WHERE t_acccode='" + bean.getT_acccode() + "' "
+                    + "AND LineNo='" + lineNoOld + "' "
+                    + "AND t_docno='" + bean.getT_docno() + "' "
+                    + "AND t_booktype='" + bean.getT_booktype() + "' "
+                    + "AND t_date='" + t_date + "'";
+            return MySQLConnect.exeUpdate(sql) > 0;
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+        return false;
+    }
+
+    public boolean updateStateTable2(CbTransactionSaveBean bean, int lineNoOld, String t_date) {
+        try {
+            String sql = "UPDATE cb_transaction_save "
+                    + "SET LineNo='" + bean.getLineNo() + "', "
+                    + "t_index='" + bean.getT_index() + "' "
+                    + "WHERE t_acccode='" + bean.getT_acccode() + "' "
+                    + "AND LineNo='" + lineNoOld + "' "
+                    + "AND t_docno='" + bean.getT_docno() + "' "
+                    + "AND t_booktype='" + bean.getT_booktype() + "' "
+                    + "AND t_date='" + t_date + "'";
+            MySQLConnect.exeUpdate(sql);
+            return MySQLConnect.exeUpdate(sql) > 0;
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+        return false;
+    }
+
+    public List<CbTransactionSaveBean> listAllByAccountCode(String txtAccCode, String loanDocPrefix) {
+        try {
+            String sql = "select * from cb_transaction_save "
+                    + "where t_acccode='" + txtAccCode + "' "
+                    + "and LineNo>0 "
+                    + "and printchk='N' and t_booktype<>'" + loanDocPrefix + "' "
+                    + "order by t_index";
+            ResultSet rs = MySQLConnect.getResultSet(sql);
+            return mappingBean(rs);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+            return new ArrayList();
+        }
+    }
+
+    public void updateWhereBookTypeNotIn(String txtAccCode, String loanDocPrefix, String paymentDocPrefix) {
+        try {
+            String sql = "update cb_transaction_save "
+                    + "set PrintChk='Y' "
+                    + "where t_acccode='" + txtAccCode + "' "
+                    + "and printChk='N' and t_booktype not in"
+                    + "('" + loanDocPrefix + "','" + paymentDocPrefix + "') ";
+            MySQLConnect.exeUpdate(sql);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+    }
+
+    public void updateWhereBookTypeNotInAndLineNo(String acccode, String lineNo, String booktype) {
+        try {
+            String sql = "update cb_transaction_save "
+                    + "set PrintChk='Y' "
+                    + "where t_acccode='" + acccode + "' "
+                    + "and lineNo='" + lineNo + "' "
+                    + "and printChk='N' and t_booktype<>'" + booktype + "' ";
+            MySQLConnect.exeUpdate(sql);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+    }
 }

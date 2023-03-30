@@ -2,21 +2,20 @@ package th.co.cbank.project.view;
 
 import java.awt.Font;
 import java.awt.event.KeyEvent;
-import java.sql.ResultSet;
-import javax.swing.JOptionPane;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import org.apache.log4j.Logger;
-import th.co.cbank.util.ThaiUtil;
 import th.co.cbank.project.constants.AppConstants;
-import th.co.cbank.project.control.MySQLConnect;
-import th.co.cbank.project.control.Value;
-import th.co.cbank.project.log.Log;
+import th.co.cbank.project.control.ProfileControl;
+import th.co.cbank.project.model.ProfileBean;
 import th.co.cbank.util.TableUtil;
 
 public class ListCustomerDialog extends BaseDialogSwing {
+
     private final Logger logger = Logger.getLogger(ListCustomerDialog.class);
     private String CUST_CODE = null;
+    private final ProfileControl profileControl = new ProfileControl();
 
     public ListCustomerDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -195,50 +194,26 @@ public class ListCustomerDialog extends BaseDialogSwing {
         DefaultTableModel model = (DefaultTableModel) tbApprove.getModel();
         TableUtil.clearModel(model);
 
-        try {
-            String sql = "select p_custCode, p_custName,p_custsurname,ApproveLimit "
-                    + "from cb_profile "
-                    + "where ApproveLimit>0 "
-                    + "and p_custCode<>'" + Value.CUST_CODE + "'";
-            ResultSet rs = MySQLConnect.getResultSet(sql);
-            while (rs.next()) {
-                model.addRow(new Object[]{
-                    rs.getString("p_custCode"),
-                    ThaiUtil.ASCII2Unicode(rs.getString("p_custName")),
-                    ThaiUtil.ASCII2Unicode(rs.getString("p_custSurname"))
-                });
-            }
-
-            rs.close();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
-            Log.write.error(e.getMessage());
+        List<ProfileBean> listProfile = profileControl.getProfileByApproveLimitMoreThanZero(CUST_CODE);
+        for (ProfileBean bean : listProfile) {
+            model.addRow(new Object[]{
+                bean.getP_custCode(),
+                bean.getP_custName(),
+                bean.getP_custSurname()
+            });
         }
     }
 
     private void searchCustomer() {
         DefaultTableModel model = (DefaultTableModel) tbApprove.getModel();
         TableUtil.clearModel(model);
-
-        try {
-            String sql = "select p_custCode, p_custName,p_custsurname,ApproveLimit "
-                    + "from cb_profile "
-                    + "where ApproveLimit>0 "
-                    + "and p_custCode<>'" + Value.CUST_CODE + "' "
-                    + "and p_custName like '%" + ThaiUtil.Unicode2ASCII(txtSearch.getText()) + "%'";
-            ResultSet rs = MySQLConnect.getResultSet(sql);
-            while (rs.next()) {
-                model.addRow(new Object[]{
-                    rs.getString("p_custCode"),
-                    ThaiUtil.ASCII2Unicode(rs.getString("p_custName")),
-                    ThaiUtil.ASCII2Unicode(rs.getString("p_custSurname"))
-                });
-            }
-
-            rs.close();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
-            Log.write.error(e.getMessage());
+        List<ProfileBean> listProfile = profileControl.getProfileByApproveAndCustName(CUST_CODE, txtSearch.getText());
+        for (ProfileBean bean : listProfile) {
+            model.addRow(new Object[]{
+                bean.getP_custCode(),
+                bean.getP_custName(),
+                bean.getP_custSurname()
+            });
         }
     }
 }

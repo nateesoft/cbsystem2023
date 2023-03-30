@@ -68,7 +68,7 @@ public class ConfigControl extends BaseControl {
             return mappingBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }
@@ -84,7 +84,7 @@ public class ConfigControl extends BaseControl {
             return listBean.get(0);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ConfigBean();
         }
     }
@@ -128,9 +128,9 @@ public class ConfigControl extends BaseControl {
             return true;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
-            return false;
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
+        return false;
     }
 
     public boolean updateConfig(ConfigBean bean) {
@@ -175,8 +175,44 @@ public class ConfigControl extends BaseControl {
             return true;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
-            return false;
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+        return false;
+    }
+
+    public boolean updateLoanDocRunning() {
+        try {
+            MySQLConnect.exeUpdate("update cb_config set LoanDocRunning=LoanDocRunning+1");
+            return true;
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+        return false;
+    }
+
+    public boolean updateFeeRunning() {
+        try {
+            String sql = "update cb_config set FeeRunning=FeeRunning+1";
+            return MySQLConnect.exeUpdate(sql) > 0;
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+        return false;
+    }
+
+    public void resetLoanConfig(String loanCode) {
+        try {
+            MySQLConnect.exeUpdate("update cb_config set loanDocRunning='1'");
+            MySQLConnect.exeUpdate("update cb_loan_config set loanRunning='1',bookNo='1' where loanCode='" + loanCode + "'");
+            MySQLConnect.exeUpdate("delete from cb_loan_account");
+            MySQLConnect.exeUpdate("delete from cb_loan_table_payment");
+            MySQLConnect.exeUpdate("delete from cb_transaction_loan");
+            MySQLConnect.exeUpdate("update cb_profile set loan_balance=0, loan_credit_amt=0, loan_credit_balance=0");
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 

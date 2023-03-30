@@ -5,10 +5,8 @@ import java.awt.Font;
 import java.awt.Frame;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.sql.ResultSet;
 import java.util.Date;
 import java.util.List;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import org.apache.log4j.Logger;
@@ -16,7 +14,6 @@ import th.co.cbank.util.JTableUtil;
 import th.co.cbank.util.DateFormat;
 import th.co.cbank.util.NumberFormat;
 import th.co.cbank.project.constants.AppConstants;
-import th.co.cbank.project.control.MySQLConnect;
 import th.co.cbank.project.model.CbMemberTypeBean;
 import th.co.cbank.project.model.ProfileMapping;
 import th.co.cbank.util.ExcelUtil;
@@ -490,30 +487,5 @@ public class ProfileList2Dialog extends BaseDialogSwing {
         }
 
         txtDate.setText(DateFormat.getLocale_ddMMyyyy(new Date()));
-    }
-
-    private void updateMasterStartMember() {
-        try {
-            String sql = "select b_cust_code, b_start from cb_save_account group by b_cust_code";
-            ResultSet rs = MySQLConnect.getResultSet(sql);
-            while (rs.next()) {
-                String b_cust_code = rs.getString("b_cust_code");
-                String b_start = rs.getString("b_start");
-                try {
-                    String sql2 = "update cb_profile set "
-                            + "p_member_start='" + b_start + "' "
-                            + "where p_custcode='" + b_cust_code + "'";
-                    MySQLConnect.exeUpdate(sql2);
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(this, e.getMessage());
-                    
-                }
-            }
-
-            rs.close();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
-            
-        }
     }
 }

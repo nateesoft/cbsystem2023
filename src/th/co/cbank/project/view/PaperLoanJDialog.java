@@ -18,7 +18,7 @@ import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
 import org.apache.log4j.Logger;
 import th.co.cbank.project.constants.AppConstants;
-import th.co.cbank.project.control.MySQLConnect;
+import th.co.cbank.project.control.ViewReport;
 import th.co.cbank.util.DateFormat;
 import th.co.cbank.util.MoneyToWord;
 import th.co.cbank.util.NumberFormat;
@@ -32,9 +32,11 @@ import th.co.cbank.project.model.ProfileBean;
 import th.co.cbank.util.MessageAlert;
 
 public class PaperLoanJDialog extends BaseDialogSwing {
+
     private final Logger logger = Logger.getLogger(PaperLoanJDialog.class);
     private final String loanAccountCode;
     private CbLoanAccountBean loanAccountBean;
+    private final ViewReport viewReport = new ViewReport();
 
     public PaperLoanJDialog(java.awt.Frame parent, boolean modal, String loanAccountCode) {
         super(parent, modal);
@@ -159,200 +161,148 @@ public class PaperLoanJDialog extends BaseDialogSwing {
     // End of variables declaration//GEN-END:variables
 
     private void print1() {
-        try {
-            Map p = new HashMap();
-            BranchBean bBean = getBranchControl().getData();
-            for (int i = 1; i <= 38; i++) {
-                p.put("p" + i, "");
-            }
-
-            p.put("p1", bBean.getName());
-            p.put("p2", "สัญญากู้เงิน");
-            p.put("p3", bBean.getName());
-            SimpleDateFormat simp = new SimpleDateFormat("dd MMMM yyyy");
-            if (loanAccountBean == null) {
-                JOptionPane.showMessageDialog(this, "ไม่พบข้อมูลผู้กู้ในระบบ ไม่สามารถออกเอกสารได้ กรุณาตรวจสอบ");
-                return;
-            }
-
-            p.put("p4", simp.format(loanAccountBean.getLoan_docdate()));
-            p.put("p5", loanAccountBean.getLoan_docno());
-
-            ProfileBean profileBean = getProfileControl().listCbProfile(loanAccountBean.getCust_code());
-            
-            AddressBean addressBean = getAddressControl().listProfileAddress(profileBean.getP_custCode(), "1");
-
-            p.put("p6", profileBean.getP_custName() + " " + profileBean.getP_custSurname());
-            p.put("p7", "" + profileBean.getP_custAge());
-            p.put("p8", addressBean.getAddr_No());
-            p.put("p9", addressBean.getAddr_Moo());
-            p.put("p10", addressBean.getAddr_Soi());
-            p.put("p11", addressBean.getAddr_Road());
-            p.put("p12", addressBean.getAddr_Tambon());
-            p.put("p13", addressBean.getAddr_Aumphur());
-            p.put("p14", addressBean.getAddr_Province());
-            p.put("p15", addressBean.getAddr_Post());
-            p.put("p16", addressBean.getAddr_Tel());
-            p.put("p17", addressBean.getCust_Code());
-            p.put("p18", DateFormat.getLocale_ddMMyyyy(profileBean.getP_member_end()));
-            p.put("p19", DateFormat.getLocale_ddMMyyyy(profileBean.getCard_Expire()));
-            p.put("p20", bBean.getName());
-            p.put("p21", "-");
-
-            CbLoanConfigBean cBean = getLoanConfigControl().listLoanConfig(loanAccountBean.getLoan_type());
-            p.put("p22", cBean.getLoanName());
-            p.put("p23", NumberFormat.showDouble2(loanAccountBean.getLoan_amount()));
-            BigDecimal bg = new BigDecimal(loanAccountBean.getLoan_amount());
-            p.put("p24", "(" + MoneyToWord.getBahtText(bg) + ")");
-            p.put("p25", "");
-            p.put("p26", NumberFormat.showDouble2(loanAccountBean.getLoan_interest()));
-            p.put("p27", "" + loanAccountBean.getPeriod_pay());
-            p.put("p28", NumberFormat.showDouble2(loanAccountBean.getPayPerAmount()));
-            p.put("p29", "" + loanAccountBean.getPeriod_pay());
-            SimpleDateFormat s1 = new SimpleDateFormat("dd/MMMM/yyyy");
-            String[] dateStart = s1.format(loanAccountBean.getLoan_start_date()).split("/");
-            p.put("p30", dateStart[0]);
-            p.put("p31", dateStart[1]);
-            p.put("p32", dateStart[2]);
-            SimpleDateFormat s2 = new SimpleDateFormat("dd/MMMM/yyyy");
-            String[] dateEnd = s2.format(loanAccountBean.getLoan_end_date()).split("/");
-            p.put("p33", dateEnd[0]);
-            p.put("p34", dateEnd[1]);
-            p.put("p35", dateEnd[2]);
-            p.put("p36", "" + cBean.getLoanPenaltyDay());
-            p.put("p37", NumberFormat.showDouble2(cBean.getLoanPenaltyINT() / 12));
-            p.put("p38", profileBean.getP_custName() + " " + profileBean.getP_custSurname());
-
-            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResource(AppConstants.JASPER_LOAN_PAPER_REPORT));
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, p, MySQLConnect.conn);
-            JasperViewer v = new JasperViewer(jasperPrint, false);
-            JDialog j = new JDialog(new JFrame(), true);
-            j.setTitle("Print");
-            j.setSize(1024, 768);
-            j.getContentPane().add(v.getContentPane());
-            j.setLocationRelativeTo(null);
-            j.setVisible(true);
-            v.setTitle("สัญญากู้เงิน");
-        } catch (HeadlessException e) {
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
-            Log.write.error(e.getMessage());
-        } catch (JRException e) {
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
-            Log.write.error(e.getMessage());
+        Map params = new HashMap();
+        BranchBean bBean = getBranchControl().getData();
+        for (int i = 1; i <= 38; i++) {
+            params.put("p" + i, "");
         }
+
+        params.put("p1", bBean.getName());
+        params.put("p2", "สัญญากู้เงิน");
+        params.put("p3", bBean.getName());
+        SimpleDateFormat simp = new SimpleDateFormat("dd MMMM yyyy");
+        if (loanAccountBean == null) {
+            JOptionPane.showMessageDialog(this, "ไม่พบข้อมูลผู้กู้ในระบบ ไม่สามารถออกเอกสารได้ กรุณาตรวจสอบ");
+            return;
+        }
+
+        params.put("p4", simp.format(loanAccountBean.getLoan_docdate()));
+        params.put("p5", loanAccountBean.getLoan_docno());
+
+        ProfileBean profileBean = getProfileControl().listCbProfile(loanAccountBean.getCust_code());
+        AddressBean addressBean = getAddressControl().listProfileAddress(profileBean.getP_custCode(), "1");
+
+        params.put("p6", profileBean.getP_custName() + " " + profileBean.getP_custSurname());
+        params.put("p7", "" + profileBean.getP_custAge());
+        params.put("p8", addressBean.getAddr_No());
+        params.put("p9", addressBean.getAddr_Moo());
+        params.put("p10", addressBean.getAddr_Soi());
+        params.put("p11", addressBean.getAddr_Road());
+        params.put("p12", addressBean.getAddr_Tambon());
+        params.put("p13", addressBean.getAddr_Aumphur());
+        params.put("p14", addressBean.getAddr_Province());
+        params.put("p15", addressBean.getAddr_Post());
+        params.put("p16", addressBean.getAddr_Tel());
+        params.put("p17", addressBean.getCust_Code());
+        params.put("p18", DateFormat.getLocale_ddMMyyyy(profileBean.getP_member_end()));
+        params.put("p19", DateFormat.getLocale_ddMMyyyy(profileBean.getCard_Expire()));
+        params.put("p20", bBean.getName());
+        params.put("p21", "-");
+
+        CbLoanConfigBean cBean = getLoanConfigControl().listLoanConfig(loanAccountBean.getLoan_type());
+        params.put("p22", cBean.getLoanName());
+        params.put("p23", NumberFormat.showDouble2(loanAccountBean.getLoan_amount()));
+        BigDecimal bg = new BigDecimal(loanAccountBean.getLoan_amount());
+        params.put("p24", "(" + MoneyToWord.getBahtText(bg) + ")");
+        params.put("p25", "");
+        params.put("p26", NumberFormat.showDouble2(loanAccountBean.getLoan_interest()));
+        params.put("p27", "" + loanAccountBean.getPeriod_pay());
+        params.put("p28", NumberFormat.showDouble2(loanAccountBean.getPayPerAmount()));
+        params.put("p29", "" + loanAccountBean.getPeriod_pay());
+        SimpleDateFormat s1 = new SimpleDateFormat("dd/MMMM/yyyy");
+        String[] dateStart = s1.format(loanAccountBean.getLoan_start_date()).split("/");
+        params.put("p30", dateStart[0]);
+        params.put("p31", dateStart[1]);
+        params.put("p32", dateStart[2]);
+        SimpleDateFormat s2 = new SimpleDateFormat("dd/MMMM/yyyy");
+        String[] dateEnd = s2.format(loanAccountBean.getLoan_end_date()).split("/");
+        params.put("p33", dateEnd[0]);
+        params.put("p34", dateEnd[1]);
+        params.put("p35", dateEnd[2]);
+        params.put("p36", "" + cBean.getLoanPenaltyDay());
+        params.put("p37", NumberFormat.showDouble2(cBean.getLoanPenaltyINT() / 12));
+        params.put("p38", profileBean.getP_custName() + " " + profileBean.getP_custSurname());
+
+        String titleReport = "สัญญากู้เงิน";
+        viewReport.printReport(titleReport, AppConstants.JASPER_LOAN_PAPER_REPORT, params);
     }
 
     private void print2() {
-        try {
-            Map p = new HashMap();
-            BranchBean bBean = getBranchControl().getData();
-            for (int i = 1; i <= 41; i++) {
-                p.put("p" + i, "");
-            }
-
-            p.put("p1", bBean.getName());
-            p.put("p2", loanAccountCode);
-            p.put("p3", bBean.getName());
-
-            SimpleDateFormat simp = new SimpleDateFormat("dd MMMM yyyy");
-            p.put("p4", simp.format(loanAccountBean.getLoan_docdate()));
-
-            List<CbBondsmanBean> listBondsman = getCbBondsmanControl().listCbBondsman(loanAccountCode);
-
-            ProfileBean profileBean = getProfileControl().listCbProfile(loanAccountBean.getCust_code());
-            if (listBondsman.size() > 0) {
-                CbBondsmanBean sbBean1 = (CbBondsmanBean) listBondsman.get(0);
-                ProfileBean pBean1 = getProfileControl().listCbProfile(sbBean1.getIdcard());
-                p.put("p5", pBean1.getP_custName() + " " + pBean1.getP_custSurname());
-                p.put("p6", "" + pBean1.getP_custAge());
-                p.put("p7", "" + pBean1.getP_custNation());
-                AddressBean bean1 = getAddressControl().listProfileAddress(pBean1.getP_custCode(), "1");
-                p.put("p8", "" + bean1.getAddr_No());
-                p.put("p9", "" + bean1.getAddr_Moo());
-                p.put("p10", "" + bean1.getAddr_Soi());
-                p.put("p11", "" + bean1.getAddr_Road());
-                p.put("p12", "" + bean1.getAddr_Tambon());
-                p.put("p13", "" + bean1.getAddr_Aumphur());
-                p.put("p14", "" + bean1.getAddr_Province());
-                p.put("p15", "" + bean1.getAddr_Post());
-                p.put("p16", "" + bean1.getAddr_Tel());
-                p.put("p17", "" + pBean1.getP_custCode());
-                p.put("p18", "" + DateFormat.getLocale_ddMMyyyy(pBean1.getCard_Expire()));
-
-                if (listBondsman.size() > 1) {
-                    CbBondsmanBean sbBean2 = (CbBondsmanBean) listBondsman.get(1);
-                    ProfileBean pBean2 = getProfileControl().listCbProfile(sbBean2.getIdcard());
-                    p.put("p19", pBean2.getP_custName() + " " + pBean2.getP_custSurname());
-                    p.put("p20", "" + pBean2.getP_custAge());
-                    p.put("p21", "" + pBean2.getP_custNation());
-                    AddressBean bean2 = getAddressControl().listProfileAddress(pBean2.getP_custCode(), "1");
-                    p.put("p22", "" + bean2.getAddr_No());
-                    p.put("p23", "" + bean2.getAddr_Moo());
-                    p.put("p24", "" + bean2.getAddr_Soi());
-                    p.put("p25", "" + bean2.getAddr_Road());
-                    p.put("p26", "" + bean2.getAddr_Tambon());
-                    p.put("p27", "" + bean2.getAddr_Aumphur());
-                    p.put("p28", "" + bean2.getAddr_Province());
-                    p.put("p29", "" + bean2.getAddr_Post());
-                    p.put("p30", "" + bean2.getAddr_Tel());
-                    p.put("p31", "" + pBean2.getP_custCode());
-                    p.put("p32", "" + DateFormat.getLocale_ddMMyyyy(pBean2.getCard_Expire()));
-
-                    p.put("p33", profileBean.getP_custName() + " " + profileBean.getP_custSurname());
-                    p.put("p37", profileBean.getP_custName() + " " + profileBean.getP_custSurname());
-                    p.put("p34", profileBean.getP_custCode());
-                    p.put("p38", NumberFormat.showDouble2(loanAccountBean.getLoan_amount()));
-                    MoneyToWord m = new MoneyToWord(loanAccountBean.getLoan_amount());
-                    p.put("p39", "(" + m.toString() + ")");
-                    p.put("p40", loanAccountBean.getLoan_docno());
-                    p.put("p41", DateFormat.getLocale_ddMMyyyy(loanAccountBean.getLoan_docdate()));
-
-                    p.put("p35", pBean1.getP_custName() + " " + pBean1.getP_custSurname());
-                    p.put("p36", pBean2.getP_custName() + " " + pBean2.getP_custSurname());
-                }
-            }
-
-            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResource(AppConstants.JASPER_LOAN_PAPER_GARUNTEE_REPORT));
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, p, MySQLConnect.conn);
-            JasperViewer v = new JasperViewer(jasperPrint, false);
-            JDialog j = new JDialog(new JFrame(), true);
-            j.setTitle("Print");
-            j.setSize(1024, 768);
-            j.getContentPane().add(v.getContentPane());
-            j.setLocationRelativeTo(null);
-            j.setVisible(true);
-            v.setTitle("สัญญาค้ำประกันการกู้ยืมเงิน ฉบับที่ 1");
-        } catch (HeadlessException e) {
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
-            Log.write.error(e.getMessage());
-        } catch (JRException e) {
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
-            Log.write.error(e.getMessage());
+        Map params = new HashMap();
+        BranchBean branchBean = getBranchControl().getData();
+        for (int i = 1; i <= 41; i++) {
+            params.put("p" + i, "");
         }
+
+        params.put("p1", branchBean.getName());
+        params.put("p2", loanAccountCode);
+        params.put("p3", branchBean.getName());
+
+        SimpleDateFormat simp = new SimpleDateFormat("dd MMMM yyyy");
+        params.put("p4", simp.format(loanAccountBean.getLoan_docdate()));
+
+        List<CbBondsmanBean> listBondsman = getCbBondsmanControl().listCbBondsman(loanAccountCode);
+        ProfileBean profileBean = getProfileControl().listCbProfile(loanAccountBean.getCust_code());
+        if (listBondsman.size() > 0) {
+            CbBondsmanBean bondsmanBean = (CbBondsmanBean) listBondsman.get(0);
+            ProfileBean pBean1 = getProfileControl().listCbProfile(bondsmanBean.getIdcard());
+            params.put("p5", pBean1.getP_custName() + " " + pBean1.getP_custSurname());
+            params.put("p6", "" + pBean1.getP_custAge());
+            params.put("p7", "" + pBean1.getP_custNation());
+            AddressBean bean1 = getAddressControl().listProfileAddress(pBean1.getP_custCode(), "1");
+            params.put("p8", "" + bean1.getAddr_No());
+            params.put("p9", "" + bean1.getAddr_Moo());
+            params.put("p10", "" + bean1.getAddr_Soi());
+            params.put("p11", "" + bean1.getAddr_Road());
+            params.put("p12", "" + bean1.getAddr_Tambon());
+            params.put("p13", "" + bean1.getAddr_Aumphur());
+            params.put("p14", "" + bean1.getAddr_Province());
+            params.put("p15", "" + bean1.getAddr_Post());
+            params.put("p16", "" + bean1.getAddr_Tel());
+            params.put("p17", "" + pBean1.getP_custCode());
+            params.put("p18", "" + DateFormat.getLocale_ddMMyyyy(pBean1.getCard_Expire()));
+
+            if (listBondsman.size() > 1) {
+                CbBondsmanBean bondsmanBean2 = (CbBondsmanBean) listBondsman.get(1);
+                ProfileBean pBean2 = getProfileControl().listCbProfile(bondsmanBean2.getIdcard());
+                params.put("p19", pBean2.getP_custName() + " " + pBean2.getP_custSurname());
+                params.put("p20", "" + pBean2.getP_custAge());
+                params.put("p21", "" + pBean2.getP_custNation());
+                AddressBean bean2 = getAddressControl().listProfileAddress(pBean2.getP_custCode(), "1");
+                params.put("p22", "" + bean2.getAddr_No());
+                params.put("p23", "" + bean2.getAddr_Moo());
+                params.put("p24", "" + bean2.getAddr_Soi());
+                params.put("p25", "" + bean2.getAddr_Road());
+                params.put("p26", "" + bean2.getAddr_Tambon());
+                params.put("p27", "" + bean2.getAddr_Aumphur());
+                params.put("p28", "" + bean2.getAddr_Province());
+                params.put("p29", "" + bean2.getAddr_Post());
+                params.put("p30", "" + bean2.getAddr_Tel());
+                params.put("p31", "" + pBean2.getP_custCode());
+                params.put("p32", "" + DateFormat.getLocale_ddMMyyyy(pBean2.getCard_Expire()));
+                params.put("p33", profileBean.getP_custName() + " " + profileBean.getP_custSurname());
+                params.put("p37", profileBean.getP_custName() + " " + profileBean.getP_custSurname());
+                params.put("p34", profileBean.getP_custCode());
+                params.put("p38", NumberFormat.showDouble2(loanAccountBean.getLoan_amount()));
+                MoneyToWord moneyToWord = new MoneyToWord(loanAccountBean.getLoan_amount());
+                params.put("p39", "(" + moneyToWord.toString() + ")");
+                params.put("p40", loanAccountBean.getLoan_docno());
+                params.put("p41", DateFormat.getLocale_ddMMyyyy(loanAccountBean.getLoan_docdate()));
+                params.put("p35", pBean1.getP_custName() + " " + pBean1.getP_custSurname());
+                params.put("p36", pBean2.getP_custName() + " " + pBean2.getP_custSurname());
+            }
+        }
+
+        String title = "สัญญาค้ำประกันการกู้ยืมเงิน ฉบับที่ 1";
+        viewReport.printReport(title, AppConstants.JASPER_LOAN_PAPER_GARUNTEE_REPORT, params);
     }
 
     private void print3() {
-        try {
-            Map p = new HashMap();
-            p.put("p42", "");
+        Map params = new HashMap();
+        params.put("p42", "");
 
-            JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResource(AppConstants.JASPER_LOAN_PAPER_GARUNTEE_REPORT_2));
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, p, MySQLConnect.conn);
-            JasperViewer v = new JasperViewer(jasperPrint, false);
-            JDialog j = new JDialog(new JFrame(), true);
-            j.setTitle("Print");
-            j.setSize(1024, 768);
-            j.getContentPane().add(v.getContentPane());
-            j.setLocationRelativeTo(null);
-            j.setVisible(true);
-            v.setTitle("สัญญาค้ำประกันการกู้ยืมเงิน ฉบับที่ 2");
-        } catch (HeadlessException e) {
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
-            Log.write.error(e.getMessage());
-        } catch (JRException e) {
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
-            Log.write.error(e.getMessage());
-        }
+        String title = "สัญญาค้ำประกันการกู้ยืมเงิน ฉบับที่ 2";
+        viewReport.printReport(title, AppConstants.JASPER_LOAN_PAPER_GARUNTEE_REPORT_2, params);
     }
 
     private void initLoad() {
