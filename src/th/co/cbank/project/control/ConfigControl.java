@@ -9,6 +9,7 @@ import java.util.Locale;
 import org.apache.log4j.Logger;
 import th.co.cbank.util.DateFormat;
 import th.co.cbank.util.MessageAlert;
+import th.co.cbank.util.ThaiUtil;
 
 public class ConfigControl extends BaseControl {
 
@@ -103,8 +104,8 @@ public class ConfigControl extends BaseControl {
                     + "'" + bean.getSaveDocRunning() + "','" + bean.getHoonDocType() + "',"
                     + "'" + bean.getHoonDocPrefix() + "','" + bean.getHoonDocRunning() + "',"
                     + "'" + bean.getLoanDocType() + "','" + bean.getLoanDocPrefix() + "',"
-                    + "'" + bean.getLoanDocRunning() + "','" + bean.getPrinterPassBook() + "',"
-                    + "'" + bean.getPrintSlipType() + "','" + bean.getPrintSlipDriverName() + "',"
+                    + "'" + bean.getLoanDocRunning() + "','" + ThaiUtil.Unicode2ASCII(bean.getPrinterPassBook()) + "',"
+                    + "'" + bean.getPrintSlipType() + "','" + ThaiUtil.Unicode2ASCII(bean.getPrintSlipDriverName()) + "',"
                     + "'" + bean.getPrintSlipPort() + "','" + bean.getAccountPrefix() + "',"
                     + "'" + bean.getAccountRunning() + "','" + bean.getAccountDocType() + "',"
                     + "'" + DateFormat.getMySQL_Date(bean.getProgramStartDate()) + "','" + bean.getNoteNo() + "','" + bean.getBranchPrefix() + "',"

@@ -18,7 +18,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import org.apache.log4j.Logger;
 import th.co.cbank.util.NumberFormat;
-import th.co.cbank.util.ThaiUtil;
 import th.co.cbank.project.constants.AppConstants;
 import th.co.cbank.project.model.ConfigBean;
 import th.co.cbank.project.control.PrintCOM;
@@ -3027,15 +3026,14 @@ public class AppSettingDialog extends BaseDialogSwing {
 
         bean.setLoanDocPrefix(txtLoanDocPrefix.getText());
         bean.setLoanDocRunning(Integer.parseInt(txtLoanDocRunning.getText()));
-
-        bean.setPrinterPassBook(ThaiUtil.Unicode2ASCII("" + cbPrinterPassBookName.getSelectedItem()));
+        bean.setPrinterPassBook(cbPrinterPassBookName.getSelectedItem().toString());
 
         if (rd1.isSelected()) {
             bean.setPrintSlipType("DV");
         } else {
             bean.setPrintSlipType("DR");
         }
-        bean.setPrintSlipDriverName(ThaiUtil.Unicode2ASCII("" + cbPrintSlipDriver.getSelectedItem()));
+        bean.setPrintSlipDriverName(cbPrintSlipDriver.getSelectedItem().toString());
         bean.setPrintSlipPort("" + cbPrinterDirect.getSelectedItem());
 
         if (chkManual1.isSelected()) {
@@ -4454,7 +4452,7 @@ public class AppSettingDialog extends BaseDialogSwing {
         try {
             CbHoonConfigBean bean = new CbHoonConfigBean();
             bean.setHoonCode(txtHCode.getText());
-            bean.setHoonName(ThaiUtil.Unicode2ASCII(txtHName.getText()));
+            bean.setHoonName(txtHName.getText());
             bean.setHoonRate(Double.parseDouble(txtHoonRate.getText().replace(",", "")));
             bean.setHoonVolumnMax(Integer.parseInt(txtHoonVolumnMax.getText().replace(",", "")));
             bean.setHoonDeviden(Double.parseDouble(txtHoonDividen.getText().replace(",", "")));
@@ -4505,7 +4503,7 @@ public class AppSettingDialog extends BaseDialogSwing {
     private void saveLoanConfig() {
         CbLoanConfigBean lBean = new CbLoanConfigBean();
         lBean.setLoanCode(txtLoanCode.getText());
-        lBean.setLoanName(ThaiUtil.Unicode2ASCII(txtLoanName.getText()));
+        lBean.setLoanName(txtLoanName.getText());
         lBean.setLoanINT(Double.parseDouble(txtLoanINT.getText().replace(",", "")));
         lBean.setLoanFee(Double.parseDouble(txtLoanFee.getText().replace(",", "")));
         lBean.setLoanPenaltyINT(Double.parseDouble(txtLoanPenaltyINT.getText().replace(",", "")));
@@ -4645,7 +4643,7 @@ public class AppSettingDialog extends BaseDialogSwing {
     private void saveData() {
         CbSaveConfigBean bean = new CbSaveConfigBean();
         bean.setTypeCode(txtTypeCode.getText());
-        bean.setTypeName(ThaiUtil.Unicode2ASCII(txtTypeName.getText()));
+        bean.setTypeName(txtTypeName.getText());
         bean.setTypeINT(computeTaxINT());
         if (rdType1.isSelected()) {
             bean.setTypeCondition("1");

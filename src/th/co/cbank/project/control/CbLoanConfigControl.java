@@ -107,7 +107,7 @@ public class CbLoanConfigControl extends BaseControl {
                     + "LoanMinAmount,IntFixed,IntBadDebt,IntTurnover,IntNormal,chkPIntCapital,"
                     + "chkPIntTable,LoanPerMonth,LoanRunning, BookNo,"
                     + "MinPayPercent, MinPerBaht, checkMinPayment)  "
-                    + "values('" + bean.getLoanCode() + "','" + bean.getLoanName() + "',"
+                    + "values('" + bean.getLoanCode() + "','" + ThaiUtil.Unicode2ASCII(bean.getLoanName()) + "',"
                     + "'" + bean.getLoanINT() + "','" + bean.getLoanFee() + "',"
                     + "'" + bean.getLoanPenaltyINT() + "','" + bean.getLoanPenaltyDay() + "',"
                     + "'" + bean.getLoanMinAmount() + "','" + bean.getIntFixed() + "',"

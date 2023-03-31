@@ -61,7 +61,7 @@ public class CbHoonConfigControl extends BaseControl {
             String sql = "insert into cb_hoon_config "
                     + "(hoonCode,hoonName,hoonRate,hoonVolumnMax,hoonDeviden,hoonBuyMin)  "
                     + "values('" + bean.getHoonCode() + "',"
-                    + "'" + bean.getHoonName() + "',"
+                    + "'" + ThaiUtil.Unicode2ASCII(bean.getHoonName()) + "',"
                     + "'" + bean.getHoonRate() + "',"
                     + "'" + bean.getHoonVolumnMax() + "',"
                     + "'" + bean.getHoonDeviden() + "',"

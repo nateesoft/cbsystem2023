@@ -100,7 +100,7 @@ public class CbSaveConfigControl extends BaseControl {
 
         return bean;
     }
-    
+
     public boolean typeCodeExist(String TypeCode) {
         boolean isExists = false;
         try {
@@ -218,7 +218,7 @@ public class CbSaveConfigControl extends BaseControl {
                     + "(TypeCode,TypeName,TypeINT,TypeCondition,RDType2,cbRDType2,rdTypeDialy,payType,cbPayType1,"
                     + "cbPayType2,cbPayType3,cbPayType4,cbPayType5,cbPayType6,cbPayType7,"
                     + "PayINT,FundINT,max_deposit,TAX,SaveRunning,NoRunning, SaveFee, min_deposit, min_withdraw)  "
-                    + "values('" + bean.getTypeCode() + "','" + bean.getTypeName() + "','" + bean.getTypeINT() + "',"
+                    + "values('" + bean.getTypeCode() + "','" + ThaiUtil.Unicode2ASCII(bean.getTypeName()) + "','" + bean.getTypeINT() + "',"
                     + "'" + bean.getTypeCondition() + "','" + bean.getRDType2() + "','" + bean.getCbRDType2() + "',"
                     + "'" + bean.getRdTypeDialy() + "','" + bean.getPayType() + "','" + bean.getCbPayType1() + "',"
                     + "'" + bean.getCbPayType2() + "','" + bean.getCbPayType3() + "','" + bean.getCbPayType4() + "',"
