@@ -10,6 +10,7 @@ import th.co.cbank.project.model.CbLoanConfigBean;
 import th.co.cbank.util.DateUtil;
 
 public class InterestControl {
+
     private final Logger logger = Logger.getLogger(InterestControl.class);
 
     public static double defaultINT(double money1, double intPerYear, int dayAll) {

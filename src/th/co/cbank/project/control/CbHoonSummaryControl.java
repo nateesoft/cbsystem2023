@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import th.co.cbank.util.MessageAlert;
 
 public class CbHoonSummaryControl extends BaseControl {
+
     private final Logger logger = Logger.getLogger(CbHoonSummaryControl.class);
 
     public List<CbHoonSummaryBean> mappingBean(ResultSet rs) throws Exception {
@@ -40,13 +41,13 @@ public class CbHoonSummaryControl extends BaseControl {
             String sql = "select * from cb_hoon_summary where year_at='" + year + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             List<CbHoonSummaryBean> listBean = mappingBean(rs);
-            if(listBean.isEmpty()){
+            if (listBean.isEmpty()) {
                 return null;
             }
             return listBean.get(0);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return null;
         }
     }
@@ -58,7 +59,7 @@ public class CbHoonSummaryControl extends BaseControl {
             return mappingBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }

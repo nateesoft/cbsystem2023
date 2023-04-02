@@ -9,6 +9,7 @@ import th.co.cbank.project.model.CbPrefixBean;
 import th.co.cbank.util.MessageAlert;
 
 public class CbPrefixControl extends BaseControl {
+
     private final Logger logger = Logger.getLogger(CbPrefixControl.class);
 
     public List<CbPrefixBean> listPrefix() {
@@ -25,7 +26,7 @@ public class CbPrefixControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return listBean;
@@ -44,7 +45,7 @@ public class CbPrefixControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return bean;
@@ -53,7 +54,7 @@ public class CbPrefixControl extends BaseControl {
     public boolean savePrefix(CbPrefixBean bean) {
         try {
             String sql = "insert into cb_prefix (code,name)  "
-                    + "values('" + bean.getCode() + "','" + bean.getName() + "')";
+                    + "values('" + bean.getCode() + "','" + ThaiUtil.Unicode2ASCII(bean.getName()) + "')";
             String sqlChk = "select * from cb_prefix where code='" + bean.getCode() + "'";
             ResultSet rs = MySQLConnect.getResultSet(sqlChk);
             if (rs.next()) {
@@ -66,7 +67,7 @@ public class CbPrefixControl extends BaseControl {
             return true;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return false;
         }
     }
@@ -75,13 +76,13 @@ public class CbPrefixControl extends BaseControl {
         try {
             String sql = "update cb_prefix set "
                     + "code='" + bean.getCode() + "', "
-                    + "name='" + bean.getName() + "' "
+                    + "name='" + ThaiUtil.Unicode2ASCII(bean.getName()) + "' "
                     + "where code='" + bean.getCode() + "'";
             update(sql);
             return true;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return false;
         }
     }

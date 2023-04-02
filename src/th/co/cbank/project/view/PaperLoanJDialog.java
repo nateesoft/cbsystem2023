@@ -1,28 +1,17 @@
 package th.co.cbank.project.view;
 
-import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
 import java.math.BigDecimal;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JOptionPane;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.util.JRLoader;
-import net.sf.jasperreports.view.JasperViewer;
 import org.apache.log4j.Logger;
 import th.co.cbank.project.constants.AppConstants;
 import th.co.cbank.project.control.ViewReport;
 import th.co.cbank.util.DateFormat;
 import th.co.cbank.util.MoneyToWord;
 import th.co.cbank.util.NumberFormat;
-import th.co.cbank.project.log.Log;
 import th.co.cbank.project.model.AddressBean;
 import th.co.cbank.project.model.BranchBean;
 import th.co.cbank.project.model.CbBondsmanBean;
@@ -172,7 +161,7 @@ public class PaperLoanJDialog extends BaseDialogSwing {
         params.put("p3", bBean.getName());
         SimpleDateFormat simp = new SimpleDateFormat("dd MMMM yyyy");
         if (loanAccountBean == null) {
-            JOptionPane.showMessageDialog(this, "ไม่พบข้อมูลผู้กู้ในระบบ ไม่สามารถออกเอกสารได้ กรุณาตรวจสอบ");
+            MessageAlert.warningPopup(this, "ไม่พบข้อมูลผู้กู้ในระบบ ไม่สามารถออกเอกสารได้ กรุณาตรวจสอบ");
             return;
         }
 

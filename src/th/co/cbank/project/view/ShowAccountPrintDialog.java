@@ -7,7 +7,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import org.apache.log4j.Logger;
 import th.co.cbank.util.NumberFormat;
-import th.co.cbank.util.ThaiUtil;
 import th.co.cbank.project.constants.AppConstants;
 import th.co.cbank.project.control.CbSaveAccountControl;
 import th.co.cbank.project.control.Value;
@@ -224,7 +223,6 @@ public class ShowAccountPrintDialog extends BaseDialogSwing {
         DefaultTableModel model = (DefaultTableModel) tbAccountList.getModel();
         TableUtil.clearModel(model);
 
-        text = ThaiUtil.Unicode2ASCII(text);
         tbAccountList.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
         tbAccountList.setRowHeight(30);
         JTableHeader tHeader = tbAccountList.getTableHeader();

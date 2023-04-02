@@ -1,9 +1,7 @@
 package th.co.cbank.project.model;
 
-import org.apache.log4j.Logger;
-
 public class CbLoanConfigBean {
-    private final Logger logger = Logger.getLogger(CbLoanConfigBean.class);
+
     private String LoanCode;//
     private String LoanName;//
     private double LoanINT = 0.00;//
@@ -54,7 +52,7 @@ public class CbLoanConfigBean {
 
     public void setBookNo(int BookNo) {
         this.BookNo = BookNo;
-    }    
+    }
 
     public int getLoanRunning() {
         return LoanRunning;

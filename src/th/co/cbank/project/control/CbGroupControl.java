@@ -33,7 +33,7 @@ public class CbGroupControl extends BaseControl {
             return mappingBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }
@@ -45,7 +45,7 @@ public class CbGroupControl extends BaseControl {
             return mappingBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }
@@ -61,7 +61,7 @@ public class CbGroupControl extends BaseControl {
             return listBean.get(0);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return null;
         }
     }
@@ -76,7 +76,7 @@ public class CbGroupControl extends BaseControl {
             update(sql);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -90,7 +90,7 @@ public class CbGroupControl extends BaseControl {
             return true;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return false;
         }
     }

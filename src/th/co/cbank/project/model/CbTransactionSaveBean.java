@@ -1,27 +1,26 @@
 package th.co.cbank.project.model;
 
 import java.util.Date;
-import org.apache.log4j.Logger;
 
 public class CbTransactionSaveBean {
-    private final Logger logger = Logger.getLogger(CbTransactionSaveBean.class);
+
     private Date t_date;//
     private String t_time = "00:00:00";//
-    private String t_acccode="";//
-    private String t_custcode="";//
-    private String t_description="";//
+    private String t_acccode = "";//
+    private String t_custcode = "";//
+    private String t_description = "";//
     private double t_amount = 0.00;//
-    private String t_empcode="";//
-    private String t_docno="";
-    private String remark="";
+    private String t_empcode = "";//
+    private String t_docno = "";
+    private String remark = "";
     private String t_booktype = "";//
     private int t_hoon = 1;//
     private int LineNo = 1;//
     private String PrintChk = "N";//
     private double t_balance = 0.00;
     private int t_index = 1;
-    private double money_in=0.00;
-    private double money_out=0.00;
+    private double money_in = 0.00;
+    private double money_out = 0.00;
     private Date update_interest;
     private double t_hoon_amt = 0.00;
     private double t_hoon_cash = 0.00;
@@ -30,7 +29,7 @@ public class CbTransactionSaveBean {
     private String branchCode = "";
     private double t_interest = 0.00;
     private double t_fee = 0.00;
-    private String t_status="";
+    private String t_status = "";
 
     public String getT_status() {
         return t_status;
@@ -71,8 +70,6 @@ public class CbTransactionSaveBean {
     public void setBranchCode(String branchCode) {
         this.branchCode = branchCode;
     }
-    
-    
 
     public double getT_hoon_amt() {
         return t_hoon_amt;

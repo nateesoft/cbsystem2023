@@ -28,7 +28,7 @@ public class CbLoanConfigControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         if (maxNo == 0) {
@@ -77,7 +77,7 @@ public class CbLoanConfigControl extends BaseControl {
             return mappingBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return listBean;
@@ -94,7 +94,7 @@ public class CbLoanConfigControl extends BaseControl {
             return listBean.get(0);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return null;
         }
     }
@@ -130,7 +130,7 @@ public class CbLoanConfigControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return isSave;
@@ -164,7 +164,7 @@ public class CbLoanConfigControl extends BaseControl {
             isSave = true;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             isSave = false;
         }
 
@@ -179,7 +179,7 @@ public class CbLoanConfigControl extends BaseControl {
             return true;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return false;
         }
 
@@ -194,7 +194,7 @@ public class CbLoanConfigControl extends BaseControl {
             return MySQLConnect.exeUpdate(sql) > 0;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return false;
         }
 

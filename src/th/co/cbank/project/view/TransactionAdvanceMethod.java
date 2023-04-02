@@ -1,55 +1,35 @@
 package th.co.cbank.project.view;
 
-import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import th.co.cbank.project.control.CbSaveAccountControl;
 import th.co.cbank.project.control.CbSaveConfigControl;
 import th.co.cbank.project.control.CbTransactionLoanControl;
 import th.co.cbank.project.control.CbTransactionSaveControl;
-import th.co.cbank.project.control.MySQLConnect;
 import th.co.cbank.project.control.Value;
 import th.co.cbank.project.model.CbSaveConfigBean;
 import th.co.cbank.project.model.CbTransactionSaveBean;
 import th.co.cbank.util.DateFormat;
-import th.co.cbank.util.MessageAlert;
-import th.co.cbank.util.ThaiUtil;
 
 public class TransactionAdvanceMethod {
 
     private static final CbSaveConfigControl saveConfigControl = new CbSaveConfigControl();
     private static final CbTransactionLoanControl cbTransactionLoanControl = new CbTransactionLoanControl();
     private static final CbTransactionSaveControl cbTransactionSaveControl = new CbTransactionSaveControl();
-    
+
     public static double balanceAmount = 0;
     public static double interestAmount = 0;
 
     public static void updateSaveAccountAndProfile(String custCode, String accCode, double netBalance, double textInt) {
         //update cb_save_account
-        try {
-            String sql = "update cb_save_account set "
-                    + "b_balance='" + netBalance + "',"
-                    + "b_interest='" + textInt + "' "
-                    + "where b_cust_code='" + custCode + "' "
-                    + "and account_code='" + accCode + "'";
-            MySQLConnect.exeUpdate(sql);
-        } catch (Exception e) {
-            MessageAlert.infoPopup(TransactionAdvanceMethod.class, e.getMessage());
-        }
+        CbSaveAccountControl saveAccountControl = new CbSaveAccountControl();
+        saveAccountControl.updateSaveAccountAndProfile(netBalance, textInt, custCode, accCode);
 
         //update cb_profile
-        try {
-            String sql1 = "update cb_profile p set p.save_balance=("
-                + "select sum(s.b_balance) from cb_save_account s "
-                + "where s.b_cust_code=p.p_custcode "
-                + "and s.account_code='" + accCode + "'"
-                + ") where p.p_custcode='" + custCode + "';";
-            MySQLConnect.exeUpdate(sql1);
-        } catch (Exception e) {
-            MessageAlert.infoPopup(TransactionAdvanceMethod.class, e.getMessage());
-        }
+        saveAccountControl.updateSaveAccountAndProfile(accCode, custCode);
     }
 
     public static List findData(String custCode, String accCode, boolean addModel) {
@@ -64,22 +44,12 @@ public class TransactionAdvanceMethod {
 
         List modelList = new ArrayList<>();
         String date = "";
-        try {
-            String sql = "select t_date from cb_transaction_save "
-                    + "where t_status in('2','3','8') "
-                    + "and t_custcode='" + custCode + "' "
-                    + "and t_acccode='" + accCode + "' "
-                    + "group by t_date "
-                    + "order by t_date";
-            ResultSet rs = MySQLConnect.getResultSet(sql);
-            while (rs.next()) {
-                date += DateFormat.getLocale_ddMMyyyy(rs.getDate("t_date")) + ",";
-            }
-            date += DateFormat.getLocale_ddMMyyyy(new Date());
-            rs.close();
-        } catch (Exception e) {
-            MessageAlert.infoPopup(TransactionAdvanceMethod.class, e.getMessage());
+        CbTransactionSaveControl tranSaveControl = new CbTransactionSaveControl();
+        List<CbTransactionSaveBean> listTransactionSaveReport = tranSaveControl.getTdateList(custCode, accCode);
+        for (CbTransactionSaveBean bean : listTransactionSaveReport) {
+            date += DateFormat.getLocale_ddMMyyyy(bean.getT_date()) + ",";
         }
+        date += DateFormat.getLocale_ddMMyyyy(new Date());
 
         //add to model
         String[] dates = date.split(",");
@@ -171,19 +141,7 @@ public class TransactionAdvanceMethod {
                         }
 
                         //update recode
-                        try {
-                            String sql = "update cb_transaction_save set "
-                                    + "t_balance='" + data2.getBalance() + "' "
-                                    + "where t_custcode='" + custCode + "' "
-                                    + "and t_acccode='" + accCode + "' "
-                                    + "and t_docno='" + data2.getT_docno() + "' "
-                                    + "and t_time='" + data2.getT_time() + "' "
-                                    + "and t_status in('2','3','8')";
-                            MySQLConnect.exeUpdate(sql);
-                        } catch (Exception e) {
-                            MessageAlert.infoPopup(TransactionAdvanceMethod.class, e.getMessage());
-
-                        }
+                        cbTransactionSaveControl.updateWhereCustCodeAccode(data2.getBalance(), custCode, accCode, data2.getT_docno(), data2.getT_time());
                     }
 
                     isDateIn = true;
@@ -229,7 +187,7 @@ public class TransactionAdvanceMethod {
                     bean.setT_time(data.getT_time());
                     bean.setT_acccode(accCode);
                     bean.setT_custcode(custCode);
-                    bean.setT_description(ThaiUtil.Unicode2ASCII("ฝากเงิน(ดอกเบี้ย)"));
+                    bean.setT_description("ฝากเงิน(ดอกเบี้ย)");
                     bean.setT_amount(data.getDeposit_interest());
                     bean.setT_empcode("system");
                     bean.setT_docno("");
@@ -302,7 +260,7 @@ public class TransactionAdvanceMethod {
                     bean.setT_time(data.getT_time());
                     bean.setT_acccode(accCode);
                     bean.setT_custcode(custCode);
-                    bean.setT_description(ThaiUtil.Unicode2ASCII("ฝากเงิน(ดอกเบี้ย)"));
+                    bean.setT_description("ฝากเงิน(ดอกเบี้ย)");
                     bean.setT_amount(data.getDeposit_interest());
                     bean.setT_empcode("system");
                     bean.setT_docno("");
@@ -358,32 +316,18 @@ public class TransactionAdvanceMethod {
     }
 
     static void updateTransactionSaveRunning(String custCode, String accCode) {
-        try {
-            String sql = "select t_docno,t_date,t_time from cb_transaction_save "
-                    + "where t_acccode='" + accCode + "' "
-                    + "and t_status in('2','3','8', '11') "
-                    + "order by t_date, t_time";
-            ResultSet rs = MySQLConnect.getResultSet(sql);
-            int t_index = 1;
-            int line_no = 1;
-            while (rs.next()) {
-                String t_date = DateFormat.getMySQL_DateTime(rs.getDate("t_date"));
-                if (line_no > 24) {
-                    line_no = line_no % 24;
-                }
-                MySQLConnect.exeUpdate("update cb_transaction_save "
-                        + "set LineNo=" + line_no + ", t_index='" + t_index + "' "
-                        + "where t_acccode='" + accCode + "' "
-                        + "and t_date='" + t_date + "' "
-                        + "and t_time='" + rs.getString("t_time") + "' "
-                        + "and t_status in('2','3','8', '11') "
-                        + "order by t_date, t_time");
-                t_index++;
-                line_no++;
+        int t_index = 1;
+        int line_no = 1;
+        CbTransactionSaveControl tranSaveControl = new CbTransactionSaveControl();
+        List<CbTransactionSaveBean> listTrans = tranSaveControl.getListByAccoundCode(accCode);
+        for (CbTransactionSaveBean bean : listTrans) {
+            String t_date = DateFormat.getMySQL_DateTime(bean.getT_date());
+            if (line_no > 24) {
+                line_no = line_no % 24;
             }
-            rs.close();
-        } catch (Exception e) {
-            MessageAlert.infoPopup(TransactionAdvanceMethod.class, e.getMessage());
+            tranSaveControl.updateWhereAccountAndStatus(line_no, t_index, accCode, t_date, bean.getT_time());
+            t_index++;
+            line_no++;
         }
     }
 }

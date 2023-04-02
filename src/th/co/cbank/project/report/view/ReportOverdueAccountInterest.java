@@ -5,6 +5,7 @@ import java.awt.Point;
 import java.util.Date;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
+import org.apache.log4j.Logger;
 import th.co.cbank.project.control.CbLoanAccountControl;
 import th.co.cbank.project.view.ArListDialog;
 import th.co.cbank.project.model.CbLoanAccountBean;
@@ -17,6 +18,7 @@ import th.co.cbank.util.TableUtil;
 
 public class ReportOverdueAccountInterest extends javax.swing.JDialog {
 
+    private final Logger logger = Logger.getLogger(ReportOverdueAccountInterest.class);
     private DefaultTableModel model;
     private final Frame parent;
 
@@ -351,17 +353,12 @@ public class ReportOverdueAccountInterest extends javax.swing.JDialog {
                 bean.getProfile().getP_custName() + " " + bean.getProfile().getP_custSurname(),
                 th.co.cbank.util.DateFormat.getLocale_ddMMyyyy(bean.getLoan_docdate()),
                 th.co.cbank.util.DateFormat.getLocale_ddMMyyyy(bean.getLoan_end_date()),
-                bean.getPay_amount() > 0 ? th.co.cbank.util.DateFormat.getLocale_ddMMyyyy(bean.getPay_date()):"<html><font color=blue>ไม่พบข้อมูล</font></html>",
+                bean.getPay_amount() > 0 ? th.co.cbank.util.DateFormat.getLocale_ddMMyyyy(bean.getPay_date()) : "<html><font color=blue>ไม่พบข้อมูล</font></html>",
                 NumberFormat.showDouble2(bean.getLoan_amount()),
                 (int) bean.getLoan_interest() + "%",
                 bean.getLoan_amount() > 0 ? NumberFormat.showCommaOnly(diff) : 0,
                 NumberFormat.showDouble2(totalInt),});
         }
-    }
-
-    public static void main(String[] args) {
-        ReportOverdueAccountInterest d = new ReportOverdueAccountInterest(null, true);
-        d.setVisible(true);
     }
 
     private void initTable() {

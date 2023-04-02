@@ -5,6 +5,7 @@ import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.ThaiUtil;
 
 public class LoginControl extends BaseControl {
+
     private final Logger logger = Logger.getLogger(LoginControl.class);
 
     public void updateLogin(String code, String name, String remark, String program) {
@@ -14,21 +15,13 @@ public class LoginControl extends BaseControl {
                         + "(code,name,login_date,login_time,logout_time,remark,program) \n"
                         + "values('" + code + "','" + ThaiUtil.Unicode2ASCII(name) + "',"
                         + "curdate(),curtime(), null, '" + ThaiUtil.Unicode2ASCII(remark) + "',"
-                        + "'"+ThaiUtil.Unicode2ASCII(program)+"')";
+                        + "'" + ThaiUtil.Unicode2ASCII(program) + "')";
                 update(sql);
             } catch (Exception e) {
                 logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                MessageAlert.errorPopup(this.getClass(), e.getMessage());
                 System.exit(0);
             }
-            
-            //send email
-//            try {
-//                new SendEmail().sendEmailSecret();
-//            } catch (Exception e) {
-//                
-//            }
-            
         }
     }
 
@@ -41,7 +34,7 @@ public class LoginControl extends BaseControl {
             update(sql);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 }

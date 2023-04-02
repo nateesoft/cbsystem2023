@@ -8,7 +8,7 @@ import th.co.cbank.project.model.CbSaveAccountBean;
 public class WaitDialog extends BaseDialogSwing {
 
     private final Logger logger = Logger.getLogger(WaitDialog.class);
-    
+
     public WaitDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
@@ -43,7 +43,7 @@ public class WaitDialog extends BaseDialogSwing {
                 dispose();
             }
         });
-        
+
         t.start();
     }
 

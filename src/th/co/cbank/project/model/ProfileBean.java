@@ -1,10 +1,8 @@
 package th.co.cbank.project.model;
 
 import java.util.Date;
-import org.apache.log4j.Logger;
 
 public class ProfileBean {
-    private final Logger logger = Logger.getLogger(ProfileBean.class);
 
     private int p_index = 0;//
     private String p_custCode;//
@@ -41,9 +39,9 @@ public class ProfileBean {
     private Date DowInCar_Target_Date;
     private int DowInCar_Target_Tree;
     private double p_down_fee = 0.00;
-    
+
     private Date Card_Expire;
-    
+
     private int ApproveLimit;
 
     public Date getCard_Expire() {

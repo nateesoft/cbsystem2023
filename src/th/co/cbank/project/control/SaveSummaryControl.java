@@ -7,6 +7,7 @@ import th.co.cbank.project.model.SaveSummaryBean;
 import th.co.cbank.util.MessageAlert;
 
 public class SaveSummaryControl extends BaseControl {
+
     private final Logger logger = Logger.getLogger(SaveSummaryControl.class);
 
     public SaveSummaryBean getSaveData() {
@@ -115,7 +116,7 @@ public class SaveSummaryControl extends BaseControl {
                     case AppConstants.CB_STATUS_LOAN:
                         //กู้เงิน
                         l10 += rs.getDouble(3);
-                        lFee+=rs.getDouble(4);
+                        lFee += rs.getDouble(4);
                         bean.setAccount_loan_today(rs.getInt(2));
                         break;
                     case AppConstants.CB_STATUS_PAYMENT:
@@ -123,7 +124,7 @@ public class SaveSummaryControl extends BaseControl {
                         break;
                 }
             }
-            
+
             bean.setLoan_balance_today(l10);
             bean.setPayment_loan_amont(l7);
             bean.setLoan_fee_today(lFee);
@@ -131,7 +132,7 @@ public class SaveSummaryControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return bean;

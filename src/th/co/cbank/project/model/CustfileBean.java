@@ -1,10 +1,9 @@
 package th.co.cbank.project.model;
 
 import java.util.Date;
-import org.apache.log4j.Logger;
 
 public class CustfileBean {
-    private final Logger logger = Logger.getLogger(CustfileBean.class);
+
     private String SP_Code;
     private String SP_Desc;
     private String Sp_Desc2;

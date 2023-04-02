@@ -2,19 +2,20 @@ package th.co.cbank.project.view;
 
 import java.awt.Font;
 import java.awt.event.KeyEvent;
-import java.sql.ResultSet;
-import javax.swing.JOptionPane;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import org.apache.log4j.Logger;
 import th.co.cbank.util.NumberFormat;
-import th.co.cbank.util.ThaiUtil;
 import th.co.cbank.project.constants.AppConstants;
-import th.co.cbank.project.control.MySQLConnect;
 import th.co.cbank.project.control.Value;
+import th.co.cbank.project.control.ViewReport;
+import th.co.cbank.project.report.model.ShowLoanAccountModel;
+import th.co.cbank.project.report.model.ShowSaveAccountModel;
 import th.co.cbank.util.TableUtil;
 
 public class ShowAccountDialog extends BaseDialogSwing {
+
     private final Logger logger = Logger.getLogger(ShowAccountDialog.class);
     private String selectItem = null;
 
@@ -199,7 +200,7 @@ public class ShowAccountDialog extends BaseDialogSwing {
     }//GEN-LAST:event_tbAccountLoanMouseClicked
 
     private void tbAccountLoanKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_tbAccountLoanKeyPressed
-        
+
     }//GEN-LAST:event_tbAccountLoanKeyPressed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -220,30 +221,20 @@ public class ShowAccountDialog extends BaseDialogSwing {
         JTableHeader tHeader = tbAccountList.getTableHeader();
         tHeader.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, AppConstants.DEFAULT_FONT_SIZE));
 
-        try {
-            String sql = "select s.*,c.typeName "
-                    + "from cb_save_account s,cb_save_config c "
-                    + "where s.account_type=c.typeCode "
-                    + "and B_CUST_CODE = '" + Value.CUST_CODE + "' "
-                    + "and account_status='1'";
-            ResultSet rs = MySQLConnect.getResultSet(sql);
-            int count = 0;
-            while (rs.next()) {
-                count++;
-                model.addRow(new Object[]{
-                    count,
-                    rs.getString("account_code"),
-                    ThaiUtil.ASCII2Unicode(rs.getString("typeName")),
-                    NumberFormat.showDouble2(rs.getDouble("b_balance"))
-                });
-            }
-
-            rs.close();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
+        ViewReport viewReport = new ViewReport();
+        List<ShowSaveAccountModel> listReport = viewReport.showSaveAccount(Value.CUST_CODE);
+        int count = 0;
+        for (ShowSaveAccountModel bean : listReport) {
+            count++;
+            model.addRow(new Object[]{
+                count,
+                bean.getAccount_code(),
+                bean.getTypeName(),
+                NumberFormat.showDouble2(bean.getB_balance())
+            });
         }
     }
-    
+
     private void loadLoanListAccount() {
         DefaultTableModel model = (DefaultTableModel) tbAccountLoan.getModel();
         TableUtil.clearModel(model);
@@ -252,26 +243,17 @@ public class ShowAccountDialog extends BaseDialogSwing {
         JTableHeader tHeader = tbAccountLoan.getTableHeader();
         tHeader.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, AppConstants.DEFAULT_FONT_SIZE));
 
-        try {
-            String sql = "select s.*,c.LoanName "
-                    + "from cb_loan_account s,cb_loan_config c "
-                    + "where s.loan_type=c.LoanCode "
-                    + "and CUST_CODE = '" + Value.CUST_CODE + "' ";
-            ResultSet rs = MySQLConnect.getResultSet(sql);
-            int count = 0;
-            while (rs.next()) {
-                count++;
-                model.addRow(new Object[]{
-                    count,
-                    rs.getString("loan_docno"),
-                    ThaiUtil.ASCII2Unicode(rs.getString("LoanName")),
-                    NumberFormat.showDouble2(rs.getDouble("loan_amount"))
-                });
-            }
-
-            rs.close();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
+        ViewReport viewReport = new ViewReport();
+        List<ShowLoanAccountModel> listReport = viewReport.showLoanAccount(Value.CUST_CODE);
+        int count = 0;
+        for (ShowLoanAccountModel bean : listReport) {
+            count++;
+            model.addRow(new Object[]{
+                count,
+                bean.getLoan_docno(),
+                bean.getLoanName(),
+                NumberFormat.showDouble2(bean.getLoan_amount())
+            });
         }
     }
 }

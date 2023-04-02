@@ -52,7 +52,7 @@ public class CbSaveConfigControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return listBean;
@@ -95,7 +95,7 @@ public class CbSaveConfigControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return bean;
@@ -112,7 +112,7 @@ public class CbSaveConfigControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return isExists;
@@ -162,7 +162,7 @@ public class CbSaveConfigControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return bean;
@@ -206,7 +206,7 @@ public class CbSaveConfigControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return bean;
@@ -239,7 +239,7 @@ public class CbSaveConfigControl extends BaseControl {
             return true;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return false;
@@ -270,7 +270,7 @@ public class CbSaveConfigControl extends BaseControl {
             return true;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return false;
@@ -296,7 +296,7 @@ public class CbSaveConfigControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         if (MaxNO == 0) {
@@ -314,7 +314,7 @@ public class CbSaveConfigControl extends BaseControl {
             update(sql);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -325,7 +325,7 @@ public class CbSaveConfigControl extends BaseControl {
             return true;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return false;
         }
     }
@@ -339,7 +339,7 @@ public class CbSaveConfigControl extends BaseControl {
             MySQLConnect.exeUpdate(sql1);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return false;
         }
         return true;

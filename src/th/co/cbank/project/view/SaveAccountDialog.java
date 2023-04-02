@@ -7,20 +7,20 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import org.apache.log4j.Logger;
-import th.co.cbank.util.ThaiUtil;
 import th.co.cbank.project.constants.AppConstants;
 import th.co.cbank.project.model.CbSaveAccountBean;
 import th.co.cbank.util.NumberUtil;
 import th.co.cbank.util.TableUtil;
 
 public class SaveAccountDialog extends BaseDialogSwing {
+
     private final Logger logger = Logger.getLogger(SaveAccountDialog.class);
     private DefaultTableModel model;
 
     public SaveAccountDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        
+
         initTable();
     }
 
@@ -170,7 +170,7 @@ public class SaveAccountDialog extends BaseDialogSwing {
     private void txtSearchKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
             dispose();
-        }else if(evt.getKeyCode()==KeyEvent.VK_ENTER){
+        } else if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             loadData();
         }
     }//GEN-LAST:event_txtSearchKeyPressed
@@ -192,26 +192,26 @@ public class SaveAccountDialog extends BaseDialogSwing {
 
     private void loadData() {
         TableUtil.clearModel(model);
-        List<CbSaveAccountBean> listAccount = getSaveAccountControl().searchSaveAccount(ThaiUtil.Unicode2ASCII(txtSearch.getText()));
-        for(int i=0;i<listAccount.size();i++){
-            CbSaveAccountBean saveAcc = (CbSaveAccountBean)listAccount.get(i);
+        List<CbSaveAccountBean> listAccount = getSaveAccountControl().searchSaveAccount(txtSearch.getText());
+        for (int i = 0; i < listAccount.size(); i++) {
+            CbSaveAccountBean saveAcc = (CbSaveAccountBean) listAccount.get(i);
             model.addRow(new Object[]{
-                (i+1),
+                (i + 1),
                 saveAcc.getAccount_code(),
                 saveAcc.getB_CUST_CODE(),
-                saveAcc.getB_CUST_NAME()+" "+saveAcc.getB_CUST_LASTNAME(),
+                saveAcc.getB_CUST_NAME() + " " + saveAcc.getB_CUST_LASTNAME(),
                 NumberUtil.toNumberFormat(saveAcc.getB_BALANCE())
             });
         }
-        
+
         TableUtil.alignTable(tbData, 0, SwingConstants.CENTER);
         TableUtil.alignTable(tbData, 4, SwingConstants.RIGHT);
-        
-        lbTotal.setText("รวมทั้งหมด "+model.getRowCount()+" รายการ");
+
+        lbTotal.setText("รวมทั้งหมด " + model.getRowCount() + " รายการ");
     }
 
     private void initTable() {
-        model = (DefaultTableModel)tbData.getModel();
+        model = (DefaultTableModel) tbData.getModel();
         tbData.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
         JTableHeader tHeader = tbData.getTableHeader();
         tHeader.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));

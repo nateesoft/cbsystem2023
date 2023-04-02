@@ -13,6 +13,7 @@ public class NumberFormat {
     public static String showCommaOnly(float obj) {
         return dec0.format(obj);
     }
+
     public static String showCommaOnly(int obj) {
         return dec0.format(obj);
     }
@@ -24,7 +25,7 @@ public class NumberFormat {
     public static String showDouble2(double obj) {
         return dec1.format(obj);
     }
-    
+
     public static String showDouble2ToCeil(double obj) {
         return dec1.format(Math.ceil(obj));
     }

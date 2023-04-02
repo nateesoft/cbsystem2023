@@ -3,6 +3,7 @@ package th.co.cbank.project.view;
 import java.util.List;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import org.apache.log4j.Logger;
 import th.co.cbank.project.control.CbLoanAccountControl;
 import th.co.cbank.project.model.ProfileBean;
 import th.co.cbank.util.JTableUtil;
@@ -10,6 +11,7 @@ import th.co.cbank.util.TableUtil;
 
 public class ArListDialog extends javax.swing.JDialog {
 
+    private final Logger logger = Logger.getLogger(ArListDialog.class);
     private final DefaultTableModel model;
     private final JTextField textField;
 

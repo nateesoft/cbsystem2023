@@ -8,7 +8,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import org.apache.log4j.Logger;
@@ -40,13 +39,14 @@ import th.co.cbank.project.view.TransactionAdvanceMethod;
 import th.co.cbank.util.DateChooseDialog;
 import th.co.cbank.util.DateFormat;
 import th.co.cbank.util.JTableUtil;
+import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.MoneyToWord;
 import th.co.cbank.util.NumberFormat;
 import th.co.cbank.util.NumberUtil;
 import th.co.cbank.util.TableUtil;
-import th.co.cbank.util.ThaiUtil;
 
 public class DepositPanel extends javax.swing.JPanel {
+
     private final Logger logger = Logger.getLogger(DepositPanel.class);
     private final ProfileBean profileBean;
     private CbSaveAccountBean saveAccountBean;
@@ -1548,16 +1548,16 @@ public class DepositPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_txtCloseRemarkKeyPressed
 
     private void btnCloseSaveAccountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseSaveAccountActionPerformed
-        int confirm = JOptionPane.showConfirmDialog(this, "ท่านต้องการยกเลิกบัญชีนี้ใช่หรือไม่ ?");
-        if (confirm == JOptionPane.YES_OPTION) {
+        int confirm = MessageAlert.showConfirm(this, "ท่านต้องการยกเลิกบัญชีนี้ใช่หรือไม่ ?");
+        if (confirm == MessageAlert.YES_OPTION) {
             closeAccount();
         }
     }//GEN-LAST:event_btnCloseSaveAccountActionPerformed
 
     private void btnCloseSaveAccountKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnCloseSaveAccountKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            int confirm = JOptionPane.showConfirmDialog(this, "ท่านต้องการยกเลิกบัญชีนี้ใช่หรือไม่ ?");
-            if (confirm == JOptionPane.YES_OPTION) {
+            int confirm = MessageAlert.showConfirm(this, "ท่านต้องการยกเลิกบัญชีนี้ใช่หรือไม่ ?");
+            if (confirm == MessageAlert.YES_OPTION) {
                 closeAccount();
             }
         }
@@ -1811,7 +1811,7 @@ public class DepositPanel extends javax.swing.JPanel {
         }
 
         if (balance <= cbSaveConfigBean.getMinDeposit()) {
-            JOptionPane.showMessageDialog(this, "ท่านต้องฝากเงินไม่ต่ำกว่า " + cbSaveConfigBean.getMinDeposit());
+            MessageAlert.warningPopup(this, "ท่านต้องฝากเงินไม่ต่ำกว่า " + cbSaveConfigBean.getMinDeposit());
             txtDepositBaht.requestFocus();
             return;
         }
@@ -1819,7 +1819,8 @@ public class DepositPanel extends javax.swing.JPanel {
         try {
             depositMoney();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
+            MessageAlert.errorPopup(this, e.getMessage());
+            logger.error(e.getMessage());
         }
     }
 
@@ -1843,14 +1844,14 @@ public class DepositPanel extends javax.swing.JPanel {
         transactionSaveBean.setT_date(DateFormat.getLocal_ddMMyyyy(txtDepositDate.getText()));
         transactionSaveBean.setT_acccode(saveAccountBean.getAccount_code());
         transactionSaveBean.setT_custcode(profileBean.getP_custCode());
-        transactionSaveBean.setT_description(ThaiUtil.Unicode2ASCII("ฝากเงิน"));
+        transactionSaveBean.setT_description("ฝากเงิน");
         transactionSaveBean.setT_status(AppConstants.CB_STATUS_SAVE);
         transactionSaveBean.setT_amount(NumberUtil.toDouble(dMoney));
         transactionSaveBean.setMoney_in(NumberUtil.toDouble(dMoney));
         transactionSaveBean.setMoney_out(0.00);
         transactionSaveBean.setT_empcode(Value.USER_CODE);
         transactionSaveBean.setT_docno(newDepositNo);
-        transactionSaveBean.setRemark(ThaiUtil.Unicode2ASCII(txtRemark1.getText()));
+        transactionSaveBean.setRemark(txtRemark1.getText());
         transactionSaveBean.setT_booktype(configBean.getSaveDocPrefix());
         transactionSaveBean.setLineNo(cbTransactionSaveControl.getLineByAccount(saveAccountBean.getAccount_code()));
         transactionSaveBean.setPrintChk("N");
@@ -1874,7 +1875,7 @@ public class DepositPanel extends javax.swing.JPanel {
             sql = "update cb_config set SaveDocRunning=SaveDocRunning+1";
             configControl.update(sql);
 
-            JOptionPane.showMessageDialog(this, "บันทึกข้อมูลการฝากเงินเรียบร้อยแล้ว");
+            MessageAlert.infoPopup(this, "บันทึกข้อมูลการฝากเงินเรียบร้อยแล้ว");
             TransactionAdvanceMethod.updateSaveAccountAndProfile(profileBean.getP_custCode(), saveAccountBean.getAccount_code(), transactionSaveBean.getT_balance(), transactionSaveBean.getT_interest());
 
             //load transaction
@@ -1903,7 +1904,8 @@ public class DepositPanel extends javax.swing.JPanel {
             lbMoneyText.setText("(...)");
             txtDepositBaht.requestFocus();
         } else {
-            JOptionPane.showMessageDialog(this, "พบข้อมูลผิดพลาดไม่สามารถบันทึกข้อมูลการฝากเงินได้ !");
+            MessageAlert.errorPopup(this, "พบข้อมูลผิดพลาดไม่สามารถบันทึกข้อมูลการฝากเงินได้ !");
+            logger.error("พบข้อมูลผิดพลาดไม่สามารถบันทึกข้อมูลการฝากเงินได้ !");
         }
     }
 
@@ -1986,12 +1988,12 @@ public class DepositPanel extends javax.swing.JPanel {
         }
 
         if (withdrawAmount < cbSaveConfigBean.getMinWitdraw()) {
-            JOptionPane.showMessageDialog(this, "ท่านต้องถอนเงินไม่ต่ำกว่า " + cbSaveConfigBean.getMinWitdraw());
+            MessageAlert.warningPopup(this, "ท่านต้องถอนเงินไม่ต่ำกว่า " + cbSaveConfigBean.getMinWitdraw());
             return;
         }
 
         if (!checkAllowWithdraw()) {
-            JOptionPane.showMessageDialog(this, "ท่านไม่มีสิทธิ์ถอนเงิน หรือระบุจำนวนสมาชิกที่สามารถถอนได้ไม่ครบถ้วน !");
+            MessageAlert.warningPopup(this, "ท่านไม่มีสิทธิ์ถอนเงิน หรือระบุจำนวนสมาชิกที่สามารถถอนได้ไม่ครบถ้วน !");
             return;
         }
 
@@ -2006,7 +2008,7 @@ public class DepositPanel extends javax.swing.JPanel {
             return;
         }
         if (balance > total) {
-            JOptionPane.showMessageDialog(this, "จำนวนเงินที่ท่านต้องการถอนมีมากกว่าจำนวนเงินคงเหลือในบัญชี !");
+            MessageAlert.warningPopup(this, "จำนวนเงินที่ท่านต้องการถอนมีมากกว่าจำนวนเงินคงเหลือในบัญชี !");
             txtWithdrawalBaht.requestFocus();
             return;
         }
@@ -2038,14 +2040,14 @@ public class DepositPanel extends javax.swing.JPanel {
             cbTransactionSaveBean.setT_date(DateFormat.getLocal_ddMMyyyy(txtWithdrawDate.getText()));
             cbTransactionSaveBean.setT_acccode(saveAccountBean.getAccount_code());
             cbTransactionSaveBean.setT_custcode(profileBean.getP_custCode());
-            cbTransactionSaveBean.setT_description(ThaiUtil.Unicode2ASCII("ถอนเงิน"));
+            cbTransactionSaveBean.setT_description("ถอนเงิน");
             cbTransactionSaveBean.setT_status(AppConstants.CB_STATUS_WITHDRAW);
             cbTransactionSaveBean.setT_amount(-NumberUtil.toDouble(wMoney));
             cbTransactionSaveBean.setMoney_in(0.00);
             cbTransactionSaveBean.setMoney_out(NumberUtil.toDouble(wMoney));
             cbTransactionSaveBean.setT_empcode(Value.USER_CODE);
             cbTransactionSaveBean.setT_docno(withdrawDoc);
-            cbTransactionSaveBean.setRemark(ThaiUtil.Unicode2ASCII(txtRemark2.getText()));
+            cbTransactionSaveBean.setRemark(txtRemark2.getText());
             cbTransactionSaveBean.setT_booktype(configBean.getWithdrawDocPrefix());
             cbTransactionSaveBean.setT_interest(0.00);
             cbTransactionSaveBean.setLineNo(cbTransactionSaveControl.getLineByAccount(saveAccountBean.getAccount_code()));
@@ -2073,7 +2075,7 @@ public class DepositPanel extends javax.swing.JPanel {
                 configControl.update(sql);
 
                 loadTransactionPerson(saveAccountBean.getAccount_code());
-                JOptionPane.showMessageDialog(this, "บันทึกข้อมูลการถอนเงินเรียบร้อยแล้ว");
+                MessageAlert.infoPopup(this, "บันทึกข้อมูลการถอนเงินเรียบร้อยแล้ว");
                 TransactionAdvanceMethod.updateSaveAccountAndProfile(profileBean.getP_custCode(), saveAccountBean.getAccount_code(), cbTransactionSaveBean.getT_balance(), cbTransactionSaveBean.getT_interest());
 
                 loadSummary();
@@ -2101,7 +2103,8 @@ public class DepositPanel extends javax.swing.JPanel {
                 txtWithdrawalBaht.requestFocus();
             }
         } catch (HeadlessException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
+            MessageAlert.errorPopup(this, e.getMessage());
+            logger.error(e.getMessage());
         }
     }
 
@@ -2139,7 +2142,7 @@ public class DepositPanel extends javax.swing.JPanel {
         txtRemark2.setText("");
         lbMoneyText1.setText("(...)");
         txtWithdrawDate.setText(DateFormat.getLocale_ddMMyyyy(new Date()));
-        
+
         txtSaveCloseBalance.setText(NumberFormat.showDouble2(saveAccountBean.getB_BALANCE()));
         txtSaveCloseInterest.setText(NumberFormat.showDouble2(saveAccountBean.getB_INTEREST()));
         txTotalMoneyClose.setText(NumberFormat.showDouble2(saveAccountBean.getB_BALANCE() + saveAccountBean.getB_INTEREST()));
@@ -2162,19 +2165,19 @@ public class DepositPanel extends javax.swing.JPanel {
             } else {
                 closeAccountDocNo = configBean.getWithdrawDocPrefix() + getRunning(configBean.getWithdrawDocRunning());
             }
-            
+
             CbTransactionSaveBean cbTransactionSaveBean = new CbTransactionSaveBean();
             cbTransactionSaveBean.setT_date(new Date());
             cbTransactionSaveBean.setT_acccode(saveAccountBean.getAccount_code());
             cbTransactionSaveBean.setT_custcode(profileBean.getP_custCode());
-            cbTransactionSaveBean.setT_description(ThaiUtil.Unicode2ASCII("ปิดบัญชี"));
+            cbTransactionSaveBean.setT_description("ปิดบัญชี");
             cbTransactionSaveBean.setT_status(AppConstants.CB_STATUS_CLOSE_SAVE);
             cbTransactionSaveBean.setT_amount(-NumberUtil.toDouble(cMoney));
             cbTransactionSaveBean.setMoney_in(0.00);
             cbTransactionSaveBean.setMoney_out(NumberUtil.toDouble(cMoney));
             cbTransactionSaveBean.setT_empcode(Value.USER_CODE);
             cbTransactionSaveBean.setT_docno(closeAccountDocNo);
-            cbTransactionSaveBean.setRemark(ThaiUtil.Unicode2ASCII(txtCloseRemark.getText()));
+            cbTransactionSaveBean.setRemark(txtCloseRemark.getText());
             cbTransactionSaveBean.setT_booktype(configBean.getWithdrawDocPrefix());
             cbTransactionSaveBean.setLineNo(cbTransactionSaveControl.getLineByAccount(saveAccountBean.getAccount_code()));
             cbTransactionSaveBean.setPrintChk("N");
@@ -2186,21 +2189,11 @@ public class DepositPanel extends javax.swing.JPanel {
             cbTransactionSaveBean.setT_balance(0);
 
             if (cbTransactionSaveControl.saveCbTransactionSave(cbTransactionSaveBean)) {
-                String sql = "update cb_save_account set "
-                        + "B_Balance = '0.00',"
-                        + "B_Update=curdate(),"
-                        + "account_status='" + AppConstants.CB_STATUS_CLOSE_SAVE + "',"
-                        + "remark='" + ThaiUtil.Unicode2ASCII(txtCloseRemark.getText()) + "' "
-                        + "where account_code='" + saveAccountBean.getAccount_code() + "'";
-                saveAccountControl.update(sql);
+                saveAccountControl.updateAccountStatusAndRemark(AppConstants.CB_STATUS_CLOSE_SAVE, txtCloseRemark.getText(), saveAccountBean.getAccount_code());
+                profileControl.updateSaveBalance(NumberUtil.toDouble(cMoney), profileBean.getP_custCode());
+                configControl.updateWithdrawDocRunning();
 
-                String sql2 = "update cb_profile set Save_Balance=Save_Balance-" + NumberUtil.toDouble(cMoney) + " "
-                        + "where P_CustCode='" + profileBean.getP_custCode() + "'";
-                profileControl.update(sql2);
-
-                configControl.update("update cb_config set WithdrawDocRunning=WithdrawDocRunning+1");
-
-                JOptionPane.showMessageDialog(this, "ดำเนินการปิดบัญชีเงินฝากเรียบร้อยแล้ว");
+                MessageAlert.infoPopup(this, "ดำเนินการปิดบัญชีเงินฝากเรียบร้อยแล้ว");
                 btnCloseSaveAccount.setEnabled(false);
                 loadSummary();
 
@@ -2221,7 +2214,8 @@ public class DepositPanel extends javax.swing.JPanel {
             }
 
         } catch (HeadlessException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
+            MessageAlert.errorPopup(this, e.getMessage());
+            logger.error(e.getMessage());
         }
     }
 

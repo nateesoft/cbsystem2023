@@ -6,8 +6,9 @@ import java.io.IOException;
 import org.apache.log4j.Logger;
 
 public class ReadText {
+
     private final Logger logger = Logger.getLogger(ReadText.class);
-    
+
     public static String readTextToString(String f) {
         String content = null;
         File file = new File(f);

@@ -10,7 +10,6 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.view.JasperViewer;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRPrintPage;
 import net.sf.jasperreports.engine.JasperReport;
@@ -24,8 +23,19 @@ import th.co.cbank.project.model.BranchBean;
 import th.co.cbank.project.model.CbSaveAccountBean;
 import th.co.cbank.project.model.CbSaveConfigBean;
 import th.co.cbank.project.report.model.CloseAccountReportModel;
-import th.co.cbank.project.report.model.HoonReportAllBean;
+import th.co.cbank.project.report.model.HoonReportAllModel;
+import th.co.cbank.project.report.model.LoanReportAllModel;
+import th.co.cbank.project.report.model.LoanReportPaymentModel;
+import th.co.cbank.project.report.model.OpenAccountReportModel;
 import th.co.cbank.project.report.model.ReportInvoiceHoonModel;
+import th.co.cbank.project.report.model.SaveReportAllModel;
+import th.co.cbank.project.report.model.ShowLoanAccountModel;
+import th.co.cbank.project.report.model.ShowLoanAccountPrintModel;
+import th.co.cbank.project.report.model.ShowSaveAccountModel;
+import th.co.cbank.project.report.model.SummaryDepositModel;
+import th.co.cbank.project.report.model.SummaryExpTransModel;
+import th.co.cbank.project.report.model.SummaryHoonModel;
+import th.co.cbank.project.report.model.SummaryLoanModel;
 import th.co.cbank.util.DateFormat;
 import th.co.cbank.util.MessageAlert;
 
@@ -83,8 +93,8 @@ public class ViewReport extends BaseControl {
                     }
                     rs2.close();
                 } catch (Exception e) {
-                    MessageAlert.infoPopup(this.getClass(), e.getMessage());
-
+                    MessageAlert.errorPopup(this.getClass(), e.getMessage());
+                    logger.error(e.getMessage());
                 }
 
                 JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResource(AppConstants.JASPER_BUY_HOON_REPORT));
@@ -102,7 +112,7 @@ public class ViewReport extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -155,7 +165,7 @@ public class ViewReport extends BaseControl {
                     rs2.close();
                 } catch (Exception e) {
                     logger.error(e.getMessage());
-                    MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                    MessageAlert.errorPopup(this.getClass(), e.getMessage());
                 }
 
                 JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResource(AppConstants.JASPER_SELL_HOON_REPORT));
@@ -173,7 +183,7 @@ public class ViewReport extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -225,7 +235,7 @@ public class ViewReport extends BaseControl {
                     rs2.close();
                 } catch (Exception e) {
                     logger.error(e.getMessage());
-                    MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                    MessageAlert.errorPopup(this.getClass(), e.getMessage());
                 }
 
                 JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResource(AppConstants.JASPER_TRANSFER_HOON_REPORT));
@@ -243,7 +253,7 @@ public class ViewReport extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -316,7 +326,7 @@ public class ViewReport extends BaseControl {
                 rs.close();
             } catch (Exception e) {
                 logger.error(e.getMessage());
-                MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                MessageAlert.errorPopup(this.getClass(), e.getMessage());
             }
 
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResource(AppConstants.JASPER_LOAN_SLIP_REPORT));
@@ -380,14 +390,14 @@ public class ViewReport extends BaseControl {
                         rs2.close();
                     } catch (Exception e) {
                         logger.error(e.getMessage());
-                        MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                        MessageAlert.errorPopup(this.getClass(), e.getMessage());
                     }
                 }
 
                 rs.close();
             } catch (Exception e) {
                 logger.error(e.getMessage());
-                MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                MessageAlert.errorPopup(this.getClass(), e.getMessage());
             }
 
             try {
@@ -405,7 +415,7 @@ public class ViewReport extends BaseControl {
                 rs.close();
             } catch (Exception e) {
                 logger.error(e.getMessage());
-                MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                MessageAlert.errorPopup(this.getClass(), e.getMessage());
             }
 
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResource(AppConstants.JASPER_LOAN_SLIP_REPORT));
@@ -581,15 +591,15 @@ public class ViewReport extends BaseControl {
 
     public void printReportHoonAllTran(String sql, String dateBetween) {
         try {
-            Map p = new HashMap();
+            Map params = new HashMap();
             BranchControl bc = new BranchControl();
             BranchBean bBean = bc.getData();
-            p.put("parameter1", bBean.getName());
-            p.put("sql", sql);
-            p.put("dateBetween", dateBetween);
+            params.put("parameter1", bBean.getName());
+            params.put("sql", sql);
+            params.put("dateBetween", dateBetween);
 
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResource(AppConstants.JASPER_HOON_ALL_REPORT));
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, p, MySQLConnect.conn);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, MySQLConnect.conn);
             JasperViewer v = new JasperViewer(jasperPrint, false);
             JDialog j = new JDialog(new JFrame(), true);
             j.setTitle("Print");
@@ -606,15 +616,15 @@ public class ViewReport extends BaseControl {
 
     public void printReportPersonBalance(String sqlAll, String dateBetween) {
         try {
-            Map p = new HashMap();
+            Map params = new HashMap();
             BranchControl bc = new BranchControl();
             BranchBean bBean = bc.getData();
-            p.put("parameter1", bBean.getName());
-            p.put("sql", sqlAll);
-            p.put("dateBetween", dateBetween);
+            params.put("parameter1", bBean.getName());
+            params.put("sql", sqlAll);
+            params.put("dateBetween", dateBetween);
 
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResource(AppConstants.JASPER_PERSON_BALANCE_REPORT));
-            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, p, MySQLConnect.conn);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, params, MySQLConnect.conn);
             JasperViewer v = new JasperViewer(jasperPrint, false);
             JDialog j = new JDialog(new JFrame(), true);
             j.setTitle("Print");
@@ -691,7 +701,7 @@ public class ViewReport extends BaseControl {
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
-            JOptionPane.showMessageDialog(null, e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return listModel;
@@ -728,7 +738,7 @@ public class ViewReport extends BaseControl {
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
-            JOptionPane.showMessageDialog(null, e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return listModel;
@@ -738,9 +748,11 @@ public class ViewReport extends BaseControl {
         return sqlQuery;
     }
 
-    public List<HoonReportAllBean> findShowAllReport(int selectedIndex, String txtDate1, String txtDate2, String custCode) {
-        List<HoonReportAllBean> listBean = new ArrayList<>();
-        String sql = "";
+    public List<HoonReportAllModel> findShowAllReport(int selectedIndex, String txtDate1, String txtDate2, String custCode) {
+        List<HoonReportAllModel> listBean = new ArrayList<>();
+        String sql = "select (select code from cb_branch limit 0,1) code, t.*, p_custName,p_custSurname "
+                    + "from cb_transaction_save t left join cb_profile p on t.t_custcode=p.p_custcode "
+                    + "where 1=1 ";
         switch (selectedIndex) {
             case 1:
                 sql += " and t_status in ('4') ";
@@ -759,19 +771,19 @@ public class ViewReport extends BaseControl {
         if (!custCode.trim().equals("")) {
             sql += " and t_custcode='" + custCode.trim() + "' ";
         }
-        
+
         sql += " order by t_custcode";
-        
+
         this.sqlQuery = sql;
 
         try {
             ResultSet rs = MySQLConnect.getResultSet(sql);
             while (rs.next()) {
-                HoonReportAllBean bean = new HoonReportAllBean();
+                HoonReportAllModel bean = new HoonReportAllModel();
                 bean.setT_docno(rs.getString("t_docno"));
                 bean.setT_date(rs.getDate("t_date"));
                 bean.setT_time(rs.getString("t_time"));
-                bean.setT_description(rs.getString("t_description"));
+                bean.setT_description(ThaiUtil.ASCII2Unicode(rs.getString("t_description")));
                 bean.setT_amount(rs.getDouble("t_amount"));
                 bean.setT_custcode(rs.getString("t_custcode"));
                 bean.setP_custName(ThaiUtil.ASCII2Unicode(rs.getString("p_custName")));
@@ -783,7 +795,7 @@ public class ViewReport extends BaseControl {
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
-            JOptionPane.showMessageDialog(null, e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return listBean;
@@ -804,4 +816,384 @@ public class ViewReport extends BaseControl {
         }
     }
 
+    public List<LoanReportAllModel> getLoanReportAll(String txtDate1, String txtDate2, String txtAccCode, String txtCustCode) {
+        List<LoanReportAllModel> listBean = new ArrayList<>();
+        String sql = "select a.payPerAmount, a.period_pay, "
+                + "(select code from cb_branch limit 0,1) code, t.*, p_custName,p_custSurname "
+                + "from cb_loan_account a "
+                + "inner join cb_transaction_loan t on a.cust_code=t.t_custcode "
+                + "inner join cb_profile p on p.p_custcode=a.cust_code "
+                + "where 1=1 "
+                + "and t.t_custcode=p.p_custcode "
+                + "and t_status in('10') ";
+        if (!txtDate1.equals("") && !txtDate2.equals("")) {
+            Date date1 = DateFormat.getLocal_ddMMyyyy(txtDate1);
+            Date date2 = DateFormat.getLocal_ddMMyyyy(txtDate2);
+            sql += " and t_date between '" + DateFormat.getMySQL_Date(date1) + "' "
+                    + "and '" + DateFormat.getMySQL_Date(date2) + "' ";
+        }
+        if (!txtAccCode.equals("")) {
+            sql += " and t_acccode='" + txtAccCode + "' ";
+        }
+        if (!txtCustCode.equals("")) {
+            sql += " and t_custcode='" + txtCustCode + "' ";
+        }
+        sql += " group by t.t_acccode  order by t_date, t_time";
+        sqlQuery = sql;
+
+        try (ResultSet rs = MySQLConnect.getResultSet(sql)) {
+            while (rs.next()) {
+                LoanReportAllModel bean = new LoanReportAllModel();
+                bean.setT_custcode(rs.getString("t_custcode"));
+                bean.setT_date(rs.getDate("t_date"));
+                bean.setT_time(rs.getString("t_time"));
+                bean.setP_custName(ThaiUtil.ASCII2Unicode(rs.getString("p_custName")));
+                bean.setP_custSurname(ThaiUtil.ASCII2Unicode(rs.getString("P_custSurname")));
+                bean.setT_description(ThaiUtil.ASCII2Unicode(rs.getString("t_description")));
+                bean.setT_amount(rs.getDouble("t_amount"));
+                bean.setPeriod_pay(rs.getInt("period_pay"));
+                bean.setPayPerAmount(rs.getDouble("payPerAmount"));
+                bean.setT_empcode(rs.getString("t_empcode"));
+                bean.setCode(rs.getString("code"));
+
+                listBean.add(bean);
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+
+        return listBean;
+    }
+
+    public List<LoanReportPaymentModel> getLoanReportPayment(String txtDate1, String txtDate2, String txtAccCode, String txtCustCode) {
+        List<LoanReportPaymentModel> listBean = new ArrayList<>();
+        String sql = "select (select code from cb_branch limit 0,1) code, "
+                + "t.*, p_custName,p_custSurname "
+                + "from cb_transaction_loan t inner join cb_profile p "
+                + "on t.t_custcode=p.p_custcode "
+                + "where 1=1 "
+                + "and t_status in('7') ";
+
+        if (!txtDate1.equals("") && !txtDate2.equals("")) {
+            Date date1 = DateFormat.getLocal_ddMMyyyy(txtDate1);
+            Date date2 = DateFormat.getLocal_ddMMyyyy(txtDate2);
+            sql += " and t_date between '" + DateFormat.getMySQL_Date(date1) + "' "
+                    + "and '" + DateFormat.getMySQL_Date(date2) + "' ";
+        }
+
+        if (!txtAccCode.equals("")) {
+            sql += " and t_acccode='" + txtAccCode + "' ";
+        }
+
+        if (!txtCustCode.equals("")) {
+            sql += " and t_custcode='" + txtCustCode + "' ";
+        }
+
+        sql += " order by t_date, t_time";
+        sqlQuery = sql;
+        try (ResultSet rs = MySQLConnect.getResultSet(sql)) {
+            while (rs.next()) {
+                LoanReportPaymentModel bean = new LoanReportPaymentModel();
+                bean.setT_custcode(rs.getString("t_custcode"));
+                bean.setT_date(rs.getDate("t_date"));
+                bean.setT_time(rs.getString("t_time"));
+                bean.setT_acccode(rs.getString("t_acccode"));
+                bean.setP_custName(ThaiUtil.ASCII2Unicode(rs.getString("p_custName")));
+                bean.setP_custSurname(ThaiUtil.ASCII2Unicode(rs.getString("P_custSurname")));
+                bean.setT_description(ThaiUtil.ASCII2Unicode(rs.getString("t_description")));
+                bean.setT_amount(rs.getDouble("t_amount"));
+                bean.setT_empcode(rs.getString("t_empcode"));
+                bean.setCode(rs.getString("code"));
+
+                listBean.add(bean);
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+
+        return listBean;
+    }
+
+    public List<OpenAccountReportModel> showAllOpenAccountReport(int selectedIndex, String selectItem, String txtDate1, String txtDate2) {
+        List<OpenAccountReportModel> listBean = new ArrayList<>();
+        String sql = "select b_start, account_code, type_name,b_fee,typeName,"
+                + "concat(b_cust_name,' ', b_cust_lastname) cust_name,emp_code,branch_code "
+                + "from cb_save_account a, cb_save_config s,cb_member_type m "
+                + "where a.account_type=s.typecode "
+                + "and a.member_type=m.type_code ";
+        if (selectedIndex > 0) {
+            String[] data = selectItem.split("-");
+            sql += " and account_type='" + data[0].trim() + "' ";
+        }
+
+        if (!txtDate1.equals("") && !txtDate2.equals("")) {
+            Date date1 = DateFormat.getLocal_ddMMyyyy(txtDate1);
+            Date date2 = DateFormat.getLocal_ddMMyyyy(txtDate2);
+            sql += " and b_start between '" + DateFormat.getMySQL_Date(date1) + "' "
+                    + "and '" + DateFormat.getMySQL_Date(date2) + "' ";
+        }
+        sqlQuery = sql;
+        try (ResultSet rs = MySQLConnect.getResultSet(sql)) {
+            while (rs.next()) {
+                OpenAccountReportModel bean = new OpenAccountReportModel();
+                bean.setB_start(rs.getDate("b_start"));
+                bean.setAccount_code(rs.getString("account_code"));
+                bean.setType_name(ThaiUtil.ASCII2Unicode(rs.getString("type_name")));
+                bean.setB_fee(rs.getDouble("b_fee"));
+                bean.setTypeName(ThaiUtil.ASCII2Unicode(rs.getString("typeName")));
+                bean.setCust_name(ThaiUtil.ASCII2Unicode(rs.getString("cust_name")));
+                bean.setEmp_code(rs.getString("emp_code"));
+                bean.setBranch_code(rs.getString("branch_code"));
+
+                listBean.add(bean);
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+
+        return listBean;
+    }
+
+    public List<SaveReportAllModel> showAllSaveReport(int selectedIndex, String txtCustCode, String txtDate1, String txtDate2, String txtAccCode, int selectAccountType, String selectAccountTypeName) {
+        List<SaveReportAllModel> listBean = new ArrayList<>();
+        String sql = "select t.*,"
+                + "(select b_cust_name from cb_save_account p where p.account_code=t.t_acccode) b_cust_name, "
+                + "(select b_cust_lastname from cb_save_account p where p.account_code=t.t_acccode) b_cust_lastname,"
+                + "(select concat(concat(b_cust_name, ' '),b_cust_lastname) from cb_save_account p where p.account_code=t.t_acccode) Name "
+                + "from cb_transaction_save t "
+                + "where 1=1 ";
+
+        if (selectedIndex > -1) {
+            switch (selectedIndex) {
+                case 0:
+                    sql += " and t_status in('1','2','3','8') ";
+                    break;
+                case 1:
+                    sql += " and t_status in('1') ";
+                    break;
+                case 2:
+                    sql += " and t_status in('2') ";
+                    break;
+                case 3:
+                    sql += " and t_status in('3') ";
+                    break;
+                case 4:
+                    sql += " and t_status in('8') ";
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        if (!txtCustCode.equals("")) {
+            sql += " and t_custcode='" + txtCustCode + "' ";
+        }
+
+        if (!txtDate1.equals("") && !txtDate2.equals("")) {
+            Date d1 = DateFormat.getLocal_ddMMyyyy(txtDate1);
+            Date d2 = DateFormat.getLocal_ddMMyyyy(txtDate2);
+
+            sql += " and t_date between '" + DateFormat.getMySQL_Date(d1) + "' and '" + DateFormat.getMySQL_Date(d2) + "' ";
+        }
+
+        if (!txtAccCode.equals("")) {
+            sql += " and t_acccode='" + txtAccCode + "' ";
+        }
+
+        if (selectAccountType > 0) {
+            String[] data = selectAccountTypeName.split("-");
+            sql += " and account_type='" + data[0].trim() + "' ";
+        }
+
+        sql += " order by t_date, t_time";
+        sqlQuery = sql;
+        try (ResultSet rs = MySQLConnect.getResultSet(sql)) {
+            while (rs.next()) {
+                SaveReportAllModel bean = new SaveReportAllModel();
+                bean.setT_amount(rs.getDouble("t_amount"));
+                bean.setT_date(rs.getDate("t_date"));
+                bean.setT_time(rs.getString("t_time"));
+                bean.setT_acccode(rs.getString("t_acccode"));
+                bean.setT_description(ThaiUtil.ASCII2Unicode(rs.getString("t_description")));
+                bean.setT_balance(rs.getDouble("t_balance"));
+                bean.setT_custcode(rs.getString("t_custcode"));
+                bean.setB_cust_name(ThaiUtil.ASCII2Unicode(rs.getString("b_cust_name")));
+                bean.setB_cust_lastname(ThaiUtil.ASCII2Unicode(rs.getString("b_cust_lastname")));
+                bean.setT_empcode(rs.getString("t_empcode"));
+                bean.setBranch_code(rs.getString("branch_code"));
+
+                listBean.add(bean);
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+
+        return listBean;
+    }
+
+    public List<ShowSaveAccountModel> showSaveAccount(String custCode) {
+        List<ShowSaveAccountModel> listBean = new ArrayList<>();
+        String sql = "select s.*,c.typeName "
+                + "from cb_save_account s,cb_save_config c "
+                + "where s.account_type=c.typeCode "
+                + "and B_CUST_CODE = '" + custCode + "' "
+                + "and account_status='1'";
+        try (ResultSet rs = MySQLConnect.getResultSet(sql)) {
+            while (rs.next()) {
+                ShowSaveAccountModel bean = new ShowSaveAccountModel();
+                bean.setAccount_code(rs.getString("account_code"));
+                bean.setTypeName(rs.getString("typeName"));
+                bean.setB_balance(rs.getDouble("b_balance"));
+
+                listBean.add(bean);
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+
+        return listBean;
+    }
+
+    public List<ShowLoanAccountModel> showLoanAccount(String custCode) {
+        List<ShowLoanAccountModel> listBean = new ArrayList<>();
+        String sql = "select s.*,c.LoanName "
+                + "from cb_loan_account s,cb_loan_config c "
+                + "where s.loan_type=c.LoanCode "
+                + "and CUST_CODE = '" + custCode + "' ";
+        try (ResultSet rs = MySQLConnect.getResultSet(sql)) {
+            while (rs.next()) {
+                ShowLoanAccountModel bean = new ShowLoanAccountModel();
+                bean.setLoan_docno(rs.getString("loan_docno"));
+                bean.setLoanName(ThaiUtil.ASCII2Unicode(rs.getString("LoanName")));
+                bean.setLoan_amount(rs.getDouble("loan_amount"));
+
+                listBean.add(bean);
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+
+        return listBean;
+    }
+
+    public List<ShowLoanAccountPrintModel> loadListAllAccount() {
+        List<ShowLoanAccountPrintModel> listBean = new ArrayList<>();
+        String sql = "select * "
+                + "from cb_loan_account l,cb_profile p "
+                + "where l.cust_code=p.p_custCode ";
+        try (ResultSet rs = MySQLConnect.getResultSet(sql)) {
+            while (rs.next()) {
+                ShowLoanAccountPrintModel bean = new ShowLoanAccountPrintModel();
+                bean.setLoan_docno(rs.getString("loan_docno"));
+                bean.setP_custName(ThaiUtil.ASCII2Unicode(rs.getString("p_custName")));
+                bean.setP_custSurname(ThaiUtil.ASCII2Unicode(rs.getString("p_custSurname")));
+
+                listBean.add(bean);
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+
+        return listBean;
+    }
+
+    public List<ShowLoanAccountPrintModel> loadListAllAccountByName(String custName) {
+        List<ShowLoanAccountPrintModel> listBean = new ArrayList<>();
+        String sql = "select * "
+                + "from cb_loan_account l,cb_profile p "
+                + "where l.cust_code=p.p_custCode "
+                + "and p_custName like '%" + ThaiUtil.Unicode2ASCII(custName) + "%'";
+        try (ResultSet rs = MySQLConnect.getResultSet(sql)) {
+            while (rs.next()) {
+                ShowLoanAccountPrintModel bean = new ShowLoanAccountPrintModel();
+                bean.setLoan_docno(rs.getString("loan_docno"));
+                bean.setP_custName(ThaiUtil.ASCII2Unicode(rs.getString("p_custName")));
+                bean.setP_custSurname(ThaiUtil.ASCII2Unicode(rs.getString("p_custSurname")));
+
+                listBean.add(bean);
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+
+        return listBean;
+    }
+
+    public SummaryDepositModel summaryDeposit(String dateMySQL) {
+        SummaryDepositModel bean = new SummaryDepositModel();
+        String sql = "select sum(money_in), sum(money_out), sum(money_in-money_out) t_balance, "
+                + "sum(t_interest), sum(t_fee) from cb_transaction_save "
+                + "where t_date='" + dateMySQL + "' and t_status in('1','2','3','8') ";
+        try (ResultSet rs = MySQLConnect.getResultSet(sql)) {
+            if (rs.next()) {
+                bean.setSumMoneyIn(rs.getDouble(1));
+                bean.setSumMoneyOut(rs.getDouble(2));
+                bean.setSumMoneyBalance(rs.getDouble(3));
+                bean.setSumInterest(rs.getDouble(4));
+                bean.setSumFee(rs.getDouble(5));
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+        return bean;
+    }
+
+    public SummaryHoonModel summaryHoon(String dateMySQL) {
+        SummaryHoonModel bean = new SummaryHoonModel();
+        bean.setT_status("");
+        String sql = "select t_status, sum(t_amount), sum(t_hoon_amt) "
+                + "from cb_transaction_save where t_date='" + dateMySQL + "' "
+                + "and t_status in('4','5','9') group by t_status";
+        try (ResultSet rs = MySQLConnect.getResultSet(sql)) {
+            if (rs.next()) {
+                bean.setT_status(rs.getString("t_satus"));
+                bean.setSumAmount(rs.getDouble(2));
+                bean.setSumHoonAmt(rs.getDouble(3));
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+        return bean;
+    }
+
+    public SummaryLoanModel summaryLoan(String dateMySQL) {
+        SummaryLoanModel bean = new SummaryLoanModel();
+        bean.setT_status("");
+        String sql = "select t_status, sum(t_amount) from cb_transaction_save "
+                + "where t_date='" + dateMySQL + "' and t_status in('10','7') group by t_status";
+        try (ResultSet rs = MySQLConnect.getResultSet(sql)) {
+            if (rs.next()) {
+                bean.setT_status(rs.getString("t_satus"));
+                bean.setSumAmount(rs.getDouble(2));
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+        return bean;
+    }
+
+    public SummaryExpTransModel summaryExpTrans() {
+        SummaryExpTransModel bean = new SummaryExpTransModel();
+        String sql = "select sum(emp_amount) from cb_exp_transaction where exp_date=curdate();";
+        try (ResultSet rs = MySQLConnect.getResultSet(sql)) {
+            if (rs.next()) {
+                bean.setSumAmount(rs.getDouble(1));
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+        return bean;
+    }
 }

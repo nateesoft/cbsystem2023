@@ -4,26 +4,21 @@ import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
-import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import org.apache.log4j.Logger;
 import th.co.cbank.util.DateFormat;
-import th.co.cbank.util.ThaiUtil;
 import th.co.cbank.project.constants.AppConstants;
 import th.co.cbank.project.control.ViewReport;
-import th.co.cbank.project.report.model.HoonReportAllBean;
+import th.co.cbank.project.report.model.HoonReportAllModel;
 import th.co.cbank.util.DateChooseDialog;
+import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.TableUtil;
 
 public class HoonReportAllDialog extends BaseDialogSwing {
@@ -33,6 +28,7 @@ public class HoonReportAllDialog extends BaseDialogSwing {
     private DecimalFormat dec = new DecimalFormat("#,##0.00");
     private Frame parent;
     private String sqlShow;
+    private final ViewReport viewReport = new ViewReport();
 
     public HoonReportAllDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -527,7 +523,7 @@ public class HoonReportAllDialog extends BaseDialogSwing {
             ViewReport vp = new ViewReport();
             vp.printReportBuyHoon(profileCode, hoonDocNoOld);
         } else {
-            JOptionPane.showMessageDialog(this, "กรุณาเลือกรายการ");
+            MessageAlert.warningPopup(this, "กรุณาเลือกรายการ");
         }
     }//GEN-LAST:event_btnReset2ActionPerformed
 
@@ -588,14 +584,13 @@ public class HoonReportAllDialog extends BaseDialogSwing {
     private void showAll() {
         DefaultTableModel model = (DefaultTableModel) tbTransaction.getModel();
         TableUtil.clearModel(model);
-        ViewReport viewReport = new ViewReport();
-        List<HoonReportAllBean> listBean = viewReport.findShowAllReport(cbAccItem.getSelectedIndex(), txtDate1.getText(), txtDate2.getText(), txtCustCode.getText());
+        List<HoonReportAllModel> listBean = viewReport.findShowAllReport(cbAccItem.getSelectedIndex(), txtDate1.getText(), txtDate2.getText(), txtCustCode.getText());
 
         double balance = 0;
         int count = 0;
         double totalDeposit = 0;
         double totalWithdraw = 0;
-        for (HoonReportAllBean bean : listBean) {
+        for (HoonReportAllModel bean : listBean) {
             count++;
             model.addRow(new Object[]{
                 count,
@@ -627,7 +622,7 @@ public class HoonReportAllDialog extends BaseDialogSwing {
 
         String tempCust = "";
         int countCust = 0;
-        for (HoonReportAllBean bean : listBean) {
+        for (HoonReportAllModel bean : listBean) {
             if (tempCust.equals("")) {
                 tempCust = bean.getT_custcode();
                 countCust++;
@@ -646,9 +641,8 @@ public class HoonReportAllDialog extends BaseDialogSwing {
     }
 
     private void exportReport() {
-        ViewReport v = new ViewReport();
-        if (!sqlShow.equals("")) {
-            v.printReportHoonAllTran(sqlShow, "ช่วงวันที่ " + txtDate1.getText() + " - " + txtDate2.getText());
+        if (!viewReport.getSqlQuery().equals("")) {
+            viewReport.printReportHoonAllTran(viewReport.getSqlQuery(), "ช่วงวันที่ " + txtDate1.getText() + " - " + txtDate2.getText());
         }
     }
 
@@ -656,7 +650,6 @@ public class HoonReportAllDialog extends BaseDialogSwing {
         txtAccCode.setText("");
         txtCustCode.setText("");
         cbAccItem.setSelectedIndex(0);
-
         txtAccCode.requestFocus();
     }
 }

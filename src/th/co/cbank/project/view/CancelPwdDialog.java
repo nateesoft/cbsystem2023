@@ -1,9 +1,9 @@
 package th.co.cbank.project.view;
 
-import javax.swing.JOptionPane;
 import org.apache.log4j.Logger;
 import th.co.cbank.project.control.CbUserControl;
 import th.co.cbank.project.control.Value;
+import th.co.cbank.util.MessageAlert;
 
 public class CancelPwdDialog extends BaseDialogSwing {
 
@@ -114,7 +114,7 @@ public class CancelPwdDialog extends BaseDialogSwing {
             isPwdOk(true);
         } else {
             isPwdOk(false);
-            JOptionPane.showMessageDialog(this, "รหัสผ่านไม่ถูกต้อง");
+            MessageAlert.warningPopup(this, "รหัสผ่านไม่ถูกต้อง");
             txtPwd.selectAll();
             txtPwd.requestFocus();
         }

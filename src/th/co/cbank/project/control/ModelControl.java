@@ -9,6 +9,7 @@ import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.ThaiUtil;
 
 public class ModelControl extends BaseControl {
+
     private final Logger logger = Logger.getLogger(ModelControl.class);
 
     public List<LoadLoanMapping> getDataLoan(String profileCode) {
@@ -31,7 +32,7 @@ public class ModelControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return list;

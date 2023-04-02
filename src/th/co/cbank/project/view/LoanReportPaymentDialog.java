@@ -4,25 +4,24 @@ import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
-import java.sql.ResultSet;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import javax.swing.JOptionPane;
+import java.util.List;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import org.apache.log4j.Logger;
 import th.co.cbank.util.DateFormat;
-import th.co.cbank.util.ThaiUtil;
 import th.co.cbank.project.constants.AppConstants;
-import th.co.cbank.project.control.MySQLConnect;
 import th.co.cbank.project.control.ViewReport;
+import th.co.cbank.project.report.model.LoanReportPaymentModel;
 import th.co.cbank.util.DateChooseDialog;
 import th.co.cbank.util.TableUtil;
 
 public class LoanReportPaymentDialog extends BaseDialogSwing {
+
     private final Logger logger = Logger.getLogger(LoanReportPaymentDialog.class);
     private SimpleDateFormat simp = new SimpleDateFormat("dd/MM/yyyy");
     private DecimalFormat dec = new DecimalFormat("#,##0.00");
@@ -554,100 +553,70 @@ public class LoanReportPaymentDialog extends BaseDialogSwing {
         txtDate1.setText(DateFormat.getLocale_ddMMyyyy(new Date()));
         txtDate2.setText(DateFormat.getLocale_ddMMyyyy(new Date()));
     }
-    
+
     private String sqlAll = "";
 
     private void showAll() {
         DefaultTableModel model = (DefaultTableModel) tbTransaction.getModel();
         TableUtil.clearModel(model);
 
-        try {
-            String sql = "select b.code, t.*, p_custName,p_custSurname "
-                    + "from cb_transaction_loan t, cb_profile p, cb_branch b "
-                    + "where t.t_custcode=p.p_custcode "
-                    + "and t_status in('7') ";
-
-            if (!txtDate1.getText().equals("") && !txtDate2.getText().equals("")) {
-                Date date1 = DateFormat.getLocal_ddMMyyyy(txtDate1.getText());
-                Date date2 = DateFormat.getLocal_ddMMyyyy(txtDate2.getText());
-                sql += " and t_date between '" + DateFormat.getMySQL_Date(date1) + "' "
-                        + "and '" + DateFormat.getMySQL_Date(date2) + "' ";
+        ViewReport viewReport = new ViewReport();
+        List<LoanReportPaymentModel> listReport = viewReport.getLoanReportPayment(txtDate1.getText(), txtDate2.getText(), txtAccCode.getText(), txtCustCode.getText());
+        sqlAll = viewReport.getSqlQuery();
+        int count = 0;
+        double balance = 0;
+        double totalDeposit = 0;
+        double totalWithdraw = 0;
+        String tempCust = "";
+        int countCust = 0;
+        for (LoanReportPaymentModel bean : listReport) {
+            if (tempCust.equals("")) {
+                tempCust = bean.getT_custcode();
+                countCust++;
+            } else if (!tempCust.equals(bean.getT_custcode())) {
+                tempCust = bean.getT_custcode();
+                countCust++;
             }
-
-            if (!txtAccCode.getText().equals("")) {
-                sql += " and t_acccode='" + txtAccCode.getText() + "' ";
-            }
-
-            if (!txtCustCode.getText().equals("")) {
-                sql += " and t_custcode='" + txtCustCode.getText() + "' ";
-            }
-
-            int count = 0;
-            double balance = 0;
-            double totalDeposit = 0;
-            double totalWithdraw = 0;
-
-            sql += " order by t_date, t_time";
-            sqlAll = sql;
-//            System.out.println(sqlAll);
-            String tempCust = "";
-            ResultSet rs2 = MySQLConnect.getResultSet(sql);
-            int countCust = 0;
-            while (rs2.next()) {
-                if (tempCust.equals("")) {
-                    tempCust = rs2.getString("t_custcode");
-                    countCust++;
-                } else if (!tempCust.equals(rs2.getString("t_custcode"))) {
-                    tempCust = rs2.getString("t_custcode");
-                    countCust++;
-                }
-            }
-            rs2.close();
-
-            ResultSet rs = MySQLConnect.getResultSet(sql);
-            while (rs.next()) {
-                count++;
-                model.addRow(new Object[]{
-                    count,
-                    simp.format(rs.getDate("t_date")),
-                    rs.getString("t_time"),
-                    rs.getString("t_acccode"),
-                    ThaiUtil.ASCII2Unicode(rs.getString("t_description")),
-                    rs.getDouble("t_amount"),
-                    rs.getString("t_custcode"),
-                    ThaiUtil.ASCII2Unicode(rs.getString("p_custName") + " " + rs.getString("p_custSurname")),
-                    rs.getString("t_empcode"),
-                    rs.getString("code")
-                });
-
-                String checkType = ThaiUtil.ASCII2Unicode(rs.getString("t_description"));
-                double amount = rs.getDouble("t_amount");
-                switch (checkType) {
-                    case "ชำระเงินกู้":
-                        totalDeposit += amount;
-                        break;
-                    case "กู้เงิน":
-                        totalWithdraw += amount;
-                        break;
-                }
-
-                balance += amount;
-            }
-            
-            TableUtil.alignTable(tbTransaction, 5, SwingConstants.RIGHT);
-
-            txtTotalPeople.setText("" + countCust);
-            if (totalWithdraw < 0) {
-                totalWithdraw *= -1;
-            }
-            txtLoanPayAmt.setText(dec.format(totalDeposit));
-            txtLoanAmt.setText(dec.format(totalWithdraw));
-            txtTotalIncome.setText(dec.format(balance));
-
-            rs.close();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
         }
+
+        for (LoanReportPaymentModel bean : listReport) {
+            count++;
+            model.addRow(new Object[]{
+                count,
+                simp.format(bean.getT_date()),
+                bean.getT_time(),
+                bean.getT_acccode(),
+                bean.getT_description(),
+                bean.getT_amount(),
+                bean.getT_custcode(),
+                bean.getP_custName() + " " + bean.getP_custSurname(),
+                bean.getT_empcode(),
+                bean.getCode()
+            });
+
+            String checkType = bean.getT_description();
+            double amount = bean.getT_amount();
+            switch (checkType) {
+                case "ชำระเงินกู้":
+                    totalDeposit += amount;
+                    break;
+                case "กู้เงิน":
+                    totalWithdraw += amount;
+                    break;
+            }
+
+            balance += amount;
+        }
+
+        TableUtil.alignTable(tbTransaction, 5, SwingConstants.RIGHT);
+
+        txtTotalPeople.setText("" + countCust);
+        if (totalWithdraw < 0) {
+            totalWithdraw *= -1;
+        }
+        txtLoanPayAmt.setText(dec.format(totalDeposit));
+        txtLoanAmt.setText(dec.format(totalWithdraw));
+        txtTotalIncome.setText(dec.format(balance));
     }
 
     private void exportReport() {

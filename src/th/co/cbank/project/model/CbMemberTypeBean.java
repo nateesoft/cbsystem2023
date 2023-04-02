@@ -1,9 +1,7 @@
 package th.co.cbank.project.model;
 
-import org.apache.log4j.Logger;
-
 public class CbMemberTypeBean {
-    private final Logger logger = Logger.getLogger(CbMemberTypeBean.class);
+
     private String typeCode;
     private String typeName;
     private int memberCount;
@@ -15,7 +13,7 @@ public class CbMemberTypeBean {
     public void setMemberCount(int memberCount) {
         this.memberCount = memberCount;
     }
-    
+
     public String getTypeCode() {
         return typeCode;
     }

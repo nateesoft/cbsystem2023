@@ -6,7 +6,6 @@ import java.awt.event.KeyEvent;
 import java.util.Date;
 import java.util.List;
 import javax.swing.JComboBox;
-import javax.swing.JOptionPane;
 import org.apache.log4j.Logger;
 import th.co.cbank.project.constants.AppConstants;
 import th.co.cbank.project.control.BranchControl;
@@ -28,13 +27,14 @@ import th.co.cbank.project.model.SaveSummaryBean;
 import th.co.cbank.project.view.ListCustomerDialog;
 import th.co.cbank.util.DateChooseDialog;
 import th.co.cbank.util.DateFormat;
+import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.NumberFormat;
 import th.co.cbank.util.NumberUtil;
-import th.co.cbank.util.ThaiUtil;
 
 public class HoonPanel extends javax.swing.JPanel {
+
     private final Logger logger = Logger.getLogger(HoonPanel.class);
-    private ProfileBean profileBean;
+    private final ProfileBean profileBean;
     private CbSaveAccountBean saveAccountBean;
     private final BranchControl branchControl = new BranchControl();
     private final ProfileControl profileControl = new ProfileControl();
@@ -1363,7 +1363,7 @@ public class HoonPanel extends javax.swing.JPanel {
     private void txtTransferPersonKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTransferPersonKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             if (profileBean.getP_custCode().equals(txtTransferPerson.getText())) {
-                JOptionPane.showMessageDialog(this, "ไม่สามารถโอนหุ้นให้กับบุคคลเดียวกันได้ !!!");
+                MessageAlert.warningPopup(this, "ไม่สามารถโอนหุ้นให้กับบุคคลเดียวกันได้ !!!");
                 txtTransferPerson.setText("");
                 txtTransferPerson.requestFocus();
             } else {
@@ -1390,7 +1390,7 @@ public class HoonPanel extends javax.swing.JPanel {
         if (listDialog.getCUST_CODE() != null) {
             List<CbSaveAccountBean> listSaveAccount = saveAccountControl.listCbSaveAccount(listDialog.getCUST_CODE());
             cbAccoutListTransfer.removeAllItems();
-            for(CbSaveAccountBean bean: listSaveAccount){
+            for (CbSaveAccountBean bean : listSaveAccount) {
                 cbAccoutListTransfer.addItem(bean.getAccount_code());
             }
             txtTransferPerson.setText(listDialog.getCUST_CODE());
@@ -1628,7 +1628,7 @@ public class HoonPanel extends javax.swing.JPanel {
         }
 
         if (cashPay < totalAmt) {
-            JOptionPane.showMessageDialog(this, "ท่านระบุจำนวนเงินไม่ครบถ้วน กรุณาเพิ่มอีก " + total + " บาท");
+            MessageAlert.warningPopup(this, "ท่านระบุจำนวนเงินไม่ครบถ้วน กรุณาเพิ่มอีก " + total + " บาท");
             txtCashPay.requestFocus();
             return;
         }
@@ -1653,12 +1653,12 @@ public class HoonPanel extends javax.swing.JPanel {
             cbTransactionSaveBean.setT_date(new Date());
             cbTransactionSaveBean.setT_acccode(saveAccountBean.getAccount_code());
             cbTransactionSaveBean.setT_custcode(profileBean.getP_custCode());
-            cbTransactionSaveBean.setT_description(ThaiUtil.Unicode2ASCII("ซื้อหุ้น"));
+            cbTransactionSaveBean.setT_description("ซื้อหุ้น");
             cbTransactionSaveBean.setT_status(AppConstants.CB_STATUS_BUY_HOON);
             cbTransactionSaveBean.setT_amount(NumberUtil.toDouble(txtHoonQTY.getText()));
             cbTransactionSaveBean.setT_empcode(Value.USER_CODE);
             cbTransactionSaveBean.setT_docno(hoonDocNo);
-            cbTransactionSaveBean.setRemark(ThaiUtil.Unicode2ASCII("ซื้อหุ้น"));
+            cbTransactionSaveBean.setRemark("ซื้อหุ้น");
             cbTransactionSaveBean.setT_booktype("");
             cbTransactionSaveBean.setLineNo(0);
             cbTransactionSaveBean.setPrintChk("N");
@@ -1686,7 +1686,7 @@ public class HoonPanel extends javax.swing.JPanel {
                 configControl.update("update cb_config set HoonDocRunning=HoonDocRunning+1");
             }
             txtDocNo.setText(hoonDocNo);
-            JOptionPane.showMessageDialog(this, "บันทึกข้อมูลการซื้อหุ้นเรียบร้อยแล้ว");
+            MessageAlert.warningPopup(this, "บันทึกข้อมูลการซื้อหุ้นเรียบร้อยแล้ว");
             btnSaveByHoon.setEnabled(false);
             txtCashPay.setEditable(false);
             txtHoonQTY.setEditable(false);
@@ -1700,7 +1700,8 @@ public class HoonPanel extends javax.swing.JPanel {
             // load default form hoon
             resetSaleHoon();
         } catch (HeadlessException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
+            MessageAlert.errorPopup(this, e.getMessage());
+            logger.error(e.getMessage());
         }
     }
 
@@ -1750,17 +1751,17 @@ public class HoonPanel extends javax.swing.JPanel {
         double balance = NumberUtil.toDouble(txtHoonBalance.getText());
 
         if (qty <= 0) {
-            JOptionPane.showMessageDialog(this, "จำนวนหุ้นที่ต้องการขายต้องมากกว่า 0!");
+            MessageAlert.warningPopup(this, "จำนวนหุ้นที่ต้องการขายต้องมากกว่า 0!");
             txtTotalSellHoonAmount.requestFocus();
             return;
         }
 
         if (qty == balance) {
-            JOptionPane.showMessageDialog(this, "จำนวนที่ท่านขายหุ้นคือจำนวนหุ้นทั้งหมดที่ท่านถือครอง !");
+            MessageAlert.infoPopup(this, "จำนวนที่ท่านขายหุ้นคือจำนวนหุ้นทั้งหมดที่ท่านถือครอง !");
         }
 
         if (qty > balance) {
-            JOptionPane.showMessageDialog(this, "จำนวนหุ้นที่ท่านถือครองมีไม่เพียงพอต่อการขาย !");
+            MessageAlert.warningPopup(this, "จำนวนหุ้นที่ท่านถือครองมีไม่เพียงพอต่อการขาย !");
             txtTotalSellHoonAmount.requestFocus();
             return;
         }
@@ -1783,11 +1784,11 @@ public class HoonPanel extends javax.swing.JPanel {
             cbTransactionSaveBean.setT_date(new Date());
             cbTransactionSaveBean.setT_acccode(saveAccountBean.getAccount_code());
             cbTransactionSaveBean.setT_custcode(profileBean.getP_custCode());
-            cbTransactionSaveBean.setT_description(ThaiUtil.Unicode2ASCII("ขายหุ้น"));
+            cbTransactionSaveBean.setT_description("ขายหุ้น");
             cbTransactionSaveBean.setT_amount(NumberUtil.toDouble(txtTotalSellHoonAmount.getText()));
             cbTransactionSaveBean.setT_empcode(Value.USER_CODE);
             cbTransactionSaveBean.setT_docno(hoonSellDocNo);
-            cbTransactionSaveBean.setRemark(ThaiUtil.Unicode2ASCII("ขายหุ้น"));
+            cbTransactionSaveBean.setRemark("ขายหุ้น");
             cbTransactionSaveBean.setT_status(AppConstants.CB_STATUS_SALE_HOON);
             cbTransactionSaveBean.setT_booktype("");
             cbTransactionSaveBean.setLineNo(0);
@@ -1821,20 +1822,21 @@ public class HoonPanel extends javax.swing.JPanel {
             }
 
             txtDocNoSellHoon.setText(hoonSellDocNo);
-            
-            JOptionPane.showMessageDialog(this, "ทำรายการขายหุ้นเสร็จเรียบร้อย");
+
+            MessageAlert.infoPopup(this, "ทำรายการขายหุ้นเสร็จเรียบร้อย");
             btnChooseDateSellHoon.setEnabled(false);
             txtTotalSellHoonAmount.setEditable(false);
             chkSelectAllSellHoon.setEnabled(false);
             btnSellHoon.setEnabled(false);
-            
+
             loadSummary();
 
             ViewReport viewReport = new ViewReport();
             viewReport.printReportSellHoon(profileBean.getP_custCode(), hoonSellDocNo);
             resetSaleHoon();
         } catch (HeadlessException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
+            MessageAlert.errorPopup(this, e.getMessage());
+            logger.error(e.getMessage());
         }
     }
 
@@ -1866,20 +1868,20 @@ public class HoonPanel extends javax.swing.JPanel {
 
     private void btnTransferHoon() {
         if (!txtTransferAppCode.getText().equals("000000")) {
-            JOptionPane.showMessageDialog(this, "อนุมัติในการโอนหุ้นไม่ถูกต้อง !");
+            MessageAlert.warningPopup(this, "อนุมัติในการโอนหุ้นไม่ถูกต้อง !");
             txtTransferAppCode.requestFocus();
             return;
         }
 
         if (profileBean.getP_custCode().equals(txtTransferPerson.getText())) {
-            JOptionPane.showMessageDialog(this, "ไม่สามารถโอนหุ้นให้กับบุคคลเดียวกันได้ !!!");
+            MessageAlert.warningPopup(this, "ไม่สามารถโอนหุ้นให้กับบุคคลเดียวกันได้ !!!");
             txtTransferPerson.setText("");
             txtTransferPerson.requestFocus();
             return;
         }
 
         if (txtTransferPerson.getText().equals("")) {
-            JOptionPane.showMessageDialog(this, "กรุณาระบุรหัสลูกค้าที่ท่านต้องการโอนหุ้นให้ !");
+            MessageAlert.warningPopup(this, "กรุณาระบุรหัสลูกค้าที่ท่านต้องการโอนหุ้นให้ !");
             txtTransferPerson.requestFocus();
             return;
         }
@@ -1887,7 +1889,7 @@ public class HoonPanel extends javax.swing.JPanel {
         double hoonBalance = Double.parseDouble(txtTotalHoonBalance.getText().replace(",", ""));
         double tranferAmt = Double.parseDouble(txtTotaTransferHoonAmt.getText().replace(",", ""));
         if (tranferAmt >= hoonBalance) {
-            JOptionPane.showMessageDialog(this, "คุณต้องการโอนหุ้นทั้งหมดจากบัญชีนี้");
+            MessageAlert.warningPopup(this, "คุณต้องการโอนหุ้นทั้งหมดจากบัญชีนี้");
             txtTotaTransferHoonAmt.setText("" + hoonBalance);
         }
 
@@ -1910,11 +1912,11 @@ public class HoonPanel extends javax.swing.JPanel {
             cbTransactionSaveBean.setT_date(new Date());
             cbTransactionSaveBean.setT_acccode(cbAccoutListTransfer.getSelectedItem().toString());
             cbTransactionSaveBean.setT_custcode(profileBean.getP_custCode());
-            cbTransactionSaveBean.setT_description(ThaiUtil.Unicode2ASCII("โอนหุ้น"));
+            cbTransactionSaveBean.setT_description("โอนหุ้น");
             cbTransactionSaveBean.setT_amount(NumberUtil.toInt(sHoonMoney));
             cbTransactionSaveBean.setT_empcode(Value.USER_CODE);
             cbTransactionSaveBean.setT_docno(transferHoonDocNo);
-            cbTransactionSaveBean.setRemark(ThaiUtil.Unicode2ASCII("โอนหุ้น"));
+            cbTransactionSaveBean.setRemark("โอนหุ้น");
             cbTransactionSaveBean.setT_status(AppConstants.CB_STATUS_TRANS_HOON);
             cbTransactionSaveBean.setT_booktype("");
             cbTransactionSaveBean.setLineNo(0);
@@ -1941,20 +1943,21 @@ public class HoonPanel extends javax.swing.JPanel {
                         + "hoon_balance=hoon_balance-" + cbTransactionSaveBean.getT_amount() + " "
                         + "where account_code='" + saveAccountBean.getAccount_code() + "';";
                 saveAccountControl.update(sql2);
-                
+
                 // update target transfer hoon
                 sql2 = "update cb_profile set "
                         + "Hoon_Qty=Hoon_Qty+" + sHoonMoney + " "
                         + "where p_CustCode='" + txtTransferPerson + "';";
                 profileControl.update(sql2);
-                
+
                 sql2 = "update cb_save_account set "
                         + "hoon_balance=hoon_balance+" + cbTransactionSaveBean.getT_amount() + " "
                         + "where account_code='" + cbAccoutListTransfer.getSelectedItem().toString() + "';";
                 saveAccountControl.update(sql2);
             }
         } catch (HeadlessException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
+            MessageAlert.errorPopup(this, e.getMessage());
+            logger.error(e.getMessage());
         }
 
         //update transactoin การรับหุ้นจากการโอน
@@ -1965,11 +1968,11 @@ public class HoonPanel extends javax.swing.JPanel {
             cbTransactionSaveBean.setT_date(new Date());
             cbTransactionSaveBean.setT_acccode(saveAccountBean.getAccount_code());
             cbTransactionSaveBean.setT_custcode(profileBean.getP_custCode());
-            cbTransactionSaveBean.setT_description(ThaiUtil.Unicode2ASCII("รับเข้าหุ้น"));
+            cbTransactionSaveBean.setT_description("รับเข้าหุ้น");
             cbTransactionSaveBean.setT_amount(NumberUtil.toInt(sHoonMoney));
             cbTransactionSaveBean.setT_empcode(Value.USER_CODE);
             cbTransactionSaveBean.setT_docno(transferHoonDocNo);
-            cbTransactionSaveBean.setRemark(ThaiUtil.Unicode2ASCII("รับเข้าหุ้น"));
+            cbTransactionSaveBean.setRemark("รับเข้าหุ้น");
             cbTransactionSaveBean.setT_booktype("");
             cbTransactionSaveBean.setLineNo(0);
             cbTransactionSaveBean.setPrintChk("N");
@@ -1989,7 +1992,8 @@ public class HoonPanel extends javax.swing.JPanel {
                 profileControl.update(sql3);
             }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
+            MessageAlert.errorPopup(this, e.getMessage());
+            logger.error(e.getMessage());
         }
 
         // อัพเดต Running
@@ -1997,17 +2001,17 @@ public class HoonPanel extends javax.swing.JPanel {
         configControl.update(sql);
 
         txtDocnoTransfer.setText(transferHoonDocNo);
-        JOptionPane.showMessageDialog(this, "ทำรายการโอนหุ้นเสร็จเรียบร้อย");
+        MessageAlert.infoPopup(this, "ทำรายการโอนหุ้นเสร็จเรียบร้อย");
         btnChooseDateTransfer.setEnabled(false);
         txtTotaTransferHoonAmt.setEditable(false);
         txtTransferPerson.setEditable(false);
         btnFindPersonToTransfer.setEnabled(false);
         cbAccoutListTransfer.setEnabled(false);
         txtTransferAppCode.setEditable(false);
-        
+
         ViewReport v = new ViewReport();
         v.printReportTransferHoon(profileBean.getP_custCode(), transferHoonDocNo);
-        
+
         loadSummary();
         resetSaleHoon();
     }

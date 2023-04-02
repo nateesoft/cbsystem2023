@@ -9,6 +9,7 @@ import th.co.cbank.project.model.CustfileBean;
 import th.co.cbank.util.MessageAlert;
 
 public class CustFileControl extends BaseControl {
+
     private final Logger logger = Logger.getLogger(CustFileControl.class);
 
     public boolean deleteCustFile(String SP_Code) {
@@ -18,7 +19,7 @@ public class CustFileControl extends BaseControl {
             return true;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return false;
         }
     }
@@ -58,13 +59,13 @@ public class CustFileControl extends BaseControl {
             return true;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return false;
         }
     }
 
     public List<CustfileBean> mappingBean(ResultSet rs) throws Exception {
-        List<CustfileBean> listBean = new ArrayList<CustfileBean>();
+        List<CustfileBean> listBean = new ArrayList<>();
         while (rs.next()) {
             CustfileBean bean = new CustfileBean();
             bean.setSP_Code(rs.getString("SP_Code"));
@@ -90,17 +91,17 @@ public class CustFileControl extends BaseControl {
         return listBean;
     }
 
-    public List<CustfileBean> getListBean() {        
+    public List<CustfileBean> getListBean() {
         try {
             String sql = "select * from custfile order by sp_code";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             return mappingBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), "พบปัญหาในการเชื่อมต่อฐานข้อมูล \nMSG(" + e.getMessage() + ")");
+            MessageAlert.errorPopup(this.getClass(), "พบปัญหาในการเชื่อมต่อฐานข้อมูล \nMSG(" + e.getMessage() + ")");
             System.exit(0);
         }
-        
+
         return new ArrayList();
     }
 
@@ -111,7 +112,7 @@ public class CustFileControl extends BaseControl {
             return mappingBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), "พบปัญหาในการเชื่อมต่อฐานข้อมูล \nMSG(" + e.getMessage() + ")");
+            MessageAlert.errorPopup(this.getClass(), "พบปัญหาในการเชื่อมต่อฐานข้อมูล \nMSG(" + e.getMessage() + ")");
             System.exit(0);
         }
 
@@ -123,16 +124,16 @@ public class CustFileControl extends BaseControl {
             String sql = "select * from custfile where sp_code='" + SP_Code + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             List<CustfileBean> listBean = mappingBean(rs);
-            if(listBean.isEmpty()){
+            if (listBean.isEmpty()) {
                 return null;
             }
             return listBean.get(0);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), "พบปัญหาในการเชื่อมต่อฐานข้อมูล \nMSG(" + e.getMessage() + ")");
+            MessageAlert.errorPopup(this.getClass(), "พบปัญหาในการเชื่อมต่อฐานข้อมูล \nMSG(" + e.getMessage() + ")");
             System.exit(0);
         }
-        
+
         return null;
     }
 

@@ -7,14 +7,12 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.apache.log4j.Logger;
 import th.co.cbank.util.JTableUtil;
 import th.co.cbank.util.NumberFormat;
 import th.co.cbank.project.constants.AppConstants;
 import th.co.cbank.project.control.CbTransactionSaveControl;
-import th.co.cbank.project.log.Log;
 import th.co.cbank.project.model.CbSaveAccountBean;
 import th.co.cbank.project.model.CbSaveConfigBean;
 import th.co.cbank.project.model.CbTransactionSaveBean;
@@ -427,7 +425,7 @@ public class PrintSavingBookDialog extends BaseDialogSwing {
         try {
             List<CbTransactionSaveBean> listTran = getCbTransactionSaveControl().listCbTransactionSaveAllAddStatus11(txtAccCode.getText());
             if (listTran.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "ไม่พบรายงานความเคลื่อนไหว หรือไม่มีการเลือกบรรทัดที่ต้องพิมพ์ !");
+                MessageAlert.warningPopup(this, "ไม่พบรายงานความเคลื่อนไหว หรือไม่มีการเลือกบรรทัดที่ต้องพิมพ์ !");
             } else {
                 List<ReportGreenBean> listBean = new ArrayList<>();
                 ReportGreenBean bean1;
@@ -471,8 +469,8 @@ public class PrintSavingBookDialog extends BaseDialogSwing {
             }
 
         } catch (HeadlessException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
-            Log.write.error(e.getMessage());
+            MessageAlert.errorPopup(this, e.getMessage());
+            logger.error(e.getMessage());
         }
     }
 

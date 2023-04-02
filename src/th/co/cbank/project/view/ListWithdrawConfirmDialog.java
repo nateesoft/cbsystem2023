@@ -16,7 +16,6 @@ import th.co.cbank.project.model.ReportGreenBean;
 public class ListWithdrawConfirmDialog extends BaseDialogSwing {
 
     private final Logger logger = Logger.getLogger(ListWithdrawConfirmDialog.class);
-
     private PrintSlipBean psBean;
     private Frame parent;
 

@@ -16,10 +16,22 @@ public class CbTransactionSaveControl extends BaseControl {
 
     private final Logger logger = Logger.getLogger(CbTransactionSaveControl.class);
 
-    public List<CbTransactionSaveBean> mappingBean(ResultSet rs) throws Exception {
+    public List<CbTransactionSaveBean> mappingListBean(ResultSet rs) throws Exception {
         List<CbTransactionSaveBean> listBean = new ArrayList<>();
         while (rs.next()) {
-            CbTransactionSaveBean bean = new CbTransactionSaveBean();
+            CbTransactionSaveBean bean = mappingBean(rs);
+            if (bean != null) {
+                listBean.add(bean);
+            }
+        }
+        rs.close();
+        return listBean;
+    }
+
+    public CbTransactionSaveBean mappingBean(ResultSet rs) throws Exception {
+        CbTransactionSaveBean bean = null;
+        if (rs.next()) {
+            bean = new CbTransactionSaveBean();
             bean.setT_date(rs.getDate("T_date"));
             bean.setT_time(rs.getString("T_time"));
             bean.setT_acccode(rs.getString("T_acccode"));
@@ -46,21 +58,18 @@ public class CbTransactionSaveControl extends BaseControl {
             bean.setT_interest(rs.getDouble("t_interest"));
             bean.setT_fee(rs.getDouble("t_fee"));
             bean.setT_status(rs.getString("t_status"));
-
-            listBean.add(bean);
         }
-        rs.close();
-        return listBean;
+        return bean;
     }
 
     public List<CbTransactionSaveBean> listCbTransactionSave() {
         try {
             String sql = "select * from cb_transaction_save";
             ResultSet rs = MySQLConnect.getResultSet(sql);
-            return mappingBean(rs);
+            return mappingListBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }
@@ -72,10 +81,10 @@ public class CbTransactionSaveControl extends BaseControl {
                 sql += where;
             }
             ResultSet rs = MySQLConnect.getResultSet(sql);
-            return mappingBean(rs);
+            return mappingListBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }
@@ -85,10 +94,10 @@ public class CbTransactionSaveControl extends BaseControl {
             String sql = "select * from cb_transaction_save "
                     + "where T_date between '" + date1 + "' and '" + date2 + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);
-            return mappingBean(rs);
+            return mappingListBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }
@@ -101,10 +110,10 @@ public class CbTransactionSaveControl extends BaseControl {
                     + "and t_status in('2','3','8') "
                     + "order by t_date, t_time";
             ResultSet rs = MySQLConnect.getResultSet(sql);
-            return mappingBean(rs);
+            return mappingListBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }
@@ -118,10 +127,10 @@ public class CbTransactionSaveControl extends BaseControl {
                     + "and t_status in('2','3','8') "
                     + "order by t_date, t_time";
             ResultSet rs = MySQLConnect.getResultSet(sql);
-            return mappingBean(rs);
+            return mappingListBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }
@@ -135,7 +144,7 @@ public class CbTransactionSaveControl extends BaseControl {
                     + "('" + booktype1 + "','" + booktype2 + "') "
                     + "order by t_index;";
             ResultSet rs = MySQLConnect.getResultSet(sql);
-            return mappingBean(rs);
+            return mappingListBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
             MessageAlert.errorPopup(this.getClass(), e.getMessage());
@@ -153,7 +162,7 @@ public class CbTransactionSaveControl extends BaseControl {
                     + "and t_status in('2','3','8') "
                     + "order by t_index";
             ResultSet rs = MySQLConnect.getResultSet(sql);
-            return mappingBean(rs);
+            return mappingListBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
             MessageAlert.errorPopup(this.getClass(), e.getMessage());
@@ -170,7 +179,7 @@ public class CbTransactionSaveControl extends BaseControl {
                     + "and t_status in('2','3','8', '11') "
                     + "order by t_date, t_time, LineNo";
             ResultSet rs = MySQLConnect.getResultSet(sql);
-            return mappingBean(rs);
+            return mappingListBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
             MessageAlert.errorPopup(this.getClass(), e.getMessage());
@@ -183,7 +192,7 @@ public class CbTransactionSaveControl extends BaseControl {
             String sql = "select * from cb_transaction_save "
                     + "where T_custcode='" + T_custcode + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);
-            List<CbTransactionSaveBean> listBean = mappingBean(rs);
+            List<CbTransactionSaveBean> listBean = mappingListBean(rs);
             if (listBean.isEmpty()) {
                 return null;
             }
@@ -199,7 +208,7 @@ public class CbTransactionSaveControl extends BaseControl {
         try {
             String sql = "select * from cb_transaction_save where t_docno='" + T_DocNO + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);
-            List<CbTransactionSaveBean> listBean = mappingBean(rs);
+            List<CbTransactionSaveBean> listBean = mappingListBean(rs);
             if (listBean.isEmpty()) {
                 return null;
             }
@@ -222,9 +231,9 @@ public class CbTransactionSaveControl extends BaseControl {
                     + "t_hoon_amt,t_hoon_ton,t_hoon_cash,t_hoon_rate,branch_code,t_interest,t_fee,t_status)  "
                     + "values('" + DateFormat.getMySQL_Date(bean.getT_date()) + "',curtime(),"
                     + "'" + bean.getT_acccode() + "','" + bean.getT_custcode() + "',"
-                    + "'" + bean.getT_description() + "','" + bean.getT_amount() + "',"
+                    + "'" + ThaiUtil.Unicode2ASCII(bean.getT_description()) + "','" + bean.getT_amount() + "',"
                     + "'" + bean.getT_empcode() + "','" + bean.getT_docno() + "',"
-                    + "'" + bean.getRemark() + "','" + bean.getT_booktype() + "',"
+                    + "'" + ThaiUtil.Unicode2ASCII(bean.getRemark()) + "','" + bean.getT_booktype() + "',"
                     + "'" + bean.getT_hoon() + "','" + bean.getLineNo() + "',"
                     + "'" + bean.getPrintChk() + "','" + bean.getT_balance() + "','" + bean.getT_index() + "',"
                     + "'" + bean.getMoney_in() + "','" + bean.getMoney_out() + "',curdate(),"
@@ -387,7 +396,7 @@ public class CbTransactionSaveControl extends BaseControl {
                     + "and t_status in('2','3','8', '11') "
                     + "order by t_date, t_time, LineNo";
             ResultSet rs = MySQLConnect.getResultSet(sql);
-            return mappingBean(rs);
+            return mappingListBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
             MessageAlert.errorPopup(this.getClass(), e.getMessage());
@@ -441,7 +450,7 @@ public class CbTransactionSaveControl extends BaseControl {
                     + "and printchk='N' and t_booktype<>'" + loanDocPrefix + "' "
                     + "order by t_index";
             ResultSet rs = MySQLConnect.getResultSet(sql);
-            return mappingBean(rs);
+            return mappingListBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
             MessageAlert.errorPopup(this.getClass(), e.getMessage());
@@ -471,6 +480,80 @@ public class CbTransactionSaveControl extends BaseControl {
                     + "and lineNo='" + lineNo + "' "
                     + "and printChk='N' and t_booktype<>'" + booktype + "' ";
             MySQLConnect.exeUpdate(sql);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+    }
+
+    public void updateWhereCustCodeAccode(double balance, String custCode, String accCode, String t_docno, String t_time) {
+        try {
+            String sql = "update cb_transaction_save set "
+                    + "t_balance='" + balance + "' "
+                    + "where t_custcode='" + custCode + "' "
+                    + "and t_acccode='" + accCode + "' "
+                    + "and t_docno='" + t_docno + "' "
+                    + "and t_time='" + t_time + "' "
+                    + "and t_status in('2','3','8')";
+            MySQLConnect.exeUpdate(sql);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+    }
+
+    public List<CbTransactionSaveBean> getTdateList(String custCode, String accCode) {
+        List<CbTransactionSaveBean> listBean = new ArrayList<>();
+        String sql = "select t_date from cb_transaction_save "
+                + "where t_status in('2','3','8') "
+                + "and t_custcode='" + custCode + "' "
+                + "and t_acccode='" + accCode + "' "
+                + "group by t_date "
+                + "order by t_date";
+        try (ResultSet rs = MySQLConnect.getResultSet(sql)) {
+            while (rs.next()) {
+                CbTransactionSaveBean bean = new CbTransactionSaveBean();
+                bean.setT_date(rs.getDate("t_date"));
+
+                listBean.add(bean);
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+        return listBean;
+    }
+
+    public List<CbTransactionSaveBean> getListByAccoundCode(String accCode) {
+        List<CbTransactionSaveBean> listBean = new ArrayList<>();
+        try {
+            String sql = "select * from cb_transaction_save "
+                    + "where t_acccode='" + accCode + "' "
+                    + "and t_status in('2','3','8', '11') "
+                    + "order by t_date, t_time";
+            ResultSet rs = MySQLConnect.getResultSet(sql);
+            while (rs.next()) {
+                CbTransactionSaveBean bean = mappingBean(rs);
+                listBean.add(bean);
+            }
+            rs.close();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+
+        return listBean;
+    }
+
+    public void updateWhereAccountAndStatus(int line_no, int t_index, String accCode, String t_date, String t_time) {
+        try {
+            MySQLConnect.exeUpdate("update cb_transaction_save "
+                    + "set LineNo=" + line_no + ", t_index='" + t_index + "' "
+                    + "where t_acccode='" + accCode + "' "
+                    + "and t_date='" + t_date + "' "
+                    + "and t_time='" + t_time + "' "
+                    + "and t_status in('2','3','8', '11') "
+                    + "order by t_date, t_time");
         } catch (Exception e) {
             logger.error(e.getMessage());
             MessageAlert.errorPopup(this.getClass(), e.getMessage());

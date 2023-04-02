@@ -10,6 +10,7 @@ import javax.xml.bind.Marshaller;
 import org.apache.log4j.Logger;
 
 public class StringUtil {
+
     private final Logger logger = Logger.getLogger(StringUtil.class);
 
     public static String getString(String inputData) {
@@ -135,7 +136,7 @@ public class StringUtil {
                 resultData = dc.format(num.doubleValue());
             }
         } catch (Exception e) {
-            
+
         }
         return resultData;
     }

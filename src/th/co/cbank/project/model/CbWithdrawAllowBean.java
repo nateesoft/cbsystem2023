@@ -1,9 +1,7 @@
 package th.co.cbank.project.model;
 
-import org.apache.log4j.Logger;
-
 public class CbWithdrawAllowBean {
-    private final Logger logger = Logger.getLogger(CbWithdrawAllowBean.class);
+
     private String account_no;//
     private int allow_person_qty = 0;//
     private int _index = 0;//

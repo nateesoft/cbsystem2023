@@ -24,6 +24,7 @@ import org.apache.log4j.Logger;
 import th.co.cbank.project.constants.AppConstants;
 
 public final class DateChooseDialog extends javax.swing.JDialog {
+
     private final Logger logger = Logger.getLogger(DateChooseDialog.class);
     private GregorianCalendar curDay;
     private final SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
@@ -513,7 +514,7 @@ private void cbMonthKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_c
                 selectedDate = sDate;
                 dispose();
             } catch (NumberFormatException e) {
-                
+
                 selectedDate = null;
             }
 

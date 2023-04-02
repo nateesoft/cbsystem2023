@@ -1,10 +1,9 @@
 package th.co.cbank.project.model;
 
 import java.util.Date;
-import org.apache.log4j.Logger;
 
 public class CbSaveAccountBean {
-    private final Logger logger = Logger.getLogger(CbSaveAccountBean.class);
+
     private String B_CUST_CODE;//
     private String B_CUST_NAME;//
     private String B_CUST_LASTNAME;//
@@ -68,7 +67,7 @@ public class CbSaveAccountBean {
 
     public void setB_FEE(double B_FEE) {
         this.B_FEE = B_FEE;
-    }    
+    }
 
     public String getBook_evidence3() {
         return book_evidence3;

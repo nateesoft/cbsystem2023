@@ -21,6 +21,7 @@ import th.co.cbank.util.ExcelUtil;
 import th.co.cbank.util.TableUtil;
 
 public class ProfileListDialog extends BaseDialogSwing {
+
     private final Logger logger = Logger.getLogger(ProfileListDialog.class);
     private final Frame parent;
 
@@ -368,10 +369,10 @@ public class ProfileListDialog extends BaseDialogSwing {
         try {
             ExcelUtil excel = new ExcelUtil();
             excel.setOutputFile("test.xls");
-            excel.write((DefaultTableModel) jTable1.getModel(), "Report-1", new int[]{7,9,10});
+            excel.write((DefaultTableModel) jTable1.getModel(), "Report-1", new int[]{7, 9, 10});
             Desktop.getDesktop().open(new File("test.xls"));
         } catch (Exception e) {
-            
+
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 

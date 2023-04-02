@@ -4,11 +4,10 @@ import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
-import java.sql.ResultSet;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import javax.swing.JOptionPane;
+import java.util.List;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -16,11 +15,11 @@ import javax.swing.table.JTableHeader;
 import org.apache.log4j.Logger;
 import th.co.cbank.util.DateFormat;
 import th.co.cbank.util.NumberFormat;
-import th.co.cbank.util.ThaiUtil;
 import th.co.cbank.project.constants.AppConstants;
-import th.co.cbank.project.control.MySQLConnect;
 import th.co.cbank.project.control.ViewReport;
+import th.co.cbank.project.report.model.LoanReportAllModel;
 import th.co.cbank.util.DateChooseDialog;
+import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.TableUtil;
 
 public class LoanReportAllDialog extends BaseDialogSwing {
@@ -468,19 +467,19 @@ public class LoanReportAllDialog extends BaseDialogSwing {
 
         DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
         rightRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
-        
+
         DefaultTableCellRenderer leftRenderer = new DefaultTableCellRenderer();
         rightRenderer.setHorizontalAlignment(SwingConstants.LEFT);
-        
+
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();
         centerRenderer.setHorizontalAlignment(SwingConstants.CENTER);
-        
+
         tbTransaction.getColumnModel().getColumn(6).setCellRenderer(rightRenderer);
         tbTransaction.getColumnModel().getColumn(7).setCellRenderer(rightRenderer);
         tbTransaction.getColumnModel().getColumn(8).setCellRenderer(rightRenderer);
-     
+
         tbTransaction.getColumnModel().getColumn(0).setCellRenderer(centerRenderer);
-        
+
         txtDate1.setText(DateFormat.getLocale_ddMMyyyy(new Date()));
         txtDate2.setText(DateFormat.getLocale_ddMMyyyy(new Date()));
     }
@@ -491,80 +490,48 @@ public class LoanReportAllDialog extends BaseDialogSwing {
         DefaultTableModel model = (DefaultTableModel) tbTransaction.getModel();
         TableUtil.clearModel(model);
 
+        ViewReport viewReport = new ViewReport();
+        List<LoanReportAllModel> listReportAll = viewReport.getLoanReportAll(txtDate1.getText(), txtDate2.getText(), txtAccCode.getText(), txtCustCode.getText());
         try {
-            String sql = "select a.payPerAmount, a.period_pay, "
-                    + "b.code, t.*, p_custName,p_custSurname "
-                    + "from cb_loan_account a, cb_transaction_loan t, "
-                    + "cb_profile p, cb_branch b "
-                    + "where a.cust_code=t.t_custcode "
-                    + "and t.t_custcode=p.p_custcode "
-                    + "and t_status in('10') ";
-            if (!txtDate1.getText().equals("") && !txtDate2.getText().equals("")) {
-                Date date1 = DateFormat.getLocal_ddMMyyyy(txtDate1.getText());
-                Date date2 = DateFormat.getLocal_ddMMyyyy(txtDate2.getText());
-                sql += " and t_date between '" + DateFormat.getMySQL_Date(date1) + "' "
-                        + "and '" + DateFormat.getMySQL_Date(date2) + "' ";
-            }
+            sqlAll = viewReport.getSqlQuery();
 
-            if (!txtAccCode.getText().equals("")) {
-                sql += " and t_acccode='" + txtAccCode.getText() + "' ";
-            }
-
-            if (!txtCustCode.getText().equals("")) {
-                sql += " and t_custcode='" + txtCustCode.getText() + "' ";
-            }
-            
+            String tempCust = "";
             int count = 0;
             double balance = 0;
-            double totalDeposit = 0;
-            double totalWithdraw = 0;
-
-            sql += " group by t.t_acccode  order by t_date, t_time";
-            sqlAll = sql;
-//            System.out.println(sqlAll);
-            String tempCust = "";
-            ResultSet rs2 = MySQLConnect.getResultSet(sql);
-            int countCust = 0;
-            while (rs2.next()) {
+            for (LoanReportAllModel bean : listReportAll) {
                 if (tempCust.equals("")) {
-                    tempCust = rs2.getString("t_custcode");
-                    countCust++;
-                } else if (!tempCust.equals(rs2.getString("t_custcode"))) {
-                    tempCust = rs2.getString("t_custcode");
-                    countCust++;
+                    tempCust = bean.getT_custcode();
+                } else if (!tempCust.equals(bean.getT_custcode())) {
+                    tempCust = bean.getT_custcode();
                 }
             }
-            rs2.close();
 
-            ResultSet rs = MySQLConnect.getResultSet(sql);
-            while (rs.next()) {
+            for (LoanReportAllModel bean : listReportAll) {
                 count++;
                 model.addRow(new Object[]{
                     count,
-                    simp.format(rs.getDate("t_date")),
-                    rs.getString("t_time"),
-                    rs.getString("t_custcode"),
-                    ThaiUtil.ASCII2Unicode(rs.getString("p_custName") + " " + rs.getString("p_custSurname")),                    
-                    ThaiUtil.ASCII2Unicode(rs.getString("t_description")),
-                    NumberFormat.showDouble2(rs.getDouble("t_amount")),
-                    rs.getInt("period_pay"),
-                    NumberFormat.showDouble2(rs.getDouble("payPerAmount")),
-                    rs.getString("t_empcode"),
-                    rs.getString("code")
+                    simp.format(bean.getT_date()),
+                    bean.getT_time(),
+                    bean.getT_custcode(),
+                    bean.getP_custName() + " " + bean.getP_custSurname(),
+                    bean.getT_description(),
+                    NumberFormat.showDouble2(bean.getT_amount()),
+                    bean.getPeriod_pay(),
+                    NumberFormat.showDouble2(bean.getPayPerAmount()),
+                    bean.getT_empcode(),
+                    bean.getCode()
                 });
 
-                balance += rs.getDouble("t_amount");
+                balance += bean.getT_amount();
             }
-            
+
             TableUtil.alignTable(tbTransaction, 6, SwingConstants.RIGHT);
             TableUtil.alignTable(tbTransaction, 7, SwingConstants.RIGHT);
             TableUtil.alignTable(tbTransaction, 8, SwingConstants.RIGHT);
-            
             txtLoanAmt.setText(dec.format(balance));
-
-            rs.close();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
+            MessageAlert.errorPopup(this, e.getMessage());
+            logger.error(e.getMessage());
         }
     }
 

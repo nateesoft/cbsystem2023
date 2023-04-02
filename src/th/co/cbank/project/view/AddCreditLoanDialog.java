@@ -8,7 +8,7 @@ import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.NumberFormat;
 
 public class AddCreditLoanDialog extends BaseDialogSwing {
-    
+
     private final Logger logger = Logger.getLogger(AddCreditLoanDialog.class);
     private String profileCode = null;
     private String empCode = null;
@@ -266,7 +266,7 @@ public class AddCreditLoanDialog extends BaseDialogSwing {
         txtCreditLoanAmt.setText(NumberFormat.showDouble2(profileBean.getLoan_Credit_Amt()));
         txtLoanBalance.setText(NumberFormat.showDouble2(profileBean.getLoan_Balance()));
         txtLoanMaxAmt.setText(NumberFormat.showDouble2(profileBean.getLoan_Credit_Balance()));
-        
+
         txtCreditLoanAmt.requestFocus();
     }
 }

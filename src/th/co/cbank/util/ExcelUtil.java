@@ -1,6 +1,5 @@
 package th.co.cbank.util;
 
-import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
@@ -22,6 +21,7 @@ import jxl.write.biff.RowsExceededException;
 import org.apache.log4j.Logger;
 
 public class ExcelUtil {
+
     private final Logger logger = Logger.getLogger(ExcelUtil.class);
     private WritableCellFormat timesBoldUnderline;
     private WritableCellFormat times;
@@ -91,7 +91,7 @@ public class ExcelUtil {
             }
         }
 
-        int maxRow = model.getRowCount()+1;
+        int maxRow = model.getRowCount() + 1;
         if (colsNumber.length > 0) {
             for (int i = 0; i < colsNumber.length; i++) {
                 StringBuilder buf = new StringBuilder();

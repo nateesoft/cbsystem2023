@@ -1,11 +1,8 @@
 package th.co.cbank.project.model;
 
-import org.apache.log4j.Logger;
-
 public class ProfileMapping {
-    private final Logger logger = Logger.getLogger(ProfileMapping.class);
 
-    private ProfileBean profileBean;    
+    private ProfileBean profileBean;
     private String listAcc;
     private String listLoan;
 
@@ -36,5 +33,5 @@ public class ProfileMapping {
     public void setListLoan(String listLoan) {
         this.listLoan = listLoan;
     }
-    
+
 }

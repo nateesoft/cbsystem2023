@@ -1,10 +1,9 @@
 package th.co.cbank.project.model;
 
 import java.util.Date;
-import org.apache.log4j.Logger;
 
 public class CbLoanAccountBean {
-    private final Logger logger = Logger.getLogger(CbLoanAccountBean.class);
+
     private String loan_docno;//
     private String loan_name;//
     private String cust_code;//
@@ -36,10 +35,10 @@ public class CbLoanAccountBean {
     private int period_pay = 0;
     private String chkPersonApprove = "N";
     private double LoanCustomerPay = 0.00;
-    private int LoanDayQty=0;
+    private int LoanDayQty = 0;
     private double LoanPayMin = 0.00;
     private double intBalance = 0.00;
-    
+
     // reference ProfileBean
     private ProfileBean profile;
 
@@ -50,7 +49,7 @@ public class CbLoanAccountBean {
     public void setProfile(ProfileBean profile) {
         this.profile = profile;
     }
-    
+
     public String getLoan_name() {
         return loan_name;
     }

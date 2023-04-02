@@ -66,8 +66,7 @@ public class PassBook_PSiPR9 {
                 JasperPrintManager.printReport(jasperPrint, false);
             } catch (JRException e) {
                 logger.error(e.getMessage());
-                MessageAlert.infoPopup(this.getClass(), e.getMessage());
-
+                MessageAlert.errorPopup(this.getClass(), e.getMessage());
             }
         }
 
@@ -118,8 +117,7 @@ public class PassBook_PSiPR9 {
                 JasperPrintManager.printReport(jasperPrint, false);
             } catch (JRException e) {
                 logger.error(e.getMessage());
-                MessageAlert.infoPopup(this.getClass(), e.getMessage());
-
+                MessageAlert.errorPopup(this.getClass(), e.getMessage());
             }
         }
         return param;
@@ -264,7 +262,7 @@ public class PassBook_PSiPR9 {
             JasperPrintManager.printReport(jasperPrint, true);
         } catch (JRException e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -283,7 +281,7 @@ public class PassBook_PSiPR9 {
             JasperPrintManager.printReport(jasperPrint, true);
         } catch (JRException e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -304,7 +302,7 @@ public class PassBook_PSiPR9 {
             JasperPrintManager.printReport(jasperPrint, false);
         } catch (JRException e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -316,7 +314,7 @@ public class PassBook_PSiPR9 {
             JasperPrintManager.printReport(jasperPrint, false);
         } catch (JRException e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -342,7 +340,7 @@ public class PassBook_PSiPR9 {
             JasperPrintManager.printReport(jasperPrint, true);
         } catch (JRException e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 

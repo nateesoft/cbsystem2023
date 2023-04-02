@@ -1,10 +1,9 @@
 package th.co.cbank.project.model;
 
 import java.util.Date;
-import org.apache.log4j.Logger;
 
 public class CbTransactionLoanBean {
-    private final Logger logger = Logger.getLogger(CbTransactionLoanBean.class);
+
     private Date t_date;
     private String t_time = "00:00:00";
     private String t_acccode;

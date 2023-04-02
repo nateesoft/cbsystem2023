@@ -9,6 +9,7 @@ import th.co.cbank.project.model.CbProjectBean;
 import th.co.cbank.util.MessageAlert;
 
 public class CbProjectControl extends BaseControl {
+
     private final Logger logger = Logger.getLogger(CbProjectControl.class);
 
     public List<CbProjectBean> listProject() {
@@ -26,7 +27,7 @@ public class CbProjectControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return listBean;
@@ -44,7 +45,7 @@ public class CbProjectControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return bean;
@@ -53,8 +54,8 @@ public class CbProjectControl extends BaseControl {
     public boolean saveProject(CbProjectBean bean) {
         try {
             String sql = "insert into cb_project (pj_id,pj_desc)  "
-                    + "values('" + bean.getProductCode()+ "','" + bean.getProductName()+ "')";
-            String sqlChk = "select * from cb_project where pj_id='" + bean.getProductCode()+ "'";
+                    + "values('" + bean.getProductCode() + "','" + ThaiUtil.Unicode2ASCII(bean.getProductName()) + "')";
+            String sqlChk = "select * from cb_project where pj_id='" + bean.getProductCode() + "'";
             ResultSet rs = MySQLConnect.getResultSet(sqlChk);
             if (rs.next()) {
                 return updateProject(bean);
@@ -66,7 +67,7 @@ public class CbProjectControl extends BaseControl {
             return true;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return false;
         }
     }
@@ -74,14 +75,14 @@ public class CbProjectControl extends BaseControl {
     public boolean updateProject(CbProjectBean bean) {
         try {
             String sql = "update cb_project set "
-                    + "pj_id='" + bean.getProductCode()+ "', "
-                    + "pj_desc='" + bean.getProductName()+ "' "
-                    + "where pj_id='" + bean.getProductCode()+ "'";
+                    + "pj_id='" + bean.getProductCode() + "', "
+                    + "pj_desc='" + ThaiUtil.Unicode2ASCII(bean.getProductName()) + "' "
+                    + "where pj_id='" + bean.getProductCode() + "'";
             update(sql);
             return true;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return false;
         }
     }

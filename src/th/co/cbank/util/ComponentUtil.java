@@ -4,7 +4,7 @@ import java.awt.Component;
 import java.awt.Container;
 
 public class ComponentUtil {
-    
+
     public static void enableComponents(Container container, boolean enable) {
         Component[] components = container.getComponents();
         for (Component component : components) {

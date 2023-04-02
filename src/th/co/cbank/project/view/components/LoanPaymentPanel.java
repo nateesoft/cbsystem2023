@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import org.apache.log4j.Logger;
@@ -32,16 +31,16 @@ import th.co.cbank.project.view.PrintLoanBookDialog;
 import th.co.cbank.util.DateChooseDialog;
 import th.co.cbank.util.DateFormat;
 import th.co.cbank.util.JTableUtil;
+import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.NumberFormat;
 import th.co.cbank.util.NumberUtil;
 import th.co.cbank.util.TableUtil;
-import th.co.cbank.util.ThaiUtil;
 
 public class LoanPaymentPanel extends javax.swing.JPanel {
 
     private final Logger logger = Logger.getLogger(LoanPaymentPanel.class);
-    private ProfileBean profileBean;
-    private CbLoanAccountBean loanAccountBean;
+    private final ProfileBean profileBean;
+    private final CbLoanAccountBean loanAccountBean;
     private final CbLoanAccountControl loanAccountControl = new CbLoanAccountControl();
     private final ProfileControl profileControl = new ProfileControl();
     private final CbLoanConfigControl loanConfigControl = new CbLoanConfigControl();
@@ -764,7 +763,7 @@ public class LoanPaymentPanel extends javax.swing.JPanel {
             double feeAmt = NumberUtil.toDouble(txtPaymentFee.getText());
 
             txtIntBalance.setText(NumberFormat.showDouble2(loanAccountBean.getIntBalance())); //ดอกเบี้ยค้างชำระจากงวดที่แล้ว
-            Date dateLastPayment = loanAccountBean.getPay_date() == null ? loanAccountBean.getLoan_docdate():loanAccountBean.getPay_date();
+            Date dateLastPayment = loanAccountBean.getPay_date() == null ? loanAccountBean.getLoan_docdate() : loanAccountBean.getPay_date();
             int diffDay = th.co.cbank.util.DateUtil.diff(dateLastPayment, new Date());
 
             double interestToday = loanAccountBean.getLoan_amount() * diffDay * loanConfigBean.getLoanINT() / 100 / 365;
@@ -790,7 +789,7 @@ public class LoanPaymentPanel extends javax.swing.JPanel {
     private void paymentConfirm() {
         double loanBalanceToPayment = NumberUtil.toDouble(txtBalanceToClose.getText());
         if (loanBalanceToPayment <= 0) {
-            JOptionPane.showMessageDialog(this, "ไม่มียอดค้างชำระในระบบ :)");
+            MessageAlert.warningPopup(this, "ไม่มียอดค้างชำระในระบบ :)");
             txtPaymentAmountCash.setText("0.00");
             txtPaymentAmountCash.selectAll();
             txtPaymentAmountCash.requestFocus();
@@ -798,24 +797,24 @@ public class LoanPaymentPanel extends javax.swing.JPanel {
         }
         double PaymentAmountCash = NumberUtil.toDouble(txtPaymentAmountCash.getText());
         if (PaymentAmountCash <= 0) {
-            JOptionPane.showMessageDialog(this, "กรุณาระบุจำนวนเงินรับชำระด้วย !");
+            MessageAlert.warningPopup(this, "กรุณาระบุจำนวนเงินรับชำระด้วย !");
             txtPaymentAmountCash.setText("0.00");
             txtPaymentAmountCash.selectAll();
             txtPaymentAmountCash.requestFocus();
             return;
         }
         if (PaymentAmountCash > loanBalanceToPayment) {
-            JOptionPane.showMessageDialog(this, "จำนวนเงินรับชำระไม่ถูกต้อง !");
+            MessageAlert.warningPopup(this, "จำนวนเงินรับชำระไม่ถูกต้อง !");
             txtPaymentAmountCash.setText("0.00");
             txtPaymentAmountCash.selectAll();
             txtPaymentAmountCash.requestFocus();
             return;
         }
-        int confirm1 = JOptionPane.showConfirmDialog(this, "กรุณายืนยันการบันทึกข้อมูลรับชำระ ?");
-        if (confirm1 == JOptionPane.YES_OPTION) {
+        int confirm1 = MessageAlert.showConfirm(this, "กรุณายืนยันการบันทึกข้อมูลรับชำระ ?");
+        if (confirm1 == MessageAlert.YES_OPTION) {
             if (PaymentAmountCash == loanBalanceToPayment) {
-                int confirm = JOptionPane.showConfirmDialog(this, "ท่านต้องการชำระยอดเต็มจำนวน เพื่อปิดบัญชีใช่หรือไม่ ?");
-                if (confirm == JOptionPane.YES_OPTION) {
+                int confirm = MessageAlert.showConfirm(this, "ท่านต้องการชำระยอดเต็มจำนวน เพื่อปิดบัญชีใช่หรือไม่ ?");
+                if (confirm == MessageAlert.YES_OPTION) {
                     if (isEffitiveRate) {
                         confirmPaymentEff();
                         return;
@@ -846,7 +845,7 @@ public class LoanPaymentPanel extends javax.swing.JPanel {
         double paymentFee = NumberUtil.toDouble(txtPaymentFee.getText());//ค่าปรับชำระเกินจำนวน
         double principleBalance = NumberUtil.toDouble(txtPrincipleBalance.getText());//เงินต้นคงเหลือ
         if (paymentAmountCash < paymentFee) {
-            JOptionPane.showMessageDialog(this, "จำนวนเงินที่รับชำระต้องมากกว่าค่าปรับ");
+            MessageAlert.warningPopup(this, "จำนวนเงินที่รับชำระต้องมากกว่าค่าปรับ");
             return;
         }
 
@@ -902,7 +901,7 @@ public class LoanPaymentPanel extends javax.swing.JPanel {
         cbTransactionLoanBean.setT_date(d1);
         cbTransactionLoanBean.setT_acccode(loanAccountBean.getLoan_docno());
         cbTransactionLoanBean.setT_custcode(loanAccountBean.getCust_code());
-        cbTransactionLoanBean.setT_description(ThaiUtil.Unicode2ASCII("รับชำระเงินกู้"));
+        cbTransactionLoanBean.setT_description("รับชำระเงินกู้");
         cbTransactionLoanBean.setT_amount(minusBalanceAmt);
         cbTransactionLoanBean.setT_interest(minusInterestAmt);
         cbTransactionLoanBean.setT_loan_int_ar_int(totalIntAmt - minusInterestAmt);
@@ -933,12 +932,12 @@ public class LoanPaymentPanel extends javax.swing.JPanel {
             //update payment doc running
             loanAccountControl.update("update cb_config set PaymentDocRunning=PaymentDocRunning+1");
             txtPaymentDocNo.setText(paymentDocNo);
-            JOptionPane.showMessageDialog(this, "บันทึกข้อมูลเรียบร้อยแล้ว");
+            MessageAlert.infoPopup(this, "บันทึกข้อมูลเรียบร้อยแล้ว");
 
             //printer out to printer
             PrintCOM printCOM = new PrintCOM();
             printCOM.printPaymentLoan(cbTransactionLoanBean);
-            
+
             txtPaymentDate.setText("");
             txtPaymentFee.setText("0.00");
             txtIntBadDebt.setText("0.00");
@@ -1120,7 +1119,8 @@ public class LoanPaymentPanel extends javax.swing.JPanel {
                     + "and cust_code='" + loanAccountBean.getCust_code() + "'";
             loanAccountControl.update(sql);
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
+            MessageAlert.errorPopup(this, e.getMessage());
+            logger.error(e.getMessage());
         }
 
         String sql = "update cb_profile set "
@@ -1135,7 +1135,7 @@ public class LoanPaymentPanel extends javax.swing.JPanel {
         loanBean.setT_date(d1);
         loanBean.setT_acccode(loanAccountBean.getLoan_docno());
         loanBean.setT_custcode(loanAccountBean.getCust_code());
-        loanBean.setT_description(ThaiUtil.Unicode2ASCII("รับชำระเงินกู้"));
+        loanBean.setT_description("รับชำระเงินกู้");
         loanBean.setT_amount(Temp_PaymentAmountCash);
         loanBean.setT_empcode(Value.USER_CODE);
         loanBean.setT_docno(loanAccountBean.getLoan_docno());
@@ -1164,7 +1164,8 @@ public class LoanPaymentPanel extends javax.swing.JPanel {
             }
             rs.close();
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
+            MessageAlert.errorPopup(this, e.getMessage());
+            logger.error(e.getMessage());
         }
 
         loanBean.setT_balance(balance);
@@ -1180,7 +1181,7 @@ public class LoanPaymentPanel extends javax.swing.JPanel {
             System.err.println(e);
         }
 
-        JOptionPane.showMessageDialog(this, "บันทึกข้อมูลเรียบร้อยแล้ว");
+        MessageAlert.infoPopup(this, "บันทึกข้อมูลเรียบร้อยแล้ว");
         txtPaymentDate.setText("");
         txtPaymentFee.setText("0.00");
         txtIntBadDebt.setText("0.00");

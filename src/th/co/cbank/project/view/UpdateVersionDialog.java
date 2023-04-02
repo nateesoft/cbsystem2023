@@ -4,12 +4,13 @@ import java.awt.event.KeyEvent;
 import org.apache.log4j.Logger;
 
 public class UpdateVersionDialog extends BaseDialogSwing {
+
     private final Logger logger = Logger.getLogger(UpdateVersionDialog.class);
 
     public UpdateVersionDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        
+
         lbVersion.setText(parent.getTitle());
     }
 
@@ -155,7 +156,7 @@ public class UpdateVersionDialog extends BaseDialogSwing {
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtVersionDescKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtVersionDescKeyPressed
-        if(evt.getKeyCode()==KeyEvent.VK_ESCAPE){
+        if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
             dispose();
         }
     }//GEN-LAST:event_txtVersionDescKeyPressed
@@ -188,6 +189,6 @@ public class UpdateVersionDialog extends BaseDialogSwing {
     // End of variables declaration//GEN-END:variables
 
     private void downloadSoftwareUpdate() {
-        
+
     }
 }

@@ -9,9 +9,10 @@ import th.co.cbank.project.model.AddressBean;
 import th.co.cbank.util.MessageAlert;
 
 public class AddressControl extends BaseControl {
+
     private final Logger logger = Logger.getLogger(AddressControl.class);
-    
-    public List<AddressBean> mappingBean(ResultSet rs) throws Exception{
+
+    public List<AddressBean> mappingBean(ResultSet rs) throws Exception {
         List<AddressBean> listBean = new ArrayList<>();
         while (rs.next()) {
             AddressBean bean = new AddressBean();
@@ -39,7 +40,7 @@ public class AddressControl extends BaseControl {
             listBean.add(bean);
         }
         rs.close();
-        
+
         return listBean;
     }
 
@@ -50,7 +51,7 @@ public class AddressControl extends BaseControl {
             return mappingBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }
@@ -61,14 +62,14 @@ public class AddressControl extends BaseControl {
                     + "and addr_type='" + addrType + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             List<AddressBean> listBean = mappingBean(rs);
-            if(listBean.isEmpty()){
+            if (listBean.isEmpty()) {
                 return null;
-            }else{
+            } else {
                 return listBean.get(0);
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return null;
         }
     }
@@ -80,13 +81,14 @@ public class AddressControl extends BaseControl {
                     + "addr_Aumphur,addr_Province,addr_Post,addr_Mobile,addr_Tel,addr_type,"
                     + "down_rai, down_deed_1, down_deed_2, down_deed_3, down_deed_4,addr_MooName)  "
                     + "values('" + bean.getCust_Code() + "','" + bean.getCust_Type() + "',"
-                    + "'" + bean.getCompany_Name() + "','" + bean.getAddr_No() + "','" + bean.getAddr_Moo() + "',"
-                    + "'" + bean.getAddr_Road() + "','" + bean.getAddr_Soi() + "','" + bean.getAddr_Tambon() + "',"
-                    + "'" + bean.getAddr_Aumphur() + "','" + bean.getAddr_Province() + "',"
+                    + "'" + ThaiUtil.Unicode2ASCII(bean.getCompany_Name()) + "','" + bean.getAddr_No() + "','" + bean.getAddr_Moo() + "',"
+                    + "'" + ThaiUtil.Unicode2ASCII(bean.getAddr_Road()) + "','" + ThaiUtil.Unicode2ASCII(bean.getAddr_Soi()) + "',"
+                    + "'" + ThaiUtil.Unicode2ASCII(bean.getAddr_Tambon()) + "',"
+                    + "'" + ThaiUtil.Unicode2ASCII(bean.getAddr_Aumphur()) + "','" + ThaiUtil.Unicode2ASCII(bean.getAddr_Province()) + "',"
                     + "'" + bean.getAddr_Post() + "','" + bean.getAddr_Mobile() + "','" + bean.getAddr_Tel() + "',"
-                    + "'" + bean.getAddr_type() + "', '"+bean.getDown_rai()+"',"
-                    + "'"+bean.getDown_deed_1()+"','"+bean.getDown_deed_2()+"','"+bean.getDown_deed_3()+"','"+bean.getDown_deed_4()+"',"
-                    + "'"+bean.getAddr_MooName()+"')";
+                    + "'" + bean.getAddr_type() + "', '" + bean.getDown_rai() + "',"
+                    + "'" + bean.getDown_deed_1() + "','" + bean.getDown_deed_2() + "','" + bean.getDown_deed_3() + "','" + bean.getDown_deed_4() + "',"
+                    + "'" + ThaiUtil.Unicode2ASCII(bean.getAddr_MooName()) + "')";
             String sqlChk = "select * from cb_profile_address "
                     + "where Cust_Code='" + bean.getCust_Code() + "' and addr_type='" + bean.getAddr_type() + "'";
             ResultSet rs = MySQLConnect.getResultSet(sqlChk);
@@ -99,7 +101,7 @@ public class AddressControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -118,18 +120,18 @@ public class AddressControl extends BaseControl {
                     + "addr_Post='" + bean.getAddr_Post() + "', "
                     + "addr_Mobile='" + bean.getAddr_Mobile() + "', "
                     + "addr_Tel='" + bean.getAddr_Tel() + "',"
-                    + "down_rai='"+bean.getDown_rai()+"',"
-                    + "down_deed_1='"+bean.getDown_deed_1()+"',"
-                    + "down_deed_2='"+bean.getDown_deed_2()+"',"
-                    + "down_deed_3='"+bean.getDown_deed_3()+"',"
-                    + "down_deed_4='"+bean.getDown_deed_4()+"',"
-                    + "addr_MooName='"+bean.getAddr_MooName()+"' "
+                    + "down_rai='" + bean.getDown_rai() + "',"
+                    + "down_deed_1='" + bean.getDown_deed_1() + "',"
+                    + "down_deed_2='" + bean.getDown_deed_2() + "',"
+                    + "down_deed_3='" + bean.getDown_deed_3() + "',"
+                    + "down_deed_4='" + bean.getDown_deed_4() + "',"
+                    + "addr_MooName='" + bean.getAddr_MooName() + "' "
                     + "where Cust_Code='" + bean.getCust_Code() + "' "
                     + "and addr_type='" + bean.getAddr_type() + "'";
             update(sql);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 

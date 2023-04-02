@@ -8,6 +8,7 @@ import th.co.cbank.project.model.CbWithdrawAllowBean;
 import th.co.cbank.project.model.ProfileBean;
 
 public class InputWithdrawDialog extends BaseDialogSwing {
+
     private final Logger logger = Logger.getLogger(InputWithdrawDialog.class);
     private final List<CbWithdrawAllowBean> listBean;
     private boolean allow = false;
@@ -303,75 +304,75 @@ public class InputWithdrawDialog extends BaseDialogSwing {
     }// </editor-fold>//GEN-END:initComponents
 
     private void custCust1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_custCust1KeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {            
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             ProfileBean profile = getProfileControl().listCbProfile(custCust1.getText());
-            if(profile!=null){
+            if (profile != null) {
                 if (!profile.getP_cust_pic_url().equals("")) {
                     pic1.setIcon(new javax.swing.ImageIcon(profile.getP_cust_pic_url()));
                 } else {
                     pic1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/no.png")));
                 }
-                
+
                 custCust2.requestFocus();
             }
         }
     }//GEN-LAST:event_custCust1KeyPressed
 
     private void custCust2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_custCust2KeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {            
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             ProfileBean profile = getProfileControl().listCbProfile(custCust2.getText());
-            if(profile!=null){
+            if (profile != null) {
                 if (!profile.getP_cust_pic_url().equals("")) {
                     pic2.setIcon(new javax.swing.ImageIcon(profile.getP_cust_pic_url()));
                 } else {
                     pic2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/no.png")));
                 }
-                
+
                 custCust3.requestFocus();
             }
         }
     }//GEN-LAST:event_custCust2KeyPressed
 
     private void custCust3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_custCust3KeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {            
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             ProfileBean profile = getProfileControl().listCbProfile(custCust3.getText());
-            if(profile!=null){
+            if (profile != null) {
                 if (!profile.getP_cust_pic_url().equals("")) {
                     pic3.setIcon(new javax.swing.ImageIcon(profile.getP_cust_pic_url()));
                 } else {
                     pic3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/no.png")));
                 }
-                
+
                 custCust4.requestFocus();
             }
         }
     }//GEN-LAST:event_custCust3KeyPressed
 
     private void custCust4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_custCust4KeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {            
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             ProfileBean profile = getProfileControl().listCbProfile(custCust4.getText());
-            if(profile!=null){
+            if (profile != null) {
                 if (!profile.getP_cust_pic_url().equals("")) {
                     pic4.setIcon(new javax.swing.ImageIcon(profile.getP_cust_pic_url()));
                 } else {
                     pic4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/no.png")));
                 }
-                
+
                 custCust5.requestFocus();
             }
         }
     }//GEN-LAST:event_custCust4KeyPressed
 
     private void custCust5KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_custCust5KeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {            
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             ProfileBean profile = getProfileControl().listCbProfile(custCust5.getText());
-            if(profile!=null){
+            if (profile != null) {
                 if (!profile.getP_cust_pic_url().equals("")) {
                     pic5.setIcon(new javax.swing.ImageIcon(profile.getP_cust_pic_url()));
                 } else {
                     pic5.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/no.png")));
                 }
-                
+
                 custCust6.requestFocus();
             }
         }
@@ -386,22 +387,22 @@ public class InputWithdrawDialog extends BaseDialogSwing {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void custCust6KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_custCust6KeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {            
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             ProfileBean profile = getProfileControl().listCbProfile(custCust6.getText());
-            if(profile!=null){
+            if (profile != null) {
                 if (!profile.getP_cust_pic_url().equals("")) {
                     pic6.setIcon(new javax.swing.ImageIcon(profile.getP_cust_pic_url()));
                 } else {
                     pic6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/no.png")));
                 }
-                
+
                 jButton1.requestFocus();
             }
         }
     }//GEN-LAST:event_custCust6KeyPressed
 
     private void jButton1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jButton1KeyPressed
-        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             jButton1ActionPerformed(null);
         }
     }//GEN-LAST:event_jButton1KeyPressed
@@ -453,10 +454,10 @@ public class InputWithdrawDialog extends BaseDialogSwing {
             }
 
             if (sizePerson == inputPerson) {
-                allow = true;                
+                allow = true;
             }
         }
-        
+
         dispose();
     }
 }

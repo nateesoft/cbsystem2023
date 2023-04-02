@@ -3,19 +3,22 @@ package th.co.cbank.project.view;
 import th.co.cbank.project.control.Value;
 import th.co.cbank.project.model.CbHoonSummaryBean;
 import java.awt.event.KeyEvent;
-import java.sql.ResultSet;
 import java.text.DecimalFormat;
 import java.util.List;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.apache.log4j.Logger;
-import th.co.cbank.project.control.MySQLConnect;
+import th.co.cbank.project.control.CbHoonBalanceControl;
+import th.co.cbank.project.control.MemmasterControl;
+import th.co.cbank.project.model.CbHoonBalanceBean;
+import th.co.cbank.project.model.Memmaster;
 import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.TableUtil;
 
 public class HoonProfitDialog extends BaseDialogSwing {
+
     private final Logger logger = Logger.getLogger(HoonProfitDialog.class);
     private DecimalFormat dec = new DecimalFormat("#,##0.00");
+    private final CbHoonBalanceControl hoonBalanceControl = new CbHoonBalanceControl();
 
     public HoonProfitDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -533,7 +536,6 @@ public class HoonProfitDialog extends BaseDialogSwing {
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        printDoc();
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jTextField6KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField6KeyPressed
@@ -650,10 +652,6 @@ public class HoonProfitDialog extends BaseDialogSwing {
     private javax.swing.JTextField txtTotalHoonBalance;
     // End of variables declaration//GEN-END:variables
 
-    private void printDoc() {
-
-    }
-
     private void compute() {
         double d1 = 0;
         double d2 = 0;
@@ -715,20 +713,7 @@ public class HoonProfitDialog extends BaseDialogSwing {
 
         total += d4;
 
-        double totalHoon = 0;
-        try {
-            String sql = "select sum(hoonvolumn) total from cb_hoon_balance;";
-            ResultSet rs = MySQLConnect.getResultSet(sql);
-            if (rs.next()) {
-                totalHoon = rs.getDouble("total");
-            }
-
-            rs.close();
-
-        } catch (Exception e) {
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
-        }
-
+        double totalHoon = hoonBalanceControl.getTotalHoonVolumn();
         String sAA = txtTotalBalance.getText();
         sAA = sAA.replace(",", "");
         double aa = Double.parseDouble(sAA);
@@ -757,15 +742,7 @@ public class HoonProfitDialog extends BaseDialogSwing {
 
     private void save() {
         // create temp
-        try {
-            MySQLConnect.exeUpdate("alter table cb_hoon_balance add column Year_At varchar(4);");
-            String sql1 = "create table if not exists cb_hoon_summary_history select * from cb_hoon_balance limit 0,0;";
-            String sql2 = "alter table cb_hoon_summary_history add column Year_At varchar(4);";
-            MySQLConnect.exeUpdate(sql1);
-            MySQLConnect.exeUpdate(sql2);
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-        }
+        hoonBalanceControl.saveToClear();
 
         CbHoonSummaryBean bean = new CbHoonSummaryBean();
         bean.setYear_at(cbYear.getSelectedItem().toString());
@@ -782,156 +759,47 @@ public class HoonProfitDialog extends BaseDialogSwing {
         bean.setDividend_baht(Double.parseDouble(jTextField4.getText().replace(",", "")));
         bean.setDividend_value_baht(Double.parseDouble(jTextField5.getText().replace(",", "")));
 
-        try {
-            String sql = "insert into cb_hoon_summary"
-                    + "(year_at,action_time,user_action,profit_total,"
-                    + "reduce_value_second,reduce_benefit,reduce_v_baht,"
-                    + "reduce_b_baht,balance_total,dividend_buy,dividend_money,"
-                    + "dividend_by,dividend_baht,dividend_value_baht) "
-                    + "values('" + bean.getYear_at() + "',now(),"
-                    + "'" + bean.getUser_action() + "','" + bean.getProfit_total() + "',"
-                    + "'" + bean.getReduce_value_second() + "','" + bean.getReduce_benefit() + "',"
-                    + "'" + bean.getReduce_v_baht() + "','" + bean.getReduce_b_baht() + "',"
-                    + "'" + bean.getBalance_total() + "','" + bean.getDividend_buy() + "',"
-                    + "'" + bean.getDividend_money() + "','" + bean.getDividend_by() + "',"
-                    + "'" + bean.getDividend_baht() + "','" + bean.getDividend_value_baht() + "')";
-            String sqlUpd = "update cb_hoon_summary set "
-                    + "action_time=now(), "
-                    + "user_action='" + bean.getUser_action() + "', "
-                    + "profit_total='" + bean.getProfit_total() + "', "
-                    + "reduce_value_second='" + bean.getReduce_value_second() + "', "
-                    + "reduce_benefit='" + bean.getReduce_benefit() + "', "
-                    + "reduce_v_baht='" + bean.getReduce_v_baht() + "', "
-                    + "reduce_b_baht='" + bean.getReduce_b_baht() + "', "
-                    + "balance_total='" + bean.getBalance_total() + "', "
-                    + "dividend_buy='" + bean.getDividend_buy() + "', "
-                    + "dividend_money='" + bean.getDividend_money() + "', "
-                    + "dividend_by='" + bean.getDividend_by() + "', "
-                    + "dividend_baht='" + bean.getDividend_baht() + "', "
-                    + "dividend_value_baht='" + bean.getDividend_value_baht() + "' "
-                    + "where year_at='" + bean.getYear_at() + "'";
-            String chk = "select * from cb_hoon_summary "
-                    + "where year_at='" + bean.getYear_at() + "'";
-            ResultSet rs = MySQLConnect.getResultSet(chk);
-            if (rs.next()) {
-                MySQLConnect.exeUpdate(sqlUpd);
-            } else {
-                MySQLConnect.exeUpdate(sql);
-            }
-
-            try {
-                String sqlHoon = "select HoonCode, HoonVolumn from cb_hoon_balance order by HoonCode";
-                ResultSet rsHoon = MySQLConnect.getResultSet(sqlHoon);
-                while (rsHoon.next()) {
-                    String HoonCode = rsHoon.getString("HoonCode");
-                    double HoonVolumn = rsHoon.getDouble("HoonVolumn");
-                    double dividend = HoonVolumn * bean.getDividend_value_baht();
-
-                    String sqlM = "select Member_TotalScore "
-                            + "from " + MySQLConnect.DATABASE_MEMBER + ".memmaster "
-                            + "where Member_Code='" + HoonCode + "';";
-                    double mTotalPoint = 0.00;
-                    try {
-                        ResultSet sqlMPoint = MySQLConnect.getResultSet(sqlM);
-                        while (sqlMPoint.next()) {
-                            mTotalPoint = sqlMPoint.getDouble("Member_TotalScore");
-                        }
-
-                        sqlMPoint.close();
-                    } catch (Exception e) {
-                        MessageAlert.infoPopup(this.getClass(), e.getMessage());
-                    }
-
-                    double totalARAmount = 0.00;
-                    try {
-                        //check balance credit amount
-                        String sqlAR = "select sum(S_CreditAmt+S_Interest) S_CreditAmt "
-                                + "from custarrear "
-                                + "where S_SPCode='" + HoonCode + "' "
-                                + "and S_MarkFlag='N';";
-                        ResultSet rsAR = MySQLConnect.getResultSet(sqlAR);
-                        if (rsAR.next()) {
-                            totalARAmount = rsAR.getDouble("S_CreditAmt");
-                        }
-
-                        rsAR.close();
-                    } catch (Exception e) {
-                        JOptionPane.showMessageDialog(this, e.getMessage());
-                    }
-
-                    String sqlD = "update cb_hoon_balance set "
-                            + "devidend='" + dividend + "',"
-                            + "Point='" + mTotalPoint + "',"
-                            + "ARAmount='" + totalARAmount + "',"
-                            + "year_at='" + bean.getYear_at() + "' "
-                            + "where HoonCode='" + HoonCode + "'";
-                    MySQLConnect.exeUpdate(sqlD);
-
-                    // update history
-                    try {
-                        String sqlIns = "insert into cb_hoon_summary_history "
-                                + "select * from cb_hoon_balance "
-                                + "where HoonCode='" + HoonCode + "' ";
-
-                        // delete tmp
-                        MySQLConnect.exeUpdate("delete from cb_hoon_summary_history "
-                                + "where HoonCode='" + HoonCode + "' "
-                                + "and year_at='" + bean.getYear_at() + "'");
-                        // insert tmp
-                        MySQLConnect.exeUpdate(sqlIns);
-
-                        // update year_at
-                        MySQLConnect.exeUpdate("update cb_hoon_summary_history "
-                                + "set year_at='" + bean.getYear_at() + "' "
-                                + "where HoonCode='" + HoonCode + "' "
-                                + "and year_at is null");
-                    } catch (Exception e) {
-                        MessageAlert.infoPopup(this.getClass(), e.getMessage());
-                    }
-                }
-
-                rsHoon.close();
-            } catch (Exception e) {
-                MessageAlert.infoPopup(this.getClass(), e.getMessage());
-            }
-
-            String listBalance = "select * from cb_hoon_balance";
-            ResultSet rsList = MySQLConnect.getResultSet(listBalance);
-            while (rsList.next()) {
-                String HoonCode = rsList.getString("HoonCode");
-                try {
-                    //check balance credit amount
-                    String sqlX = "select sum(S_CreditAmt+S_Interest) S_CreditAmt "
-                            + "from custarrear "
-                            + "where S_SPCode='" + HoonCode + "' "
-                            + "and S_MarkFlag='N';";
-                    double totalBalanceAmount = 0.00;
-                    ResultSet rsX = MySQLConnect.getResultSet(sqlX);
-                    if (rsX.next()) {
-                        totalBalanceAmount = rsX.getDouble("S_CreditAmt");
-                    }
-
-                    String sqlDX = "update cb_hoon_balance "
-                            + "set ARAmount='" + totalBalanceAmount + "' "
-                            + "where hoonCode='" + HoonCode + "'";
-                    MySQLConnect.exeUpdate(sqlDX);
-
-                    rsX.close();
-                } catch (Exception e) {
-                    JOptionPane.showMessageDialog(this, e.getMessage());
-                }
-            }
-
-            rsList.close();
-
-            rs.close();
-
-            JOptionPane.showMessageDialog(this, "บันทึกข้อมูลเรียบร้อย");
-            jTabbedPane1.setSelectedIndex(1);
-            loadSummary();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
+        if (hoonBalanceControl.checkExitYearAt(bean.getYear_at())) {
+            hoonBalanceControl.updateHoonSummary(bean);
+        } else {
+            hoonBalanceControl.saveHoonSummary(bean);
         }
+
+        MemmasterControl memControl = new MemmasterControl();
+        try {
+            List<CbHoonBalanceBean> listHoonBalance = hoonBalanceControl.getHoonBalance();
+            for (CbHoonBalanceBean bBean : listHoonBalance) {
+                String HoonCode = bBean.getHoonCode();
+                double HoonVolumn = bBean.getHoonVolumn();
+                double dividend = HoonVolumn * bean.getDividend_value_baht();
+
+                List<Memmaster> listMem = memControl.getListMemberTotalScore(HoonCode);
+                double mTotalPoint = 0.00;
+                for (Memmaster memmaster : listMem) {
+                    mTotalPoint = memmaster.getMember_TotalScore();
+                }
+
+                double totalARAmount = 0.00; // old code get from custarrear
+                hoonBalanceControl.updateDevidendPointWhereHoonCode(dividend, mTotalPoint, totalARAmount, bean.getYear_at(), HoonCode);
+                hoonBalanceControl.deleteHoonSummaryHistory(HoonCode, bean.getYear_at());
+                hoonBalanceControl.backupHoonSummaryHistory(HoonCode);
+                hoonBalanceControl.updateYearAtWhereHoonCode(bean.getYear_at(), HoonCode);
+            }
+
+        } catch (Exception e) {
+            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+        }
+
+        List<CbHoonBalanceBean> listHoonBalance = hoonBalanceControl.getHoonBalance();
+        for (CbHoonBalanceBean hoonBalance : listHoonBalance) {
+            String HoonCode = hoonBalance.getHoonCode();
+            double totalBalanceAmount = 0.00; // old code get from custarrear
+            hoonBalanceControl.updateArAmountWhereHoonCode(totalBalanceAmount, HoonCode);
+        }
+
+        MessageAlert.infoPopup(this, "บันทึกข้อมูลเรียบร้อย");
+        jTabbedPane1.setSelectedIndex(1);
+        loadSummary();
     }
 
     private void loadDefault() {
@@ -973,18 +841,7 @@ public class HoonProfitDialog extends BaseDialogSwing {
             jTextField10.setText("0");
             jTextField5.setText("0.00");
         }
-
-        try {
-            String sql = "select sum(hoonvolumn) total from cb_hoon_balance";
-            ResultSet rs = MySQLConnect.getResultSet(sql);
-            if (rs.next()) {
-                txtTotalHoonBalance.setText(dec.format(rs.getDouble("total")));
-            }
-
-            rs.close();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(rootPane, e.getMessage());
-        }
+        txtTotalHoonBalance.setText(dec.format(hoonBalanceControl.getTotalHoonVolumn()));
     }
 
     private void loadSummary() {

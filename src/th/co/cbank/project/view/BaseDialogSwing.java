@@ -35,7 +35,6 @@ import th.co.cbank.project.control.CbUserControl;
 
 public class BaseDialogSwing extends JDialog {
 
-    private final Logger logger = Logger.getLogger(BaseDialogSwing.class);
     private final CbSaveAccountControl saveAccountControl = new CbSaveAccountControl();
     private final CbLoanAccountControl loanAccountControl = new CbLoanAccountControl();
     private final BranchControl branchControl = new BranchControl();

@@ -16,13 +16,12 @@ import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.plaf.FontUIResource;
 import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
 import th.co.cbank.util.DateFormat;
 import th.co.cbank.util.NumberFormat;
 import th.co.cbank.project.constants.AppConstants;
-import th.co.cbank.project.control.MySQLConnect;
 import th.co.cbank.project.control.PrintCOM;
 import th.co.cbank.project.control.Value;
-import th.co.cbank.project.log.Log;
 import th.co.cbank.project.model.CbLoanAccountBean;
 import th.co.cbank.project.model.CbSaveAccountBean;
 import th.co.cbank.project.report.view.DialyReportDialog;
@@ -42,18 +41,19 @@ import th.co.cbank.util.StringUtil;
 
 public class MainDialog extends BaseSwing {
 
-    private final Logger logger = Logger.getLogger(MainDialog.class);
+    private static final Logger logger = Logger.getLogger(MainDialog.class);
     private final LoginDialog login;
     private boolean profileIsActive = false;
-
     private ProfileBean profileBean = null;
-
     private List<CbSaveAccountBean> listSaveAccounts = null;
     private List<CbLoanAccountBean> listLoanAccounts = null;
-
     private CbSaveAccountBean saveAccountBean = null;
     private CbLoanAccountBean loanAccountBean = null;
     private String selectAccountType = null;
+
+    static {
+        PropertyConfigurator.configure("log4j.properties");
+    }
 
     public MainDialog(java.awt.Frame parent, boolean modal) {
         initComponents();
@@ -82,7 +82,7 @@ public class MainDialog extends BaseSwing {
     private boolean cancelProfileStatus(ProfileBean profileBean) {
         String status = profileBean.getStatus();
         if ("Cancel".equals(status)) {
-            JOptionPane.showMessageDialog(this, "รหัสผู้ใช้งานนี้ได้ถูกยกเลิกออกจากระบบแล้ว !", "สถานะสมาชิก [ยกเลิก]", JOptionPane.WARNING_MESSAGE);
+            MessageAlert.warningPopup(this, "รหัสผู้ใช้งานนี้ได้ถูกยกเลิกออกจากระบบแล้ว !");
             txtProfileCode.setText("");
             txtProfileCode.requestFocus();
             return true;
@@ -1341,8 +1341,8 @@ public class MainDialog extends BaseSwing {
     }//GEN-LAST:event_mnSaveHistoryLoanActionPerformed
 
     private void jMenuItem47ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem47ActionPerformed
-        int conf = JOptionPane.showConfirmDialog(this, "กรุณายืนยันการอัพเดตโปรแกรม จาก Transaction ?");
-        if (conf == JOptionPane.YES_OPTION) {
+        int conf = MessageAlert.showConfirm(this, "กรุณายืนยันการอัพเดตโปรแกรม จาก Transaction ?");
+        if (conf == MessageAlert.YES_OPTION) {
             UpdateTransactionDialog updateTransactionDialog = new UpdateTransactionDialog(this, true);
             updateTransactionDialog.setVisible(true);
             btnRegister.setText("เริ่มใหม่");
@@ -1436,7 +1436,7 @@ public class MainDialog extends BaseSwing {
     }//GEN-LAST:event_txtProfileCodeKeyPressed
 
     public static void main(String args[]) {
-        Log.write.info("Start Program");
+        logger.info("Start Program");
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -1661,13 +1661,12 @@ public class MainDialog extends BaseSwing {
     }
 
     private void formWindowClosing() {
-        int ic = JOptionPane.showConfirmDialog(this, "ท่านต้องการออกจากระบบใช่หรือไม่ ?");
-        if (ic == JOptionPane.YES_OPTION) {
+        int ic = MessageAlert.showConfirm(this, "ท่านต้องการออกจากระบบใช่หรือไม่ ?");
+        if (ic == MessageAlert.YES_OPTION) {
             Value.clear();
             new File("cbanksystem.running").delete();
             PrintCOM printCom = new PrintCOM();
             printCom.printLOG("Logout by ... " + Value.CUST_CODE + "   End time: " + DateFormat.getLocale_ddMMyyyy(new Date()));
-            MySQLConnect.close();
             System.exit(0);
         }
     }
@@ -1777,7 +1776,7 @@ public class MainDialog extends BaseSwing {
 
     private void btnRegisterActionPerformed() {
         if ("N".equals(Value.ACCESS[0])) {
-            JOptionPane.showMessageDialog(this, "ท่านไม่มีสิทธิ์เข้าใช้งานฟังก์ชั่นการทำงานนี้");
+            MessageAlert.warningPopup(this, "ท่านไม่มีสิทธิ์เข้าใช้งานฟังก์ชั่นการทำงานนี้");
             return;
         }
 
@@ -1795,7 +1794,7 @@ public class MainDialog extends BaseSwing {
 
     private void btnEditActionPerformed() {
         if (Value.ACCESS[1].equals("N")) {
-            JOptionPane.showMessageDialog(this, "ท่านไม่มีสิทธิ์เข้าใช้งานฟังก์ชั่นการทำงานนี้");
+            MessageAlert.warningPopup(this, "ท่านไม่มีสิทธิ์เข้าใช้งานฟังก์ชั่นการทำงานนี้");
             return;
         }
         if (profileIsActive) {
@@ -1819,7 +1818,7 @@ public class MainDialog extends BaseSwing {
 
     private void btnFindActionPerformed() {
         if (Value.ACCESS[2].equals("N")) {
-            JOptionPane.showMessageDialog(this, "ท่านไม่มีสิทธิ์เข้าใช้งานฟังก์ชั่นการทำงานนี้");
+            MessageAlert.warningPopup(this, "ท่านไม่มีสิทธิ์เข้าใช้งานฟังก์ชั่นการทำงานนี้");
             return;
         }
         clearProfileForm();
@@ -1874,7 +1873,7 @@ public class MainDialog extends BaseSwing {
                 if (StringUtil.isNotNullString(txtProfileCode.getText())) {
                     profileBean = getProfileControl().listCbProfile(txtProfileCode.getText());
                     if (profileBean == null) {
-                        JOptionPane.showMessageDialog(this, "ไม่พบข้อมูลลูกค้าในระบบ กรุณาตรวจสอบ");
+                        MessageAlert.warningPopup(this, "ไม่พบข้อมูลลูกค้าในระบบ กรุณาตรวจสอบ");
                         txtProfileCode.selectAll();
                         txtProfileCode.requestFocus();
                     }

@@ -6,12 +6,12 @@ import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import org.apache.log4j.Logger;
-import th.co.cbank.util.ThaiUtil;
 import th.co.cbank.project.constants.AppConstants;
 import th.co.cbank.project.model.CbPrefixBean;
 import th.co.cbank.util.TableUtil;
 
 public class PrefixDialog extends BaseDialogSwing {
+
     private final Logger logger = Logger.getLogger(PrefixDialog.class);
 
     public PrefixDialog(java.awt.Frame parent, boolean modal) {
@@ -204,8 +204,8 @@ public class PrefixDialog extends BaseDialogSwing {
         } else {
             CbPrefixBean bean = new CbPrefixBean();
             bean.setCode(txtCode.getText());
-            bean.setName(ThaiUtil.Unicode2ASCII(txtName.getText()));
-            
+            bean.setName(txtName.getText());
+
             if (getPrefixControl().savePrefix(bean)) {
                 loadPrefixData();
             }

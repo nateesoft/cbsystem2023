@@ -6,64 +6,65 @@ import org.apache.log4j.Logger;
 import th.co.cbank.util.MessageAlert;
 
 public class SettingFingerControl extends BaseControl {
+
     private final Logger logger = Logger.getLogger(SettingFingerControl.class);
-    
-    public boolean save(SettingBean bean){
+
+    public boolean save(SettingBean bean) {
         try {
             String sql = "insert into cb_setting "
                     + "(INTEREST,VAT,BASE_DEPOSIT,BASE_WITHDRAWAL,UPDATE_DATE,PWD,DAY_CI,INTEREST2,VAT2,BASE_DEPOSIT2,BASE_WITHDRAWAL2) "
-                    + "values('"+bean.getINTEREST()+"','"+bean.getVAT()+"','"+bean.getBASE_DEPOSIT()+"',"
-                    + "'"+bean.getBASE_WITHDRAWAL()+"',now(),'"+bean.getPWD()+"','"+bean.getDayCI()+"',"
-                    + "'"+bean.getINTEREST2()+"','"+bean.getVAT2()+"','"+bean.getBASE_DEPOSIT2()+"','"+bean.getBASE_WITHDRAWAL2()+"')";
-            if(!existData()){
+                    + "values('" + bean.getINTEREST() + "','" + bean.getVAT() + "','" + bean.getBASE_DEPOSIT() + "',"
+                    + "'" + bean.getBASE_WITHDRAWAL() + "',now(),'" + bean.getPWD() + "','" + bean.getDayCI() + "',"
+                    + "'" + bean.getINTEREST2() + "','" + bean.getVAT2() + "','" + bean.getBASE_DEPOSIT2() + "','" + bean.getBASE_WITHDRAWAL2() + "')";
+            if (!existData()) {
                 update(sql);
-            }else{
+            } else {
                 sql = "update cb_setting "
                         + "set "
-                        + "INTEREST='"+bean.getINTEREST()+"', "
-                        + "VAT='"+bean.getVAT()+"', "
-                        + "BASE_DEPOSIT='"+bean.getBASE_DEPOSIT()+"', "
-                        + "BASE_WITHDRAWAL='"+bean.getBASE_WITHDRAWAL()+"',"
-                        + "PWD='"+bean.getPWD()+"',"
-                        + "DAY_CI='"+bean.getDayCI()+"',"
-                        + "INTEREST2='"+bean.getINTEREST2()+"', "
-                        + "VAT2='"+bean.getVAT2()+"', "
-                        + "BASE_DEPOSIT2='"+bean.getBASE_DEPOSIT2()+"', "
-                        + "BASE_WITHDRAWAL2='"+bean.getBASE_WITHDRAWAL2()+"'";
+                        + "INTEREST='" + bean.getINTEREST() + "', "
+                        + "VAT='" + bean.getVAT() + "', "
+                        + "BASE_DEPOSIT='" + bean.getBASE_DEPOSIT() + "', "
+                        + "BASE_WITHDRAWAL='" + bean.getBASE_WITHDRAWAL() + "',"
+                        + "PWD='" + bean.getPWD() + "',"
+                        + "DAY_CI='" + bean.getDayCI() + "',"
+                        + "INTEREST2='" + bean.getINTEREST2() + "', "
+                        + "VAT2='" + bean.getVAT2() + "', "
+                        + "BASE_DEPOSIT2='" + bean.getBASE_DEPOSIT2() + "', "
+                        + "BASE_WITHDRAWAL2='" + bean.getBASE_WITHDRAWAL2() + "'";
                 update(sql);
             }
-            
+
             return true;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return false;
         }
     }
-    
-    public boolean existData(){
+
+    public boolean existData() {
         boolean isExist = false;
         try {
             String sql = "select * from cb_setting";
             ResultSet rs = MySQLConnect.getResultSet(sql);
-            if(rs.next()){
+            if (rs.next()) {
                 isExist = true;
             }
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
-        
+
         return isExist;
     }
-    
-    public SettingBean getData(){
+
+    public SettingBean getData() {
         SettingBean bean = null;
         try {
             String sql = "select * from cb_setting";
             ResultSet rs = MySQLConnect.getResultSet(sql);
-            if(rs.next()){
+            if (rs.next()) {
                 bean = new SettingBean();
                 bean.setINTEREST(rs.getDouble("INTEREST"));
                 bean.setVAT(rs.getDouble("VAT"));
@@ -72,7 +73,7 @@ public class SettingFingerControl extends BaseControl {
                 bean.setUPDATE_DATE(rs.getString("UPDATE_DATE"));
                 bean.setPWD(rs.getString("PWD"));
                 bean.setDayCI(rs.getInt("Day_CI"));
-                
+
                 bean.setINTEREST2(rs.getDouble("INTEREST2"));
                 bean.setVAT2(rs.getDouble("VAT2"));
                 bean.setBASE_DEPOSIT2(rs.getDouble("BASE_DEPOSIT2"));
@@ -81,18 +82,18 @@ public class SettingFingerControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
-        
+
         return bean;
     }
-    
-    public SettingBean getData6(){
+
+    public SettingBean getData6() {
         SettingBean bean = null;
         try {
             String sql = "select * from cb_setting";
             ResultSet rs = MySQLConnect.getResultSet(sql);
-            if(rs.next()){
+            if (rs.next()) {
                 bean = new SettingBean();
                 bean.setINTEREST(rs.getDouble("INTEREST2"));
                 bean.setVAT(rs.getDouble("VAT2"));
@@ -105,9 +106,9 @@ public class SettingFingerControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
-        
+
         return bean;
     }
 }

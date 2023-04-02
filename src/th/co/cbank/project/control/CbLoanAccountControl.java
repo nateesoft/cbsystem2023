@@ -7,7 +7,6 @@ import java.util.List;
 import org.apache.log4j.Logger;
 import th.co.cbank.util.DateFormat;
 import th.co.cbank.util.ThaiUtil;
-import th.co.cbank.project.log.Log;
 import th.co.cbank.project.model.CbLoanAccountBean;
 import th.co.cbank.project.model.ProfileBean;
 import th.co.cbank.util.MessageAlert;
@@ -66,7 +65,7 @@ public class CbLoanAccountControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return listBean;
@@ -118,7 +117,7 @@ public class CbLoanAccountControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return listBean;
@@ -131,7 +130,7 @@ public class CbLoanAccountControl extends BaseControl {
                     + "from cb_loan_account ln,cb_profile p,cb_loan_config c "
                     + "where ln.cust_code=p.p_custCode "
                     + "and ln.loan_type=c.loanCode "
-                    + "and p_custName like '%" + custName + "%'";
+                    + "and p_custName like '%" + ThaiUtil.Unicode2ASCII(custName) + "%'";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             while (rs.next()) {
                 ProfileBean profile = new ProfileBean();
@@ -151,7 +150,7 @@ public class CbLoanAccountControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return listBean;
@@ -202,7 +201,7 @@ public class CbLoanAccountControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return bean;
@@ -256,7 +255,7 @@ public class CbLoanAccountControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             bean = null;
         }
 
@@ -294,7 +293,7 @@ public class CbLoanAccountControl extends BaseControl {
             return MySQLConnect.exeUpdate(sql) > 0;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return false;
         }
     }
@@ -314,7 +313,7 @@ public class CbLoanAccountControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return isSave;
@@ -343,13 +342,12 @@ public class CbLoanAccountControl extends BaseControl {
             if (rs.next()) {
                 updateLoanAccount(bean);
             } else {
-                Log.write.info(sql);
                 update(sql);
             }
             isSave = true;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             isSave = false;
         }
 
@@ -380,7 +378,7 @@ public class CbLoanAccountControl extends BaseControl {
             isSaveReady = true;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             isSaveReady = false;
         }
 
@@ -426,7 +424,7 @@ public class CbLoanAccountControl extends BaseControl {
             update(sql);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -495,7 +493,7 @@ public class CbLoanAccountControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return bean;
@@ -530,9 +528,9 @@ public class CbLoanAccountControl extends BaseControl {
 
                 listBean.add(bean);
             }
-        } catch (Exception ex) {
-            logger.error(ex.getMessage());
-            MessageAlert.infoPopup(this.getClass(), ex.getMessage());
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return listBean;
@@ -575,9 +573,9 @@ public class CbLoanAccountControl extends BaseControl {
 
                 listBean.add(bean);
             }
-        } catch (Exception ex) {
-            logger.error(ex.getMessage());
-            MessageAlert.infoPopup(this.getClass(), ex.getMessage());
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return listBean;
@@ -622,9 +620,9 @@ public class CbLoanAccountControl extends BaseControl {
                 listBean.add(bean);
             }
             rs.close();
-        } catch (Exception ex) {
-            logger.error(ex.getMessage());
-            MessageAlert.infoPopup(this.getClass(), ex.getMessage());
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return listBean;

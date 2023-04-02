@@ -1,9 +1,6 @@
 package th.co.cbank.project.model;
 
-import org.apache.log4j.Logger;
-
 public class SaveSummaryBean {
-    private final Logger logger = Logger.getLogger(SaveSummaryBean.class);
 
     private int accountAll;//บัญชีทั้งหมด
     private int closeAll;//ปิดบัญชีทั้งหมด

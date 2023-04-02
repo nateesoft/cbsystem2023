@@ -11,15 +11,14 @@ import org.apache.log4j.Logger;
 import th.co.cbank.util.JTableUtil;
 import th.co.cbank.util.DateFormat;
 import th.co.cbank.util.NumberFormat;
-import th.co.cbank.util.ThaiUtil;
 import th.co.cbank.project.model.mapping.PayInterestAmtMapping;
 import th.co.cbank.util.DateChooseDialog;
 import th.co.cbank.util.ExcelUtil;
 import th.co.cbank.util.TableUtil;
 
 public class PayInterestAmtDialog extends BaseDialogSwing {
-    private final Logger logger = Logger.getLogger(PayInterestAmtDialog.class);
 
+    private final Logger logger = Logger.getLogger(PayInterestAmtDialog.class);
     private Frame parent;
     private DefaultTableModel model;
 
@@ -188,7 +187,7 @@ public class PayInterestAmtDialog extends BaseDialogSwing {
     }//GEN-LAST:event_btnExportActionPerformed
 
     private void tbDataMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbDataMouseClicked
-        if(evt.getClickCount()==2){
+        if (evt.getClickCount() == 2) {
             showDetail();
         }
     }//GEN-LAST:event_tbDataMouseClicked
@@ -240,7 +239,7 @@ public class PayInterestAmtDialog extends BaseDialogSwing {
             excel.write((DefaultTableModel) tbData.getModel(), "Report-3", new int[]{3, 4});
             Desktop.getDesktop().open(new File("Pay Interest.xls"));
         } catch (Exception e) {
-            
+
         }
     }
 

@@ -1,9 +1,7 @@
 package th.co.cbank.project.model;
 
-import org.apache.log4j.Logger;
-
 public class CbProjectBean {
-    private final Logger logger = Logger.getLogger(CbProjectBean.class);
+
     private String productCode;
     private String productName;
 

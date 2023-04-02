@@ -7,13 +7,12 @@ import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.util.List;
 import javax.swing.JCheckBox;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import org.apache.log4j.Logger;
-import th.co.cbank.util.ThaiUtil;
 import th.co.cbank.project.constants.AppConstants;
 import th.co.cbank.project.model.CbGroupBean;
+import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.TableUtil;
 
 public class ConfigDialog extends BaseDialogSwing {
@@ -1214,11 +1213,11 @@ public class ConfigDialog extends BaseDialogSwing {
         bean.setFax_No(txtFax.getText());
         bean.setE_Mail(txtEmail.getText());
         bean.setManager(txtManager.getText());
-        
-        if(getBranchControl().updatePatial(bean)){
-            JOptionPane.showMessageDialog(this, "บันทึกข้อมูลเรียบร้อย");
+
+        if (getBranchControl().updatePatial(bean)) {
+            MessageAlert.infoPopup(this, "บันทึกข้อมูลเรียบร้อย");
         } else {
-            JOptionPane.showMessageDialog(this, "อัพเดตข้อมูลไม่สำเร็จ !!!");
+            MessageAlert.errorPopup(this, "อัพเดตข้อมูลไม่สำเร็จ !!!");
         }
     }//GEN-LAST:event_btnSaveActionPerformed
 
@@ -1230,7 +1229,7 @@ public class ConfigDialog extends BaseDialogSwing {
         if (!txtGroupCode.getText().equals("")) {
             saveGroup();
         } else {
-            JOptionPane.showMessageDialog(this, "กรุณากรอกข้อมูลให้ครบถ้วน");
+            MessageAlert.warningPopup(this, "กรุณากรอกข้อมูลให้ครบถ้วน");
             txtGroupCode.requestFocus();
         }
     }//GEN-LAST:event_btnGroupSaveActionPerformed
@@ -1341,7 +1340,7 @@ public class ConfigDialog extends BaseDialogSwing {
         if (!txtUserCode.getText().equals("") || !txtUserPass.getText().equals("")) {
             saveUser();
         } else {
-            JOptionPane.showMessageDialog(this, "กรุณากรอกข้อมูลให้ครบถ้วน");
+            MessageAlert.warningPopup(this, "กรุณากรอกข้อมูลให้ครบถ้วน");
             txtUserCode.requestFocus();
         }
     }//GEN-LAST:event_jButton1ActionPerformed
@@ -1713,7 +1712,7 @@ public class ConfigDialog extends BaseDialogSwing {
     private void saveGroup() {
         GroupBean bean = new GroupBean();
         bean.setGroupCode(txtGroupCode.getText());
-        bean.setGroupName(ThaiUtil.Unicode2ASCII(txtGroupName.getText()));
+        bean.setGroupName(txtGroupName.getText());
         String strPer = "";
         for (JCheckBox chkAll1 : chkAll) {
             boolean isSelect = chkAll1.isSelected();
@@ -1729,30 +1728,30 @@ public class ConfigDialog extends BaseDialogSwing {
         loadListGroup();
         resetForm();
 
-        JOptionPane.showMessageDialog(this, "บันทึกข้อมูลเรียบร้อยแล้ว");
+        MessageAlert.infoPopup(this, "บันทึกข้อมูลเรียบร้อยแล้ว");
     }
 
     private void saveUser() {
         CbUserBean bean = new CbUserBean();
         bean.setUsergroup("" + cbGroup.getSelectedItem());
-        bean.setName(ThaiUtil.Unicode2ASCII(txtName.getText()));
-        bean.setLastname(ThaiUtil.Unicode2ASCII(txtLastName.getText()));
+        bean.setName(txtName.getText());
+        bean.setLastname(txtLastName.getText());
         bean.setPassword(txtUserPass.getText());
         bean.setUsername(txtUserCode.getText());
         bean.setIDCard(txtUserIDCode.getText());
         bean.setAddr_no(txtUser_Addr.getText());
         bean.setAddr_moo(txtUser_AddrNo.getText());
-        bean.setAddr_road(ThaiUtil.Unicode2ASCII(txtUser_AddrRoad.getText()));
-        bean.setAddr_soi(ThaiUtil.Unicode2ASCII(txtUser_AddrSoi.getText()));
-        bean.setAddr_tambon(ThaiUtil.Unicode2ASCII(txtUser_AddrTambon.getText()));
-        bean.setAddr_amphur(ThaiUtil.Unicode2ASCII(txtUser_AddrAmphur.getText()));
-        bean.setAddr_province(ThaiUtil.Unicode2ASCII(txtUser_AddrProvince.getText()));
+        bean.setAddr_road(txtUser_AddrRoad.getText());
+        bean.setAddr_soi(txtUser_AddrSoi.getText());
+        bean.setAddr_tambon(txtUser_AddrTambon.getText());
+        bean.setAddr_amphur(txtUser_AddrAmphur.getText());
+        bean.setAddr_province(txtUser_AddrProvince.getText());
         bean.setAddr_post(txtUser_AddrPost.getText());
         bean.setAddr_tel(txtUser_AddrTel.getText());
         bean.setAddr_tel_home(txtUser_AddrHome.getText());
 
         getUserControl().saveUser(bean);
-        JOptionPane.showMessageDialog(this, "บันทึกข้อมูลเรียบร้อยแล้ว");
+        MessageAlert.infoPopup(this, "บันทึกข้อมูลเรียบร้อยแล้ว");
         resetFormEmp();
 
         loadListGroup();

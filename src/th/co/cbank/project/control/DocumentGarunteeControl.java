@@ -9,6 +9,7 @@ import th.co.cbank.project.model.DocumentGarunteeBean;
 import th.co.cbank.util.MessageAlert;
 
 public class DocumentGarunteeControl extends BaseControl {
+
     private final Logger logger = Logger.getLogger(DocumentGarunteeControl.class);
 
     public List<DocumentGarunteeBean> mappingBean(ResultSet rs) throws Exception {
@@ -34,7 +35,7 @@ public class DocumentGarunteeControl extends BaseControl {
             return mappingBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }
@@ -46,7 +47,7 @@ public class DocumentGarunteeControl extends BaseControl {
             return mappingBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }
@@ -56,13 +57,13 @@ public class DocumentGarunteeControl extends BaseControl {
             String sql = "select * from document_garuntee where DOC_NO='" + docNo + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             List<DocumentGarunteeBean> listBean = mappingBean(rs);
-            if(listBean.isEmpty()){
+            if (listBean.isEmpty()) {
                 return null;
             }
             return listBean.get(0);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return null;
         }
     }
@@ -71,7 +72,8 @@ public class DocumentGarunteeControl extends BaseControl {
         boolean result = false;
         try {
             String sql = "insert into document_garuntee(DOC_NO,DOC_DESC,IMAGE1,IMGAE2,IMAGE3)  "
-                    + "values('" + documentGarunteeBean.getDOC_NO() + "','" + documentGarunteeBean.getDOC_DESC() + "','" + documentGarunteeBean.getIMAGE1() + "',"
+                    + "values('" + documentGarunteeBean.getDOC_NO() + "',"
+                    + "'" + ThaiUtil.Unicode2ASCII(documentGarunteeBean.getDOC_DESC()) + "','" + documentGarunteeBean.getIMAGE1() + "',"
                     + "'" + documentGarunteeBean.getIMGAE2() + "','" + documentGarunteeBean.getIMAGE3() + "')";
             String sqlChk = "select * from document_garuntee "
                     + "where DOC_NO='" + documentGarunteeBean.getDOC_NO() + "'";
@@ -86,7 +88,7 @@ public class DocumentGarunteeControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return result;
@@ -104,7 +106,7 @@ public class DocumentGarunteeControl extends BaseControl {
             return true;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return false;
@@ -116,7 +118,7 @@ public class DocumentGarunteeControl extends BaseControl {
             update(sql);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 }

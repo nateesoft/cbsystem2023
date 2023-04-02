@@ -8,6 +8,7 @@ import th.co.cbank.project.model.CbCancelAccountBean;
 import th.co.cbank.util.MessageAlert;
 
 public class CbCancelAccountControl extends BaseControl {
+
     private final Logger logger = Logger.getLogger(CbCancelAccountControl.class);
 
     public List<CbCancelAccountBean> mappingBean(ResultSet rs) throws Exception {
@@ -34,7 +35,7 @@ public class CbCancelAccountControl extends BaseControl {
             return mappingBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }
@@ -47,7 +48,7 @@ public class CbCancelAccountControl extends BaseControl {
             return mappingBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }
@@ -63,7 +64,7 @@ public class CbCancelAccountControl extends BaseControl {
             return listBean.get(0);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return null;
         }
     }
@@ -87,7 +88,7 @@ public class CbCancelAccountControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -103,7 +104,7 @@ public class CbCancelAccountControl extends BaseControl {
             update(sql);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 }

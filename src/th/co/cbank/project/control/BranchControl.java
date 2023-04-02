@@ -4,7 +4,6 @@ import th.co.cbank.project.model.BranchBean;
 import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JOptionPane;
 import org.apache.log4j.Logger;
 import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.ThaiUtil;
@@ -115,7 +114,7 @@ public class BranchControl extends BaseControl {
             return mappingBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }
@@ -180,7 +179,7 @@ public class BranchControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -230,7 +229,7 @@ public class BranchControl extends BaseControl {
             update(sql);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -252,7 +251,7 @@ public class BranchControl extends BaseControl {
             return update(sql) > 0;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            JOptionPane.showMessageDialog(null, e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
         return false;
     }

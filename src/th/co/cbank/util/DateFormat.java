@@ -5,7 +5,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import javax.swing.JOptionPane;
 
 public class DateFormat {
 
@@ -30,7 +29,7 @@ public class DateFormat {
 
         return d1;
     }
-    
+
     public static Date dateFromJSONThai(String d) {
         Date d1;
         SimpleDateFormat s = new SimpleDateFormat("MMM d, y");

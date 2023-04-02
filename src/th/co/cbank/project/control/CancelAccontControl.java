@@ -9,8 +9,9 @@ import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.ThaiUtil;
 
 public class CancelAccontControl {
+
     private final Logger logger = Logger.getLogger(CancelAccontControl.class);
-    
+
     public List<Object[]> getAccountToCancel() {
         List<Object[]> list = new ArrayList();
         try {
@@ -36,9 +37,9 @@ public class CancelAccontControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
-        
+
         return list;
     }
 }

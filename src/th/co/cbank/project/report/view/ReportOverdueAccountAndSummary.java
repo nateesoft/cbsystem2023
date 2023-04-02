@@ -5,6 +5,7 @@ import java.awt.Point;
 import java.util.Date;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
+import org.apache.log4j.Logger;
 import th.co.cbank.project.control.CbLoanAccountControl;
 import th.co.cbank.project.view.ArListDialog;
 import th.co.cbank.project.model.CbLoanAccountBean;
@@ -17,6 +18,7 @@ import th.co.cbank.util.TableUtil;
 
 public class ReportOverdueAccountAndSummary extends javax.swing.JDialog {
 
+    private final Logger logger = Logger.getLogger(ReportOverdueAccountAndSummary.class);
     private DefaultTableModel model;
     private final Frame parent;
 
@@ -383,8 +385,7 @@ public class ReportOverdueAccountAndSummary extends javax.swing.JDialog {
                 ? NumberFormat.showDouble2(bean.getProfile().getLoan_Credit_Balance())
                 : "<html><b><font color=red>" + NumberFormat.showDouble2(bean.getProfile().getLoan_Credit_Balance()) + "</font></b></html>",
                 (int) bean.getLoan_interest() + "%",
-                NumberFormat.showDouble2(totalInt),
-            });
+                NumberFormat.showDouble2(totalInt),});
 
             loanBalanceTotal += bean.getLoan_amount();
             totalIntSum += totalInt;
@@ -393,11 +394,6 @@ public class ReportOverdueAccountAndSummary extends javax.swing.JDialog {
         lbBalance.setText("ยอดค้างชำระ  " + NumberFormat.showDouble2(loanBalanceTotal) + "  บาท");
         lbInterest.setText("ดอกเบี้ยค้างชำระ  " + NumberFormat.showDouble2(totalIntSum) + "  บาท");
         lbTotal.setText("ข้อมูลทั้งหมด " + NumberFormat.showCommaOnly(list.size()) + " รายการ");
-    }
-
-    public static void main(String[] args) {
-        ReportOverdueAccountAndSummary d = new ReportOverdueAccountAndSummary(null, true);
-        d.setVisible(true);
     }
 
     private void initTable() {

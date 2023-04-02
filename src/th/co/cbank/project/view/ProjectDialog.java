@@ -6,12 +6,12 @@ import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import org.apache.log4j.Logger;
-import th.co.cbank.util.ThaiUtil;
 import th.co.cbank.project.constants.AppConstants;
 import th.co.cbank.project.model.CbProjectBean;
 import th.co.cbank.util.TableUtil;
 
 public class ProjectDialog extends BaseDialogSwing {
+
     private final Logger logger = Logger.getLogger(ProjectDialog.class);
 
     public ProjectDialog(java.awt.Frame parent, boolean modal) {
@@ -204,7 +204,7 @@ public class ProjectDialog extends BaseDialogSwing {
         } else {
             CbProjectBean bean = new CbProjectBean();
             bean.setProductCode(txtProjectCode.getText());
-            bean.setProductName(ThaiUtil.Unicode2ASCII(txtProjectName.getText()));
+            bean.setProductName(txtProjectName.getText());
 
             if (getProjectControl().saveProject(bean)) {
                 loadProjectData();
@@ -214,9 +214,9 @@ public class ProjectDialog extends BaseDialogSwing {
 
     private void txtProjectCodeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtProjectCodeKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            if(txtProjectCode.getText().equals("")){
+            if (txtProjectCode.getText().equals("")) {
                 txtProjectCode.requestFocus();
-            }else{
+            } else {
                 txtProjectName.requestFocus();
             }
         } else if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -226,9 +226,9 @@ public class ProjectDialog extends BaseDialogSwing {
 
     private void txtProjectNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtProjectNameKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            if(txtProjectName.getText().equals("")){
+            if (txtProjectName.getText().equals("")) {
                 txtProjectName.requestFocus();
-            }else{
+            } else {
                 btnSave.requestFocus();
             }
         }
@@ -280,7 +280,7 @@ public class ProjectDialog extends BaseDialogSwing {
         tbProject.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
     }
 
-    private void loadProjectData() {        
+    private void loadProjectData() {
         List<CbProjectBean> listExp = getProjectControl().listProject();
         DefaultTableModel model = (DefaultTableModel) tbProject.getModel();
         TableUtil.clearModel(model);

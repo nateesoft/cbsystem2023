@@ -17,7 +17,6 @@ import javax.swing.table.JTableHeader;
 import org.apache.log4j.Logger;
 import th.co.cbank.util.DateFormat;
 import th.co.cbank.util.NumberFormat;
-import th.co.cbank.util.ThaiUtil;
 import th.co.cbank.project.constants.AppConstants;
 import th.co.cbank.project.control.ViewReport;
 import th.co.cbank.project.model.BranchBean;
@@ -417,7 +416,7 @@ public class CloseAccountReportDialog extends BaseDialogSwing {
                 count,
                 DateFormat.getLocale_ddMMyyyy(bean.getT_date()),
                 bean.getT_time(),
-                ThaiUtil.ASCII2Unicode(bean.getCust_name()),
+                bean.getCust_name(),
                 bean.getT_acccode(),
                 NumberFormat.showDouble2(Math.abs(bean.getT_amount())),
                 NumberFormat.showDouble2(bean.getT_balance()),

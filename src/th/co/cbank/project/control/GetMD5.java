@@ -16,13 +16,12 @@ import org.apache.log4j.Logger;
 import th.co.cbank.util.MessageAlert;
 
 public class GetMD5 {
+
     private final Logger logger = Logger.getLogger(GetMD5.class);
 
     public boolean getMD5(String serialNo) {
         SimpleDateFormat simp = new SimpleDateFormat("dd/MM/yyyy HH EE", Locale.ENGLISH);
-
         String password = "softpos" + simp.format(new Date());
-
         MessageDigest md;
         try {
             md = MessageDigest.getInstance("MD5");
@@ -33,18 +32,18 @@ public class GetMD5 {
             for (int i = 0; i < byteData.length; i++) {
                 sb.append(Integer.toString((byteData[i] & 0xff) + 0x100, 16).substring(1));
             }
-            
-            if(serialNo.equals(sb.toString())){
+
+            if (serialNo.equals(sb.toString())) {
                 return true;
             }
         } catch (NoSuchAlgorithmException e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return false;
     }
-    
+
     public String getMacAddress() {
         InetAddress ip;
         String MAC_ADDRESS = "";
@@ -59,35 +58,35 @@ public class GetMD5 {
             MAC_ADDRESS = sb.toString();
         } catch (SocketException | UnknownHostException e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return MAC_ADDRESS;
     }
-    
-    public String getSOC(){
+
+    public String getSOC() {
         String soc = "";
         BufferedReader br = null;
         try {
             String sCurrentLine;
             br = new BufferedReader(new FileReader("soc.bin"));
             while ((sCurrentLine = br.readLine()) != null) {
-                soc+=sCurrentLine;
+                soc += sCurrentLine;
             }
 
         } catch (IOException e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         } finally {
             try {
                 if (br != null) {
                     br.close();
                 }
             } catch (IOException ex) {
-                MessageAlert.infoPopup(this.getClass(), ex.getMessage());
+                MessageAlert.errorPopup(this.getClass(), ex.getMessage());
             }
         }
-        
+
         return soc.trim();
     }
 

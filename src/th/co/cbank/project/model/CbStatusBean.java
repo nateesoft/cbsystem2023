@@ -1,9 +1,7 @@
 package th.co.cbank.project.model;
 
-import org.apache.log4j.Logger;
-
 public class CbStatusBean {
-    private final Logger logger = Logger.getLogger(CbStatusBean.class);
+
     private String exp_id;//
     private String exp_desc;//
 

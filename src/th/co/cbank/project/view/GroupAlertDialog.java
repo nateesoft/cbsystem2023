@@ -7,14 +7,15 @@ import java.util.Locale;
 import org.apache.log4j.Logger;
 
 public class GroupAlertDialog extends BaseDialogSwing {
+
     private final Logger logger = Logger.getLogger(GroupAlertDialog.class);
 
     public GroupAlertDialog(java.awt.Frame parent, boolean modal, Point p) {
         super(parent, modal);
         initComponents();
         SimpleDateFormat simp = new SimpleDateFormat("ddMMyyyy", Locale.ENGLISH);
-        jLabel5.setText(jLabel5.getText()+" G"+simp.format(new Date())+"01");
-        
+        jLabel5.setText(jLabel5.getText() + " G" + simp.format(new Date()) + "01");
+
         setLocation(p);
     }
 

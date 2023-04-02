@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import th.co.cbank.util.MessageAlert;
 
 public class BaseControl {
+
     private final Logger logger = Logger.getLogger(BaseControl.class);
 
     public int update(String sql) {
@@ -11,7 +12,7 @@ public class BaseControl {
             return MySQLConnect.exeUpdate(sql);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return -1;

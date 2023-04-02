@@ -1,9 +1,7 @@
 package th.co.cbank.project.model;
 
-import org.apache.log4j.Logger;
-
 public class CusttypeBean {
-    private final Logger logger = Logger.getLogger(CusttypeBean.class);
+
     private String SP_Type;
     private String SP_TypeName;
     private double SP_CrAmount = 0.00;

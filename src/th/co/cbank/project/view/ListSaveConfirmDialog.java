@@ -16,7 +16,6 @@ import th.co.cbank.project.model.ReportGreenBean;
 public class ListSaveConfirmDialog extends BaseDialogSwing {
 
     private final Logger logger = Logger.getLogger(ListSaveConfirmDialog.class);
-
     private PrintSlipBean psBean;
     private Frame parent;
 

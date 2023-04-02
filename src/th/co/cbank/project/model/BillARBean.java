@@ -1,10 +1,9 @@
 package th.co.cbank.project.model;
 
 import java.util.Date;
-import org.apache.log4j.Logger;
 
 public class BillARBean {
-    private final Logger logger = Logger.getLogger(BillARBean.class);
+
     private String Ref_No;
     private Date Ondate;
     private String ArCode;

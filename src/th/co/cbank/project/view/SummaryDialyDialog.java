@@ -6,12 +6,13 @@ import org.apache.log4j.Logger;
 import th.co.cbank.project.constants.AppConstants;
 
 public class SummaryDialyDialog extends javax.swing.JDialog {
+
     private final Logger logger = Logger.getLogger(SummaryDialyDialog.class);
 
     public SummaryDialyDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        
+
         initTable();
     }
 
@@ -360,7 +361,7 @@ public class SummaryDialyDialog extends javax.swing.JDialog {
         tbIncome.setRowHeight(25);
         JTableHeader tHeader1 = tbIncome.getTableHeader();
         tHeader1.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, AppConstants.DEFAULT_FONT_SIZE));
-        
+
         tbExpense.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
         tbExpense.setRowHeight(25);
         JTableHeader tHeader2 = tbExpense.getTableHeader();

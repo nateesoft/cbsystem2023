@@ -1,9 +1,6 @@
 package th.co.cbank.project.model.mapping;
 
-import org.apache.log4j.Logger;
-
 public class LoadLoanMapping {
-    private final Logger logger = Logger.getLogger(LoadLoanMapping.class);
 
     private String loan_docno;
     private double loan_credit_balance;

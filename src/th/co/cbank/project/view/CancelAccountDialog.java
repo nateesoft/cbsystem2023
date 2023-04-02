@@ -2,7 +2,6 @@ package th.co.cbank.project.view;
 
 import java.awt.Font;
 import java.util.List;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import org.apache.log4j.Logger;
@@ -13,6 +12,7 @@ import th.co.cbank.project.control.CbSaveAccountControl;
 import th.co.cbank.project.control.CbSaveConfigControl;
 import th.co.cbank.project.control.Value;
 import th.co.cbank.project.model.CbCancelAccountBean;
+import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.TableUtil;
 
 public class CancelAccountDialog extends BaseDialogSwing {
@@ -217,12 +217,12 @@ public class CancelAccountDialog extends BaseDialogSwing {
     private void findAccount() {
         DefaultTableModel model = (DefaultTableModel) tbMaster.getModel();
         TableUtil.clearModel(model);
-        
+
         CancelAccontControl accontControl = new CancelAccontControl();
-         List<Object[]> listModel = accontControl.getAccountToCancel();
-         for(Object []data: listModel){
-             model.addRow(data);
-         }
+        List<Object[]> listModel = accontControl.getAccountToCancel();
+        for (Object[] data : listModel) {
+            model.addRow(data);
+        }
     }
 
     private void processToCancel() {
@@ -231,8 +231,8 @@ public class CancelAccountDialog extends BaseDialogSwing {
             String accountNo = tbMaster.getValueAt(rowSel, 2).toString();
             String accountType = tbMaster.getValueAt(rowSel, 5).toString();
             int bookNo = Integer.parseInt(tbMaster.getValueAt(rowSel, 6).toString());
-            int conf = JOptionPane.showConfirmDialog(this, "ท่านต้องการยกเลิกบัญชีเลขที่ " + accountNo + " ใช่หรือไม่ ?");
-            if (conf == JOptionPane.YES_OPTION) {
+            int conf = MessageAlert.showConfirm(this, "ท่านต้องการยกเลิกบัญชีเลขที่ " + accountNo + " ใช่หรือไม่ ?");
+            if (conf == MessageAlert.YES_OPTION) {
                 CancelPwdDialog c = new CancelPwdDialog(null, true);
                 c.setVisible(true);
 
@@ -253,7 +253,7 @@ public class CancelAccountDialog extends BaseDialogSwing {
                          */
                         if (saveAccountControl.deleteAccountAndBookNo(accountNo, bookNo)) {
                             if (saveConfigControl.updateSaveRunningAndNoRunning(accountType)) {
-                                JOptionPane.showMessageDialog(this, "ยกเลิกบัญชี " + accountNo + " เรียบร้อยแล้ว");
+                                MessageAlert.infoPopup(this, "ยกเลิกบัญชี " + accountNo + " เรียบร้อยแล้ว");
 
                                 findAccount();
 
@@ -268,13 +268,13 @@ public class CancelAccountDialog extends BaseDialogSwing {
                             }
                         }
                     } else {
-                        JOptionPane.showMessageDialog(this, "มีบัญชีที่เปิดหลังบัญชีนี้ ไม่สามารถลบข้อมูลนี้ได้ \n"
+                        MessageAlert.warningPopup(this, "มีบัญชีที่เปิดหลังบัญชีนี้ ไม่สามารถลบข้อมูลนี้ได้ \n"
                                 + "ท่านสามารถยกเลิกบัญชีล่าสุดได้เท่านั้น !");
                     }
                 }
             }
         } else {
-            JOptionPane.showMessageDialog(this, "กรุณาเลือกบัญชีที่ท่านต้องการยกเลิก !!!");
+            MessageAlert.warningPopup(this, "กรุณาเลือกบัญชีที่ท่านต้องการยกเลิก !!!");
             tbMaster.requestFocus();
         }
     }

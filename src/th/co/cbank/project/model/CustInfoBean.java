@@ -1,9 +1,7 @@
 package th.co.cbank.project.model;
 
-import org.apache.log4j.Logger;
-
 public class CustInfoBean {
-    private final Logger logger = Logger.getLogger(CustInfoBean.class);
+
     private String SP_Code;
     private int SP_Index = 0;
     private String SP_Name;

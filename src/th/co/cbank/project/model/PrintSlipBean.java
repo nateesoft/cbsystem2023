@@ -1,12 +1,9 @@
 package th.co.cbank.project.model;
 
-import org.apache.log4j.Logger;
-
 public class PrintSlipBean {
-    
+
     // ชื่อบัญชี เลขที่บัญชี วันที่ เวลา รหัสผู้รับฝาก ยอดเงิน
     //
-    private final Logger logger = Logger.getLogger(PrintSlipBean.class);
     private String AccountName;
     private String AccountCode;
     private String TranDate;
@@ -70,6 +67,5 @@ public class PrintSlipBean {
     public void setAmount(String Amount) {
         this.Amount = Amount;
     }
-    
-    
+
 }

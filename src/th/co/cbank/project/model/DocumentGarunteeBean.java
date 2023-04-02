@@ -1,9 +1,7 @@
 package th.co.cbank.project.model;
 
-import org.apache.log4j.Logger;
-
 public class DocumentGarunteeBean {
-    private final Logger logger = Logger.getLogger(DocumentGarunteeBean.class);
+
     private String DOC_NO = "";//
     private String DOC_DESC = "";//
     private String IMAGE1 = "";//

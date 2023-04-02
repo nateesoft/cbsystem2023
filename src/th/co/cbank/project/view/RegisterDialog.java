@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import th.co.cbank.project.control.GetMD5;
 
 public class RegisterDialog extends BaseDialogSwing {
+
     private final Logger logger = Logger.getLogger(RegisterDialog.class);
 
     public RegisterDialog(java.awt.Frame parent, boolean modal) {
@@ -117,7 +118,7 @@ public class RegisterDialog extends BaseDialogSwing {
                     System.err.println(e);
                 }
             } catch (Exception ex) {
-                
+
             }
 
             dispose();
@@ -127,7 +128,7 @@ public class RegisterDialog extends BaseDialogSwing {
                 f.createNewFile();
                 dispose();
             } catch (IOException ex) {
-                
+
             }
         }
     }

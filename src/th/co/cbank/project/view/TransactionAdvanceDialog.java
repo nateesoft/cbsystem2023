@@ -3,10 +3,10 @@ package th.co.cbank.project.view;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.KeyEvent;
 import java.util.List;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.apache.log4j.Logger;
 import th.co.cbank.util.JTableUtil;
+import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.TableUtil;
 
 public class TransactionAdvanceDialog extends BaseDialogSwing {
@@ -350,7 +350,7 @@ public class TransactionAdvanceDialog extends BaseDialogSwing {
         double netBalance = Double.parseDouble(txtNetBalance.getText().replace(",", ""));
         double intAmt = Double.parseDouble(txtInt.getText().replace(",", ""));
         TransactionAdvanceMethod.updateSaveAccountAndProfile(txtCustCode.getText(), txtAccCode.getText(), netBalance, intAmt);
-        JOptionPane.showMessageDialog(this, "บันทึกข้อมูลเรียบร้อย");
+        MessageAlert.infoPopup(this, "บันทึกข้อมูลเรียบร้อย");
     }//GEN-LAST:event_jButton4ActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

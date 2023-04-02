@@ -65,7 +65,7 @@ public class CbSaveAccountControl extends BaseControl {
             return listBean;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }
@@ -79,22 +79,23 @@ public class CbSaveAccountControl extends BaseControl {
             return listBean;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }
-    
+
     public List<CbSaveAccountBean> searchByCustNameCustCodeAccSts(String accountStatus, String custName, String custCode) {
         try {
             String sql = "select * from cb_save_account s where account_status='" + accountStatus + "' "
-                    + "and B_CUST_NAME like '%" + custName + "%' or account_code like '%" + custCode + "%' "
+                    + "and B_CUST_NAME like '%" + ThaiUtil.Unicode2ASCII(custName) + "%' "
+                    + "or account_code like '%" + ThaiUtil.Unicode2ASCII(custCode) + "%' "
                     + "order by account_code";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             List<CbSaveAccountBean> listBean = mappingBean(rs);
             return listBean;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }
@@ -110,7 +111,7 @@ public class CbSaveAccountControl extends BaseControl {
             return listBean;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
 
@@ -118,13 +119,14 @@ public class CbSaveAccountControl extends BaseControl {
 
     public List<CbSaveAccountBean> searchSaveAccount(String custName) {
         try {
-            String sql = "select * from cb_save_account where B_CUST_NAME like '%" + custName + "%'";
+            String sql = "select * from cb_save_account "
+                    + "where B_CUST_NAME like '%" + ThaiUtil.Unicode2ASCII(custName) + "%'";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             List<CbSaveAccountBean> listBean = mappingBean(rs);
             return listBean;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
 
@@ -152,7 +154,7 @@ public class CbSaveAccountControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return listBean;
@@ -200,7 +202,7 @@ public class CbSaveAccountControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return listBean;
@@ -218,7 +220,7 @@ public class CbSaveAccountControl extends BaseControl {
             return listBean.get(0);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return null;
         }
 
@@ -239,7 +241,7 @@ public class CbSaveAccountControl extends BaseControl {
             return listBean.get(0);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return null;
         }
 
@@ -253,14 +255,14 @@ public class CbSaveAccountControl extends BaseControl {
                     + "MEMBER_TYPE,B_UPDATE,account_code,account_status,book_no,book_evidence1,book_evidence2,"
                     + "book_evidence3,book_evidence4,remark,"
                     + "hoon_balance,account_type,b_time,b_fee,Branch_Code,Emp_Code)  "
-                    + "values('" + bean.getB_CUST_CODE() + "','" + bean.getB_CUST_NAME() + "',"
-                    + "'" + bean.getB_CUST_LASTNAME() + "','" + bean.getB_BALANCE() + "',"
+                    + "values('" + bean.getB_CUST_CODE() + "','" + ThaiUtil.Unicode2ASCII(bean.getB_CUST_NAME()) + "',"
+                    + "'" + ThaiUtil.Unicode2ASCII(bean.getB_CUST_LASTNAME()) + "','" + bean.getB_BALANCE() + "',"
                     + "'" + bean.getB_INTEREST() + "',curdate(),'" + bean.getMEMBER_TYPE() + "',curdate(),"
                     + "'" + bean.getAccount_code() + "',"
                     + "'" + bean.getAccount_status() + "','" + bean.getBook_no() + "',"
-                    + "'" + bean.getBook_evidence1() + "','" + bean.getBook_evidence2() + "',"
-                    + "'" + bean.getBook_evidence3() + "','" + bean.getBook_evidence4() + "',"
-                    + "'" + bean.getRemark() + "',"
+                    + "'" + ThaiUtil.Unicode2ASCII(bean.getBook_evidence1()) + "','" + ThaiUtil.Unicode2ASCII(bean.getBook_evidence2()) + "',"
+                    + "'" + ThaiUtil.Unicode2ASCII(bean.getBook_evidence3()) + "','" + ThaiUtil.Unicode2ASCII(bean.getBook_evidence4()) + "',"
+                    + "'" + ThaiUtil.Unicode2ASCII(bean.getRemark()) + "',"
                     + "'" + bean.getHoon_balance() + "','" + bean.getAccount_type() + "',"
                     + "curtime(), '" + bean.getB_FEE() + "','" + bean.getBranch_Code() + "','" + bean.getEmp_Code() + "')";
             String sqlChk = "select * from cb_save_account "
@@ -289,7 +291,7 @@ public class CbSaveAccountControl extends BaseControl {
         } catch (Exception e) {
             isSave = false;
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return isSave;
@@ -330,7 +332,7 @@ public class CbSaveAccountControl extends BaseControl {
             isSave = true;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return isSave;
@@ -567,7 +569,7 @@ public class CbSaveAccountControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -588,7 +590,7 @@ public class CbSaveAccountControl extends BaseControl {
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return totalAmount;
@@ -622,24 +624,20 @@ public class CbSaveAccountControl extends BaseControl {
                 }
 
                 if (t_balance != totalAmount) {
-                    try {
-                        String sqlUpd = "update cb_transaction_save "
-                                + "set t_balance='" + totalAmount + "' "
-                                + "where t_custcode='" + rs.getString("t_custcode") + "' "
-                                + "and t_acccode='" + rs.getString("t_acccode") + "' "
-                                + "and t_time='" + rs.getString("t_time") + "' "
-                                + "and t_status in('2','3','8') ";
-                        update(sqlUpd);
-                    } catch (Exception e) {
-                        logger.error(e.getMessage());
-                        MessageAlert.infoPopup(this.getClass(), e.getMessage());
-                    }
+                    String sqlUpd = "update cb_transaction_save "
+                            + "set t_balance='" + totalAmount + "' "
+                            + "where t_custcode='" + rs.getString("t_custcode") + "' "
+                            + "and t_acccode='" + rs.getString("t_acccode") + "' "
+                            + "and t_time='" + rs.getString("t_time") + "' "
+                            + "and t_status in('2','3','8') ";
+                    update(sqlUpd);
                 }
             }
 
             rs.close();
         } catch (Exception e) {
-
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -660,7 +658,7 @@ public class CbSaveAccountControl extends BaseControl {
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -680,7 +678,7 @@ public class CbSaveAccountControl extends BaseControl {
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         //อัพเดตยอดเงินแต่ละบัญชี
@@ -704,7 +702,7 @@ public class CbSaveAccountControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         //update ความเคลื่อนไหว
@@ -742,7 +740,7 @@ public class CbSaveAccountControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         //update ข้อมูลรวมเงินฝากทุกบัญชี
@@ -760,7 +758,7 @@ public class CbSaveAccountControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -775,7 +773,7 @@ public class CbSaveAccountControl extends BaseControl {
             update(sqlUpd);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -792,7 +790,7 @@ public class CbSaveAccountControl extends BaseControl {
             update(sqlUpd);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -806,7 +804,7 @@ public class CbSaveAccountControl extends BaseControl {
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return false;
@@ -823,7 +821,7 @@ public class CbSaveAccountControl extends BaseControl {
             update(sql);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -844,7 +842,7 @@ public class CbSaveAccountControl extends BaseControl {
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return bean;
@@ -854,15 +852,13 @@ public class CbSaveAccountControl extends BaseControl {
         SimpleDateFormat simp = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         String dateString = "";
 
-        try {
-            String sqlStartDate = "select B_Start from cb_save_account where B_Cust_Code='" + CustCode + "'";
-            try (ResultSet rs = MySQLConnect.getResultSet(sqlStartDate)) {
-                if (rs.next()) {
-                    dateString = rs.getString(1);
-                }
+        String sqlStartDate = "select B_Start from cb_save_account where B_Cust_Code='" + CustCode + "'";
+        try (ResultSet rs = MySQLConnect.getResultSet(sqlStartDate)) {
+            if (rs.next()) {
+                dateString = rs.getString(1);
             }
         } catch (Exception e) {
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         if (dateString.equals("") || dateEnd.equals("")) {
@@ -1085,16 +1081,11 @@ public class CbSaveAccountControl extends BaseControl {
                     totalBalance += deposit_money;
                     if (deposit_money > 0) {
                         interest = getInterest(Vat, IC, deposit_money, 1);
-                        try {
-                            String sqlUpd = "update cb_save_transaction "
-                                    + "set interest='" + interest + "' "
-                                    + "where doc_no='" + docNoTemp + "' "
-                                    + "and cust_code='" + bCustCode + "';";
-                            update(sqlUpd);
-                        } catch (Exception e) {
-                            logger.error(e.getMessage());
-                            MessageAlert.infoPopup(this.getClass(), e.getMessage());
-                        }
+                        String sqlUpd = "update cb_save_transaction "
+                                + "set interest='" + interest + "' "
+                                + "where doc_no='" + docNoTemp + "' "
+                                + "and cust_code='" + bCustCode + "';";
+                        update(sqlUpd);
                     }
                     rs2.close();
                     //***************************//
@@ -1123,62 +1114,55 @@ public class CbSaveAccountControl extends BaseControl {
                 }
 
                 //update interest
-                try {
-                    String sqlUpd = "update cb_save_account "
-                            + "set b_interest='" + totalInt + "',"
-                            + "b_update=curdate(),"
-                            + "b_balance='" + totalBalance + "' "
-                            + "where b_cust_code='" + bCustCode + "' "
-                            + "and b_type='T1'";
-                    if (update(sqlUpd) > 0) {
-                        String sqlUpd2 = "update cb_save_transaction "
-                                + "set interest='" + totalInt + "' "
-                                + "where doc_no='" + docNoTemp + "' "
-                                + "and cust_code='" + bCustCode + "';";
-                        update(sqlUpd2);
-                    }
-                } catch (Exception e) {
-                    logger.error(e.getMessage());
-                    MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                String sqlUpd = "update cb_save_account "
+                        + "set b_interest='" + totalInt + "',"
+                        + "b_update=curdate(),"
+                        + "b_balance='" + totalBalance + "' "
+                        + "where b_cust_code='" + bCustCode + "' "
+                        + "and b_type='T1'";
+                if (update(sqlUpd) > 0) {
+                    String sqlUpd2 = "update cb_save_transaction "
+                            + "set interest='" + totalInt + "' "
+                            + "where doc_no='" + docNoTemp + "' "
+                            + "and cust_code='" + bCustCode + "';";
+                    update(sqlUpd2);
                 }
             }
 
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
     public List<PayInterestAmtMapping> getPayInterest(String date) {
         List<PayInterestAmtMapping> listData = new ArrayList();
-        try {
-            String sql = "select sum(t_amount) int_amount, t.*,"
-                    + "(select concat(concat(b_cust_name, ' '),b_cust_lastname) from cb_save_account p where p.account_code=t.t_acccode limit 0,1) accountName,"
-                    + "(select b_balance from cb_save_account s where s.account_code=t.t_acccode limit 0,1) b_balance "
-                    + "from cb_transaction_save t "
-                    + "where t_booktype='INT' "
-                    + "and t_date = '" + date + "' "
-                    + "group by t_acccode "
-                    + "order by t_custcode, t_acccode, t_date, t_time;";
-            try (ResultSet rs = MySQLConnect.getResultSet(sql)) {
-                int count = 1;
-                while (rs.next()) {
-                    PayInterestAmtMapping bean = new PayInterestAmtMapping();
-                    bean.setIndex(count);
-                    bean.setAccountNo(rs.getString("t_acccode"));
-                    bean.setAccountName(ThaiUtil.ASCII2Unicode(rs.getString("accountName")));
-                    bean.setBalanceAmt(rs.getDouble("b_balance"));
-                    bean.setIntAmt(rs.getDouble("int_amount"));
-                    bean.setCustCode(rs.getString("t_custcode"));
+        String sql = "select sum(t_amount) int_amount, t.*,"
+                + "(select concat(concat(b_cust_name, ' '),b_cust_lastname) from cb_save_account p where p.account_code=t.t_acccode limit 0,1) accountName,"
+                + "(select b_balance from cb_save_account s where s.account_code=t.t_acccode limit 0,1) b_balance "
+                + "from cb_transaction_save t "
+                + "where t_booktype='INT' "
+                + "and t_date = '" + date + "' "
+                + "group by t_acccode "
+                + "order by t_custcode, t_acccode, t_date, t_time;";
+        try (ResultSet rs = MySQLConnect.getResultSet(sql)) {
+            int count = 1;
+            while (rs.next()) {
+                PayInterestAmtMapping bean = new PayInterestAmtMapping();
+                bean.setIndex(count);
+                bean.setAccountNo(rs.getString("t_acccode"));
+                bean.setAccountName(ThaiUtil.ASCII2Unicode(rs.getString("accountName")));
+                bean.setBalanceAmt(rs.getDouble("b_balance"));
+                bean.setIntAmt(rs.getDouble("int_amount"));
+                bean.setCustCode(rs.getString("t_custcode"));
 
-                    listData.add(bean);
-                    count++;
-                }
+                listData.add(bean);
+                count++;
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return listData;
@@ -1186,16 +1170,14 @@ public class CbSaveAccountControl extends BaseControl {
 
     public int getMaxBookNo() {
         int maxBookNo = 0;
-        try {
-            String sql0 = "select max(book_no) m_book_no from cb_save_account;";
-            try (ResultSet rs = MySQLConnect.getResultSet(sql0)) {
-                if (rs.next()) {
-                    maxBookNo = rs.getInt("m_book_no");
-                }
+        String sql0 = "select max(book_no) m_book_no from cb_save_account;";
+        try (ResultSet rs = MySQLConnect.getResultSet(sql0)) {
+            if (rs.next()) {
+                maxBookNo = rs.getInt("m_book_no");
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return maxBookNo;
@@ -1209,7 +1191,7 @@ public class CbSaveAccountControl extends BaseControl {
             MySQLConnect.exeUpdate(sql);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return false;
         }
         return true;
@@ -1217,22 +1199,20 @@ public class CbSaveAccountControl extends BaseControl {
 
     public List<Object[]> getAccountWhereCustCode(String custCode) {
         List<Object[]> list = new ArrayList();
-        try {
-            String sql = "select b_cust_code,account_code, b_balance,b_fee "
-                    + "from cb_save_account where b_cust_code='" + custCode + "'";
-            try (ResultSet rs1 = MySQLConnect.getResultSet(sql)) {
-                while (rs1.next()) {
-                    list.add(new Object[]{
-                        rs1.getString("b_cust_code"),
-                        rs1.getString("account_code"),
-                        NumberFormat.showDouble2(rs1.getString("b_balance")),
-                        NumberFormat.showDouble2(rs1.getString("b_fee"))
-                    });
-                }
+        String sql = "select b_cust_code,account_code, b_balance,b_fee "
+                + "from cb_save_account where b_cust_code='" + custCode + "'";
+        try (ResultSet rs1 = MySQLConnect.getResultSet(sql)) {
+            while (rs1.next()) {
+                list.add(new Object[]{
+                    rs1.getString("b_cust_code"),
+                    rs1.getString("account_code"),
+                    NumberFormat.showDouble2(rs1.getString("b_balance")),
+                    NumberFormat.showDouble2(rs1.getString("b_fee"))
+                });
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return list;
@@ -1267,7 +1247,50 @@ public class CbSaveAccountControl extends BaseControl {
             MySQLConnect.exeUpdate(sql2);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+    }
+
+    public void updateSaveAccountAndProfile(double netBalance, double textInt, String custCode, String accCode) {
+        try {
+            String sql = "update cb_save_account set "
+                    + "b_balance='" + netBalance + "',"
+                    + "b_interest='" + textInt + "' "
+                    + "where b_cust_code='" + custCode + "' "
+                    + "and account_code='" + accCode + "'";
+            MySQLConnect.exeUpdate(sql);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+    }
+
+    public void updateSaveAccountAndProfile(String accCode, String custCode) {
+        try {
+            String sql1 = "update cb_profile p set p.save_balance=("
+                    + "select sum(s.b_balance) from cb_save_account s "
+                    + "where s.b_cust_code=p.p_custcode "
+                    + "and s.account_code='" + accCode + "'"
+                    + ") where p.p_custcode='" + custCode + "';";
+            MySQLConnect.exeUpdate(sql1);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+    }
+
+    public void updateAccountStatusAndRemark(String CB_STATUS_CLOSE_SAVE, String remark, String account_code) {
+        try {
+            String sql = "update cb_save_account set "
+                    + "B_Balance = '0.00',"
+                    + "B_Update=curdate(),"
+                    + "account_status='" + CB_STATUS_CLOSE_SAVE + "',"
+                    + "remark='" + ThaiUtil.Unicode2ASCII(remark) + "' "
+                    + "where account_code='" + account_code + "'";
+            MySQLConnect.exeUpdate(sql);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 }

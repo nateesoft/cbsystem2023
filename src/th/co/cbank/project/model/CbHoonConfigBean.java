@@ -1,9 +1,7 @@
 package th.co.cbank.project.model;
 
-import org.apache.log4j.Logger;
-
 public class CbHoonConfigBean {
-    private final Logger logger = Logger.getLogger(CbHoonConfigBean.class);
+
     private String hoonCode;//
     private String hoonName;//
     private double hoonRate = 0.00;//

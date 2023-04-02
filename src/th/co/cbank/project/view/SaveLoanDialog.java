@@ -7,7 +7,6 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import org.apache.log4j.Logger;
-import th.co.cbank.util.ThaiUtil;
 import th.co.cbank.project.constants.AppConstants;
 import th.co.cbank.project.model.CbLoanAccountBean;
 import th.co.cbank.util.NumberUtil;
@@ -195,7 +194,7 @@ public class SaveLoanDialog extends BaseDialogSwing {
     private void loadData() {
         TableUtil.clearModel(model);
 
-        List<CbLoanAccountBean> listAccount = getLoanAccountControl().searchLoanAccount(ThaiUtil.Unicode2ASCII(txtSearch.getText()));
+        List<CbLoanAccountBean> listAccount = getLoanAccountControl().searchLoanAccount(txtSearch.getText());
         for (int i = 0; i < listAccount.size(); i++) {
             CbLoanAccountBean loanAcc = (CbLoanAccountBean) listAccount.get(i);
             model.addRow(new Object[]{

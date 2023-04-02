@@ -1,9 +1,7 @@
 package th.co.cbank.project.model;
 
-import org.apache.log4j.Logger;
-
 public class CbSaveConfigBean {
-    private final Logger logger = Logger.getLogger(CbSaveConfigBean.class);
+
     private String TypeCode;//
     private String TypeName;//
     private double TypeINT = 0.00;//

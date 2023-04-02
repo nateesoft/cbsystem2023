@@ -4,7 +4,6 @@ import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
@@ -21,6 +20,7 @@ import th.co.cbank.util.DateChooseDialog;
 import th.co.cbank.util.TableUtil;
 
 public class ExpendFormDialog extends BaseDialogSwing {
+
     private final Logger logger = Logger.getLogger(ExpendFormDialog.class);
     private Frame parent;
 
@@ -32,11 +32,11 @@ public class ExpendFormDialog extends BaseDialogSwing {
 
         loadData();
         loadDataTransaction();
-        
+
         BRANCH_CODE.setText(Value.BRANCH_CODE);
         EMP_CODE.setText(Value.USER_CODE);
         EXP_DATE.setText(DateFormat.getLocale_ddMMyyyy(new Date()));
-        
+
         EXP_DOC.requestFocus();
     }
 
@@ -330,9 +330,9 @@ public class ExpendFormDialog extends BaseDialogSwing {
     }//GEN-LAST:event_btnDateActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        if(!EXP_DOC.getText().equals("")){
+        if (!EXP_DOC.getText().equals("")) {
             saveData();
-        }else{
+        } else {
             EXP_DOC.requestFocus();
         }
     }//GEN-LAST:event_btnSaveActionPerformed
@@ -456,10 +456,10 @@ public class ExpendFormDialog extends BaseDialogSwing {
             EMP_AMOUNT.requestFocus();
             return;
         }
-        
-        if(bean.getEMP_AMOUNT()<=0){
+
+        if (bean.getEMP_AMOUNT() <= 0) {
             EMP_AMOUNT.requestFocus();
-        }else{            
+        } else {
             getCbExpTransactionControl().saveCbExpTransaction(bean);
 
             loadDataTransaction();

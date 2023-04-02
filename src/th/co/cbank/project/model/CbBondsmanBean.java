@@ -1,9 +1,7 @@
 package th.co.cbank.project.model;
 
-import org.apache.log4j.Logger;
-
 public class CbBondsmanBean {
-    private final Logger logger = Logger.getLogger(CbBondsmanBean.class);
+
     private String loan_docno;//
     private String idcard;//
     private String name;//

@@ -2,17 +2,16 @@ package th.co.cbank.project.view;
 
 import java.awt.Font;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import org.apache.log4j.Logger;
-import th.co.cbank.util.ThaiUtil;
 import th.co.cbank.project.constants.AppConstants;
 import th.co.cbank.project.model.CbFeeBean;
 import th.co.cbank.util.TableUtil;
 
 public class FeeDialog extends BaseDialogSwing {
+
     private final Logger logger = Logger.getLogger(FeeDialog.class);
 
     public FeeDialog(java.awt.Frame parent, boolean modal) {
@@ -205,8 +204,8 @@ public class FeeDialog extends BaseDialogSwing {
         } else {
             CbFeeBean bean = new CbFeeBean();
             bean.setExp_id(txtExpendId.getText());
-            bean.setExp_desc(ThaiUtil.Unicode2ASCII(txtExpendName.getText()));
-            
+            bean.setExp_desc(txtExpendName.getText());
+
             if (getCbFeeControl().saveExpense(bean)) {
                 loadExpenseData();
             }
@@ -215,9 +214,9 @@ public class FeeDialog extends BaseDialogSwing {
 
     private void txtExpendIdKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtExpendIdKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            if(txtExpendId.getText().equals("")){
+            if (txtExpendId.getText().equals("")) {
                 txtExpendId.requestFocus();
-            }else{
+            } else {
                 txtExpendName.requestFocus();
             }
         } else if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -227,9 +226,9 @@ public class FeeDialog extends BaseDialogSwing {
 
     private void txtExpendNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtExpendNameKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            if(txtExpendName.getText().equals("")){
+            if (txtExpendName.getText().equals("")) {
                 txtExpendName.requestFocus();
-            }else{
+            } else {
                 btnSave.requestFocus();
             }
         }

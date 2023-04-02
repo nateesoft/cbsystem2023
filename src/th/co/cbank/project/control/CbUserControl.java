@@ -1,9 +1,11 @@
 package th.co.cbank.project.control;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;
+import th.co.cbank.project.model.CbGroupBean;
 import th.co.cbank.util.ThaiUtil;
 import th.co.cbank.project.model.CbUserBean;
 import th.co.cbank.util.MessageAlert;
@@ -12,10 +14,10 @@ public class CbUserControl extends BaseControl {
 
     private final Logger logger = Logger.getLogger(CbUserControl.class);
 
-    public List<CbUserBean> mappingBean(ResultSet rs) throws Exception {
-        List<CbUserBean> listBean = new ArrayList<>();
-        while (rs.next()) {
-            CbUserBean bean = new CbUserBean();
+    public CbUserBean mappingBean(ResultSet rs) throws SQLException {
+        CbUserBean bean = null;
+        if (rs.next()) {
+            bean = new CbUserBean();
             bean.setUsername(rs.getString("Username"));
             bean.setPassword(rs.getString("Password"));
             bean.setName(ThaiUtil.ASCII2Unicode(rs.getString("Name")));
@@ -32,8 +34,19 @@ public class CbUserControl extends BaseControl {
             bean.setAddr_post(rs.getString("Addr_post"));
             bean.setAddr_tel(rs.getString("Addr_tel"));
             bean.setAddr_tel_home(rs.getString("Addr_tel_home"));
+        }
+        rs.close();
 
-            listBean.add(bean);
+        return bean;
+    }
+
+    public List<CbUserBean> mappingListBean(ResultSet rs) throws Exception {
+        List<CbUserBean> listBean = new ArrayList<>();
+        while (rs.next()) {
+            CbUserBean bean = mappingBean(rs);
+            if (bean != null) {
+                listBean.add(bean);
+            }
         }
         rs.close();
         return listBean;
@@ -43,10 +56,10 @@ public class CbUserControl extends BaseControl {
         try {
             String sql = "select * from cb_user";
             ResultSet rs = MySQLConnect.getResultSet(sql);
-            return mappingBean(rs);
+            return mappingListBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }
@@ -55,14 +68,14 @@ public class CbUserControl extends BaseControl {
         try {
             String sql = "select * from cb_user where username='" + username + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);
-            List<CbUserBean> listBean = mappingBean(rs);
+            List<CbUserBean> listBean = mappingListBean(rs);
             if (listBean.isEmpty()) {
                 return null;
             }
             return listBean.get(0);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return null;
         }
     }
@@ -74,11 +87,11 @@ public class CbUserControl extends BaseControl {
                     + "addr_no,addr_moo,addr_road,addr_soi,addr_tambon,addr_amphur,addr_province,addr_post,"
                     + "addr_tel,addr_tel_home)  "
                     + "values('" + bean.getUsername() + "',md5('" + bean.getPassword() + "'),"
-                    + "'" + bean.getName() + "','" + bean.getLastname() + "','" + bean.getUsergroup() + "',"
+                    + "'" + ThaiUtil.Unicode2ASCII(bean.getName()) + "','" + ThaiUtil.Unicode2ASCII(bean.getLastname()) + "','" + bean.getUsergroup() + "',"
                     + "'" + bean.getIDCard() + "','" + bean.getAddr_no() + "','" + bean.getAddr_moo() + "',"
-                    + "'" + bean.getAddr_road() + "','" + bean.getAddr_soi() + "',"
-                    + "'" + bean.getAddr_tambon() + "','" + bean.getAddr_amphur() + "',"
-                    + "'" + bean.getAddr_province() + "','" + bean.getAddr_post() + "',"
+                    + "'" + ThaiUtil.Unicode2ASCII(bean.getAddr_road()) + "','" + ThaiUtil.Unicode2ASCII(bean.getAddr_soi()) + "',"
+                    + "'" + ThaiUtil.Unicode2ASCII(bean.getAddr_tambon()) + "','" + ThaiUtil.Unicode2ASCII(bean.getAddr_amphur()) + "',"
+                    + "'" + ThaiUtil.Unicode2ASCII(bean.getAddr_province()) + "','" + bean.getAddr_post() + "',"
                     + "'" + bean.getAddr_tel() + "','" + bean.getAddr_tel_home() + "')";
             String sqlChk = "select * from cb_user where username='" + bean.getUsername() + "'";
             ResultSet rs = MySQLConnect.getResultSet(sqlChk);
@@ -91,7 +104,7 @@ public class CbUserControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -118,7 +131,7 @@ public class CbUserControl extends BaseControl {
             update(sql);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -135,9 +148,39 @@ public class CbUserControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
         return isValid;
+    }
+
+    public CbUserBean getUserAndPass(String user, String pass) {
+        String sql = "select * from cb_user "
+                + "where username='" + user + "' "
+                + "and password=md5('" + pass + "') ";
+        try (ResultSet rs = MySQLConnect.getResultSet(sql)) {
+            return mappingBean(rs);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+        return null;
+    }
+
+    public CbGroupBean getPermission(String user) {
+        CbGroupBean bean = new CbGroupBean();
+        String sql = "select permission "
+                + "from cb_group g inner join cb_user u "
+                + "on g.groupcode=u.usergroup "
+                + "where username = '" + user + "';";
+        try (ResultSet rs = MySQLConnect.getResultSet(sql)) {
+            if (rs.next()) {
+                bean.setPermission(rs.getString("permission"));
+            }
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+        return bean;
     }
 
 }

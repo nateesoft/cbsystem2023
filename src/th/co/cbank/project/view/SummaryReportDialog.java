@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import th.co.cbank.project.model.CbTransactionSaveBean;
 
 public class SummaryReportDialog extends BaseDialogSwing {
+
     private final Logger logger = Logger.getLogger(SummaryReportDialog.class);
 
     public SummaryReportDialog(java.awt.Frame parent, boolean modal) {
@@ -720,13 +721,13 @@ public class SummaryReportDialog extends BaseDialogSwing {
     private void txtDate1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDate1KeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             txtDate2.requestFocus();
-        }else if(evt.getKeyCode()==KeyEvent.VK_ESCAPE){
+        } else if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
             dispose();
         }
     }//GEN-LAST:event_txtDate1KeyPressed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        
+
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed

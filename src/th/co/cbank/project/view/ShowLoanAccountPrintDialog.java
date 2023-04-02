@@ -2,18 +2,18 @@ package th.co.cbank.project.view;
 
 import java.awt.Font;
 import java.awt.event.KeyEvent;
-import java.sql.ResultSet;
-import javax.swing.JOptionPane;
+import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import org.apache.log4j.Logger;
-import th.co.cbank.util.ThaiUtil;
 import th.co.cbank.project.constants.AppConstants;
-import th.co.cbank.project.control.MySQLConnect;
 import th.co.cbank.project.control.Value;
+import th.co.cbank.project.control.ViewReport;
+import th.co.cbank.project.report.model.ShowLoanAccountPrintModel;
 import th.co.cbank.util.TableUtil;
 
 public class ShowLoanAccountPrintDialog extends BaseDialogSwing {
+
     private final Logger logger = Logger.getLogger(ShowLoanAccountPrintDialog.class);
     private String selectItem = null;
 
@@ -201,58 +201,40 @@ public class ShowLoanAccountPrintDialog extends BaseDialogSwing {
         JTableHeader tHeader = tbAccountList.getTableHeader();
         tHeader.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, AppConstants.DEFAULT_FONT_SIZE));
 
-        try {
-            String sql = "select * "
-                    + "from cb_loan_account l,cb_profile p "
-                    + "where l.cust_code=p.p_custCode ";
-            ResultSet rs = MySQLConnect.getResultSet(sql);
-            int count = 0;
-            while (rs.next()) {
-                count++;
-                model.addRow(new Object[]{
-                    count,
-                    rs.getString("loan_docno"),
-                    ThaiUtil.ASCII2Unicode(rs.getString("p_custName")),
-                    ThaiUtil.ASCII2Unicode(rs.getString("p_custSurname"))
-                });
-            }
-
-            rs.close();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
+        ViewReport viewReport = new ViewReport();
+        List<ShowLoanAccountPrintModel> listBean = viewReport.loadListAllAccount();
+        int count = 0;
+        for (ShowLoanAccountPrintModel bean : listBean) {
+            count++;
+            model.addRow(new Object[]{
+                count,
+                bean.getLoan_docno(),
+                bean.getP_custName(),
+                bean.getP_custSurname()
+            });
         }
     }
 
-    private void loadListAccount(String text) {
+    private void loadListAccount(String custName) {
         DefaultTableModel model = (DefaultTableModel) tbAccountList.getModel();
         TableUtil.clearModel(model);
-        
-        text = ThaiUtil.Unicode2ASCII(text);
+
         tbAccountList.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
         tbAccountList.setRowHeight(30);
         JTableHeader tHeader = tbAccountList.getTableHeader();
         tHeader.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, AppConstants.DEFAULT_FONT_SIZE));
 
-        try {
-            String sql = "select * "
-                    + "from cb_loan_account l,cb_profile p "
-                    + "where l.cust_code=p.p_custCode "
-                    + "and p_custName like '%" + text + "%'";
-            ResultSet rs = MySQLConnect.getResultSet(sql);
-            int count = 0;
-            while (rs.next()) {
-                count++;
-                model.addRow(new Object[]{
-                    count,
-                    rs.getString("loan_docno"),
-                    ThaiUtil.ASCII2Unicode(rs.getString("p_custName")),
-                    ThaiUtil.ASCII2Unicode(rs.getString("p_custSurname"))
-                });
-            }
-
-            rs.close();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
+        ViewReport viewReport = new ViewReport();
+        List<ShowLoanAccountPrintModel> listBean = viewReport.loadListAllAccountByName(custName);
+        int count = 0;
+        for (ShowLoanAccountPrintModel bean : listBean) {
+            count++;
+            model.addRow(new Object[]{
+                count,
+                bean.getLoan_docno(),
+                bean.getP_custName(),
+                bean.getP_custSurname()
+            });
         }
     }
 }

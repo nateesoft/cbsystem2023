@@ -1,9 +1,6 @@
 package th.co.cbank.project.model.mapping;
 
-import org.apache.log4j.Logger;
-
 public class PayInterestAmtMapping {
-    private final Logger logger = Logger.getLogger(PayInterestAmtMapping.class);
 
     private int index;
     private String accountNo;

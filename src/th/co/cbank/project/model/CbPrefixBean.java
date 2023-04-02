@@ -1,9 +1,7 @@
 package th.co.cbank.project.model;
 
-import org.apache.log4j.Logger;
-
 public class CbPrefixBean {
-    private final Logger logger = Logger.getLogger(CbPrefixBean.class);
+
     private String code;
     private String name;
 

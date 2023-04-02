@@ -18,6 +18,7 @@ import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
+import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.ss.usermodel.Cell;
@@ -35,13 +36,14 @@ import th.co.cbank.project.model.ProfileBean;
 
 public class ReportPersonDetail extends javax.swing.JDialog {
 
+    private final Logger logger = Logger.getLogger(ReportPersonDetail.class);
     private DefaultTableModel model;
 
     public ReportPersonDetail(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
 
-        initTable();        
+        initTable();
     }
 
     @SuppressWarnings("unchecked")

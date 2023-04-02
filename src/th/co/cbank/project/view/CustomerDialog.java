@@ -4,7 +4,6 @@ import th.co.cbank.project.model.ProfileBean;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.util.List;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import org.apache.log4j.Logger;
@@ -14,6 +13,7 @@ import th.co.cbank.util.NumberFormat;
 import th.co.cbank.project.constants.AppConstants;
 import th.co.cbank.project.model.CbLoanAccountBean;
 import th.co.cbank.project.model.CbSaveAccountBean;
+import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.NumberUtil;
 import th.co.cbank.util.StringUtil;
 import th.co.cbank.util.TableUtil;
@@ -350,7 +350,7 @@ public class CustomerDialog extends BaseDialogSwing {
 
                 double balanceAmt = NumberUtil.toDouble("" + tbLoanAccount.getValueAt(rows, 3));
                 if (balanceAmt == 0) {
-                    JOptionPane.showMessageDialog(this, "ไม่พบยอดค้างชำระในระบบ !!!");
+                    MessageAlert.warningPopup(this, "ไม่พบยอดค้างชำระในระบบ !!!");
                     setAccountCode(null);
                     setAccountType("loan");
                     return;
@@ -404,7 +404,7 @@ public class CustomerDialog extends BaseDialogSwing {
 
         JTableUtil.alignCenter(tbLoanAccount, 0);
     }
-    
+
     private List<ProfileBean> listProfiles = null;
 
     private void findCustomer() {

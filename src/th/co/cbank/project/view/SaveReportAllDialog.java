@@ -4,12 +4,10 @@ import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
-import java.sql.ResultSet;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -17,15 +15,16 @@ import javax.swing.table.JTableHeader;
 import org.apache.log4j.Logger;
 import th.co.cbank.util.JTableUtil;
 import th.co.cbank.util.DateFormat;
-import th.co.cbank.util.ThaiUtil;
 import th.co.cbank.project.constants.AppConstants;
-import th.co.cbank.project.control.MySQLConnect;
 import th.co.cbank.project.control.ViewReport;
 import th.co.cbank.project.model.CbSaveConfigBean;
+import th.co.cbank.project.report.model.SaveReportAllModel;
 import th.co.cbank.util.DateChooseDialog;
+import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.TableUtil;
 
 public class SaveReportAllDialog extends BaseDialogSwing {
+
     private final Logger logger = Logger.getLogger(SaveReportAllDialog.class);
     private SimpleDateFormat simp = new SimpleDateFormat("dd/MM/yyyy");
     private DecimalFormat dec = new DecimalFormat("#,##0.00");
@@ -67,7 +66,7 @@ public class SaveReportAllDialog extends BaseDialogSwing {
         jLabel3 = new javax.swing.JLabel();
         txtCustCode = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox();
+        selectAccountType = new javax.swing.JComboBox();
         jButton2 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         txtTotalDeposit = new javax.swing.JTextField();
@@ -248,7 +247,7 @@ public class SaveReportAllDialog extends BaseDialogSwing {
         jLabel12.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel12.setText("เลือกประเภทบัญชี");
 
-        jComboBox1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        selectAccountType.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -271,7 +270,7 @@ public class SaveReportAllDialog extends BaseDialogSwing {
                         .addComponent(jLabel12)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jComboBox1, 0, 185, Short.MAX_VALUE)
+                    .addComponent(selectAccountType, 0, 185, Short.MAX_VALUE)
                     .addComponent(txtAccCode))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -288,7 +287,7 @@ public class SaveReportAllDialog extends BaseDialogSwing {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(txtCustCode, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(selectAccountType, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel12))
                 .addContainerGap())
         );
@@ -512,7 +511,6 @@ public class SaveReportAllDialog extends BaseDialogSwing {
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
-    private javax.swing.JComboBox jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
@@ -529,6 +527,7 @@ public class SaveReportAllDialog extends BaseDialogSwing {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JComboBox selectAccountType;
     private javax.swing.JTable tbTransaction;
     private javax.swing.JTextField txtAccCode;
     private javax.swing.JTextField txtCustCode;
@@ -560,11 +559,11 @@ public class SaveReportAllDialog extends BaseDialogSwing {
         txtDate2.setText(DateFormat.getLocale_ddMMyyyy(new Date()));
 
         List<CbSaveConfigBean> listBean = getSaveConfigControl().listSaveConfig();
-        jComboBox1.removeAllItems();
-        jComboBox1.addItem("เลือกทั้งหมด");
+        selectAccountType.removeAllItems();
+        selectAccountType.addItem("เลือกทั้งหมด");
         for (int i = 0; i < listBean.size(); i++) {
             CbSaveConfigBean bBean = (CbSaveConfigBean) listBean.get(i);
-            jComboBox1.addItem(bBean.getTypeCode() + " - " + bBean.getTypeName());
+            selectAccountType.addItem(bBean.getTypeCode() + " - " + bBean.getTypeName());
         }
     }
 
@@ -575,60 +574,20 @@ public class SaveReportAllDialog extends BaseDialogSwing {
         TableUtil.clearModel(model);
 
         try {
-            String sql = "select t.*,"
-                    + "(select b_cust_name from cb_save_account p where p.account_code=t.t_acccode) b_cust_name, "
-                    + "(select b_cust_lastname from cb_save_account p where p.account_code=t.t_acccode) b_cust_lastname,"
-                    + "(select concat(concat(b_cust_name, ' '),b_cust_lastname) from cb_save_account p where p.account_code=t.t_acccode) Name "
-                    + "from cb_transaction_save t "
-                    + "where 1=1 ";
-
-            if (cbAccItem.getSelectedIndex() > -1) {
-                if (cbAccItem.getSelectedIndex() == 0) {
-                    sql += " and t_status in('1','2','3','8') ";
-                } else if (cbAccItem.getSelectedIndex() == 1) {
-                    sql += " and t_status in('1') ";
-                } else if (cbAccItem.getSelectedIndex() == 2) {
-                    sql += " and t_status in('2') ";
-                } else if (cbAccItem.getSelectedIndex() == 3) {
-                    sql += " and t_status in('3') ";
-                } else if (cbAccItem.getSelectedIndex() == 4) {
-                    sql += " and t_status in('8') ";
-                }
-            }
-
-            if (!txtCustCode.getText().equals("")) {
-                sql += " and t_custcode='" + txtCustCode.getText() + "' ";
-            }
-
-            if (!txtDate1.getText().equals("") && !txtDate2.getText().equals("")) {
-                Date d1 = DateFormat.getLocal_ddMMyyyy(txtDate1.getText());
-                Date d2 = DateFormat.getLocal_ddMMyyyy(txtDate2.getText());
-
-                sql += " and t_date between '" + DateFormat.getMySQL_Date(d1) + "' and '" + DateFormat.getMySQL_Date(d2) + "' ";
-            }
-
-            if (!txtAccCode.getText().equals("")) {
-                sql += " and t_acccode='" + txtAccCode.getText() + "' ";
-            }
-
-            if (jComboBox1.getSelectedIndex() > 0) {
-                String[] data = jComboBox1.getSelectedItem().toString().split("-");
-                sql += " and account_type='" + data[0].trim() + "' ";
-            }
-
-            sql += " order by t_date, t_time";
-            sqlAll = sql;
-            ResultSet rs = MySQLConnect.getResultSet(sql);
+            ViewReport viewReport = new ViewReport();
+            List<SaveReportAllModel> listReport
+                    = viewReport.showAllSaveReport(cbAccItem.getSelectedIndex(), txtCustCode.getText(), txtDate1.getText(), txtDate2.getText(), txtAccCode.getText(), selectAccountType.getSelectedIndex(), selectAccountType.getSelectedItem().toString());
+            sqlAll = viewReport.getSqlQuery();
             int count = 0;
             double balance = 0;
             double totalDeposit = 0;
             double totalWithdraw = 0;
 
-            while (rs.next()) {
+            for (SaveReportAllModel bean : listReport) {
                 count++;
 
-                double depositAmt = rs.getDouble("t_amount");
-                double withdrawAmt = rs.getDouble("t_amount");
+                double depositAmt = bean.getT_amount();
+                double withdrawAmt = bean.getT_amount();
                 if (depositAmt < 0) {
                     depositAmt = 0;
                     withdrawAmt = withdrawAmt * -1;
@@ -638,17 +597,17 @@ public class SaveReportAllDialog extends BaseDialogSwing {
 
                 model.addRow(new Object[]{
                     count,
-                    simp.format(rs.getDate("t_date")),
-                    rs.getString("t_time"),
-                    rs.getString("t_acccode"),
-                    ThaiUtil.ASCII2Unicode(rs.getString("t_description")),
+                    simp.format(bean.getT_date()),
+                    bean.getT_time(),
+                    bean.getT_acccode(),
+                    bean.getT_description(),
                     depositAmt,
                     withdrawAmt,
-                    rs.getDouble("t_balance"),
-                    rs.getString("t_custcode"),
-                    ThaiUtil.ASCII2Unicode(rs.getString("b_cust_name") + " " + rs.getString("b_cust_lastname")),
-                    rs.getString("t_empcode"),
-                    rs.getString("branch_code")
+                    bean.getT_balance(),
+                    bean.getT_custcode(),
+                    bean.getB_cust_name() + " " + bean.getB_cust_lastname(),
+                    bean.getT_empcode(),
+                    bean.getBranch_code()
                 });
 
                 totalDeposit += depositAmt;
@@ -662,10 +621,9 @@ public class SaveReportAllDialog extends BaseDialogSwing {
             }
             txtTotalWithdraw.setText(dec.format(totalWithdraw));
             txtTotalIncome.setText(dec.format(balance));
-
-            rs.close();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
+            MessageAlert.errorPopup(this, e.getMessage());
+            logger.error(e.getMessage());
         }
 
         JTableUtil.sortDouble(tbTransaction, 5);

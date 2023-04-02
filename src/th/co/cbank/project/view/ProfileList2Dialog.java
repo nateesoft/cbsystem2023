@@ -20,6 +20,7 @@ import th.co.cbank.util.ExcelUtil;
 import th.co.cbank.util.TableUtil;
 
 public class ProfileList2Dialog extends BaseDialogSwing {
+
     private final Logger logger = Logger.getLogger(ProfileList2Dialog.class);
     private final Frame parent;
 
@@ -363,10 +364,10 @@ public class ProfileList2Dialog extends BaseDialogSwing {
         try {
             ExcelUtil excel = new ExcelUtil();
             excel.setOutputFile("test.xls");
-            excel.write((DefaultTableModel) jTable1.getModel(), "Report-2", new int[]{7,8,9});
+            excel.write((DefaultTableModel) jTable1.getModel(), "Report-2", new int[]{7, 8, 9});
             Desktop.getDesktop().open(new File("test.xls"));
         } catch (Exception e) {
-            
+
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -446,15 +447,15 @@ public class ProfileList2Dialog extends BaseDialogSwing {
                 bean.getProfileBean().getLoan_Balance(),
                 bean.getProfileBean().getApproveLimit()
             });
-            
-            totalSaveAmt+=bean.getProfileBean().getSave_Balance();
-            totalHoonQty+=bean.getProfileBean().getHoon_Qty();
-            totalLoanAmt+=bean.getProfileBean().getLoan_Balance();
+
+            totalSaveAmt += bean.getProfileBean().getSave_Balance();
+            totalHoonQty += bean.getProfileBean().getHoon_Qty();
+            totalLoanAmt += bean.getProfileBean().getLoan_Balance();
         }
 
         JTableUtil.sortDouble(jTable1, 7);
         JTableUtil.sortDouble(jTable1, 9);
-        
+
         txtTotalSaveAmt.setText(NumberFormat.showDouble2(totalSaveAmt));
         txtTotalHoonQty.setText(NumberFormat.showDouble2(totalHoonQty));
         txtTotalLoanAmt.setText(NumberFormat.showDouble2(totalLoanAmt));

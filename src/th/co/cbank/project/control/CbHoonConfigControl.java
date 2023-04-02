@@ -9,6 +9,7 @@ import th.co.cbank.project.model.CbHoonConfigBean;
 import th.co.cbank.util.MessageAlert;
 
 public class CbHoonConfigControl extends BaseControl {
+
     private final Logger logger = Logger.getLogger(CbHoonConfigControl.class);
 
     public List<CbHoonConfigBean> mappingBean(ResultSet rs) throws Exception {
@@ -35,7 +36,7 @@ public class CbHoonConfigControl extends BaseControl {
             return mappingBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }
@@ -44,13 +45,13 @@ public class CbHoonConfigControl extends BaseControl {
         try {
             ResultSet rs = MySQLConnect.getResultSet("select * from cb_hoon_config where HoonCode='" + id + "'");
             List<CbHoonConfigBean> listBean = mappingBean(rs);
-            if(listBean.isEmpty()){
+            if (listBean.isEmpty()) {
                 return null;
             }
             return listBean.get(0);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return null;
         }
     }
@@ -79,7 +80,7 @@ public class CbHoonConfigControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return isSave;
@@ -99,7 +100,7 @@ public class CbHoonConfigControl extends BaseControl {
             return true;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return false;
         }
     }
@@ -112,7 +113,7 @@ public class CbHoonConfigControl extends BaseControl {
             return true;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return false;
         }
     }

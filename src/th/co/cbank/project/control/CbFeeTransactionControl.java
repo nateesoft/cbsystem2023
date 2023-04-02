@@ -9,6 +9,7 @@ import th.co.cbank.project.model.CbFeeTransactionBean;
 import th.co.cbank.util.MessageAlert;
 
 public class CbFeeTransactionControl extends BaseControl {
+
     private final Logger logger = Logger.getLogger(CbFeeTransactionControl.class);
 
     public List<CbFeeTransactionBean> mappingBean(ResultSet rs) throws Exception {
@@ -37,7 +38,7 @@ public class CbFeeTransactionControl extends BaseControl {
             return mappingBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }
@@ -50,7 +51,7 @@ public class CbFeeTransactionControl extends BaseControl {
             return mappingBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }
@@ -60,13 +61,13 @@ public class CbFeeTransactionControl extends BaseControl {
             String sql = "select * from cb_fee_transaction where fee_code='" + fee_code + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             List<CbFeeTransactionBean> listBean = mappingBean(rs);
-            if(listBean.isEmpty()){
+            if (listBean.isEmpty()) {
                 return null;
             }
             return listBean.get(0);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return null;
         }
     }
@@ -84,7 +85,7 @@ public class CbFeeTransactionControl extends BaseControl {
             update(sql);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -103,7 +104,7 @@ public class CbFeeTransactionControl extends BaseControl {
             update(sql);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 }

@@ -5,10 +5,10 @@ import java.io.File;
 import java.io.IOException;
 import javax.swing.JFileChooser;
 import org.apache.log4j.Logger;
-import th.co.cbank.project.log.Log;
 import th.co.cbank.util.MessageAlert;
 
 public class DatabaseDumpDialog extends BaseDialogSwing {
+
     private final Logger logger = Logger.getLogger(DatabaseDumpDialog.class);
 
     public DatabaseDumpDialog(java.awt.Frame parent, boolean modal) {
@@ -33,11 +33,11 @@ public class DatabaseDumpDialog extends BaseDialogSwing {
                         + sql_db + " "
                         + "-r  " + sql_target_path);
                 MessageAlert.infoPopup(this.getClass(), "Backup ฐานข้อมูลเรียบร้อยแล้ว");
-                Log.write.info("Backup database success");
+                logger.info("Backup database success");
                 dispose();
             } catch (IOException ioe) {
                 MessageAlert.infoPopup(this.getClass(), "พบปัญหาในการ Backup ข้อมูล");
-                Log.write.error(ioe.getMessage());
+                logger.error(ioe.getMessage());
             }
         }
     }
@@ -372,7 +372,7 @@ public class DatabaseDumpDialog extends BaseDialogSwing {
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void txtMySQLPathKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMySQLPathKeyPressed
-        if(evt.getKeyCode()==KeyEvent.VK_ESCAPE){
+        if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
             dispose();
         }
     }//GEN-LAST:event_txtMySQLPathKeyPressed

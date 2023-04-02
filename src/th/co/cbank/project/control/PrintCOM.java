@@ -14,7 +14,6 @@ import java.util.Enumeration;
 import org.apache.log4j.Logger;
 import th.co.cbank.util.NumberFormat;
 import th.co.cbank.util.ThaiUtil;
-import th.co.cbank.project.log.Log;
 import th.co.cbank.project.model.BranchBean;
 import th.co.cbank.project.model.CbFeeTransactionBean;
 import th.co.cbank.project.model.CbTransactionLoanBean;
@@ -67,13 +66,8 @@ public final class PrintCOM extends BaseControl {
 
                     } else {
                         //ทุกอย่างเหมือนเดิม อิอิ
-                        try {
-                            String sql2 = "update cb_config set PrintSlipPort=''";
-                            update(sql2);
-                        } catch (Exception e) {
-                            logger.error(e.getMessage());
-                            MessageAlert.infoPopup(this.getClass(), e.getMessage());
-                        }
+                        String sql2 = "update cb_config set PrintSlipPort=''";
+                        update(sql2);
                     }
                 }
             }
@@ -81,7 +75,7 @@ public final class PrintCOM extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -115,8 +109,9 @@ public final class PrintCOM extends BaseControl {
             outputStream.flush();
             LineCount = 0;
             PrintLine4 = false;
-        } catch (IOException ex) {
-            System.out.println(ex.getMessage());
+        } catch (IOException e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -189,7 +184,7 @@ public final class PrintCOM extends BaseControl {
                 outputStream.write(XLine1.getBytes(fixCharSet));
             } catch (IOException e) {
                 logger.error(e.getMessage());
-                MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                MessageAlert.errorPopup(this.getClass(), e.getMessage());
             }
         } else {
             get_Line(ThaiUtil.Unicode2ASCII(PrintMsg));
@@ -241,11 +236,11 @@ public final class PrintCOM extends BaseControl {
                     }
                 } catch (IOException e) {
                     logger.error(e.getMessage());
-                    MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                    MessageAlert.errorPopup(this.getClass(), e.getMessage());
                 }
             } catch (Exception e) {
                 logger.error(e.getMessage());
-                MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                MessageAlert.errorPopup(this.getClass(), e.getMessage());
             }
         }
     }
@@ -307,7 +302,7 @@ public final class PrintCOM extends BaseControl {
                         }
                     } catch (IOException e) {
                         logger.error(e.getMessage());
-                        MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                        MessageAlert.errorPopup(this.getClass(), e.getMessage());
                     }
                 }
             }
@@ -338,7 +333,6 @@ public final class PrintCOM extends BaseControl {
                         try {
                             outputStream = serialPort.getOutputStream();
                         } catch (IOException e) {
-
                             System.exit(0);
                         }
                         try {
@@ -371,14 +365,14 @@ public final class PrintCOM extends BaseControl {
                             }
                         } catch (IOException e) {
                             logger.error(e.getMessage());
-                            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                            MessageAlert.errorPopup(this.getClass(), e.getMessage());
                         }
                     }
                 }
             }
         } else {
-            MessageAlert.infoPopup(this.getClass(), "Printer Comport ยังไม่ได้ติดตั้งกรุณาตั้งค่า");
-            Log.write.error("Printer Comport ยังไม่ได้ติดตั้งกรุณาตั้งค่า");
+            MessageAlert.errorPopup(this.getClass(), "Printer Comport ยังไม่ได้ติดตั้งกรุณาตั้งค่า");
+            logger.error("Printer Comport ยังไม่ได้ติดตั้งกรุณาตั้งค่า");
         }
 
     }
@@ -390,7 +384,7 @@ public final class PrintCOM extends BaseControl {
             outputStream.write(Str);
         } catch (IOException e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -403,7 +397,7 @@ public final class PrintCOM extends BaseControl {
                 outputStream.flush();
             } catch (IOException e) {
                 logger.error(e.getMessage());
-                MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                MessageAlert.errorPopup(this.getClass(), e.getMessage());
             }
         }
         if (style == 2) {
@@ -413,7 +407,7 @@ public final class PrintCOM extends BaseControl {
                 outputStream.flush();
             } catch (IOException e) {
                 logger.error(e.getMessage());
-                MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                MessageAlert.errorPopup(this.getClass(), e.getMessage());
             }
         }
         if (style == 3) {
@@ -423,7 +417,7 @@ public final class PrintCOM extends BaseControl {
                 outputStream.flush();
             } catch (IOException e) {
                 logger.error(e.getMessage());
-                MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                MessageAlert.errorPopup(this.getClass(), e.getMessage());
             }
         }
         if (style == 4) {
@@ -433,7 +427,7 @@ public final class PrintCOM extends BaseControl {
                 outputStream.flush();
             } catch (IOException e) {
                 logger.error(e.getMessage());
-                MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                MessageAlert.errorPopup(this.getClass(), e.getMessage());
             }
         }
 
@@ -445,7 +439,7 @@ public final class PrintCOM extends BaseControl {
                 outputStream.flush();
             } catch (IOException e) {
                 logger.error(e.getMessage());
-                MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                MessageAlert.errorPopup(this.getClass(), e.getMessage());
             }
         }
         if (style == 6) {
@@ -455,7 +449,7 @@ public final class PrintCOM extends BaseControl {
                 outputStream.flush();
             } catch (IOException e) {
                 logger.error(e.getMessage());
-                MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                MessageAlert.errorPopup(this.getClass(), e.getMessage());
             }
         }
 
@@ -467,7 +461,7 @@ public final class PrintCOM extends BaseControl {
                 outputStream.flush();
             } catch (IOException e) {
                 logger.error(e.getMessage());
-                MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                MessageAlert.errorPopup(this.getClass(), e.getMessage());
             }
         }
         if (style == 8) {
@@ -477,7 +471,7 @@ public final class PrintCOM extends BaseControl {
                 outputStream.flush();
             } catch (IOException e) {
                 logger.error(e.getMessage());
-                MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                MessageAlert.errorPopup(this.getClass(), e.getMessage());
             }
         }
 
@@ -489,7 +483,7 @@ public final class PrintCOM extends BaseControl {
                 outputStream.flush();
             } catch (IOException e) {
                 logger.error(e.getMessage());
-                MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                MessageAlert.errorPopup(this.getClass(), e.getMessage());
             }
         }
         if (style == 11) {
@@ -499,7 +493,7 @@ public final class PrintCOM extends BaseControl {
                 outputStream.flush();
             } catch (IOException e) {
                 logger.error(e.getMessage());
-                MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                MessageAlert.errorPopup(this.getClass(), e.getMessage());
             }
         }
         if (style == 12) {
@@ -509,7 +503,7 @@ public final class PrintCOM extends BaseControl {
                 outputStream.flush();
             } catch (IOException e) {
                 logger.error(e.getMessage());
-                MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                MessageAlert.errorPopup(this.getClass(), e.getMessage());
             }
         }
         if (style == 13) {
@@ -520,7 +514,7 @@ public final class PrintCOM extends BaseControl {
                 outputStream.flush();
             } catch (IOException e) {
                 logger.error(e.getMessage());
-                MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                MessageAlert.errorPopup(this.getClass(), e.getMessage());
             }
         }
     }
@@ -579,13 +573,13 @@ public final class PrintCOM extends BaseControl {
                         serialPort = (SerialPort) portId.open("SimpleWriteApp", 2000);
                     } catch (PortInUseException e) {
                         logger.error(e.getMessage());
-                        MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                        MessageAlert.errorPopup(this.getClass(), e.getMessage());
                     }
                     try {
                         outputStream = serialPort.getOutputStream();
                     } catch (IOException e) {
                         logger.error(e.getMessage());
-                        MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                        MessageAlert.errorPopup(this.getClass(), e.getMessage());
                     }
                     try {
                         serialPort.setSerialPortParams(9600,
@@ -648,7 +642,7 @@ public final class PrintCOM extends BaseControl {
                         }
                     } catch (IOException e) {
                         logger.error(e.getMessage());
-                        MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                        MessageAlert.errorPopup(this.getClass(), e.getMessage());
                     }
                 }
             }
@@ -674,19 +668,19 @@ public final class PrintCOM extends BaseControl {
                         serialPort = (SerialPort) portId.open("SimpleWriteApp", 2000);
                     } catch (PortInUseException e) {
                         logger.error(e.getMessage());
-                        MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                        MessageAlert.errorPopup(this.getClass(), e.getMessage());
                     }
                     try {
                         outputStream = serialPort.getOutputStream();
                     } catch (IOException e) {
                         logger.error(e.getMessage());
-                        MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                        MessageAlert.errorPopup(this.getClass(), e.getMessage());
                     }
                     try {
                         serialPort.setSerialPortParams(9600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
                     } catch (UnsupportedCommOperationException e) {
                         logger.error(e.getMessage());
-                        MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                        MessageAlert.errorPopup(this.getClass(), e.getMessage());
                     }
 
                     initPrinter();
@@ -742,7 +736,7 @@ public final class PrintCOM extends BaseControl {
                         }
                     } catch (IOException e) {
                         logger.error(e.getMessage());
-                        MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                        MessageAlert.errorPopup(this.getClass(), e.getMessage());
                     }
                 }
             }
@@ -809,19 +803,19 @@ public final class PrintCOM extends BaseControl {
                         serialPort = (SerialPort) portId.open("SimpleWriteApp", 2000);
                     } catch (PortInUseException e) {
                         logger.error(e.getMessage());
-                        MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                        MessageAlert.errorPopup(this.getClass(), e.getMessage());
                     }
                     try {
                         outputStream = serialPort.getOutputStream();
                     } catch (IOException e) {
                         logger.error(e.getMessage());
-                        MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                        MessageAlert.errorPopup(this.getClass(), e.getMessage());
                     }
                     try {
                         serialPort.setSerialPortParams(9600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
                     } catch (UnsupportedCommOperationException e) {
                         logger.error(e.getMessage());
-                        MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                        MessageAlert.errorPopup(this.getClass(), e.getMessage());
                     }
 
                     initPrinter();
@@ -869,7 +863,7 @@ public final class PrintCOM extends BaseControl {
                         isPrint = true;
                     } catch (IOException e) {
                         logger.error(e.getMessage());
-                        MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                        MessageAlert.errorPopup(this.getClass(), e.getMessage());
 
                         isPrint = false;
                     }
@@ -998,8 +992,7 @@ public final class PrintCOM extends BaseControl {
                         isPrint = true;
                     } catch (IOException e) {
                         logger.error(e.getMessage());
-                        MessageAlert.infoPopup(this.getClass(), e.getMessage());
-
+                        MessageAlert.errorPopup(this.getClass(), e.getMessage());
                         isPrint = false;
                     }
                 }
@@ -1055,19 +1048,19 @@ public final class PrintCOM extends BaseControl {
                         serialPort = (SerialPort) portId.open("SimpleWriteApp", 2000);
                     } catch (PortInUseException e) {
                         logger.error(e.getMessage());
-                        MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                        MessageAlert.errorPopup(this.getClass(), e.getMessage());
                     }
                     try {
                         outputStream = serialPort.getOutputStream();
                     } catch (IOException e) {
                         logger.error(e.getMessage());
-                        MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                        MessageAlert.errorPopup(this.getClass(), e.getMessage());
                     }
                     try {
                         serialPort.setSerialPortParams(9600, SerialPort.DATABITS_8, SerialPort.STOPBITS_1, SerialPort.PARITY_NONE);
                     } catch (UnsupportedCommOperationException e) {
                         logger.error(e.getMessage());
-                        MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                        MessageAlert.errorPopup(this.getClass(), e.getMessage());
                     }
 
                     initPrinter();
@@ -1109,7 +1102,7 @@ public final class PrintCOM extends BaseControl {
                         isPrint = true;
                     } catch (IOException e) {
                         logger.error(e.getMessage());
-                        MessageAlert.infoPopup(this.getClass(), e.getMessage());
+                        MessageAlert.errorPopup(this.getClass(), e.getMessage());
 
                         isPrint = false;
                     }

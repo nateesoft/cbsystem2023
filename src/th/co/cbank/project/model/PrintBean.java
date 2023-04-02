@@ -1,9 +1,7 @@
 package th.co.cbank.project.model;
 
-import org.apache.log4j.Logger;
-
 public class PrintBean {
-    private final Logger logger = Logger.getLogger(PrintBean.class);
+
     private String p_title;
     private String p_date;
     private String p_time;
@@ -130,6 +128,5 @@ public class PrintBean {
     public void setP_emp_name(String p_emp_name) {
         this.p_emp_name = p_emp_name;
     }
-    
-    
+
 }

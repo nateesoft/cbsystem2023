@@ -10,11 +10,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Properties;
 import org.apache.log4j.Logger;
-import th.co.cbank.project.log.Log;
 import th.co.cbank.util.MessageAlert;
 
 public class MySQLConnect {
-    private final Logger logger = Logger.getLogger(MySQLConnect.class);
+
+    private static final Logger logger = Logger.getLogger(MySQLConnect.class);
     private static String CLASS_NAME;
     public static String SERVER;
     public static boolean USE_FINGER = false;
@@ -25,7 +25,7 @@ public class MySQLConnect {
     public static Connection conn;
     private static int PORT;
     private static String CHARSET;
-    
+
     public static Connection connect() {
         CLASS_NAME = "com.mysql.jdbc.Driver";
         try {
@@ -60,16 +60,16 @@ public class MySQLConnect {
             }
             input.close();
         } catch (IOException e) {
-            Log.write.error(e.getMessage());
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(MySQLConnect.class, e.getMessage());
         }
-        
+
         try {
             Class.forName(CLASS_NAME);
             String jdbcUrl = "jdbc:mysql://" + SERVER + ":" + PORT + "/" + DATABASE + "?charset=" + CHARSET;
             conn = DriverManager.getConnection(jdbcUrl, USER, PASS);
         } catch (ClassNotFoundException | SQLException e) {
-            MessageAlert.infoPopup(MySQLConnect.class, e.getMessage());
-            
+            MessageAlert.errorPopup(MySQLConnect.class, e.getMessage());
             if (SERVER == null) {
                 System.exit(0);
             }
@@ -111,7 +111,8 @@ public class MySQLConnect {
                 conn.close();
             }
         } catch (SQLException e) {
-            Log.write.error(e.getMessage());
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(MySQLConnect.class, e.getMessage());
         }
     }
 }

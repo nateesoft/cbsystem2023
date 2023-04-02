@@ -1,11 +1,8 @@
 package th.co.cbank.project.view;
 
 import java.awt.event.KeyEvent;
-import java.sql.ResultSet;
 import org.apache.log4j.Logger;
-import th.co.cbank.project.model.CbProjectBean;
 import th.co.cbank.project.model.ProfileBean;
-import th.co.cbank.util.ThaiUtil;
 
 public class EditProfileDialog extends BaseDialogSwing {
 

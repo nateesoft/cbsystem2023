@@ -1,18 +1,17 @@
 package th.co.cbank.project.model;
 
 import java.util.Date;
-import org.apache.log4j.Logger;
 
 public class CbFeeTransactionBean {
-    private final Logger logger = Logger.getLogger(CbFeeTransactionBean.class);
-    private String fee_code="";//
-    private String fee_desc="";//
+
+    private String fee_code = "";//
+    private String fee_desc = "";//
     private double fee_amount = 0.00;//
-    private String fee_branch="";//
-    private String fee_emp_code="";//
-    private String fee_cust_code="";
-    private Date fee_date=null;
-    private String fee_time="";
+    private String fee_branch = "";//
+    private String fee_emp_code = "";//
+    private String fee_cust_code = "";
+    private Date fee_date = null;
+    private String fee_time = "";
 
     public Date getFee_date() {
         return fee_date;

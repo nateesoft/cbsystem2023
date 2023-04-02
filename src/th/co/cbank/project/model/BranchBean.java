@@ -1,10 +1,9 @@
 package th.co.cbank.project.model;
 
 import java.util.Date;
-import org.apache.log4j.Logger;
 
 public class BranchBean {
-    private final Logger logger = Logger.getLogger(BranchBean.class);
+
     private String Code = "";//
     private String Name = "";//
     private String AddressNo;//

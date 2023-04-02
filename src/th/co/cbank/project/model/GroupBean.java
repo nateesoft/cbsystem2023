@@ -1,9 +1,7 @@
 package th.co.cbank.project.model;
 
-import org.apache.log4j.Logger;
-
 public class GroupBean {
-    private final Logger logger = Logger.getLogger(GroupBean.class);
+
     private String groupCode;
     private String groupName;
     private String permission;

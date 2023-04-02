@@ -5,6 +5,7 @@ import java.awt.Container;
 import org.apache.log4j.Logger;
 
 public class EnableControl {
+
     private final Logger logger = Logger.getLogger(EnableControl.class);
 
     public void enableComponents(Container container, boolean enable) {

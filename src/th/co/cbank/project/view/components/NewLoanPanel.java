@@ -11,7 +11,6 @@ import java.util.Date;
 import java.util.List;
 import javax.swing.JComboBox;
 import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
@@ -47,11 +46,11 @@ import th.co.cbank.util.DateChooseDialog;
 import th.co.cbank.util.DateFormat;
 import th.co.cbank.util.ImagePreviewPanel;
 import th.co.cbank.util.JTableUtil;
+import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.NumberFormat;
 import th.co.cbank.util.NumberUtil;
 import th.co.cbank.util.StringUtil;
 import th.co.cbank.util.TableUtil;
-import th.co.cbank.util.ThaiUtil;
 
 public class NewLoanPanel extends javax.swing.JPanel {
 
@@ -2213,7 +2212,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
         double loanAmt = NumberUtil.toDouble(txtLoanAmt.getText());
         double limitLoanAmt = profileBean.getLoan_Credit_Balance();
         if (loanAmt > limitLoanAmt) {
-            JOptionPane.showMessageDialog(this, "จำนวนเงินกู้เกินกำหนด กรุณาเพิ่มวงเงิน !");
+            MessageAlert.warningPopup(this, "จำนวนเงินกู้เกินกำหนด กรุณาเพิ่มวงเงิน !");
             txtLoanAmt.selectAll();
             txtLoanAmt.requestFocus();
             return;
@@ -2535,7 +2534,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
             String docType = getIDCombobox(cbLoanAcc);
             CbLoanConfigBean cbLoanConfigBean = loanConfigControl.listLoanConfig(docType);
             if (loanPerMonth > cbLoanConfigBean.getLoanPerMonth()) {
-                JOptionPane.showMessageDialog(this, "ท่านกู้เกินจำนวนงวดตามที่สัญญากำหนดไว้ ต้องไม่เกิน " + cbLoanConfigBean.getLoanPerMonth() + " งวด");
+                MessageAlert.warningPopup(this, "ท่านกู้เกินจำนวนงวดตามที่สัญญากำหนดไว้ ต้องไม่เกิน " + cbLoanConfigBean.getLoanPerMonth() + " งวด");
                 txtLoanPerMonth.selectAll();
                 txtLoanPerMonth.requestFocus();
                 return;
@@ -2549,13 +2548,13 @@ public class NewLoanPanel extends javax.swing.JPanel {
     private void addBoundsman() {
         ProfileBean profileApprove = profileControl.listCbProfile(txtLoanCustCode.getText());
         if ("".equals(txtLoanCustCode.getText()) || profileApprove == null) {
-            JOptionPane.showMessageDialog(this, "ข้อมูลรหัสผู้ค้ำประกันไม่ถูกต้อง !!!");
+            MessageAlert.warningPopup(this, "ข้อมูลรหัสผู้ค้ำประกันไม่ถูกต้อง !!!");
             txtLoanCustCode.selectAll();
             txtLoanCustCode.requestFocus();
             return;
         }
         if (profileApprove.getApproveLimit() <= 0) {
-            JOptionPane.showMessageDialog(this, "ผู้ค้ำประกันท่านนี้ไม่มีสิทธิ์ค้ำประกัน !!!");
+            MessageAlert.warningPopup(this, "ผู้ค้ำประกันท่านนี้ไม่มีสิทธิ์ค้ำประกัน !!!");
             clearBondman();
             txtLoanCustCode.requestFocus();
             return;
@@ -2588,8 +2587,8 @@ public class NewLoanPanel extends javax.swing.JPanel {
         if (validateDataLoan()) {
             //ตรวจสอบผู้ค้ำประกัน
             if (tbGuarantor.getRowCount() == 0) {
-                int confirm = JOptionPane.showConfirmDialog(this, "ไม่พบข้อมูลผู้ค้ำประกัน ท่านต้องการเปิดบัญชีเงินกู้หรือไม่ ?");
-                if (confirm == JOptionPane.YES_OPTION) {
+                int confirm = MessageAlert.showConfirm(this, "ไม่พบข้อมูลผู้ค้ำประกัน ท่านต้องการเปิดบัญชีเงินกู้หรือไม่ ?");
+                if (confirm == MessageAlert.YES_OPTION) {
                     saveLoanForm();
                 }
                 return;
@@ -2658,7 +2657,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
             // save evidence
             DocumentGarunteeBean documentGarunteeBean = new DocumentGarunteeBean();
             documentGarunteeBean.setDOC_NO(loanDocNo);
-            documentGarunteeBean.setDOC_DESC(ThaiUtil.Unicode2ASCII(txtAssetGaruntee1.getText()));
+            documentGarunteeBean.setDOC_DESC(txtAssetGaruntee1.getText());
             documentGarunteeBean.setIMAGE1(txtImg1.getText().replace("\\", "/"));
             documentGarunteeBean.setIMGAE2(txtImg2.getText().replace("\\", "/"));
             documentGarunteeBean.setIMAGE3(txtImg3.getText().replace("\\", "/"));
@@ -2666,10 +2665,10 @@ public class NewLoanPanel extends javax.swing.JPanel {
 
             //update running
             loanConfigControl.updateRunningBookNo(cbLoanAccountBean.getLoan_type());
-            profileControl.updateLoanBalance(cbLoanAccountBean.getLoan_amount(),cbLoanAccountBean.getLoan_amount(),cbLoanAccountBean.getCust_code());
+            profileControl.updateLoanBalance(cbLoanAccountBean.getLoan_amount(), cbLoanAccountBean.getLoan_amount(), cbLoanAccountBean.getCust_code());
             configControl.updateLoanDocRunning();
-            int confrim = JOptionPane.showConfirmDialog(this, "ท่านต้องการพิมพ์หน้าสมุดเงินกู้ใช่หรือไม่ ?");
-            if (confrim == JOptionPane.YES_OPTION) {
+            int confrim = MessageAlert.showConfirm(this, "ท่านต้องการพิมพ์หน้าสมุดเงินกู้ใช่หรือไม่ ?");
+            if (confrim == MessageAlert.YES_OPTION) {
                 printLoanFrontBook(loanDocNo);
             }
             isStep1 = true;
@@ -2680,7 +2679,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
                 tLoanBean.setT_date(DateFormat.getLocal_ddMMyyyy(txtStartLoanDate.getText()));
                 tLoanBean.setT_acccode(loanDocNo);
                 tLoanBean.setT_custcode(profileBean.getP_custCode());
-                tLoanBean.setT_description(ThaiUtil.Unicode2ASCII("" + cbLoanAcc.getSelectedItem()));
+                tLoanBean.setT_description("" + cbLoanAcc.getSelectedItem());
                 tLoanBean.setT_amount(cbLoanAccountBean.getLoan_amount());
                 tLoanBean.setMoney_in(0.00);
                 tLoanBean.setMoney_out(0.00);
@@ -2702,8 +2701,8 @@ public class NewLoanPanel extends javax.swing.JPanel {
                 tLoanBean.setT_fee(NumberUtil.toDouble(txtLoanFee.getText()));
 
                 if (cbTransactionLoanControl.saveCbTransactionLoan(tLoanBean)) {
-                    int confirm = JOptionPane.showConfirmDialog(this, "ท่านต้องการบันทึกรายงานความเคลื่อนไหวลงสมุดใช่หรือไม่ ?");
-                    if (confirm == JOptionPane.YES_OPTION) {
+                    int confirm = MessageAlert.showConfirm(this, "ท่านต้องการบันทึกรายงานความเคลื่อนไหวลงสมุดใช่หรือไม่ ?");
+                    if (confirm == MessageAlert.YES_OPTION) {
                         printTransactionLoanBook(loanDocNo);
                     }
                 }
@@ -2765,7 +2764,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
                 jTabbedPane3.setEnabledAt(0, false);
                 jTabbedPane3.setEnabledAt(2, false);
 
-                JOptionPane.showMessageDialog(this, "บันทึกข้อมูลการกู้เงินเรียบร้อยแล้ว");
+                MessageAlert.infoPopup(this, "บันทึกข้อมูลการกู้เงินเรียบร้อยแล้ว");
                 btnPrintLoanPaper(loanDocNo);
             }
         }
@@ -2918,13 +2917,13 @@ public class NewLoanPanel extends javax.swing.JPanel {
 
     private boolean validateDataLoan() {
         if (NumberUtil.toDouble(txtLoanAmt.getText()) <= 0) {
-            JOptionPane.showMessageDialog(this, "กรุณาระบุจำนวนเงินที่ต้องการกู้ !");
+            MessageAlert.warningPopup(this, "กรุณาระบุจำนวนเงินที่ต้องการกู้ !");
             txtLoanAmt.selectAll();
             txtLoanAmt.requestFocus();
             return false;
         }
         if (NumberUtil.toDouble(txtPayPerMonth.getText()) < 0) {
-            JOptionPane.showMessageDialog(this, "จำนวนเงินผ่อนชำระต่องวด น้อยกว่า 0 บาท !");
+            MessageAlert.warningPopup(this, "จำนวนเงินผ่อนชำระต่องวด น้อยกว่า 0 บาท !");
             txtPayPerMonth.selectAll();
             txtPayPerMonth.requestFocus();
             return false;
@@ -2937,7 +2936,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
         double limitAmt = profileBean.getLoan_Credit_Balance();
         int loanPerMonth = NumberUtil.toInt(txtLoanPerMonth.getText());
         if (loanPerMonth <= 0) {
-            JOptionPane.showMessageDialog(this, "จำนวนงวดที่กำหนดไม่ถูกต้อง !");
+            MessageAlert.warningPopup(this, "จำนวนงวดที่กำหนดไม่ถูกต้อง !");
             txtLoanPerMonth.selectAll();
             txtLoanPerMonth.requestFocus();
             return false;
@@ -2946,7 +2945,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
         String docType = getIDCombobox(cbLoanAcc);
         CbLoanConfigBean cbLoanConfigBean = loanConfigControl.listLoanConfig(docType);
         if (loanPerMonth > cbLoanConfigBean.getLoanPerMonth()) {
-            JOptionPane.showMessageDialog(this, "ท่านกู้เกินจำนวนงวดตามที่สัญญากำหนดไว้ ต้องไม่เกิน " + cbLoanConfigBean.getLoanPerMonth() + " งวด");
+            MessageAlert.warningPopup(this, "ท่านกู้เกินจำนวนงวดตามที่สัญญากำหนดไว้ ต้องไม่เกิน " + cbLoanConfigBean.getLoanPerMonth() + " งวด");
             return false;
         }
 
@@ -2955,19 +2954,19 @@ public class NewLoanPanel extends javax.swing.JPanel {
 
         int chkDateCompare = dCurrent.compareTo(dStartLoan);
         if (chkDateCompare == 1) {
-            JOptionPane.showMessageDialog(this, "ท่านกำหนดวันที่เริ่มกู้เงินไม่ถูกต้อง !");
+            MessageAlert.warningPopup(this, "ท่านกำหนดวันที่เริ่มกู้เงินไม่ถูกต้อง !");
             txtLoanDateStart.requestFocus();
             return false;
         }
 
         if (loanAmt > limitAmt) {
-            JOptionPane.showMessageDialog(this, "ท่านกู้เกินวงเงินที่กำหนด กรุณาตรวจสอบ !");
+            MessageAlert.warningPopup(this, "ท่านกู้เกินวงเงินที่กำหนด กรุณาตรวจสอบ !");
             txtLoanAmt.requestFocus();
             return false;
         }
 
         if (loanAmt <= 0) {
-            JOptionPane.showMessageDialog(this, "จำนวนเงินในการกู้ไม่ถูกต้อง กรุณาตรวจสอบ !");
+            MessageAlert.warningPopup(this, "จำนวนเงินในการกู้ไม่ถูกต้อง กรุณาตรวจสอบ !");
             txtLoanAmt.requestFocus();
             return false;
         }
@@ -2978,7 +2977,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
     private void btnDelGuarantor() {
         int rowSel = tbGuarantor.getSelectedRow();
         if (rowSel == -1) {
-            JOptionPane.showMessageDialog(this, "กรุณาเลือกรายการผู้ค้ำประกันที่ท่านต้องการลบ ?");
+            MessageAlert.warningPopup(this, "กรุณาเลือกรายการผู้ค้ำประกันที่ท่านต้องการลบ ?");
             return;
         }
         bonsmanModel.removeRow(rowSel);

@@ -27,7 +27,7 @@ public class CbProfileControl {
             }
             return false;
         } catch (Exception e) {
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             logger.error(e.getMessage());
             return false;
         }
@@ -51,7 +51,7 @@ public class CbProfileControl {
             }
             rs.close();
         } catch (Exception e) {
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             logger.error(e.getMessage());
         }
 
@@ -78,7 +78,7 @@ public class CbProfileControl {
 
             rs.close();
         } catch (Exception e) {
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             logger.error(e.getMessage());
         }
 
@@ -106,7 +106,7 @@ public class CbProfileControl {
 
             rs.close();
         } catch (Exception e) {
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             logger.error(e.getMessage());
         }
 
@@ -120,7 +120,7 @@ public class CbProfileControl {
                     + "where p_custCode='" + custCode + "'";
             return MySQLConnect.exeUpdate(sql) > 0;
         } catch (Exception e) {
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             logger.error(e.getMessage());
         }
         return false;

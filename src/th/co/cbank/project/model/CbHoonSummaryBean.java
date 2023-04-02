@@ -1,10 +1,9 @@
 package th.co.cbank.project.model;
 
 import java.util.Date;
-import org.apache.log4j.Logger;
 
 public class CbHoonSummaryBean {
-    private final Logger logger = Logger.getLogger(CbHoonSummaryBean.class);
+
     private String year_at;
     private Date action_time;
     private String user_action;

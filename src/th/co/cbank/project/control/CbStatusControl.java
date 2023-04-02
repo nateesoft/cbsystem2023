@@ -9,6 +9,7 @@ import th.co.cbank.project.model.CbStatusBean;
 import th.co.cbank.util.MessageAlert;
 
 public class CbStatusControl extends BaseControl {
+
     private final Logger logger = Logger.getLogger(CbStatusControl.class);
 
     public List<CbStatusBean> listExpense() {
@@ -25,7 +26,7 @@ public class CbStatusControl extends BaseControl {
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return listBean;
@@ -41,7 +42,7 @@ public class CbStatusControl extends BaseControl {
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return bean;
@@ -50,7 +51,7 @@ public class CbStatusControl extends BaseControl {
     public boolean saveExpense(CbStatusBean bean) {
         try {
             String sql = "insert into cb_status (exp_id,exp_desc)  "
-                    + "values('" + bean.getExp_id() + "','" + bean.getExp_desc() + "')";
+                    + "values('" + bean.getExp_id() + "','" + ThaiUtil.Unicode2ASCII(bean.getExp_desc()) + "')";
             String sqlChk = "select * from cb_status where exp_id='" + bean.getExp_id() + "'";
             try (ResultSet rs = MySQLConnect.getResultSet(sqlChk)) {
                 if (rs.next()) {
@@ -62,7 +63,7 @@ public class CbStatusControl extends BaseControl {
             return true;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return false;
         }
     }
@@ -71,13 +72,13 @@ public class CbStatusControl extends BaseControl {
         try {
             String sql = "update cb_status set "
                     + "exp_id='" + bean.getExp_id() + "', "
-                    + "exp_desc='" + bean.getExp_desc() + "' "
+                    + "exp_desc='" + ThaiUtil.Unicode2ASCII(bean.getExp_desc()) + "' "
                     + "where exp_id='" + bean.getExp_id() + "'";
             update(sql);
             return true;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return false;
         }
     }

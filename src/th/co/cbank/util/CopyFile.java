@@ -7,9 +7,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import javax.swing.JOptionPane;
 
 public class CopyFile {
+
     private final Logger logger = Logger.getLogger(CopyFile.class);
 
     public static void copy(File source, File dest) {

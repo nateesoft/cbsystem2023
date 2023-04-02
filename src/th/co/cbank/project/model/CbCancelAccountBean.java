@@ -1,15 +1,14 @@
 package th.co.cbank.project.model;
 
 import java.util.Date;
-import org.apache.log4j.Logger;
 
 public class CbCancelAccountBean {
-    private final Logger logger = Logger.getLogger(CbCancelAccountBean.class);
-     private Date date_cancel;//
-     private String time_cancel = "00:00:00";//
-     private String account_no;//
-     private String account_type;//
-     private String user_code;//
+
+    private Date date_cancel;//
+    private String time_cancel = "00:00:00";//
+    private String account_no;//
+    private String account_type;//
+    private String user_code;//
 
     public Date getDate_cancel() {
         return date_cancel;
@@ -50,5 +49,5 @@ public class CbCancelAccountBean {
     public void setUser_code(String user_code) {
         this.user_code = user_code;
     }
-     
+
 }

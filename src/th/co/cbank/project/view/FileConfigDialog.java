@@ -17,13 +17,12 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Properties;
 import javax.imageio.ImageIO;
-import javax.swing.JOptionPane;
 import org.apache.log4j.Logger;
-import th.co.cbank.project.log.Log;
 import th.co.cbank.util.FTPUtility;
 import th.co.cbank.util.MessageAlert;
 
 public class FileConfigDialog extends BaseDialogSwing {
+
     private final Logger logger = Logger.getLogger(FileConfigDialog.class);
 
     public FileConfigDialog(java.awt.Frame parent, boolean modal) {
@@ -36,7 +35,7 @@ public class FileConfigDialog extends BaseDialogSwing {
         } catch (IOException ex) {
             MessageAlert.infoPopup(this.getClass(), ex.getMessage());
         }
-        
+
         readConfig();
     }
 
@@ -526,7 +525,7 @@ public class FileConfigDialog extends BaseDialogSwing {
         Connection connect;
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            Log.write.info("Driver Loaded.");
+            logger.info("Driver Loaded.");
 
             String jdbcUrl = "jdbc:mysql://"
                     + "" + txtServer.getText() + ":" + cbPort.getSelectedItem() + ""
@@ -557,12 +556,12 @@ public class FileConfigDialog extends BaseDialogSwing {
                 cbDatabaseMaster.setSelectedItem("" + database);
                 cbDatabaseMember.setSelectedItem("" + databaseMember);
             } catch (IOException | SQLException e) {
-                JOptionPane.showMessageDialog(this, e.getMessage(), "Error Connection", JOptionPane.ERROR_MESSAGE);
-                Log.write.error(e.getMessage());
+                MessageAlert.errorPopup(this, e.getMessage());
+                logger.error(e.getMessage());
             }
         } catch (ClassNotFoundException | SQLException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
-            Log.write.error(e.getMessage());
+            MessageAlert.errorPopup(this, e.getMessage());
+            logger.error(e.getMessage());
         }
     }
 
@@ -619,8 +618,8 @@ public class FileConfigDialog extends BaseDialogSwing {
             }
 
         } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage(), "Read config file Error !", JOptionPane.ERROR_MESSAGE);
-            Log.write.error(e.getMessage() + "\n" + e.getMessage());
+            MessageAlert.errorPopup(this, e.getMessage());
+            logger.error(e.getMessage() + "\n" + e.getMessage());
         }
     }
 
@@ -652,12 +651,12 @@ public class FileConfigDialog extends BaseDialogSwing {
 
             bf.close();
 
-            JOptionPane.showMessageDialog(this, "บันทึกข้อมูลเรียบร้อยแล้ว [" + fileName + " ]");
-            Log.write.info("บันทึกข้อมูลเรียบร้อยแล้ว [" + fileName + " ]");
+            MessageAlert.infoPopup(this, "บันทึกข้อมูลเรียบร้อยแล้ว [" + fileName + " ]");
+            logger.info("บันทึกข้อมูลเรียบร้อยแล้ว [" + fileName + " ]");
             dispose();
         } catch (IOException ex) {
-            Log.write.error(ex.getMessage() + "\nError writing to file '" + fileName + "'");
-            JOptionPane.showMessageDialog(this, ex.getMessage());
+            logger.error(ex.getMessage() + "\nError writing to file '" + fileName + "'");
+            MessageAlert.errorPopup(this, ex.getMessage());
         }
     }
 
@@ -690,7 +689,7 @@ public class FileConfigDialog extends BaseDialogSwing {
                 ftp_list_dir.append("Start Download.\n");
                 File fileDownload = new File(tempFolder + "/" + fileName);
                 File fileExtract = new File("");
-                
+
                 if (ftp.download(ftp_root_path.getText() + "/" + "update/" + fileName,
                         fileDownload)) {
                     ftp_list_dir.append("Download file " + fileName + " is Success .\n");
@@ -701,7 +700,7 @@ public class FileConfigDialog extends BaseDialogSwing {
                     f.createNewFile();
                     if (ftp.upload(f.getName(), ftp_root_path.getText() + "/log/" + f.getName())) {
                         f.delete();
-                        
+
                         //unzip
                         //ZipUtility zipUtil = new ZipUtility();
                         //zipUtil.unzip(fileDownload, fileExtract);
@@ -715,7 +714,7 @@ public class FileConfigDialog extends BaseDialogSwing {
                 ftp_list_dir.append("Closed Connection.\n");
             }
         } catch (IOException e) {
-            
+
         }
     }
 }

@@ -4,14 +4,12 @@ import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
-import java.sql.ResultSet;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
@@ -19,19 +17,18 @@ import javax.swing.table.JTableHeader;
 import org.apache.log4j.Logger;
 import th.co.cbank.util.DateFormat;
 import th.co.cbank.util.NumberFormat;
-import th.co.cbank.util.ThaiUtil;
 import th.co.cbank.project.constants.AppConstants;
-import th.co.cbank.project.control.MySQLConnect;
 import th.co.cbank.project.control.ViewReport;
 import th.co.cbank.project.model.BranchBean;
 import th.co.cbank.project.model.CbSaveConfigBean;
+import th.co.cbank.project.report.model.OpenAccountReportModel;
 import th.co.cbank.util.DateChooseDialog;
+import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.TableUtil;
 
 public class OpenAccountReport extends BaseDialogSwing {
-    private final Logger logger = Logger.getLogger(OpenAccountReport.class);
 
-    private final DecimalFormat dec = new DecimalFormat("#,##0.00");
+    private final Logger logger = Logger.getLogger(OpenAccountReport.class);
     private final Frame parent;
     private String sqlAll;
 
@@ -430,45 +427,29 @@ public class OpenAccountReport extends BaseDialogSwing {
         TableUtil.clearModel(model);
 
         try {
-            String sql = "select b_start, account_code, type_name,b_fee,typeName,"
-                    + "concat(b_cust_name,' ', b_cust_lastname) cust_name,emp_code,branch_code "
-                    + "from cb_save_account a, cb_save_config s,cb_member_type m "
-                    + "where a.account_type=s.typecode "
-                    + "and a.member_type=m.type_code ";
-
-            if (cbAccType.getSelectedIndex() > 0) {
-                String[] data = cbAccType.getSelectedItem().toString().split("-");
-                sql += " and account_type='" + data[0].trim() + "' ";
-            }
-
-            if (!txtDate1.getText().equals("") && !txtDate2.getText().equals("")) {
-                Date date1 = DateFormat.getLocal_ddMMyyyy(txtDate1.getText());
-                Date date2 = DateFormat.getLocal_ddMMyyyy(txtDate2.getText());
-                sql += " and b_start between '" + DateFormat.getMySQL_Date(date1) + "' and '" + DateFormat.getMySQL_Date(date2) + "' ";
-            }
-
-            sqlAll = sql;
-            ResultSet rs = MySQLConnect.getResultSet(sql);
+            ViewReport viewReport = new ViewReport();
+            List<OpenAccountReportModel> listReport
+                    = viewReport.showAllOpenAccountReport(cbAccType.getSelectedIndex(), cbAccType.getSelectedItem().toString(), txtDate1.getText(), txtDate2.getText());
+            sqlAll = viewReport.getSqlQuery();
             int count = 0;
-            while (rs.next()) {
+            for (OpenAccountReportModel bean : listReport) {
                 count++;
                 model.addRow(new Object[]{
                     count,
-                    DateFormat.getLocale_ddMMyyyy(rs.getDate("b_start")),
-                    rs.getString("account_code"),
-                    ThaiUtil.ASCII2Unicode(rs.getString("type_name")),
-                    NumberFormat.showDouble2(rs.getDouble("b_fee")),
-                    ThaiUtil.ASCII2Unicode(rs.getString("typeName")),
-                    ThaiUtil.ASCII2Unicode(rs.getString("cust_name")),
-                    rs.getString("emp_code"),
-                    rs.getString("branch_code")
+                    DateFormat.getLocale_ddMMyyyy(bean.getB_start()),
+                    bean.getAccount_code(),
+                    bean.getType_name(),
+                    NumberFormat.showDouble2(bean.getB_fee()),
+                    bean.getTypeName(),
+                    bean.getCust_name(),
+                    bean.getEmp_code(),
+                    bean.getBranch_code()
                 });
-
             }
 
-            rs.close();
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
+            MessageAlert.errorPopup(this, e.getMessage());
+            logger.error(e.getMessage());
         }
 
         double totalFee = 0.0;

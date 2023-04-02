@@ -1,20 +1,17 @@
 package th.co.cbank.project.model;
 
-import org.apache.log4j.Logger;
-
 public class SettingBean {
-    private final Logger logger = Logger.getLogger(SettingBean.class);
 
     private double INTEREST = 0.00;
     private double VAT = 0.00;
     private double BASE_DEPOSIT = 0.00;
     private double BASE_WITHDRAWAL = 0.00;
-    
+
     private double INTEREST2 = 0.00;
     private double VAT2 = 0.00;
     private double BASE_DEPOSIT2 = 0.00;
     private double BASE_WITHDRAWAL2 = 0.00;
-    
+
     private String UPDATE_DATE = "";
     private String PWD;
     private int DayCI = 0;
@@ -50,7 +47,7 @@ public class SettingBean {
     public void setBASE_WITHDRAWAL2(double BASE_WITHDRAWAL2) {
         this.BASE_WITHDRAWAL2 = BASE_WITHDRAWAL2;
     }
-    
+
     public int getDayCI() {
         return DayCI;
     }

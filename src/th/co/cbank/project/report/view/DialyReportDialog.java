@@ -13,13 +13,14 @@ import th.co.cbank.project.view.BaseDialogSwing;
 import th.co.cbank.util.DateChooseDialog;
 
 public class DialyReportDialog extends BaseDialogSwing {
+
     private final Logger logger = Logger.getLogger(DialyReportDialog.class);
     private Frame parent;
 
     public DialyReportDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        
+
         this.parent = parent;
         init();
     }
@@ -114,11 +115,6 @@ public class DialyReportDialog extends BaseDialogSwing {
 
         btnFind.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnFind.setText("ค้นหาข้อมูล");
-        btnFind.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnFindActionPerformed(evt);
-            }
-        });
 
         jButton2.setText("...");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
@@ -178,11 +174,6 @@ public class DialyReportDialog extends BaseDialogSwing {
 
         btnPrint.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnPrint.setText("พิมพ์เอกสาร");
-        btnPrint.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnPrintActionPerformed(evt);
-            }
-        });
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel2.setText("ถึง");
@@ -735,14 +726,6 @@ public class DialyReportDialog extends BaseDialogSwing {
         dispose();
     }//GEN-LAST:event_btnCloseActionPerformed
 
-    private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnPrintActionPerformed
-
-    private void btnFindActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnFindActionPerformed
-
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         Point point = txtDate1.getLocationOnScreen();
         point.setLocation(point.getX() + txtDate1.getWidth(), point.getY());
@@ -768,9 +751,9 @@ public class DialyReportDialog extends BaseDialogSwing {
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private void txtDate1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDate1KeyPressed
-        if(evt.getKeyCode()==KeyEvent.VK_ESCAPE){
+        if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
             dispose();
-        }else if(evt.getKeyCode()==KeyEvent.VK_ENTER){
+        } else if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             txtDate2.selectAll();
             txtDate2.requestFocus();
         }
@@ -781,10 +764,10 @@ public class DialyReportDialog extends BaseDialogSwing {
     }//GEN-LAST:event_txtDate1FocusGained
 
     private void txtDate2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDate2KeyPressed
-        if(evt.getKeyCode()==KeyEvent.VK_ESCAPE){
+        if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
             txtDate1.selectAll();
             txtDate1.requestFocus();
-        }else if(evt.getKeyCode()==KeyEvent.VK_ENTER){
+        } else if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             btnFind.requestFocus();
         }
     }//GEN-LAST:event_txtDate2KeyPressed
@@ -864,10 +847,10 @@ public class DialyReportDialog extends BaseDialogSwing {
     private void init() {
         tableDialyReport.setFont(new Font("Tahoma", Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
         tableDialyReport.setRowHeight(30);
-        
+
         JTableHeader tHeader = tableDialyReport.getTableHeader();
         tHeader.setFont(new Font("Tahoma", Font.BOLD, AppConstants.DEFAULT_FONT_SIZE));
-        
+
         txtDate1.setText(DateFormat.getLocale_ddMMyyyy(new Date()));
         txtDate2.setText(DateFormat.getLocale_ddMMyyyy(new Date()));
     }

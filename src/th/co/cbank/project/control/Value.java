@@ -30,7 +30,7 @@ public class Value {
     public static String BRANCH_CODE;
 
     public static int SELECT_CHOICE = 0;
-    
+
     public static void clear() {
         USER_CODE = "";
         USER_NAME = "";

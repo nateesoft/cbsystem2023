@@ -37,7 +37,7 @@ public class ProfileControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return data.split(",");
@@ -55,7 +55,7 @@ public class ProfileControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
 
         }
 
@@ -216,7 +216,7 @@ public class ProfileControl extends BaseControl {
             return mappingBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }
@@ -228,7 +228,7 @@ public class ProfileControl extends BaseControl {
             return mappingBean2(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return listBean;
@@ -246,7 +246,7 @@ public class ProfileControl extends BaseControl {
             return listProfile.get(0);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return null;
         }
     }
@@ -294,7 +294,7 @@ public class ProfileControl extends BaseControl {
             return listProfile.get(0);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return null;
         }
     }
@@ -309,21 +309,21 @@ public class ProfileControl extends BaseControl {
                     + "Dow_Incar_Rai, Dow_Incar_Date, Dow_Incar_Tree, P_Down_Fee, P_Prefix,p_member_type,"
                     + "ApproveLimit, Card_Expire) "
                     + "values('" + bean.getP_index() + "','" + bean.getP_custCode() + "','" + bean.getP_custType() + "',"
-                    + "'" + bean.getP_custName() + "','" + bean.getP_custSurname() + "',"
+                    + "'" + ThaiUtil.Unicode2ASCII(bean.getP_custName()) + "','" + ThaiUtil.Unicode2ASCII(bean.getP_custSurname()) + "',"
                     + "'" + DateFormat.getMySQL_Date(bean.getP_custBirthDay()) + "',"
-                    + "'" + bean.getP_custAge() + "','" + bean.getP_custSex() + "','" + bean.getP_custOccupation() + "',"
-                    + "'" + bean.getP_custNation() + "','" + bean.getP_cust_status() + "','" + bean.getP_cust_religion() + "',"
+                    + "'" + bean.getP_custAge() + "','" + bean.getP_custSex() + "','" + ThaiUtil.Unicode2ASCII(bean.getP_custOccupation()) + "',"
+                    + "'" + ThaiUtil.Unicode2ASCII(bean.getP_custNation()) + "','" + bean.getP_cust_status() + "','" + ThaiUtil.Unicode2ASCII(bean.getP_cust_religion()) + "',"
                     + "'" + DateFormat.getMySQL_Date(bean.getP_member_start()) + "',"
                     + "'" + DateFormat.getMySQL_Date(bean.getP_member_end()) + "',"
-                    + "'" + bean.getP_spouse_name() + "',"
-                    + "'" + bean.getP_spouse_surname() + "','" + bean.getP_spouse_sex() + "','" + bean.getP_cust_pic_url() + "',"
-                    + "'" + bean.getP_fee() + "','" + bean.getStatus() + "','" + bean.getHoon_Qty() + "',"
+                    + "'" + ThaiUtil.Unicode2ASCII(bean.getP_spouse_name()) + "',"
+                    + "'" + ThaiUtil.Unicode2ASCII(bean.getP_spouse_surname()) + "','" + ThaiUtil.Unicode2ASCII(bean.getP_spouse_sex()) + "','" + bean.getP_cust_pic_url() + "',"
+                    + "'" + bean.getP_fee() + "','" + ThaiUtil.Unicode2ASCII(bean.getStatus()) + "','" + bean.getHoon_Qty() + "',"
                     + "'" + bean.getMember_Point() + "','" + bean.getAR_Balance() + "','" + bean.getSave_Balance() + "',"
                     + "'" + bean.getLoan_Balance() + "','" + bean.getLoan_Credit_Amt() + "','" + bean.getLoan_Credit_Balance() + "',"
                     + "'" + bean.getDowInCar_Target_Rai() + "',"
                     + "'" + DateFormat.getMySQL_Date(bean.getDowInCar_Target_Date()) + "',"
                     + "'" + bean.getDowInCar_Target_Tree() + "', '" + bean.getP_down_fee() + "',"
-                    + "'" + bean.getP_prefix() + "','" + bean.getP_member_type() + "','" + bean.getApproveLimit() + "',"
+                    + "'" + ThaiUtil.Unicode2ASCII(bean.getP_prefix()) + "','" + bean.getP_member_type() + "','" + bean.getApproveLimit() + "',"
                     + "'" + DateFormat.getMySQL_Date(bean.getCard_Expire()) + "')";
             String sqlChk = "select * from cb_profile where p_custCode='" + bean.getP_custCode() + "' ";
             ResultSet rs = MySQLConnect.getResultSet(sqlChk);
@@ -337,8 +337,7 @@ public class ProfileControl extends BaseControl {
             return true;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
-
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return false;
@@ -375,9 +374,8 @@ public class ProfileControl extends BaseControl {
                     + "where p_custCode='" + bean.getP_custCode() + "'";
             update(sql);
         } catch (Exception e) {
-
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -393,7 +391,7 @@ public class ProfileControl extends BaseControl {
             return mappingBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList<>();
         }
     }
@@ -437,7 +435,7 @@ public class ProfileControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
 
         }
     }
@@ -458,8 +456,7 @@ public class ProfileControl extends BaseControl {
             return "" + max;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
-
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return "1";
@@ -476,7 +473,7 @@ public class ProfileControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return pMax;
@@ -519,7 +516,7 @@ public class ProfileControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return hoonQty;
@@ -562,6 +559,17 @@ public class ProfileControl extends BaseControl {
             logger.error(e.getMessage());
             MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return -1;
+        }
+    }
+
+    public void updateSaveBalance(double cMoney, String p_custCode) {
+        try {
+            String sql = "update cb_profile set Save_Balance=Save_Balance-" + cMoney + " "
+                    + "where P_CustCode='" + p_custCode + "'";
+            MySQLConnect.exeUpdate(sql);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 }

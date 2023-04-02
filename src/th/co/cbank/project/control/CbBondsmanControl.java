@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;
 import th.co.cbank.util.ThaiUtil;
-import th.co.cbank.project.log.Log;
 import th.co.cbank.project.model.CbBondsmanBean;
 import th.co.cbank.util.MessageAlert;
 
@@ -36,7 +35,7 @@ public class CbBondsmanControl extends BaseControl {
             return mappingBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }
@@ -48,7 +47,7 @@ public class CbBondsmanControl extends BaseControl {
             return mappingBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }
@@ -64,7 +63,7 @@ public class CbBondsmanControl extends BaseControl {
             return listBean.get(0);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return null;
         }
     }
@@ -77,7 +76,7 @@ public class CbBondsmanControl extends BaseControl {
             update(sql);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -98,21 +97,17 @@ public class CbBondsmanControl extends BaseControl {
             } else {
                 update(sql);
                 //ลบจำนวนที่สามารถค้ำประกันได้ออกไป
-                try {
-                    String sql2 = "update cb_profile set "
-                            + "ApproveLimit=ApproveLimit-1 "
-                            + "where p_custCode='" + bean.getIdcard() + "';";
-                    update(sql2);
-                } catch (Exception e) {
-                    Log.write.error(e.getMessage());
-                }
+                String sql2 = "update cb_profile set "
+                        + "ApproveLimit=ApproveLimit-1 "
+                        + "where p_custCode='" + bean.getIdcard() + "';";
+                update(sql2);
                 isSave = true;
             }
 
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return isSave;
@@ -129,7 +124,7 @@ public class CbBondsmanControl extends BaseControl {
             return true;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return false;

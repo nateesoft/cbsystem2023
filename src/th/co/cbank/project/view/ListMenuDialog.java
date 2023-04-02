@@ -48,7 +48,7 @@ public class ListMenuDialog extends BaseDialogSwing {
             btnTransferHoon.setEnabled(false);
             btnOpenLoan.setEnabled(false);
         }
-        
+
         if (saveAccountBean == null) {
             btnBuyHoon.setEnabled(false);
             btnSaleHoon.setEnabled(false);

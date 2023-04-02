@@ -1,10 +1,9 @@
 package th.co.cbank.project.model;
 
 import java.util.Date;
-import org.apache.log4j.Logger;
 
 public class ConfigBean {
-    private final Logger logger = Logger.getLogger(ConfigBean.class);
+
     private String SaveDocType;//
     private String SaveDocPrefix;//
     private int SaveDocRunning = 1;//
@@ -71,7 +70,7 @@ public class ConfigBean {
 
     public void setFeeAmt(double FeeAmt) {
         this.FeeAmt = FeeAmt;
-    }    
+    }
 
     public String getFeePrefix() {
         return FeePrefix;

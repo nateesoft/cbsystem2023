@@ -3,24 +3,22 @@ package th.co.cbank.project.view;
 import java.awt.Frame;
 import java.awt.event.KeyEvent;
 import java.io.File;
-import java.sql.ResultSet;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-import javax.swing.JOptionPane;
 import org.apache.log4j.Logger;
 import th.co.cbank.project.control.CbSaveAccountControl;
-import th.co.cbank.project.control.MySQLConnect;
+import th.co.cbank.project.control.CbUserControl;
 import th.co.cbank.util.DateFormat;
 import th.co.cbank.project.control.Value;
 import th.co.cbank.util.ReadText;
 import th.co.cbank.util.ScrollText;
-import th.co.cbank.util.ThaiUtil;
 import th.co.cbank.project.control.PrintCOM;
-import th.co.cbank.project.log.Log;
 import th.co.cbank.project.model.BranchBean;
+import th.co.cbank.project.model.CbGroupBean;
 import th.co.cbank.project.model.CbSaveAccountBean;
+import th.co.cbank.project.model.CbUserBean;
 import th.co.cbank.util.MessageAlert;
 
 public class LoginDialog extends BaseDialogSwing {
@@ -337,43 +335,26 @@ public class LoginDialog extends BaseDialogSwing {
         }
 
         logger.info("Start Login: " + txtUser.getText());
+
+        CbUserControl userControl = new CbUserControl();
+        CbUserBean userBean = userControl.getUserAndPass(txtUser.getText().trim(), txtPass.getText().trim());
         try {
-            String sql = "select * from cb_user "
-                    + "where username='" + txtUser.getText().trim() + "' "
-                    + "and password=md5('" + txtPass.getText().trim() + "') ";
-            Log.write.info("Login by MD5");
-            ResultSet rs = MySQLConnect.getResultSet(sql);
-            if (rs.next()) {
+            if (userBean != null) {
                 txtUser.setText("");
                 txtPass.setText("");
-                Value.USER_CODE = rs.getString("Username");
-                Value.USER_NAME = ThaiUtil.ASCII2Unicode(rs.getString("Name"));
+                Value.USER_CODE = userBean.getUsername();
+                Value.USER_NAME = userBean.getName();
                 Value.USER_TIME = sdf.format(new Date());
-                Value.USER_LAST_NAME = ThaiUtil.ASCII2Unicode(rs.getString("lastname"));
+                Value.USER_LAST_NAME = userBean.getLastname();
 
                 BranchBean branchBean = getBranchControl().getData();
                 Value.BRANCH_CODE = branchBean.getCode();
 
-                getLoginControl().updateLogin(Value.USER_CODE, Value.USER_NAME, "Success", getTitle());
+                getLoginControl().updateLogin(userBean.getUsername(), Value.USER_NAME, "Success", getTitle());
 
-                try {
-                    String sql2 = "select permission from cb_group g, cb_user u "
-                            + "where g.groupcode=u.usergroup "
-                            + "and username = '" + Value.USER_CODE + "'";
-                    ResultSet rss = MySQLConnect.getResultSet(sql2);
-                    String strPer = "";
-                    if (rss.next()) {
-                        strPer = rss.getString("permission");
-                    }
-
-                    String[] per = strPer.split(",");
-                    System.arraycopy(per, 0, Value.ACCESS, 0, per.length);
-
-                    rss.close();
-                } catch (Exception e) {
-                    System.err.println(e);
-                    Log.write.error(e.getMessage());
-                }
+                CbGroupBean groupBean = userControl.getPermission(userBean.getUsername());
+                String[] per = groupBean.getPermission().split(",");
+                System.arraycopy(per, 0, Value.ACCESS, 0, per.length);
 
                 PrintCOM printCom = new PrintCOM();
                 printCom.printLOG("Login by ... " + Value.USER_CODE + "   Start time: " + DateFormat.getLocale_ddMMyyyy(new Date()));
@@ -397,10 +378,9 @@ public class LoginDialog extends BaseDialogSwing {
 
                 dispose();
                 parent.setVisible(true);
-                rs.close();
             } else {
-                JOptionPane.showMessageDialog(this, "รหัสผู้ใช้งานไม่ถูกต้อง หรือมีผู้ใช้งานอยู่แล้ว กรุณาตรวจสอบ !!!", "ERROR", JOptionPane.ERROR_MESSAGE);
-                Log.write.error("รหัสผู้ใช้งานไม่ถูกต้อง หรือมีผู้ใช้งานอยู่แล้ว กรุณาตรวจสอบ !!!");
+                MessageAlert.errorPopup(this, "รหัสผู้ใช้งานไม่ถูกต้อง หรือมีผู้ใช้งานอยู่แล้ว กรุณาตรวจสอบ !!!");
+                logger.error("รหัสผู้ใช้งานไม่ถูกต้อง หรือมีผู้ใช้งานอยู่แล้ว กรุณาตรวจสอบ !!!");
                 txtUser.setText("");
                 txtUser.requestFocus();
                 txtPass.setText("");
@@ -410,8 +390,8 @@ public class LoginDialog extends BaseDialogSwing {
             }
 
         } catch (Exception e) {
-            Log.write.error(e.getMessage());
-            JOptionPane.showMessageDialog(this, "ไม่สามารถเข้าสู่ระบบได้ เนื่องจากเกิดปัญหาในการเชื่อมต่อฐานข้อมูล", "Error Login", JOptionPane.ERROR_MESSAGE);
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this, "ไม่สามารถเข้าสู่ระบบได้ เนื่องจากเกิดปัญหาในการเชื่อมต่อฐานข้อมูล");
             txtUser.setText("");
             txtUser.requestFocus();
             txtPass.setText("");

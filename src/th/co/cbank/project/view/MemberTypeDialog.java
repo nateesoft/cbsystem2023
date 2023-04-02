@@ -2,18 +2,17 @@ package th.co.cbank.project.view;
 
 import java.awt.Font;
 import java.awt.event.KeyEvent;
-import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import org.apache.log4j.Logger;
-import th.co.cbank.util.ThaiUtil;
 import th.co.cbank.project.constants.AppConstants;
 import th.co.cbank.project.model.CbMemberTypeBean;
+import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.TableUtil;
 
 public class MemberTypeDialog extends BaseDialogSwing {
+
     private final Logger logger = Logger.getLogger(MemberTypeDialog.class);
 
     public MemberTypeDialog(java.awt.Frame parent, boolean modal) {
@@ -221,19 +220,18 @@ public class MemberTypeDialog extends BaseDialogSwing {
     }//GEN-LAST:event_btnResetActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        if(txtTypeCode.getText().equals("")){
+        if (txtTypeCode.getText().equals("")) {
             txtTypeCode.requestFocus();
-        }else if(txtTypeName.getText().equals("")){
+        } else if (txtTypeName.getText().equals("")) {
             txtTypeName.requestFocus();
-        }else{
+        } else {
             CbMemberTypeBean bean = new CbMemberTypeBean();
             bean.setTypeCode(txtTypeCode.getText());
-            bean.setTypeName(ThaiUtil.Unicode2ASCII(txtTypeName.getText()));
+            bean.setTypeName(txtTypeName.getText());
             bean.setMemberCount(jComboBox1.getSelectedIndex() + 1);
 
-            
             if (getMemberTypeControl().saveMemberType(bean)) {
-                JOptionPane.showMessageDialog(this, "บันทึกข้อมูลเรียบร้อยแล้ว");
+                MessageAlert.infoPopup(this, "บันทึกข้อมูลเรียบร้อยแล้ว");
                 loadMemberTypeData();
             }
         }
@@ -241,9 +239,9 @@ public class MemberTypeDialog extends BaseDialogSwing {
 
     private void txtTypeCodeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTypeCodeKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            if(!txtTypeCode.getText().equals("")){
+            if (!txtTypeCode.getText().equals("")) {
                 txtTypeName.requestFocus();
-            }else{
+            } else {
                 txtTypeCode.requestFocus();
             }
         } else if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
@@ -253,11 +251,11 @@ public class MemberTypeDialog extends BaseDialogSwing {
 
     private void txtTypeNameKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtTypeNameKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            if(!txtTypeName.getText().equals("")){
+            if (!txtTypeName.getText().equals("")) {
                 jComboBox1.requestFocus();
-            }else{
+            } else {
                 txtTypeName.requestFocus();
-            }            
+            }
         }
     }//GEN-LAST:event_txtTypeNameKeyPressed
 
@@ -274,9 +272,9 @@ public class MemberTypeDialog extends BaseDialogSwing {
                 CbMemberTypeBean bean = getMemberTypeControl().listMemberType("" + tbMemberType.getValueAt(rows, 0));
                 txtTypeCode.setText(bean.getTypeCode());
                 txtTypeName.setText(bean.getTypeName());
-                if(bean.getMemberCount()>1){
+                if (bean.getMemberCount() > 1) {
                     jComboBox1.setSelectedIndex(1);
-                }else{
+                } else {
                     jComboBox1.setSelectedIndex(0);
                 }
 

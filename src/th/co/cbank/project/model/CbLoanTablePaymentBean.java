@@ -1,10 +1,9 @@
 package th.co.cbank.project.model;
 
 import java.util.Date;
-import org.apache.log4j.Logger;
 
 public class CbLoanTablePaymentBean {
-    private final Logger logger = Logger.getLogger(CbLoanTablePaymentBean.class);
+
     private String loan_doc_no;//
     private int loan_index = 0;//
     private double loan_int_ar_lost = 0.00;//
@@ -161,7 +160,7 @@ public class CbLoanTablePaymentBean {
 
     @Override
     public String toString() {
-        return "CbLoanTablePaymentBean{" + "logger=" + logger + ", loan_doc_no=" + loan_doc_no + ", loan_index=" + loan_index + ", loan_int_ar_lost=" + loan_int_ar_lost + ", loan_int_ar_mgr=" + loan_int_ar_mgr + ", loan_int_ar_int=" + loan_int_ar_int + ", net_total_pay=" + net_total_pay + ", payment_money=" + payment_money + ", payment_balance=" + payment_balance + ", payment_fee=" + payment_fee + ", base_total_amount=" + base_total_amount + ", table_avg_compute=" + table_avg_compute + ", balance_amount=" + balance_amount + ", due_date=" + due_date + ", sys_date=" + sys_date + ", sys_time=" + sys_time + ", emp_code=" + emp_code + ", branch_code=" + branch_code + '}';
+        return "CbLoanTablePaymentBean{" + "loan_doc_no=" + loan_doc_no + ", loan_index=" + loan_index + ", loan_int_ar_lost=" + loan_int_ar_lost + ", loan_int_ar_mgr=" + loan_int_ar_mgr + ", loan_int_ar_int=" + loan_int_ar_int + ", net_total_pay=" + net_total_pay + ", payment_money=" + payment_money + ", payment_balance=" + payment_balance + ", payment_fee=" + payment_fee + ", base_total_amount=" + base_total_amount + ", table_avg_compute=" + table_avg_compute + ", balance_amount=" + balance_amount + ", due_date=" + due_date + ", sys_date=" + sys_date + ", sys_time=" + sys_time + ", emp_code=" + emp_code + ", branch_code=" + branch_code + '}';
     }
 
 }

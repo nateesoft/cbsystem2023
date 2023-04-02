@@ -217,4 +217,40 @@ public class ConfigControl extends BaseControl {
         }
     }
 
+    public void resetDB() {
+        try {
+            String sql = "update cb_profile set "
+                    + "Hoon_Qty='0',"
+                    + "Member_Point='0',"
+                    + "AR_Balance='0.00',"
+                    + "Save_Balance='0.00',"
+                    + "Loan_Balance='0.00',"
+                    + "Loan_Credit_Balance=Loan_Credit_Amt,"
+                    + "status='" + ThaiUtil.Unicode2ASCII("ยังไม่เปิดบัญชี") + "',"
+                    + "dow_incar_rai='0', dow_incar_tree='0',p_down_fee='0',p_prefix='¤Ø³' ";
+            MySQLConnect.exeUpdate(sql);
+            MySQLConnect.exeUpdate("update cb_save_config set SaveRunning='1',NoRunning='1'");
+            MySQLConnect.exeUpdate("truncate cb_save_account");
+            MySQLConnect.exeUpdate("truncate cb_transaction_save");
+            MySQLConnect.exeUpdate("truncate cb_transaction_loan");
+            MySQLConnect.exeUpdate("truncate cb_loan_account");
+            MySQLConnect.exeUpdate("truncate cb_loan_table");
+            MySQLConnect.exeUpdate("truncate cb_loan_transaction");
+            MySQLConnect.exeUpdate("update cb_loan_config set LoanRunning='1',BookNo='1'");
+            MySQLConnect.exeUpdate("delete from cb_bondsman");
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+    }
+
+    public void updateWithdrawDocRunning() {
+        try {
+            MySQLConnect.exeUpdate("update cb_config set WithdrawDocRunning=WithdrawDocRunning+1");
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+    }
+
 }

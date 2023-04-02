@@ -7,20 +7,22 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
+import org.apache.log4j.Logger;
 import th.co.cbank.util.DateFormat;
 import th.co.cbank.util.NumberFormat;
 import th.co.cbank.project.constants.AppConstants;
 import th.co.cbank.project.control.ViewReport;
 import th.co.cbank.project.report.model.ReportInvoiceHoonModel;
+import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.TableUtil;
 
 public class ReportInvoiceHoon extends javax.swing.JDialog {
 
+    private final Logger logger = Logger.getLogger(ReportInvoiceHoon.class);
     private DefaultTableModel model;
 
     public ReportInvoiceHoon(java.awt.Frame parent, boolean modal) {
@@ -107,11 +109,6 @@ public class ReportInvoiceHoon extends javax.swing.JDialog {
         jLabel6.setText("เลขที่บัญชี :");
 
         txtAccountCode.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtAccountCode.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtAccountCodeKeyPressed(evt);
-            }
-        });
 
         btnFind.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnFind.setText("ค้นหาข้อมูล");
@@ -241,13 +238,9 @@ public class ReportInvoiceHoon extends javax.swing.JDialog {
         find();
     }//GEN-LAST:event_btnFindActionPerformed
 
-    private void txtAccountCodeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAccountCodeKeyPressed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtAccountCodeKeyPressed
-
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
-        int iCon = JOptionPane.showConfirmDialog(this, "ท่านต้องการพิมพ์ข้อมูลทั้งหมด " + tableData.getRowCount() + " รายการใช่หรือไม่ !");
-        if (iCon == JOptionPane.YES_OPTION) {
+        int iCon = MessageAlert.showConfirm(this, "ท่านต้องการพิมพ์ข้อมูลทั้งหมด " + tableData.getRowCount() + " รายการใช่หรือไม่ !");
+        if (iCon == MessageAlert.YES_OPTION) {
             this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
             printAll();
             this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -279,12 +272,12 @@ public class ReportInvoiceHoon extends javax.swing.JDialog {
 
     private void printPerson(String idCard, String accCode, String address) {
         ViewReport view = new ViewReport();
-        Map m = new HashMap();
-        m.put("date", DateFormat.getEnglish_ddMMyyyy(new Date()));
-        m.put("idCard", idCard);
-        m.put("accountNo", accCode);
-        m.put("address", address);
-        view.printSample(m, AppConstants.JASPER_INVOICE_HOON_REPORT);
+        Map params = new HashMap();
+        params.put("date", DateFormat.getEnglish_ddMMyyyy(new Date()));
+        params.put("idCard", idCard);
+        params.put("accountNo", accCode);
+        params.put("address", address);
+        view.printSample(params, AppConstants.JASPER_INVOICE_HOON_REPORT);
     }
 
     private void printAll() {
@@ -354,7 +347,7 @@ public class ReportInvoiceHoon extends javax.swing.JDialog {
             String address = "" + tableData.getValueAt(tableData.getSelectedRow(), 11);
             printPerson(idCard, accountCode, address);
         } else {
-            JOptionPane.showMessageDialog(this, "กรุณาเลือกข้อมูลที่ต้องการพิมพ์");
+            MessageAlert.warningPopup(this, "กรุณาเลือกข้อมูลที่ต้องการพิมพ์");
         }
     }
 }

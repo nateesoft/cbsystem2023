@@ -11,6 +11,7 @@ import th.co.cbank.project.model.CbLoanTablePaymentBean;
 import th.co.cbank.util.MessageAlert;
 
 public class CbLoanTablePaymentControl extends BaseControl {
+
     private final Logger logger = Logger.getLogger(CbLoanTablePaymentControl.class);
 
     public List<CbLoanTablePaymentBean> mappingBean(ResultSet rs) throws Exception {
@@ -49,7 +50,7 @@ public class CbLoanTablePaymentControl extends BaseControl {
             return mappingBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }
@@ -63,7 +64,7 @@ public class CbLoanTablePaymentControl extends BaseControl {
             return mappingBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }
@@ -81,7 +82,7 @@ public class CbLoanTablePaymentControl extends BaseControl {
             return listBean.get(0);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return null;
         }
     }
@@ -97,7 +98,7 @@ public class CbLoanTablePaymentControl extends BaseControl {
             return listBean.get(0);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return null;
         }
     }
@@ -138,7 +139,7 @@ public class CbLoanTablePaymentControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -167,7 +168,7 @@ public class CbLoanTablePaymentControl extends BaseControl {
             update(sql);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -188,7 +189,7 @@ public class CbLoanTablePaymentControl extends BaseControl {
             return rs;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
         return null;
     }

@@ -18,14 +18,12 @@ import java.util.Date;
 import java.util.List;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import org.apache.log4j.Logger;
 import th.co.cbank.util.DateFormat;
 import th.co.cbank.util.NumberFormat;
-import th.co.cbank.util.ThaiUtil;
 import th.co.cbank.project.constants.AppConstants;
 import th.co.cbank.project.control.CbProfileControl;
 import th.co.cbank.project.control.ConfigControl;
@@ -39,6 +37,7 @@ import th.co.cbank.project.model.CbPrefixBean;
 import th.co.cbank.project.model.CbProjectBean;
 import th.co.cbank.util.DateChooseDialog;
 import th.co.cbank.util.ImagePreviewPanel;
+import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.TableUtil;
 
 public class SavingDialog extends BaseDialogSwing {
@@ -2094,7 +2093,7 @@ public class SavingDialog extends BaseDialogSwing {
         boolean isValid = false;
         if (cbMemberType.getSelectedIndex() == 1) {
             if (tbListPersonApp.getRowCount() == 0) {
-                JOptionPane.showMessageDialog(this, "กรุณาเลือกสมาชิกเข้าร่วมกลุ่ม !");
+                MessageAlert.warningPopup(this, "กรุณาเลือกสมาชิกเข้าร่วมกลุ่ม !");
                 jTabbedPane2.setSelectedIndex(4);
                 txtCustAppCode.requestFocus();
             } else {
@@ -2110,12 +2109,12 @@ public class SavingDialog extends BaseDialogSwing {
                 txtFeeMember.setEditable(true);
                 jButton1.setEnabled(true);
                 if (!isRegister) {//เป็นการแก้ไขข้อมูล
-                    JOptionPane.showMessageDialog(this, "บันทึกข้อมูลเรียบร้อยแล้ว");
+                    MessageAlert.infoPopup(this, "บันทึกข้อมูลเรียบร้อยแล้ว");
                     dispose();
                 } else {
-                    int iConfirm = JOptionPane.showConfirmDialog(this, "บันทึกข้อมูลเรียบร้อยแล้ว ท่านต้องการบันทึกค่าธรรมเนียมต่อหรือไม่ ?");
+                    int iConfirm = MessageAlert.showConfirm(this, "บันทึกข้อมูลเรียบร้อยแล้ว ท่านต้องการบันทึกค่าธรรมเนียมต่อหรือไม่ ?");
                     btnExit.setVisible(true);
-                    if (iConfirm == JOptionPane.YES_OPTION) {
+                    if (iConfirm == MessageAlert.YES_OPTION) {
                         jTabbedPane2.setSelectedIndex(5);
                     } else {
                         clearForm();
@@ -2227,7 +2226,7 @@ public class SavingDialog extends BaseDialogSwing {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         if (saveData()) {
             printFee();
-            JOptionPane.showMessageDialog(this, "บันทึกข้อมูลเรียบร้อยแล้ว");
+            MessageAlert.infoPopup(this, "บันทึกข้อมูลเรียบร้อยแล้ว");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -2450,9 +2449,8 @@ public class SavingDialog extends BaseDialogSwing {
     }//GEN-LAST:event_btnMemStartDateActionPerformed
 
     private void chkDisableMemberMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_chkDisableMemberMouseClicked
-        int conf = JOptionPane.showConfirmDialog(this, "ท่านต้องการยกเลิกสมาชิกนี้ใช้หรือไม่ ?", "ยืนยันการยกเลิกสมาชิก",
-                JOptionPane.YES_NO_OPTION, JOptionPane.WARNING_MESSAGE);
-        if (conf == JOptionPane.YES_OPTION) {
+        int conf = MessageAlert.showConfirm(this, "ท่านต้องการยกเลิกสมาชิกนี้ใช้หรือไม่ ?");
+        if (conf == MessageAlert.YES_OPTION) {
             if (processCancelMember()) {
                 getEnableControl().enableComponents(jTabbedPane1, false);
 
@@ -2937,7 +2935,7 @@ public class SavingDialog extends BaseDialogSwing {
         String idCard = txtCode.getText();
 
         if (idCard.trim().equals("")) {
-            JOptionPane.showMessageDialog(this, "กรุณาระบุรหัสบัตรประชาชน/รหัสกลุ่มสมาชิก !");
+            MessageAlert.warningPopup(this, "กรุณาระบุรหัสบัตรประชาชน/รหัสกลุ่มสมาชิก !");
             txtCode.setText("");
             txtCode.requestFocus();
             return false;
@@ -2945,12 +2943,12 @@ public class SavingDialog extends BaseDialogSwing {
 
         if (cbMemberType.getSelectedIndex() == 0) {
             if (idCard.trim().length() != 13) {
-                JOptionPane.showMessageDialog(this, "รหัสบัตรประชาชนต้องเป็น 13 หลักเท่านั้น");
+                MessageAlert.warningPopup(this, "รหัสบัตรประชาชนต้องเป็น 13 หลักเท่านั้น");
                 txtCode.setText("");
                 txtCode.requestFocus();
                 return false;
             } else if (!PIDCheck.checkPID(idCard)) {
-                JOptionPane.showMessageDialog(this, "ท่านระบุรหัสบัตรประชาชนไม่ถูกต้อง กรุณาตรวจสอบ");
+                MessageAlert.warningPopup(this, "ท่านระบุรหัสบัตรประชาชนไม่ถูกต้อง กรุณาตรวจสอบ");
                 txtCode.setText("");
                 txtCode.requestFocus();
                 return false;
@@ -2958,11 +2956,11 @@ public class SavingDialog extends BaseDialogSwing {
         }
 
         if (txtName.getText().trim().equals("")) {
-            JOptionPane.showMessageDialog(this, "กรุณาระบุชื่อด้วย");
+            MessageAlert.warningPopup(this, "กรุณาระบุชื่อด้วย");
             txtName.requestFocus();
             return false;
         } else if (!feeCheck) {
-            JOptionPane.showMessageDialog(this, "ค่าธรรมเนียมต้องเป็นตัวเลขเท่านั้น");
+            MessageAlert.warningPopup(this, "ค่าธรรมเนียมต้องเป็นตัวเลขเท่านั้น");
             return false;
         } else {
             ProfileBean bean = new ProfileBean();
@@ -2973,8 +2971,8 @@ public class SavingDialog extends BaseDialogSwing {
             bean.setApproveLimit(Integer.parseInt(txtApproveLimit.getText()));
 
             bean.setP_custCode(idCard);
-            bean.setP_custName(ThaiUtil.Unicode2ASCII(txtName.getText()));
-            bean.setP_custSurname(ThaiUtil.Unicode2ASCII(txtSurname.getText()));
+            bean.setP_custName(txtName.getText());
+            bean.setP_custSurname(txtSurname.getText());
             bean.setP_custAge(Integer.parseInt(txtAge.getText()));
 
             bean.setP_custBirthDay(DateFormat.getLocal_ddMMyyyy(txtDate.getText()));
@@ -3006,14 +3004,14 @@ public class SavingDialog extends BaseDialogSwing {
             }
             bean.setP_cust_status(status);
             if (isRegister) {
-                bean.setStatus(ThaiUtil.Unicode2ASCII("ยังไม่เปิดบัญชี"));
+                bean.setStatus("ยังไม่เปิดบัญชี");
             } else {
                 ProfileBean bbBean = getProfileControl().listCbProfile(bean.getP_custCode());
-                bean.setStatus(ThaiUtil.Unicode2ASCII(bbBean.getStatus()));
+                bean.setStatus(bbBean.getStatus());
             }
-            bean.setP_custOccupation(ThaiUtil.Unicode2ASCII(txtOccupation.getText()));
-            bean.setP_custNation(ThaiUtil.Unicode2ASCII(txtNation.getText()));
-            bean.setP_cust_religion(ThaiUtil.Unicode2ASCII("" + cbReligion.getSelectedItem()));
+            bean.setP_custOccupation(txtOccupation.getText());
+            bean.setP_custNation(txtNation.getText());
+            bean.setP_cust_religion("" + cbReligion.getSelectedItem());
 
             String sex;
             switch (cbSex.getSelectedIndex()) {
@@ -3041,9 +3039,9 @@ public class SavingDialog extends BaseDialogSwing {
                     break;
             }
 
-            bean.setP_spouse_name(ThaiUtil.Unicode2ASCII(txtSpouseName.getText()));
-            bean.setP_spouse_surname(ThaiUtil.Unicode2ASCII(txtSpouseSurname.getText()));
-            bean.setP_spouse_sex(ThaiUtil.Unicode2ASCII(sex2));
+            bean.setP_spouse_name(txtSpouseName.getText());
+            bean.setP_spouse_surname(txtSpouseSurname.getText());
+            bean.setP_spouse_sex(sex2);
 
             try {
                 bean.setP_fee(Double.parseDouble(txtFeeMember.getText()));
@@ -3088,9 +3086,9 @@ public class SavingDialog extends BaseDialogSwing {
             }
 
             if (cb_prefix.getItemCount() == 0) {
-                bean.setP_prefix(ThaiUtil.Unicode2ASCII("คุณ"));
+                bean.setP_prefix("คุณ");
             } else {
-                bean.setP_prefix(ThaiUtil.Unicode2ASCII("" + cb_prefix.getSelectedItem()));
+                bean.setP_prefix("" + cb_prefix.getSelectedItem());
             }
 
             if (cbMemberType.getItemCount() == 0) {
@@ -3125,12 +3123,12 @@ public class SavingDialog extends BaseDialogSwing {
                 AddressBean aBean1 = new AddressBean();
                 aBean1.setAddr_No(txtAddNo1.getText());
                 aBean1.setAddr_Moo(txtAddrMoo1.getText());
-                aBean1.setAddr_MooName(ThaiUtil.Unicode2ASCII(txtAddrMooName1.getText()));
-                aBean1.setAddr_Road(ThaiUtil.Unicode2ASCII(txtAddrRoad1.getText()));
-                aBean1.setAddr_Soi(ThaiUtil.Unicode2ASCII(txtAddrSoi1.getText()));
-                aBean1.setAddr_Tambon(ThaiUtil.Unicode2ASCII(txtAddrTambon1.getText()));
-                aBean1.setAddr_Aumphur(ThaiUtil.Unicode2ASCII(txtAddrAmphur1.getText()));
-                aBean1.setAddr_Province(ThaiUtil.Unicode2ASCII(txtAddrProvince1.getText()));
+                aBean1.setAddr_MooName(txtAddrMooName1.getText());
+                aBean1.setAddr_Road(txtAddrRoad1.getText());
+                aBean1.setAddr_Soi(txtAddrSoi1.getText());
+                aBean1.setAddr_Tambon(txtAddrTambon1.getText());
+                aBean1.setAddr_Aumphur(txtAddrAmphur1.getText());
+                aBean1.setAddr_Province(txtAddrProvince1.getText());
                 aBean1.setAddr_Post(txtAddrPost1.getText());
                 aBean1.setAddr_type("1");
                 aBean1.setAddr_Mobile(txtAddrMobile1.getText());
@@ -3155,12 +3153,12 @@ public class SavingDialog extends BaseDialogSwing {
                 } else {
                     aBean2.setAddr_No(txtAddrNo2.getText());
                     aBean2.setAddr_Moo(txtAddrMoo2.getText());
-                    aBean2.setAddr_MooName(ThaiUtil.Unicode2ASCII(txtAddrMooName2.getText()));
-                    aBean2.setAddr_Road(ThaiUtil.Unicode2ASCII(txtAddrRoad2.getText()));
-                    aBean2.setAddr_Soi(ThaiUtil.Unicode2ASCII(txtAddrSoi2.getText()));
-                    aBean2.setAddr_Tambon(ThaiUtil.Unicode2ASCII(txtAddrTambon2.getText()));
-                    aBean2.setAddr_Aumphur(ThaiUtil.Unicode2ASCII(txtAddrAmphur2.getText()));
-                    aBean2.setAddr_Province(ThaiUtil.Unicode2ASCII(txtAddrProvince2.getText()));
+                    aBean2.setAddr_MooName(txtAddrMooName2.getText());
+                    aBean2.setAddr_Road(txtAddrRoad2.getText());
+                    aBean2.setAddr_Soi(txtAddrSoi2.getText());
+                    aBean2.setAddr_Tambon(txtAddrTambon2.getText());
+                    aBean2.setAddr_Aumphur(txtAddrAmphur2.getText());
+                    aBean2.setAddr_Province(txtAddrProvince2.getText());
                     aBean2.setAddr_Post(txtAddrPost2.getText());
                     aBean2.setAddr_type("2");
                     aBean2.setAddr_Mobile("");
@@ -3182,21 +3180,21 @@ public class SavingDialog extends BaseDialogSwing {
                 if (jCheckBox4.isSelected()) {
                     aBean3 = aBean1;
                     aBean3.setAddr_type("3");
-                    aBean3.setCompany_Name(ThaiUtil.Unicode2ASCII(txtAddr3ComName.getText()));
+                    aBean3.setCompany_Name(txtAddr3ComName.getText());
                 } else {
                     aBean3.setAddr_No(txtAddrNo3.getText());
                     aBean3.setAddr_Moo(txtAddrMoo3.getText());
-                    aBean3.setAddr_MooName(ThaiUtil.Unicode2ASCII(txtAddrMooName3.getText()));
-                    aBean3.setAddr_Road(ThaiUtil.Unicode2ASCII(txtAddrRoad3.getText()));
-                    aBean3.setAddr_Soi(ThaiUtil.Unicode2ASCII(txtAddrSoi3.getText()));
-                    aBean3.setAddr_Tambon(ThaiUtil.Unicode2ASCII(txtAddrTambon3.getText()));
-                    aBean3.setAddr_Aumphur(ThaiUtil.Unicode2ASCII(txtAddrAmphur3.getText()));
-                    aBean3.setAddr_Province(ThaiUtil.Unicode2ASCII(txtAddrProvince3.getText()));
+                    aBean3.setAddr_MooName(txtAddrMooName3.getText());
+                    aBean3.setAddr_Road(txtAddrRoad3.getText());
+                    aBean3.setAddr_Soi(txtAddrSoi3.getText());
+                    aBean3.setAddr_Tambon(txtAddrTambon3.getText());
+                    aBean3.setAddr_Aumphur(txtAddrAmphur3.getText());
+                    aBean3.setAddr_Province(txtAddrProvince3.getText());
                     aBean3.setAddr_Post(txtAddrPost3.getText());
                     aBean3.setAddr_type("3");
                     aBean3.setAddr_Mobile("");
                     aBean3.setAddr_Tel("");
-                    aBean3.setCompany_Name(ThaiUtil.Unicode2ASCII(txtAddr3ComName.getText()));
+                    aBean3.setCompany_Name(txtAddr3ComName.getText());
                     aBean3.setCust_Code(idCard);
                     aBean3.setCust_Type("1");
                 }
@@ -3214,17 +3212,17 @@ public class SavingDialog extends BaseDialogSwing {
                     AddressBean aBean4 = new AddressBean();
                     aBean4.setAddr_No(txtAddrNo4.getText());
                     aBean4.setAddr_Moo(txtAddrMoo4.getText());
-                    aBean4.setAddr_MooName(ThaiUtil.Unicode2ASCII(txtAddrMooName4.getText()));
-                    aBean4.setAddr_Road(ThaiUtil.Unicode2ASCII(txtAddrRoad4.getText()));
-                    aBean4.setAddr_Soi(ThaiUtil.Unicode2ASCII(txtAddrSoi4.getText()));
-                    aBean4.setAddr_Tambon(ThaiUtil.Unicode2ASCII(txtAddrTambon4.getText()));
-                    aBean4.setAddr_Aumphur(ThaiUtil.Unicode2ASCII(txtAddrAmphur4.getText()));
-                    aBean4.setAddr_Province(ThaiUtil.Unicode2ASCII(txtAddrProvince4.getText()));
+                    aBean4.setAddr_MooName(txtAddrMooName4.getText());
+                    aBean4.setAddr_Road(txtAddrRoad4.getText());
+                    aBean4.setAddr_Soi(txtAddrSoi4.getText());
+                    aBean4.setAddr_Tambon(txtAddrTambon4.getText());
+                    aBean4.setAddr_Aumphur(txtAddrAmphur4.getText());
+                    aBean4.setAddr_Province(txtAddrProvince4.getText());
                     aBean4.setAddr_Post(txtAddrPost4.getText());
                     aBean4.setAddr_type("4");
                     aBean4.setAddr_Mobile("");
                     aBean4.setAddr_Tel("");
-                    aBean4.setCompany_Name(ThaiUtil.Unicode2ASCII("" + cbProject.getSelectedItem()));
+                    aBean4.setCompany_Name("" + cbProject.getSelectedItem());
                     aBean4.setCust_Code(idCard);
                     aBean4.setCust_Type("1");
 
@@ -3584,8 +3582,7 @@ public class SavingDialog extends BaseDialogSwing {
                 //load data
                 loadPersonApp();
             } else {
-                JOptionPane.showMessageDialog(this, "ไม่พบข้อมูลสมาชิกในกลุ่ม \n"
-                        + "กรุณาลงทะเบียนข้อมูลสมาชิกในกลุ่มก่อน !");
+                MessageAlert.warningPopup(this, "ไม่พบข้อมูลสมาชิกในกลุ่ม กรุณาลงทะเบียนข้อมูลสมาชิกในกลุ่มก่อน !");
                 txtCustAppCode.requestFocus();
             }
         } else {

@@ -1,10 +1,9 @@
 package th.co.cbank.project.model;
 
 import java.util.Date;
-import org.apache.log4j.Logger;
 
 public class CbExpTransactionBean {
-    private final Logger logger = Logger.getLogger(CbExpTransactionBean.class);
+
     private String EXP_DOC;//
     private Date EXP_DATE;//
     private String BRANCH_CODE;//

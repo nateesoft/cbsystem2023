@@ -29,6 +29,7 @@ import org.apache.commons.net.ftp.FTPReply;
 import org.apache.log4j.Logger;
 
 public class FTPUtility {
+
     private final Logger logger = Logger.getLogger(FTPUtility.class);
     private FTPClient ftp;
     private final Frame frame = new Frame();
@@ -95,7 +96,7 @@ public class FTPUtility {
             return success;
 
         } catch (IOException e) {
-            
+
             return false;
         }
     }
@@ -188,16 +189,16 @@ public class FTPUtility {
             ftp.connect(server);
             reply = ftp.getReplyCode();
             if (!FTPReply.isPositiveCompletion(reply)) {
-                ftp.disconnect();                
+                ftp.disconnect();
                 return false;
             }
         } catch (NoRouteToHostException e) {
-            
+
             if (ftp.isConnected()) {
                 try {
                     ftp.disconnect();
                 } catch (IOException f) {
-                    
+
                 }
             }
 //            JOptionPane.showMessageDialog(frame, "ไม่พบ FTP Server : " + server);
@@ -207,29 +208,29 @@ public class FTPUtility {
                 try {
                     ftp.disconnect();
                 } catch (IOException f) {
-                    
+
                 }
             }
 //            JOptionPane.showMessageDialog(frame, "ไมรู้จัก FTP Server : " + server);
             return false;
         } catch (ConnectException e) {
-            
+
             if (ftp.isConnected()) {
                 try {
                     ftp.disconnect();
                 } catch (IOException f) {
-                    
+
                 }
             }
 //            MessageAlert.infoPopup(this.getClass(), e.getMessage() + " ConnectException..");
             return false;
         } catch (SocketException e) {
-            
+
             if (ftp.isConnected()) {
                 try {
                     ftp.disconnect();
                 } catch (IOException f) {
-                    
+
 //                    MessageAlert.infoPopup(this.getClass(), f.getMessage() + " SocketException..");
                 }
             }
@@ -237,13 +238,13 @@ public class FTPUtility {
 //                    + "การเชื่อมต่ออินเตอร์เน็ต หรือ ระบบเน็ตเวิค ของท่าน!!!");
             return false;
         } catch (IOException e) {
-            
+
 //            MessageAlert.infoPopup(this.getClass(), e.getMessage() + " IOException..");
             if (ftp.isConnected()) {
                 try {
                     ftp.disconnect();
                 } catch (IOException f) {
-                    
+
                 }
             }
 //            JOptionPane.showMessageDialog(frame, "เกิดปัญหาการเชื่อมต่อ กรุณาตรวจเช็ค! \n"
@@ -263,7 +264,7 @@ public class FTPUtility {
             }
 
         } catch (HeadlessException | IOException e) {
-            
+
             return false;
         }
         return true;
@@ -281,7 +282,7 @@ public class FTPUtility {
                 this.port = "21";
                 return true;
             } catch (IOException ex) {
-                
+
             }
         }
 

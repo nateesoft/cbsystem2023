@@ -3,6 +3,7 @@ package th.co.cbank.project.view;
 import org.apache.log4j.Logger;
 
 public class FormCashDialyDialog extends javax.swing.JDialog {
+
     private final Logger logger = Logger.getLogger(FormCashDialyDialog.class);
 
     public FormCashDialyDialog(java.awt.Frame parent, boolean modal) {
@@ -388,27 +389,27 @@ public class FormCashDialyDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnExportActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExportActionPerformed
-        
+
     }//GEN-LAST:event_btnExportActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        
+
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnSaveDraftActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveDraftActionPerformed
-        
+
     }//GEN-LAST:event_btnSaveDraftActionPerformed
 
     private void btnCallMasterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCallMasterActionPerformed
-        
+
     }//GEN-LAST:event_btnCallMasterActionPerformed
 
     private void btnAddItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddItemActionPerformed
-        
+
     }//GEN-LAST:event_btnAddItemActionPerformed
 
     private void btnResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnResetActionPerformed
-        
+
     }//GEN-LAST:event_btnResetActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

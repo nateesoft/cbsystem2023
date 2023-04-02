@@ -3,17 +3,20 @@ package th.co.cbank.project.view;
 import java.awt.Frame;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
-import java.sql.ResultSet;
 import java.util.Date;
-import javax.swing.JOptionPane;
 import org.apache.log4j.Logger;
 import th.co.cbank.util.DateFormat;
 import th.co.cbank.util.NumberFormat;
 import th.co.cbank.project.constants.AppConstants;
-import th.co.cbank.project.control.MySQLConnect;
+import th.co.cbank.project.control.ViewReport;
+import th.co.cbank.project.report.model.SummaryDepositModel;
+import th.co.cbank.project.report.model.SummaryExpTransModel;
+import th.co.cbank.project.report.model.SummaryHoonModel;
+import th.co.cbank.project.report.model.SummaryLoanModel;
 import th.co.cbank.util.DateChooseDialog;
 
 public class SummaryReportCloseDay extends BaseDialogSwing {
+
     private final Logger logger = Logger.getLogger(SummaryReportCloseDay.class);
     private final Frame parent;
 
@@ -861,112 +864,64 @@ public class SummaryReportCloseDay extends BaseDialogSwing {
         Date date = DateFormat.getLocal_ddMMyyyy(txtDate1.getText());
         String dateMySQL = DateFormat.getMySQL_Date(date);
 
-        //รายการเงินฝาก
-        try {
-            String sql = "select sum(money_in), sum(money_out), "
-                    + "sum(money_in-money_out) t_balance, "
-                    + "sum(t_interest), sum(t_fee) "
-                    + "from cb_transaction_save "
-                    + "where t_date='" + dateMySQL + "' "
-                    + "and t_status in('1','2','3','8') ";
-            ResultSet rs = MySQLConnect.getResultSet(sql);
-            if (rs.next()) {
-                txtDeposit.setText(NumberFormat.showDouble2(rs.getDouble(1)));
-                txtWithdraw.setText(NumberFormat.showDouble2(rs.getDouble(2)));
-                txtSaveBalance.setText(NumberFormat.showDouble2(rs.getDouble(3)));
-                txtSaveINT.setText(NumberFormat.showDouble2(rs.getDouble(4)));
-                txtSaveFee.setText(NumberFormat.showDouble2(rs.getDouble(5)));
-            }
+        ViewReport viewReport = new ViewReport();
 
-            rs.close();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
-        }
+        //รายการเงินฝาก
+        SummaryDepositModel sumDeposit = viewReport.summaryDeposit(dateMySQL);
+        txtDeposit.setText(NumberFormat.showDouble2(sumDeposit.getSumMoneyIn()));
+        txtWithdraw.setText(NumberFormat.showDouble2(sumDeposit.getSumMoneyOut()));
+        txtSaveBalance.setText(NumberFormat.showDouble2(sumDeposit.getSumMoneyBalance()));
+        txtSaveINT.setText(NumberFormat.showDouble2(sumDeposit.getSumInterest()));
+        txtSaveFee.setText(NumberFormat.showDouble2(sumDeposit.getSumFee()));
 
         //รายการหุ้น
-        try {
-            String sql = "select t_status, sum(t_amount), sum(t_hoon_amt) "
-                    + "from cb_transaction_save "
-                    + "where t_date='" + dateMySQL + "' "
-                    + "and t_status in('4','5','9') "
-                    + "group by t_status";
-            ResultSet rs = MySQLConnect.getResultSet(sql);
-            double hBuy = 0.00;
-            double hSale = 0.00;
-            double hTran = 0.00;
-            double hAmtBuy = 0.00;
-            double hAmtSale = 0.00;
-            while (rs.next()) {
-                String t_status = rs.getString(1);
-                switch (t_status) {
-                    case "4":
-                        hBuy += rs.getDouble(2);
-                        hAmtBuy += rs.getDouble(3);
-                        break;
-                    case "5":
-                        hSale += rs.getDouble(2);
-                        hAmtSale += rs.getDouble(3);
-                        break;
-                    case "9":
-                        hTran += rs.getDouble(2);
-                        break;
-                }
-            }
+        double hBuy = 0.00;
+        double hSale = 0.00;
+        double hTran = 0.00;
+        double hAmtBuy = 0.00;
+        double hAmtSale = 0.00;
 
-            txtHoonBuyQty.setText(NumberFormat.showDouble2(hBuy));
-            txtHoonBuyAmt.setText(NumberFormat.showDouble2(hAmtBuy));
-            txtHoonSaleQty.setText(NumberFormat.showDouble2(hSale));
-            txtHoonSaleAmt.setText(NumberFormat.showDouble2(hAmtSale));
-            txtHoonTransfer.setText(NumberFormat.showDouble2(hTran));
-
-            rs.close();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
+        SummaryHoonModel sumHoon = viewReport.summaryHoon(dateMySQL);
+        String t_status = sumHoon.getT_status();
+        switch (t_status) {
+            case "4":
+                hBuy += sumHoon.getSumAmount();
+                hAmtBuy += sumHoon.getSumHoonAmt();
+                break;
+            case "5":
+                hSale += sumHoon.getSumAmount();
+                hAmtSale += sumHoon.getSumHoonAmt();
+                break;
+            case "9":
+                hTran += sumHoon.getSumAmount();
+                break;
         }
+
+        txtHoonBuyQty.setText(NumberFormat.showDouble2(hBuy));
+        txtHoonBuyAmt.setText(NumberFormat.showDouble2(hAmtBuy));
+        txtHoonSaleQty.setText(NumberFormat.showDouble2(hSale));
+        txtHoonSaleAmt.setText(NumberFormat.showDouble2(hAmtSale));
+        txtHoonTransfer.setText(NumberFormat.showDouble2(hTran));
 
         //เงินกู้
-        try {
-            String sql = "select t_status, sum(t_amount) "
-                    + "from cb_transaction_save "
-                    + "where t_date='" + dateMySQL + "' "
-                    + "and t_status in('10','7') "
-                    + "group by t_status";
-            double loanAmt = 0.00;
-            double payAmt = 0.00;
-            ResultSet rs = MySQLConnect.getResultSet(sql);
-            while (rs.next()) {
-                String t_status = rs.getString(1);
-                switch (t_status) {
-                    case AppConstants.CB_STATUS_LOAN:
-                        loanAmt += rs.getDouble(2);
-                        break;
-                    case AppConstants.CB_STATUS_PAYMENT:
-                        payAmt += rs.getDouble(2);
-                        break;
-                }
-            }
-
-            txtLoanAmt.setText(NumberFormat.showDouble2(loanAmt));
-            txtLoanzPayAmt.setText(NumberFormat.showDouble2(payAmt));
-
-            rs.close();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
+        double loanAmt = 0.00;
+        double payAmt = 0.00;
+        SummaryLoanModel sumLoan = viewReport.summaryLoan(dateMySQL);
+        switch (sumLoan.getT_status()) {
+            case AppConstants.CB_STATUS_LOAN:
+                loanAmt += sumLoan.getSumAmount();
+                break;
+            case AppConstants.CB_STATUS_PAYMENT:
+                payAmt += sumLoan.getSumAmount();
+                break;
         }
+
+        txtLoanAmt.setText(NumberFormat.showDouble2(loanAmt));
+        txtLoanzPayAmt.setText(NumberFormat.showDouble2(payAmt));
 
         //ค่าใช้จ่าย
-        try {
-            String sql = "select sum(emp_amount) from cb_exp_transaction "
-                    + "where exp_date=curdate();";
-            ResultSet rs = MySQLConnect.getResultSet(sql);
-            if (rs.next()) {
-                txtExpendAmt.setText(NumberFormat.showDouble2(rs.getDouble(1)));
-            }
-
-            rs.close();
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
-        }
+        SummaryExpTransModel sumExpTrans = viewReport.summaryExpTrans();
+        txtExpendAmt.setText(NumberFormat.showDouble2(sumExpTrans.getSumAmount()));
     }
 
 }

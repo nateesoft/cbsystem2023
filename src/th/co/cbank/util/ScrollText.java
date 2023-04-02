@@ -15,6 +15,7 @@ import org.apache.log4j.Logger;
 import th.co.cbank.project.constants.AppConstants;
 
 public class ScrollText extends JComponent {
+
     private final Logger logger = Logger.getLogger(ScrollText.class);
     private BufferedImage image;
     private Dimension imageSize;

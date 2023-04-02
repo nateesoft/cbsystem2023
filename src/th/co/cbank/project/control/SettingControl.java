@@ -9,6 +9,7 @@ import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.ThaiUtil;
 
 public class SettingControl extends BaseControl {
+
     private final Logger logger = Logger.getLogger(SettingControl.class);
 
     public List<GroupBean> listCbGroup() {
@@ -27,7 +28,7 @@ public class SettingControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return listBean;
@@ -46,7 +47,7 @@ public class SettingControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return bean;
@@ -55,7 +56,7 @@ public class SettingControl extends BaseControl {
     public void saveCbGroup(GroupBean bean) {
         try {
             String sql = "insert into cb_group (groupcode,groupname,permission)  "
-                    + "values('" + bean.getGroupCode() + "','" + bean.getGroupName() + "','" + bean.getPermission() + "')";
+                    + "values('" + bean.getGroupCode() + "','" + ThaiUtil.Unicode2ASCII(bean.getGroupName()) + "','" + bean.getPermission() + "')";
             String sqlChk = "select * from cb_group "
                     + "where groupcode='" + bean.getGroupCode() + "' ";
             ResultSet rs = MySQLConnect.getResultSet(sqlChk);
@@ -68,7 +69,7 @@ public class SettingControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -81,7 +82,7 @@ public class SettingControl extends BaseControl {
             update(sql);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 

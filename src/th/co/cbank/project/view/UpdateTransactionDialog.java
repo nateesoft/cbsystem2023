@@ -1,10 +1,10 @@
 package th.co.cbank.project.view;
 
 import java.util.List;
-import javax.swing.JOptionPane;
 import th.co.cbank.project.control.CbSaveAccountControl;
 import th.co.cbank.project.control.CbTransactionSaveControl;
 import th.co.cbank.project.model.CbSaveAccountBean;
+import th.co.cbank.util.MessageAlert;
 
 public class UpdateTransactionDialog extends javax.swing.JDialog {
 
@@ -95,45 +95,6 @@ public class UpdateTransactionDialog extends javax.swing.JDialog {
         dispose();
     }//GEN-LAST:event_btnCloseActionPerformed
 
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(UpdateTransactionDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(UpdateTransactionDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(UpdateTransactionDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(UpdateTransactionDialog.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the dialog */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                UpdateTransactionDialog dialog = new UpdateTransactionDialog(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
-            }
-        });
-    }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClose;
     private javax.swing.JButton btnStartProcess;
@@ -158,6 +119,6 @@ public class UpdateTransactionDialog extends javax.swing.JDialog {
             pb.setValue(count);
         }
 
-        JOptionPane.showMessageDialog(this, "กระบวนการอัพเดตความเคลื่อนไหวเสร็จสมบูรณ์");
+        MessageAlert.infoPopup(this, "กระบวนการอัพเดตความเคลื่อนไหวเสร็จสมบูรณ์");
     }
 }

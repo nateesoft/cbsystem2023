@@ -9,6 +9,7 @@ import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.ThaiUtil;
 
 public class CbFeeControl extends BaseControl {
+
     private final Logger logger = Logger.getLogger(CbFeeControl.class);
 
     public List<CbFeeBean> mappingBean(ResultSet rs) throws Exception {
@@ -24,14 +25,14 @@ public class CbFeeControl extends BaseControl {
         return listBean;
     }
 
-    public List<CbFeeBean> listCbFee() {        
+    public List<CbFeeBean> listCbFee() {
         try {
             String sql = "select * from cb_fee";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             return mappingBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }
@@ -43,7 +44,7 @@ public class CbFeeControl extends BaseControl {
             return mappingBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }
@@ -53,13 +54,13 @@ public class CbFeeControl extends BaseControl {
             String sql = "select * from cb_fee where exp_id='" + exp_id + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             List<CbFeeBean> listBean = mappingBean(rs);
-            if(listBean.isEmpty()){
+            if (listBean.isEmpty()) {
                 return null;
             }
             return listBean.get(0);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return null;
         }
     }
@@ -80,7 +81,7 @@ public class CbFeeControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -92,7 +93,7 @@ public class CbFeeControl extends BaseControl {
                     + "where exp_id='" + bean.getExp_id() + "'";
             update(sql);
         } catch (Exception e) {
-            
+
         }
     }
 
@@ -103,7 +104,7 @@ public class CbFeeControl extends BaseControl {
             return mappingBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }
@@ -113,13 +114,13 @@ public class CbFeeControl extends BaseControl {
             String sql = "select * from cb_fee where exp_id='" + exp_id + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             List<CbFeeBean> listBean = mappingBean(rs);
-            if(listBean.isEmpty()){
+            if (listBean.isEmpty()) {
                 return null;
             }
             return listBean.get(0);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return null;
         }
     }
@@ -127,7 +128,7 @@ public class CbFeeControl extends BaseControl {
     public boolean saveExpense(CbFeeBean bean) {
         try {
             String sql = "insert into cb_fee (exp_id,exp_desc)  "
-                    + "values('" + bean.getExp_id() + "','" + bean.getExp_desc() + "')";
+                    + "values('" + bean.getExp_id() + "','" + ThaiUtil.Unicode2ASCII(bean.getExp_desc()) + "')";
             String sqlChk = "select * from cb_fee where exp_id='" + bean.getExp_id() + "'";
             ResultSet rs = MySQLConnect.getResultSet(sqlChk);
             if (rs.next()) {
@@ -140,7 +141,7 @@ public class CbFeeControl extends BaseControl {
             return true;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return false;
         }
     }
@@ -155,7 +156,7 @@ public class CbFeeControl extends BaseControl {
             return true;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return false;
         }
     }

@@ -24,7 +24,6 @@ import th.co.cbank.project.control.SaveSummaryControl;
 
 public class BaseSwing extends JFrame {
 
-    private final Logger logger = Logger.getLogger(BaseSwing.class);
     private final CbSaveAccountControl saveAccountControl = new CbSaveAccountControl();
     private final CbLoanAccountControl loanAccountControl = new CbLoanAccountControl();
     private final BranchControl branchControl = new BranchControl();

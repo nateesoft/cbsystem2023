@@ -13,6 +13,7 @@ import th.co.cbank.util.DateUtil;
 import th.co.cbank.util.NumberUtil;
 
 public class HoonInvestDialog extends BaseDialogSwing {
+
     private final Logger logger = Logger.getLogger(HoonInvestDialog.class);
     private DefaultTableModel model;
     private double balanceAmt = 0;
@@ -589,7 +590,7 @@ public class HoonInvestDialog extends BaseDialogSwing {
     }//GEN-LAST:event_btnSaveDataActionPerformed
 
     private void btnCalculateKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_btnCalculateKeyPressed
-        if(evt.getKeyCode()==KeyEvent.VK_ENTER){
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             loadData();
         }
     }//GEN-LAST:event_btnCalculateKeyPressed
@@ -677,14 +678,14 @@ public class HoonInvestDialog extends BaseDialogSwing {
     private void loadData() {
         List<ProfileBean> listProfile = getProfileControl().listProfileHoon();
         double dividendPerYearAmt = NumberUtil.toDouble(txtDividendPerYearAmt.getText());
-        for(ProfileBean bean: listProfile){
-            
+        for (ProfileBean bean : listProfile) {
+
             model.addRow(new Object[]{
                 bean.getP_index(),
                 bean.getP_custName(),
                 bean.getP_custSurname(),
                 bean.getHoon_Qty(),
-                dividendPerYearAmt*bean.getHoon_Qty(),
+                dividendPerYearAmt * bean.getHoon_Qty(),
                 0,
                 "",
                 0,
@@ -695,6 +696,6 @@ public class HoonInvestDialog extends BaseDialogSwing {
     }
 
     private void saveData() {
-        
+
     }
 }

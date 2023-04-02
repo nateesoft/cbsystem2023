@@ -3,7 +3,6 @@ package th.co.cbank.project.view.components;
 import java.awt.event.KeyEvent;
 import java.util.List;
 import javax.swing.JComboBox;
-import javax.swing.JOptionPane;
 import org.apache.log4j.Logger;
 import th.co.cbank.project.control.BranchControl;
 import th.co.cbank.project.control.CbFeeControl;
@@ -22,10 +21,11 @@ import th.co.cbank.project.model.CbSaveAccountBean;
 import th.co.cbank.project.model.CbSaveConfigBean;
 import th.co.cbank.project.model.ConfigBean;
 import th.co.cbank.project.model.ProfileBean;
+import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.NumberUtil;
-import th.co.cbank.util.ThaiUtil;
 
 public class NewDepositPanel extends javax.swing.JPanel {
+
     private final Logger logger = Logger.getLogger(NewDepositPanel.class);
     private ProfileBean profileBean;
     private final CbSaveConfigControl saveConfigControl = new CbSaveConfigControl();
@@ -38,12 +38,12 @@ public class NewDepositPanel extends javax.swing.JPanel {
 
     public NewDepositPanel(ProfileBean profileBean) {
         initComponents();
-        
+
         this.profileBean = profileBean;
-        
+
         initLoad();
     }
-    
+
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -301,8 +301,8 @@ public class NewDepositPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_txtSaveFeeKeyPressed
 
     private void btnSaveAccOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveAccOpenActionPerformed
-        int confirm = JOptionPane.showConfirmDialog(this, "ท่านต้องการเปิดบัญชีเงินฝากใช่หรือไม่ ?");
-        if (confirm == JOptionPane.YES_OPTION) {
+        int confirm = MessageAlert.showConfirm(this, "ท่านต้องการเปิดบัญชีเงินฝากใช่หรือไม่ ?");
+        if (confirm == MessageAlert.YES_OPTION) {
             saveOpenSave();
         }
     }//GEN-LAST:event_btnSaveAccOpenActionPerformed
@@ -343,7 +343,7 @@ public class NewDepositPanel extends javax.swing.JPanel {
             return "";
         }
     }
-    
+
     private String getRunning(int run) {
         if (run < 10) {
             return "000000" + run;
@@ -361,7 +361,7 @@ public class NewDepositPanel extends javax.swing.JPanel {
             return "" + run;
         }
     }
-    
+
     private String getBookNo(int run) {
         if (run == 0) {
             run = 1;
@@ -374,7 +374,7 @@ public class NewDepositPanel extends javax.swing.JPanel {
             return "" + run;
         }
     }
-    
+
     String[] generateAutoNo() {
         String newAccountNo = "";
         String newBookNo = "";
@@ -388,10 +388,10 @@ public class NewDepositPanel extends javax.swing.JPanel {
             newAccountNo = sBean.getTypeCode() + getRunning(sBean.getSaveRunning());
         }
         newBookNo = getBookNo(saveConfigControl.getMaxInt(docType));
-        
+
         return new String[]{newAccountNo, newBookNo};
     }
-    
+
     private void initLoad() {
         chkSave1.setSelected(false);
         chkSave2.setSelected(false);
@@ -399,7 +399,7 @@ public class NewDepositPanel extends javax.swing.JPanel {
         txtAccountCode.setText("");
         txtBookNo.setText("");
         txtSaveFee.setText("0.00");
-        
+
         List<CbSaveConfigBean> listBean = saveConfigControl.listSaveConfig();
         cbAccType.removeAllItems();
         for (int i = 0; i < listBean.size(); i++) {
@@ -407,12 +407,12 @@ public class NewDepositPanel extends javax.swing.JPanel {
             cbAccType.addItem(bean.getTypeCode() + " - " + bean.getTypeName());
         }
     }
-    
+
     private void saveOpenSave() {
         if (cbAccType.getItemCount() == 0) {
             return;
         }
-        
+
         double saveFeeAmt = NumberUtil.toDouble(txtSaveFee.getText());
         if (saveFeeAmt < 0) {
             txtSaveFee.requestFocus();
@@ -420,26 +420,26 @@ public class NewDepositPanel extends javax.swing.JPanel {
         }
 
         CbSaveAccountBean cbSaveAccountBean = new CbSaveAccountBean();
-        String []gen = generateAutoNo();
+        String[] gen = generateAutoNo();
         cbSaveAccountBean.setAccount_code(gen[0]); // wait auto generate
         cbSaveAccountBean.setBook_no(gen[1]); // wait auto generate
         cbSaveAccountBean.setB_BALANCE(0);
-        cbSaveAccountBean.setRemark(ThaiUtil.Unicode2ASCII("เปิดบัญชี"));
+        cbSaveAccountBean.setRemark("เปิดบัญชี");
         cbSaveAccountBean.setBook_evidence3("");
         cbSaveAccountBean.setBook_evidence4("");
         if (chkSave1.isSelected()) {
-            cbSaveAccountBean.setBook_evidence1(ThaiUtil.Unicode2ASCII(chkSave1.getText()));
+            cbSaveAccountBean.setBook_evidence1(chkSave1.getText());
         } else {
             cbSaveAccountBean.setBook_evidence1("");
         }
         if (chkSave2.isSelected()) {
-            cbSaveAccountBean.setBook_evidence2(ThaiUtil.Unicode2ASCII(chkSave2.getText()));
+            cbSaveAccountBean.setBook_evidence2(chkSave2.getText());
         } else {
             cbSaveAccountBean.setBook_evidence2("");
         }
         cbSaveAccountBean.setB_CUST_CODE(profileBean.getP_custCode());
-        cbSaveAccountBean.setB_CUST_NAME(ThaiUtil.Unicode2ASCII(profileBean.getP_custName()));
-        cbSaveAccountBean.setB_CUST_LASTNAME(ThaiUtil.Unicode2ASCII(profileBean.getP_custSurname()));
+        cbSaveAccountBean.setB_CUST_NAME(profileBean.getP_custName());
+        cbSaveAccountBean.setB_CUST_LASTNAME(profileBean.getP_custSurname());
         cbSaveAccountBean.setB_INTEREST(0.00);
         cbSaveAccountBean.setHoon_balance(0);
         String accType = getIDCombobox(cbAccType);
@@ -470,21 +470,21 @@ public class NewDepositPanel extends javax.swing.JPanel {
 
             txtAccountCode.setText(cbSaveAccountBean.getAccount_code());
             txtBookNo.setText(cbSaveAccountBean.getBook_no());
-            JOptionPane.showMessageDialog(this, "เปิดบัญชีเรียบร้อยแล้ว");
-            
+            MessageAlert.infoPopup(this, "เปิดบัญชีเรียบร้อยแล้ว");
+
             btnSaveAccOpen.setEnabled(false);
             cbAccType.setEnabled(false);
             txtSaveFee.setEditable(false);
             btnPrintSliplOpenAcc.setEnabled(false);
-            
-            int iConfirm1 = JOptionPane.showConfirmDialog(this, "ท่านต้องการดำเนินการพิมพ์หน้าปกสมุดหรือไม่ ?");
-            if (iConfirm1 == JOptionPane.YES_OPTION) {
+
+            int iConfirm1 = MessageAlert.showConfirm(this, "ท่านต้องการดำเนินการพิมพ์หน้าปกสมุดหรือไม่ ?");
+            if (iConfirm1 == MessageAlert.YES_OPTION) {
                 //print หน้าปก
                 printFrontBook(cbSaveAccountBean.getAccount_type(), cbSaveAccountBean.getBook_no());
             }
         }
     }
-    
+
     private void printFrontBook(String accType, String bookNo) {
         //print หน้าปกสมุด
         PassBook_PSiPR9 view = new PassBook_PSiPR9();

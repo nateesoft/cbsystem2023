@@ -4,11 +4,11 @@ import th.co.cbank.project.model.ProfileBean;
 import java.awt.Font;
 import java.awt.event.KeyEvent;
 import java.util.List;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import org.apache.log4j.Logger;
 import th.co.cbank.project.constants.AppConstants;
+import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.TableUtil;
 
 public class CustomerMasterDialog extends BaseDialogSwing {
@@ -175,15 +175,15 @@ public class CustomerMasterDialog extends BaseDialogSwing {
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         int[] rowSelect = tbCustomer.getSelectedRows();
-        
+
         if (rowSelect.length > 0) {
             for (int i = 0; i < rowSelect.length; i++) {
-                String customerCode = "" + tbCustomer.getValueAt(i, 1);                
+                String customerCode = "" + tbCustomer.getValueAt(i, 1);
                 getProfileControl().deleteProfile(customerCode);
             }
             findCustomer();
         } else {
-            JOptionPane.showMessageDialog(this, "กรุณาเลือกข้อมูลที่ต้องการลบข้อมูล");
+            MessageAlert.warningPopup(this, "กรุณาเลือกข้อมูลที่ต้องการลบข้อมูล");
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 

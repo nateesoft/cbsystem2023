@@ -2,19 +2,20 @@ package th.co.cbank.project.view;
 
 import java.util.List;
 import javax.swing.DefaultListModel;
-import javax.swing.JOptionPane;
 import org.apache.log4j.Logger;
 import th.co.cbank.project.model.CbLoanAccountBean;
 import th.co.cbank.project.model.CbSaveAccountBean;
+import th.co.cbank.util.MessageAlert;
 
 public class SelectAccountDialog extends BaseDialogSwing {
+
     private final Logger logger = Logger.getLogger(SelectAccountDialog.class);
     private String accountCode = "";
 
     public SelectAccountDialog(java.awt.Frame parent, boolean modal, String selectAccountType, List<CbSaveAccountBean> listSaveAccounts, List<CbLoanAccountBean> listLoanAccounts) {
         super(parent, modal);
         initComponents();
-        
+
         ltAccountList.removeAll();
         if (selectAccountType.equals("deposit")) {//บัญชีเงินฝาก
             DefaultListModel model = new DefaultListModel();
@@ -28,16 +29,16 @@ public class SelectAccountDialog extends BaseDialogSwing {
                 dispose();
             }
         }
-        
+
         if (selectAccountType.equals("loan")) {//บัญชีเงินกู้
-                DefaultListModel model = new DefaultListModel();
-                for (int i = 0; i < listLoanAccounts.size(); i++) {
-                    CbLoanAccountBean bean = (CbLoanAccountBean) listLoanAccounts.get(i);
-                    if(bean.getLoan_amount()>0){
-                        model.addElement(bean.getLoan_docno());
-                    }
+            DefaultListModel model = new DefaultListModel();
+            for (int i = 0; i < listLoanAccounts.size(); i++) {
+                CbLoanAccountBean bean = (CbLoanAccountBean) listLoanAccounts.get(i);
+                if (bean.getLoan_amount() > 0) {
+                    model.addElement(bean.getLoan_docno());
                 }
-                ltAccountList.setModel(model);
+            }
+            ltAccountList.setModel(model);
             if (listLoanAccounts.size() == 1) {
                 setAccountCode(listLoanAccounts.get(0).getLoan_docno());
                 dispose();
@@ -153,7 +154,7 @@ public class SelectAccountDialog extends BaseDialogSwing {
             setAccountCode(ltAccountList.getSelectedValue().toString());
             dispose();
         } else {
-            JOptionPane.showMessageDialog(this, "กรุณาเลือกบัญชี !");
+            MessageAlert.warningPopup(this, "กรุณาเลือกบัญชี !");
             ltAccountList.requestFocus();
         }
     }//GEN-LAST:event_ltAccountListMouseClicked

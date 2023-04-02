@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import org.apache.log4j.Logger;
 
 public class ImagePreviewPanel extends JPanel implements PropertyChangeListener {
+
     private final Logger logger = Logger.getLogger(ImagePreviewPanel.class);
     private int width, height;
     private ImageIcon icon;

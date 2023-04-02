@@ -7,12 +7,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.text.DecimalFormat;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import org.apache.log4j.Logger;
 import th.co.cbank.util.DateFormat;
-import th.co.cbank.util.ThaiUtil;
 import th.co.cbank.project.constants.AppConstants;
 import th.co.cbank.project.control.Value;
 import th.co.cbank.project.model.BranchBean;
@@ -26,8 +24,8 @@ import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.TableUtil;
 
 public class LoadExcelAccountLoanDialog extends BaseDialogSwing {
-    private final Logger logger = Logger.getLogger(LoadExcelAccountLoanDialog.class);
 
+    private final Logger logger = Logger.getLogger(LoadExcelAccountLoanDialog.class);
     private static final double LOAN_CREDIT_AMT = 150000;
     private static final String fileName = "D:/idCard.txt";
     private static final String fileRename = "D:/idCard_bak.txt";
@@ -197,8 +195,8 @@ public class LoadExcelAccountLoanDialog extends BaseDialogSwing {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnLoadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLoadActionPerformed
-        int confirm = JOptionPane.showConfirmDialog(this, "ยืนยันการ load ข้อมูลจาก config file");
-        if (confirm == JOptionPane.YES_OPTION) {
+        int confirm = MessageAlert.showConfirm(this, "ยืนยันการ load ข้อมูลจาก config file");
+        if (confirm == MessageAlert.YES_OPTION) {
             if (chkLoanConfig.isSelected()) {
                 new Thread(new Runnable() {
                     @Override
@@ -209,7 +207,7 @@ public class LoadExcelAccountLoanDialog extends BaseDialogSwing {
                             process();
                             btnLoad.setEnabled(true);
                         } catch (Exception e) {
-                            
+
                         }
                     }
                 }).start();
@@ -271,7 +269,7 @@ public class LoadExcelAccountLoanDialog extends BaseDialogSwing {
                 }
                 if (loanAmt == 0) {
                     lbMsg.setText("Loading.. " + idCard + " : not create new loan account: loan amount == " + loanAmt);
-                    taLog.append(idCard+" : Loan amount == 0 ... Not create new loan account");
+                    taLog.append(idCard + " : Loan amount == 0 ... Not create new loan account");
                     continue;
                 }
                 i++;
@@ -323,7 +321,7 @@ public class LoadExcelAccountLoanDialog extends BaseDialogSwing {
                     tLoanBean.setT_date(loanBean.getLoan_docdate());
                     tLoanBean.setT_acccode(loanDocNo);
                     tLoanBean.setT_custcode(proBean.getP_custCode());
-                    tLoanBean.setT_description(ThaiUtil.Unicode2ASCII(fixLoanConfigName));
+                    tLoanBean.setT_description(fixLoanConfigName);
                     tLoanBean.setT_amount(loanAmt);
                     tLoanBean.setMoney_in(0.00);
                     tLoanBean.setMoney_out(0.00);
@@ -359,7 +357,7 @@ public class LoadExcelAccountLoanDialog extends BaseDialogSwing {
                     loanTbPayBean.setBranch_code(bBean.getCode());
 
                     getCbLoanTablePaymentControl().saveCbLoanTablePayment(loanTbPayBean);
-                    lbMsg.setText("Loading.. Finish... ("+i+")" + idCard);
+                    lbMsg.setText("Loading.. Finish... (" + i + ")" + idCard);
                     taLog.append(lbMsg.getText() + "\n");
                 }
 
@@ -412,7 +410,7 @@ public class LoadExcelAccountLoanDialog extends BaseDialogSwing {
                 if (lineData.length > 1) {
                     loanAmt = Double.parseDouble(lineData[1]);
                 }
-                if(loanAmt==0){
+                if (loanAmt == 0) {
                     continue;
                 }
                 count++;
@@ -459,7 +457,7 @@ public class LoadExcelAccountLoanDialog extends BaseDialogSwing {
             }
             br.close();
         } catch (Exception e) {
-            
+
         }
     }
 

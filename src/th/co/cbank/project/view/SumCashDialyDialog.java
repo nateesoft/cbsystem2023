@@ -6,12 +6,13 @@ import org.apache.log4j.Logger;
 import th.co.cbank.project.constants.AppConstants;
 
 public class SumCashDialyDialog extends javax.swing.JDialog {
+
     private final Logger logger = Logger.getLogger(SumCashDialyDialog.class);
 
     public SumCashDialyDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-        
+
         initTable();
     }
 
@@ -348,7 +349,7 @@ public class SumCashDialyDialog extends javax.swing.JDialog {
     }//GEN-LAST:event_btnCloseActionPerformed
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
-        
+
     }//GEN-LAST:event_btnSaveActionPerformed
 
     private void btnPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintActionPerformed
@@ -388,7 +389,7 @@ public class SumCashDialyDialog extends javax.swing.JDialog {
         tbIncome.setRowHeight(25);
         JTableHeader tHeader1 = tbIncome.getTableHeader();
         tHeader1.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, AppConstants.DEFAULT_FONT_SIZE));
-        
+
         tbExpense.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
         tbExpense.setRowHeight(25);
         JTableHeader tHeader2 = tbExpense.getTableHeader();

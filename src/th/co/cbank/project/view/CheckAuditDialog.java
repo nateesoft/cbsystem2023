@@ -15,6 +15,7 @@ import th.co.cbank.util.NumberFormat;
 import th.co.cbank.util.TableUtil;
 
 public class CheckAuditDialog extends BaseDialogSwing {
+
     private final Logger logger = Logger.getLogger(CheckAuditDialog.class);
 
     public CheckAuditDialog(java.awt.Frame parent, boolean modal) {
@@ -35,30 +36,30 @@ public class CheckAuditDialog extends BaseDialogSwing {
 
         JTableHeader h1 = tbProfile.getTableHeader();
         h1.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, 12));
-        
+
         JTableHeader h2 = tbSaveAccount.getTableHeader();
         h2.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, 12));
-        
+
         JTableHeader h3 = tbTransaction.getTableHeader();
         h3.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, 12));
-        
+
         JTableHeader h4 = tbTransactionLoan.getTableHeader();
         h4.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, 12));
-        
+
         // init table
         TableUtil.alignTable(tbProfile, 3, SwingConstants.RIGHT);
         TableUtil.alignTable(tbProfile, 4, SwingConstants.RIGHT);
         TableUtil.alignTable(tbProfile, 5, SwingConstants.RIGHT);
-        
+
         TableUtil.alignTable(tbTransaction, 3, SwingConstants.RIGHT);
         TableUtil.alignTable(tbTransaction, 4, SwingConstants.RIGHT);
         TableUtil.alignTable(tbTransaction, 5, SwingConstants.RIGHT);
         TableUtil.alignTable(tbTransaction, 6, SwingConstants.RIGHT);
         TableUtil.alignTable(tbTransaction, 7, SwingConstants.RIGHT);
-        
+
         TableUtil.alignTable(tbSaveAccount, 2, SwingConstants.RIGHT);
         TableUtil.alignTable(tbSaveAccount, 3, SwingConstants.RIGHT);
-        
+
         TableUtil.alignTable(tbTransactionLoan, 3, SwingConstants.RIGHT);
         TableUtil.alignTable(tbTransactionLoan, 4, SwingConstants.RIGHT);
         TableUtil.alignTable(tbTransactionLoan, 5, SwingConstants.RIGHT);
@@ -419,7 +420,7 @@ public class CheckAuditDialog extends BaseDialogSwing {
     }//GEN-LAST:event_btnReProcessActionPerformed
 
     private void tbSaveAccountMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbSaveAccountMouseClicked
-        if(tbSaveAccount.getSelectedRow() != -1){
+        if (tbSaveAccount.getSelectedRow() != -1) {
             btnReProcess.setEnabled(true);
         }
     }//GEN-LAST:event_tbSaveAccountMouseClicked
@@ -464,7 +465,7 @@ public class CheckAuditDialog extends BaseDialogSwing {
         TableUtil.clearModel(model4);
         CbProfileControl profileControl = new CbProfileControl();
         List<Object[]> listModel4 = profileControl.getProfileListOrderByCustCode();
-        for(Object []data: listModel4){
+        for (Object[] data : listModel4) {
             model1.addRow(data);
         }
     }
@@ -477,51 +478,51 @@ public class CheckAuditDialog extends BaseDialogSwing {
         TableUtil.clearModel(model2);
         TableUtil.clearModel(model3);
         TableUtil.clearModel(model4);
-        
+
         String custCode = "" + tbProfile.getValueAt(tbProfile.getSelectedRow(), 1);
         CbSaveAccountControl saveAccountControl = new CbSaveAccountControl();
-        
+
         List<Object[]> listModel2 = saveAccountControl.getAccountWhereCustCode(custCode);
-        for(Object[] data: listModel2){
+        for (Object[] data : listModel2) {
             model2.addRow(data);
         }
         CbTransactionSaveControl transactionSaveControl = new CbTransactionSaveControl();
         List<Object[]> listModel3 = transactionSaveControl.getTransactionListWhereCustCode(custCode);
         double deposit = 0.00;
         double withdraw = 0.00;
-        for(Object[] data: listModel3){
+        for (Object[] data : listModel3) {
             model3.addRow(data);
-            deposit += Double.parseDouble((""+data[4]).replace(",", ""));
-            withdraw += Double.parseDouble((""+data[5]).replace(",", ""));
+            deposit += Double.parseDouble(("" + data[4]).replace(",", ""));
+            withdraw += Double.parseDouble(("" + data[5]).replace(",", ""));
         }
         txtDeposit.setText(NumberFormat.showDouble2(deposit));
         txtWithdraw.setText(NumberFormat.showDouble2(withdraw));
-        txtBalance.setText(NumberFormat.showDouble2(deposit-withdraw));
+        txtBalance.setText(NumberFormat.showDouble2(deposit - withdraw));
 
         // รายละเอียดเงินกู้
         List<Object[]> listModel4 = transactionSaveControl.getTransactionListWhereCustCode(custCode);
-        for(Object []data: listModel4){
+        for (Object[] data : listModel4) {
             model4.addRow(data);
         }
     }
 
     private void reProcess() {
         btnReProcess.setEnabled(false);
-        
+
         int colProfile = tbProfile.getSelectedColumn();
         String profileCode = tbProfile.getValueAt(colProfile, 1).toString();
-        
+
         int colAccount = tbSaveAccount.getSelectedColumn();
         String accCode = tbSaveAccount.getValueAt(colAccount, 1).toString();
-        
+
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
         TransactionAdvanceMethod.findData(profileCode, accCode, false);
         double all_balance = TransactionAdvanceMethod.balanceAmount;
         double all_interest = TransactionAdvanceMethod.interestAmount;
         TransactionAdvanceMethod.updateSaveAccountAndProfile(profileCode, accCode, all_balance, all_interest);
-        TransactionAdvanceMethod.updateTransactionSaveRunning(profileCode,  accCode);
+        TransactionAdvanceMethod.updateTransactionSaveRunning(profileCode, accCode);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        
+
         // reload data
         clearAllModel();
     }

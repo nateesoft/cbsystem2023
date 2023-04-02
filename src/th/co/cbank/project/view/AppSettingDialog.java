@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Locale;
 import javax.print.PrintService;
 import javax.swing.JCheckBox;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import org.apache.log4j.Logger;
@@ -21,10 +20,10 @@ import th.co.cbank.util.NumberFormat;
 import th.co.cbank.project.constants.AppConstants;
 import th.co.cbank.project.model.ConfigBean;
 import th.co.cbank.project.control.PrintCOM;
-import th.co.cbank.project.log.Log;
 import th.co.cbank.project.model.CbHoonConfigBean;
 import th.co.cbank.project.model.CbLoanConfigBean;
 import th.co.cbank.project.model.CbSaveConfigBean;
+import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.TableUtil;
 
 public class AppSettingDialog extends BaseDialogSwing {
@@ -3117,7 +3116,7 @@ public class AppSettingDialog extends BaseDialogSwing {
         bean.setBookSpec(cbBookSpec.getSelectedIndex());
 
         if (getConfigControl().saveConfig(bean)) {
-            JOptionPane.showMessageDialog(this, "บันทึกข้อมูลเรียบร้อยแล้ว");
+            MessageAlert.infoPopup(this, "บันทึกข้อมูลเรียบร้อยแล้ว");
         }
     }//GEN-LAST:event_btnPrintTransaction4ActionPerformed
 
@@ -3125,7 +3124,7 @@ public class AppSettingDialog extends BaseDialogSwing {
         if (!txtTypeCode.getText().equals("")) {
             saveData();
         } else {
-            JOptionPane.showMessageDialog(this, "กรุณากรอกข้อมูลให้ครบถ้วน");
+            MessageAlert.warningPopup(this, "กรุณากรอกข้อมูลให้ครบถ้วน");
             txtTypeCode.requestFocus();
         }
     }//GEN-LAST:event_btnSaveTypeActionPerformed
@@ -3176,7 +3175,7 @@ public class AppSettingDialog extends BaseDialogSwing {
         if (!txtHCode.getText().equals("")) {
             save();
         } else {
-            JOptionPane.showMessageDialog(this, "กรุณากรอกข้อมูลให้ครบถ้วน");
+            MessageAlert.warningPopup(this, "กรุณากรอกข้อมูลให้ครบถ้วน");
             txtHCode.requestFocus();
         }
     }//GEN-LAST:event_jButton3ActionPerformed
@@ -3271,7 +3270,7 @@ public class AppSettingDialog extends BaseDialogSwing {
         if (!txtLoanCode.getText().equals("")) {
             saveLoanConfig();
         } else {
-            JOptionPane.showMessageDialog(this, "กรุณากรอกข้อมูลให้ครบถ้วน");
+            MessageAlert.warningPopup(this, "กรุณากรอกข้อมูลให้ครบถ้วน");
             txtLoanCode.requestFocus();
         }
     }//GEN-LAST:event_jButton4ActionPerformed
@@ -3356,7 +3355,7 @@ public class AppSettingDialog extends BaseDialogSwing {
         if (!txtLoanCode.getText().equals("")) {
             deleteLoanData();
         } else {
-            JOptionPane.showMessageDialog(this, "กรุณาเลือกข้อมูลที่ต้องการลบ");
+            MessageAlert.warningPopup(this, "กรุณาเลือกข้อมูลที่ต้องการลบ");
             txtLoanCode.setText("");
             txtLoanCode.setEditable(true);
             txtLoanCode.requestFocus();
@@ -3411,15 +3410,15 @@ public class AppSettingDialog extends BaseDialogSwing {
             return;
         }
         if (getSaveConfigControl().typeCodeExist(txtTypeCode.getText())) {
-            JOptionPane.showMessageDialog(this, "มีการนำข้อมูลเงินฝากประเภทนี้ไปใช้งานแล้ว ไม่สามารถลบรายการนี้ได้ !");
+            MessageAlert.warningPopup(this, "มีการนำข้อมูลเงินฝากประเภทนี้ไปใช้งานแล้ว ไม่สามารถลบรายการนี้ได้ !");
             return;
         }
         if (getSaveConfigControl().deleteConfig(txtTypeCode.getText())) {
-            JOptionPane.showMessageDialog(this, "ลบข้อมูลเรียบร้อยแล้ว");
+            MessageAlert.warningPopup(this, "ลบข้อมูลเรียบร้อยแล้ว");
             loadDataSaveType();
             clearConfigSaveForm();
         } else {
-            JOptionPane.showMessageDialog(this, "ไม่สามารถลบข้อมูลได้ !!!");
+            MessageAlert.warningPopup(this, "ไม่สามารถลบข้อมูลได้ !!!");
         }
     }//GEN-LAST:event_btnSaveType1ActionPerformed
 
@@ -3434,10 +3433,10 @@ public class AppSettingDialog extends BaseDialogSwing {
             if (getHoonConfigControl().deleteMaster(txtHCode.getText())) {
                 loadHoonList();
                 resetHoon();
-                JOptionPane.showMessageDialog(this, "ลบข้อมูลหุ้นเรียบร้อย !");
+                MessageAlert.infoPopup(this, "ลบข้อมูลหุ้นเรียบร้อย !");
             }
         } else {
-            JOptionPane.showMessageDialog(this, "กรุณาเลือกข้อมูลที่ต้องการลบ");
+            MessageAlert.warningPopup(this, "กรุณาเลือกข้อมูลที่ต้องการลบ");
             txtHCode.setEditable(true);
             txtHCode.requestFocus();
         }
@@ -4459,13 +4458,13 @@ public class AppSettingDialog extends BaseDialogSwing {
             bean.setHoonBuyMin(Integer.parseInt(txtHoonBuyMin.getText().replace(",", "")));
 
             if (getHoonConfigControl().saveCbHoonConfig(bean)) {
-                JOptionPane.showMessageDialog(this, "บันทึกข้อมูลเรียบร้อย");
+                MessageAlert.infoPopup(this, "บันทึกข้อมูลเรียบร้อย");
                 resetHoon();
                 loadHoonList();
             }
         } catch (NumberFormatException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
-            Log.write.error(e.getMessage());
+            MessageAlert.errorPopup(this, e.getMessage());
+            logger.error(e.getMessage());
         }
     }
 
@@ -4542,7 +4541,7 @@ public class AppSettingDialog extends BaseDialogSwing {
         lBean.setMinPaymentBaht(Double.parseDouble(txtMinPayBaht.getText().replace(",", "")));
 
         if (getLoanConfigControl().saveLoanConfig(lBean)) {
-            JOptionPane.showMessageDialog(this, "บันทึกข้อมูลเรียบร้อย");
+            MessageAlert.infoPopup(this, "บันทึกข้อมูลเรียบร้อย");
             resetConfigLoan();
             //load list data
             loadConfigLoadList();
@@ -4700,7 +4699,7 @@ public class AppSettingDialog extends BaseDialogSwing {
         bean.setMinWitdraw(Double.parseDouble(txtMinWitdraw.getText().replace(",", "")));
 
         if (getSaveConfigControl().saveCbSaveConfig(bean)) {
-            JOptionPane.showMessageDialog(this, "บันทึกข้อมูลเรียบร้อยแล้ว");
+            MessageAlert.infoPopup(this, "บันทึกข้อมูลเรียบร้อยแล้ว");
             clearConfigSaveForm();
             loadDataSaveType();
         }
@@ -4721,15 +4720,15 @@ public class AppSettingDialog extends BaseDialogSwing {
     private void deleteLoanData() {
         try {
             if (getLoanConfigControl().deleteLoanMaster(txtLoanCode.getText())) {
-                JOptionPane.showMessageDialog(this, "ลบข้อมูลเรียบร้อย");
+                MessageAlert.infoPopup(this, "ลบข้อมูลเรียบร้อย");
                 loadConfigLoadList();
                 resetConfigLoan();
             } else {
-                JOptionPane.showMessageDialog(this, "ไม่สามารถลบข้อมูลได้");
+                MessageAlert.errorPopup(this, "ไม่สามารถลบข้อมูลได้");
             }
         } catch (HeadlessException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
-            Log.write.error(e.getMessage());
+            MessageAlert.errorPopup(this, e.getMessage());
+            logger.error(e.getMessage());
         }
     }
 

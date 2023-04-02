@@ -66,7 +66,7 @@ public class CbTransactionLoanControl extends BaseControl {
             return mappingBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }
@@ -81,7 +81,7 @@ public class CbTransactionLoanControl extends BaseControl {
             return mappingBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }
@@ -95,7 +95,7 @@ public class CbTransactionLoanControl extends BaseControl {
             return mappingBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }
@@ -111,7 +111,7 @@ public class CbTransactionLoanControl extends BaseControl {
             return mappingBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }
@@ -133,7 +133,7 @@ public class CbTransactionLoanControl extends BaseControl {
             return mappingBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }
@@ -149,7 +149,7 @@ public class CbTransactionLoanControl extends BaseControl {
             return listBean.get(0);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return null;
         }
     }
@@ -162,7 +162,7 @@ public class CbTransactionLoanControl extends BaseControl {
                     + "t_hoon_amt,t_hoon_cash,t_hoon_ton,t_hoon_rate,branch_code,t_interest,t_fee,t_status,"
                     + "t_loan_int_ar_lost,t_loan_int_ar_mgr,t_loan_int_ar_int)  "
                     + "values('" + DateFormat.getMySQL_Date(bean.getT_date()) + "',curtime(),'" + bean.getT_acccode() + "',"
-                    + "'" + bean.getT_custcode() + "','" + bean.getT_description() + "','" + bean.getT_amount() + "',"
+                    + "'" + bean.getT_custcode() + "','" + ThaiUtil.Unicode2ASCII(bean.getT_description()) + "','" + bean.getT_amount() + "',"
                     + "'" + bean.getT_empcode() + "','" + bean.getT_docno() + "','" + bean.getRemark() + "',"
                     + "'" + bean.getT_booktype() + "','" + bean.getT_hoon() + "','" + bean.getLineNo() + "',"
                     + "'" + bean.getPrintChk() + "','" + bean.getT_balance() + "','" + bean.getT_index() + "',"
@@ -175,7 +175,7 @@ public class CbTransactionLoanControl extends BaseControl {
             return true;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return false;
@@ -198,7 +198,7 @@ public class CbTransactionLoanControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         if (LineMax == 0) {
@@ -222,7 +222,7 @@ public class CbTransactionLoanControl extends BaseControl {
             rs.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         if (LineMax == 0) {
@@ -241,7 +241,7 @@ public class CbTransactionLoanControl extends BaseControl {
             update(sql);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
     }
 
@@ -267,7 +267,7 @@ public class CbTransactionLoanControl extends BaseControl {
             rs1.close();
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
 
         return list;
@@ -285,7 +285,7 @@ public class CbTransactionLoanControl extends BaseControl {
             return MySQLConnect.exeUpdate(sql) > 0;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
         }
         return false;
     }

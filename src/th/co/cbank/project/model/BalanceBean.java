@@ -1,10 +1,9 @@
 package th.co.cbank.project.model;
 
 import java.util.Date;
-import org.apache.log4j.Logger;
 
 public class BalanceBean {
-    private final Logger logger = Logger.getLogger(BalanceBean.class);
+
     private String B_CUST_CODE;
     private String B_CUST_NAME;
     private String B_CUST_LASTNAME;

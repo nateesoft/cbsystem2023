@@ -9,6 +9,7 @@ import th.co.cbank.project.model.CbMemberTypeBean;
 import th.co.cbank.util.MessageAlert;
 
 public class CbMemberTypeControl extends BaseControl {
+
     private final Logger logger = Logger.getLogger(CbMemberTypeControl.class);
 
     public List<CbMemberTypeBean> mappingBean(ResultSet rs) throws Exception {
@@ -32,7 +33,7 @@ public class CbMemberTypeControl extends BaseControl {
             return mappingBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }
@@ -42,13 +43,13 @@ public class CbMemberTypeControl extends BaseControl {
             String sql = "select * from cb_member_type where type_code='" + pj_id + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             List<CbMemberTypeBean> listBean = mappingBean(rs);
-            if(listBean.isEmpty()){
+            if (listBean.isEmpty()) {
                 return null;
             }
             return listBean.get(0);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return null;
         }
     }
@@ -56,7 +57,7 @@ public class CbMemberTypeControl extends BaseControl {
     public boolean saveMemberType(CbMemberTypeBean bean) {
         try {
             String sql = "insert into cb_member_type (type_code,type_name,member_count)  "
-                    + "values('" + bean.getTypeCode() + "','" + bean.getTypeName() + "','" + bean.getMemberCount() + "')";
+                    + "values('" + bean.getTypeCode() + "','" + ThaiUtil.Unicode2ASCII(bean.getTypeName()) + "','" + bean.getMemberCount() + "')";
             String sqlChk = "select * from cb_member_type where type_code='" + bean.getTypeCode() + "'";
             ResultSet rs = MySQLConnect.getResultSet(sqlChk);
             if (rs.next()) {
@@ -69,7 +70,7 @@ public class CbMemberTypeControl extends BaseControl {
             return true;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return false;
         }
     }
@@ -77,14 +78,14 @@ public class CbMemberTypeControl extends BaseControl {
     public boolean updateMemberType(CbMemberTypeBean bean) {
         try {
             String sql = "update cb_member_type set "
-                    + "type_name='" + bean.getTypeName() + "',"
+                    + "type_name='" + ThaiUtil.Unicode2ASCII(bean.getTypeName()) + "',"
                     + "member_count='" + bean.getMemberCount() + "' "
                     + "where type_code='" + bean.getTypeCode() + "'";
             update(sql);
             return true;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return false;
         }
     }

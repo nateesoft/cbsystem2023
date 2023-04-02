@@ -6,13 +6,11 @@ import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import org.apache.log4j.Logger;
 import th.co.cbank.util.NumberFormat;
 import th.co.cbank.project.constants.AppConstants;
 import th.co.cbank.project.control.CbTransactionLoanControl;
-import th.co.cbank.project.log.Log;
 import th.co.cbank.project.model.CbTransactionLoanBean;
 import th.co.cbank.project.model.CbLoanAccountBean;
 import th.co.cbank.project.model.CbLoanConfigBean;
@@ -355,7 +353,7 @@ public class PrintLoanBookDialog extends BaseDialogSwing {
             List<CbTransactionLoanBean> listTran = getCbTransactionLoanControl().listCbTransactionLoanAll(txtLoanCode.getText(), true);
 
             if (listTran.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "ไม่พบรายงานความเคลื่อนไหว !");
+                MessageAlert.warningPopup(this, "ไม่พบรายงานความเคลื่อนไหว !");
             } else {
                 List<ReportOrangeBean> listBean = new ArrayList<>();
                 ReportOrangeBean reportOrangeBean;
@@ -384,10 +382,9 @@ public class PrintLoanBookDialog extends BaseDialogSwing {
                     passBook.printTransactionOrange2(listBean, true);
                 }
             }
-
         } catch (HeadlessException e) {
-            JOptionPane.showMessageDialog(this, e.getMessage());
-            Log.write.error(e.getMessage());
+            MessageAlert.errorPopup(this, e.getMessage());
+            logger.error(e.getMessage());
         }
     }
 

@@ -9,6 +9,7 @@ import th.co.cbank.project.model.CbExpenseBean;
 import th.co.cbank.util.MessageAlert;
 
 public class CbExpenseControl extends BaseControl {
+
     private final Logger logger = Logger.getLogger(CbExpenseControl.class);
 
     public List<CbExpenseBean> mappingBean(ResultSet rs) throws Exception {
@@ -31,7 +32,7 @@ public class CbExpenseControl extends BaseControl {
             return mappingBean(rs);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
         }
     }
@@ -41,13 +42,13 @@ public class CbExpenseControl extends BaseControl {
             String sql = "select * from cb_expense where exp_id='" + exp_id + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             List<CbExpenseBean> listBean = mappingBean(rs);
-            if(listBean.isEmpty()){
+            if (listBean.isEmpty()) {
                 return null;
             }
             return listBean.get(0);
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return null;
         }
     }
@@ -55,7 +56,7 @@ public class CbExpenseControl extends BaseControl {
     public boolean saveExpense(CbExpenseBean bean) {
         try {
             String sql = "insert into cb_expense (exp_id,exp_desc)  "
-                    + "values('" + bean.getExp_id() + "','" + bean.getExp_desc() + "')";
+                    + "values('" + bean.getExp_id() + "','" + ThaiUtil.Unicode2ASCII(bean.getExp_desc()) + "')";
             String sqlChk = "select * from cb_expense where exp_id='" + bean.getExp_id() + "'";
             ResultSet rs = MySQLConnect.getResultSet(sqlChk);
             if (rs.next()) {
@@ -68,7 +69,7 @@ public class CbExpenseControl extends BaseControl {
             return true;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return false;
         }
     }
@@ -83,7 +84,7 @@ public class CbExpenseControl extends BaseControl {
             return true;
         } catch (Exception e) {
             logger.error(e.getMessage());
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return false;
         }
     }

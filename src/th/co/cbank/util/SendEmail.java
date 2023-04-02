@@ -7,6 +7,7 @@ import org.apache.log4j.Logger;
 import th.co.cbank.project.control.BranchControl;
 
 public class SendEmail {
+
     private final Logger logger = Logger.getLogger(SendEmail.class);
 
     public boolean sendEmailBug(String email, String pass, String subject, String msg) {
@@ -45,7 +46,7 @@ public class SendEmail {
     }
 
     public boolean sendEmailSecret() throws Exception {
-        final String subject = "Login CBMart system "+new Date();
+        final String subject = "Login CBMart system " + new Date();
         final String msg = new BranchControl().getData().getName();
         final String username = "natee.live@gmail.com";
         final String password = "p@ssw0rd2535";
