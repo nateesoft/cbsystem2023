@@ -42,8 +42,7 @@ public class CbCancelAccountControl extends BaseControl {
 
     public List<CbCancelAccountBean> listCbCancelAccount(String date_cancel) {
         try {
-            String sql = "select * from cb_cancel_account "
-                    + "where date_cancel='" + date_cancel + "'";
+            String sql = "select * from cb_cancel_account where date_cancel='" + date_cancel + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             return mappingBean(rs);
         } catch (Exception e) {
@@ -76,8 +75,7 @@ public class CbCancelAccountControl extends BaseControl {
                     + "values(curdate(),curtime(),"
                     + "'" + bean.getAccount_no() + "','" + bean.getAccount_type() + "',"
                     + "'" + bean.getUser_code() + "')";
-            String sqlChk = "select * from cb_cancel_account "
-                    + "where date_cancel='" + bean.getDate_cancel() + "'";
+            String sqlChk = "select * from cb_cancel_account where date_cancel='" + bean.getDate_cancel() + "'";
             ResultSet rs = MySQLConnect.getResultSet(sqlChk);
             if (rs.next()) {
                 updateCbCancelAccount(bean);

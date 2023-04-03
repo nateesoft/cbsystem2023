@@ -90,7 +90,7 @@ public class CbHoonConfigControl extends BaseControl {
         try {
             String sql = "update cb_hoon_config set "
                     + "hoonCode='" + bean.getHoonCode() + "', "
-                    + "hoonName='" + bean.getHoonName() + "', "
+                    + "hoonName='" + ThaiUtil.Unicode2ASCII(bean.getHoonName()) + "', "
                     + "hoonRate='" + bean.getHoonRate() + "', "
                     + "hoonVolumnMax='" + bean.getHoonVolumnMax() + "', "
                     + "hoonDeviden='" + bean.getHoonDeviden() + "', "
@@ -107,8 +107,7 @@ public class CbHoonConfigControl extends BaseControl {
 
     public boolean deleteMaster(String hoonCode) {
         try {
-            String sql = "delete from cb_hoon_config "
-                    + "where hoonCode='" + hoonCode + "'";
+            String sql = "delete from cb_hoon_config where hoonCode='" + hoonCode + "'";
             update(sql);
             return true;
         } catch (Exception e) {

@@ -37,7 +37,7 @@ public class BranchControl extends BaseControl {
             bean.setFlageCost(rs.getString("FlageCost"));
             bean.setGp(rs.getFloat("Gp"));
             bean.setFlageGp(rs.getString("FlageGp"));
-            bean.setRemark(rs.getString("Remark"));
+            bean.setRemark(ThaiUtil.ASCII2Unicode(rs.getString("Remark")));
             bean.setArBillNo(rs.getFloat("ArBillNo"));
             bean.setEarneatBillNo(rs.getFloat("EarneatBillNo"));
             bean.setReturnBillNo(rs.getFloat("ReturnBillNo"));
@@ -140,14 +140,14 @@ public class BranchControl extends BaseControl {
                     + "PrintInvForm,PSelectStk,PStkChk,PMinStkChk,RoundUpTime,GiftStatusChk,"
                     + "KICCopy1,KICCopy2,KICCopy3,KICCopy4,KICCopy5,KICCopy6,KICCopy7,KICCopy8,KICCopy9,"
                     + "KICChk1,KICChk2,KICChk3,KICChk4,KICChk5,KICChk6,KICChk7,KICChk8,KICChk9,UpdateBranchPoint)  "
-                    + "values('" + bean.getCode() + "','" + bean.getName() + "','" + bean.getAddressNo() + "',"
-                    + "'" + bean.getLocality() + "','" + bean.getSubProvince() + "','" + bean.getProvince() + "',"
+                    + "values('" + bean.getCode() + "','" + ThaiUtil.Unicode2ASCII(bean.getName()) + "','" + bean.getAddressNo() + "',"
+                    + "'" + ThaiUtil.Unicode2ASCII(bean.getLocality()) + "','" + ThaiUtil.Unicode2ASCII(bean.getSubProvince()) + "','" + ThaiUtil.Unicode2ASCII(bean.getProvince()) + "',"
                     + "'" + bean.getPost() + "','" + bean.getTel_No() + "','" + bean.getFax_No() + "',"
-                    + "'" + bean.getE_Mail() + "','" + bean.getManager() + "','" + bean.getLocation_Area() + "',"
+                    + "'" + bean.getE_Mail() + "','" + ThaiUtil.Unicode2ASCII(bean.getManager()) + "','" + ThaiUtil.Unicode2ASCII(bean.getLocation_Area()) + "',"
                     + "'" + bean.getSer_Area() + "','" + bean.getCou_Area() + "','" + bean.getKic_Area() + "',"
                     + "'" + bean.getTot_Area() + "','" + bean.getCost() + "','" + bean.getCharge() + "',"
                     + "'" + bean.getFlageCost() + "','" + bean.getGp() + "','" + bean.getFlageGp() + "',"
-                    + "'" + bean.getRemark() + "','" + bean.getArBillNo() + "','" + bean.getEarneatBillNo() + "',"
+                    + "'" + ThaiUtil.Unicode2ASCII(bean.getRemark()) + "','" + bean.getArBillNo() + "','" + bean.getEarneatBillNo() + "',"
                     + "'" + bean.getReturnBillNo() + "','" + bean.getPrintAutoSumDate() + "',"
                     + "'" + bean.getSaveOrder() + "','" + bean.getSaveOrderCopy() + "','" + bean.getSaveOrderChk() + "',"
                     + "'" + bean.getKIC1() + "','" + bean.getKIC2() + "','" + bean.getKIC3() + "',"
@@ -185,17 +185,17 @@ public class BranchControl extends BaseControl {
 
     public void updateBranch(BranchBean bean) {
         try {
-            String sql = "update branch set Code='" + bean.getCode() + "', Name='" + bean.getName() + "', "
-                    + "AddressNo='" + bean.getAddressNo() + "', Locality='" + bean.getLocality() + "', "
-                    + "SubProvince='" + bean.getSubProvince() + "', Province='" + bean.getProvince() + "', "
+            String sql = "update branch set Code='" + bean.getCode() + "', Name='" + ThaiUtil.Unicode2ASCII(bean.getName()) + "', "
+                    + "AddressNo='" + bean.getAddressNo() + "', Locality='" + ThaiUtil.Unicode2ASCII(bean.getLocality()) + "', "
+                    + "SubProvince='" + ThaiUtil.Unicode2ASCII(bean.getSubProvince()) + "', Province='" + ThaiUtil.Unicode2ASCII(bean.getProvince()) + "', "
                     + "Post='" + bean.getPost() + "', Tel_No='" + bean.getTel_No() + "', "
                     + "Fax_No='" + bean.getFax_No() + "', E_Mail='" + bean.getE_Mail() + "', "
-                    + "Manager='" + bean.getManager() + "', Location_Area='" + bean.getLocation_Area() + "', "
+                    + "Manager='" + ThaiUtil.Unicode2ASCII(bean.getManager()) + "', Location_Area='" + ThaiUtil.Unicode2ASCII(bean.getLocation_Area()) + "', "
                     + "Ser_Area='" + bean.getSer_Area() + "', Cou_Area='" + bean.getCou_Area() + "', "
                     + "Kic_Area='" + bean.getKic_Area() + "', Tot_Area='" + bean.getTot_Area() + "', "
                     + "Cost='" + bean.getCost() + "', Charge='" + bean.getCharge() + "', "
                     + "FlageCost='" + bean.getFlageCost() + "', Gp='" + bean.getGp() + "', "
-                    + "FlageGp='" + bean.getFlageGp() + "', Remark='" + bean.getRemark() + "', "
+                    + "FlageGp='" + bean.getFlageGp() + "', Remark='" + ThaiUtil.Unicode2ASCII(bean.getRemark()) + "', "
                     + "ArBillNo='" + bean.getArBillNo() + "', EarneatBillNo='" + bean.getEarneatBillNo() + "', "
                     + "ReturnBillNo='" + bean.getReturnBillNo() + "', "
                     + "PrintAutoSumDate='" + bean.getPrintAutoSumDate() + "', SaveOrder='" + bean.getSaveOrder() + "', "

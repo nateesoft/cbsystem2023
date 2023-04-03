@@ -141,7 +141,7 @@ public class CbLoanConfigControl extends BaseControl {
         try {
             String sql = "update cb_loan_config set "
                     + "LoanCode='" + bean.getLoanCode() + "', "
-                    + "LoanName='" + bean.getLoanName() + "', "
+                    + "LoanName='" + ThaiUtil.Unicode2ASCII(bean.getLoanName()) + "', "
                     + "LoanINT='" + bean.getLoanINT() + "', "
                     + "LoanFee='" + bean.getLoanFee() + "', "
                     + "LoanPenaltyINT='" + bean.getLoanPenaltyINT() + "', "
@@ -173,8 +173,7 @@ public class CbLoanConfigControl extends BaseControl {
 
     public boolean deleteLoanMaster(String LoanCode) {
         try {
-            String sql = "delete from cb_loan_config "
-                    + "where LoanCode='" + LoanCode + "';";
+            String sql = "delete from cb_loan_config where LoanCode='" + LoanCode + "';";
             update(sql);
             return true;
         } catch (Exception e) {
@@ -187,10 +186,8 @@ public class CbLoanConfigControl extends BaseControl {
 
     public boolean updateRunningBookNo(String loan_type) {
         try {
-            String sql = "update cb_loan_config set "
-                    + "LoanRunning=LoanRunning+1,"
-                    + "BookNo=BookNo+1 "
-                    + "where LoanCode='" + loan_type + "'";
+            String sql = "update cb_loan_config set LoanRunning=LoanRunning+1,"
+                    + "BookNo=BookNo+1 where LoanCode='" + loan_type + "'";
             return MySQLConnect.exeUpdate(sql) > 0;
         } catch (Exception e) {
             logger.error(e.getMessage());

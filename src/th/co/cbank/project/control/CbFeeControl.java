@@ -69,8 +69,7 @@ public class CbFeeControl extends BaseControl {
         try {
             String sql = "insert into cb_fee (exp_id,exp_desc)  "
                     + "values('" + bean.getExp_id() + "','" + bean.getExp_desc() + "')";
-            String sqlChk = "select * from cb_fee "
-                    + "where exp_id='" + bean.getExp_id() + "'";
+            String sqlChk = "select * from cb_fee where exp_id='" + bean.getExp_id() + "'";
             ResultSet rs = MySQLConnect.getResultSet(sqlChk);
             if (rs.next()) {
                 updateCbFee(bean);
@@ -87,9 +86,8 @@ public class CbFeeControl extends BaseControl {
 
     public void updateCbFee(CbFeeBean bean) {
         try {
-            String sql = "update cb_fee set "
-                    + "exp_id='" + bean.getExp_id() + "', "
-                    + "exp_desc='" + bean.getExp_desc() + "' "
+            String sql = "update cb_fee set exp_id='" + bean.getExp_id() + "', "
+                    + "exp_desc='" + ThaiUtil.Unicode2ASCII(bean.getExp_desc()) + "' "
                     + "where exp_id='" + bean.getExp_id() + "'";
             update(sql);
         } catch (Exception e) {
@@ -150,7 +148,7 @@ public class CbFeeControl extends BaseControl {
         try {
             String sql = "update cb_fee set "
                     + "exp_id='" + bean.getExp_id() + "', "
-                    + "exp_desc='" + bean.getExp_desc() + "' "
+                    + "exp_desc='" + ThaiUtil.Unicode2ASCII(bean.getExp_desc()) + "' "
                     + "where exp_id='" + bean.getExp_id() + "'";
             update(sql);
             return true;

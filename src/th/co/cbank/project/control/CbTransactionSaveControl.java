@@ -40,7 +40,7 @@ public class CbTransactionSaveControl extends BaseControl {
             bean.setT_amount(rs.getDouble("T_amount"));
             bean.setT_empcode(rs.getString("T_empcode"));
             bean.setT_docno(rs.getString("t_docno"));
-            bean.setRemark(rs.getString("remark"));
+            bean.setRemark(ThaiUtil.ASCII2Unicode(rs.getString("remark")));
             bean.setT_booktype(rs.getString("T_booktype"));
             bean.setT_hoon(rs.getInt("t_hoon"));
             bean.setLineNo(rs.getInt("LineNo"));
@@ -104,11 +104,9 @@ public class CbTransactionSaveControl extends BaseControl {
 
     public List<CbTransactionSaveBean> getTransactionSave(String t_custcode, String t_acccode) {
         try {
-            String sql = "select * from cb_transaction_save "
-                    + "where t_custcode='" + t_custcode + "' "
+            String sql = "select * from cb_transaction_save where t_custcode='" + t_custcode + "' "
                     + "and t_acccode='" + t_acccode + "' "
-                    + "and t_status in('2','3','8') "
-                    + "order by t_date, t_time";
+                    + "and t_status in('2','3','8') order by t_date, t_time";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             return mappingListBean(rs);
         } catch (Exception e) {
@@ -120,12 +118,9 @@ public class CbTransactionSaveControl extends BaseControl {
 
     public List<CbTransactionSaveBean> getTransaction(String t_custcode, String t_acccode, Date t_date) {
         try {
-            String sql = "select * from cb_transaction_save "
-                    + "where t_custcode='" + t_custcode + "' "
-                    + "and t_acccode='" + t_acccode + "' "
-                    + "and t_date='" + DateFormat.getMySQL_Date(t_date) + "' "
-                    + "and t_status in('2','3','8') "
-                    + "order by t_date, t_time";
+            String sql = "select * from cb_transaction_save where t_custcode='" + t_custcode + "' "
+                    + "and t_acccode='" + t_acccode + "' and t_date='" + DateFormat.getMySQL_Date(t_date) + "' "
+                    + "and t_status in('2','3','8') order by t_date, t_time";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             return mappingListBean(rs);
         } catch (Exception e) {
@@ -137,12 +132,10 @@ public class CbTransactionSaveControl extends BaseControl {
 
     public List<CbTransactionSaveBean> getTransactionByBookType(String acccode, String booktype1, String booktype2) {
         try {
-            String sql = "select * from "
-                    + "cb_transaction_save "
+            String sql = "select * from cb_transaction_save "
                     + "where t_acccode='" + acccode + "' "
                     + "and printchk='N' and LineNo>0 and t_booktype not in"
-                    + "('" + booktype1 + "','" + booktype2 + "') "
-                    + "order by t_index;";
+                    + "('" + booktype1 + "','" + booktype2 + "') order by t_index;";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             return mappingListBean(rs);
         } catch (Exception e) {
@@ -154,13 +147,10 @@ public class CbTransactionSaveControl extends BaseControl {
 
     public List<CbTransactionSaveBean> listCbTransactionSaveAll(String accCode) {
         try {
-            String sql = "select * "
-                    + "from cb_transaction_save "
+            String sql = "select * from cb_transaction_save "
                     + "where t_acccode='" + accCode + "' "
-                    + "and LineNo>0 "
-                    + "and PrintChk='N' "
-                    + "and t_status in('2','3','8') "
-                    + "order by t_index";
+                    + "and LineNo>0 and PrintChk='N' "
+                    + "and t_status in('2','3','8') order by t_index";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             return mappingListBean(rs);
         } catch (Exception e) {
@@ -172,11 +162,9 @@ public class CbTransactionSaveControl extends BaseControl {
 
     public List<CbTransactionSaveBean> listCbTransactionSaveAllAddStatus11(String accCode) {
         try {
-            String sql = "select * "
-                    + "from cb_transaction_save "
+            String sql = "select * from cb_transaction_save "
                     + "where t_acccode='" + accCode + "' "
-                    + "and PrintChk='N' "
-                    + "and t_status in('2','3','8', '11') "
+                    + "and PrintChk='N' and t_status in('2','3','8', '11') "
                     + "order by t_date, t_time, LineNo";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             return mappingListBean(rs);
@@ -189,8 +177,7 @@ public class CbTransactionSaveControl extends BaseControl {
 
     public CbTransactionSaveBean listCbTransactionSave(String T_custcode) {
         try {
-            String sql = "select * from cb_transaction_save "
-                    + "where T_custcode='" + T_custcode + "'";
+            String sql = "select * from cb_transaction_save where T_custcode='" + T_custcode + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             List<CbTransactionSaveBean> listBean = mappingListBean(rs);
             if (listBean.isEmpty()) {
@@ -271,8 +258,7 @@ public class CbTransactionSaveControl extends BaseControl {
         int LineMax = 1;
         try {
             String sql = "select max(t_index)+1 as MaxLineNO "
-                    + "from cb_transaction_save "
-                    + "where t_acccode='" + AccCode + "' ";
+                    + "from cb_transaction_save where t_acccode='" + AccCode + "' ";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             if (rs.next()) {
                 LineMax = rs.getInt("MaxLineNO");
@@ -298,8 +284,7 @@ public class CbTransactionSaveControl extends BaseControl {
         int LineMax = 1;
         try {
             String sql = "select max(t_index)+1 as MaxLineNO "
-                    + "from cb_transaction_save "
-                    + "where t_acccode='" + AccCode + "' ";
+                    + "from cb_transaction_save where t_acccode='" + AccCode + "' ";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             if (rs.next()) {
                 LineMax = rs.getInt("MaxLineNO");
@@ -321,10 +306,8 @@ public class CbTransactionSaveControl extends BaseControl {
     public void updateLinePrint(String t_acccode, int lineNo, String t_date) {
         try {
             String sql = "update cb_transaction_save set "
-                    + "PrintChk='Y' "
-                    + "where t_acccode='" + t_acccode + "' "
-                    + "and lineNo='" + lineNo + "' "
-                    + "and t_date='" + t_date + "'";
+                    + "PrintChk='Y' where t_acccode='" + t_acccode + "' "
+                    + "and lineNo='" + lineNo + "' and t_date='" + t_date + "'";
             update(sql);
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -334,11 +317,9 @@ public class CbTransactionSaveControl extends BaseControl {
 
     public void updateLoanLinePrint(String t_acccode, int lineNo, String t_date) {
         try {
-            String sql = "update cb_transaction_loan set "
-                    + "PrintChk='Y' "
+            String sql = "update cb_transaction_loan set PrintChk='Y' "
                     + "where t_acccode='" + t_acccode + "' "
-                    + "and lineNo='" + lineNo + "' "
-                    + "and t_date='" + t_date + "'";
+                    + "and lineNo='" + lineNo + "' and t_date='" + t_date + "'";
             update(sql);
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -350,8 +331,7 @@ public class CbTransactionSaveControl extends BaseControl {
         try {
             String sql1 = "delete from cb_transaction_save "
                     + "where t_custcode='" + custCode + "' "
-                    + "and t_acccode='" + accCode + "' "
-                    + "and t_booktype='INT'";
+                    + "and t_acccode='" + accCode + "' and t_booktype='INT'";
             update(sql1);
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -364,8 +344,7 @@ public class CbTransactionSaveControl extends BaseControl {
         try {
             String sql = "select t_date, t_time, t_custcode, t_acccode, t_balance, "
                     + "t_amount,money_in,money_out,t_fee,t_description, t_status "
-                    + "from cb_transaction_save "
-                    + "where t_custcode='" + custCode + "' "
+                    + "from cb_transaction_save where t_custcode='" + custCode + "' "
                     + "order by t_date, t_time";
             ResultSet rs1 = MySQLConnect.getResultSet(sql);
             while (rs1.next()) {
@@ -393,8 +372,7 @@ public class CbTransactionSaveControl extends BaseControl {
         try {
             String sql = "select * from cb_transaction_save "
                     + "where t_acccode='" + accCode + "' "
-                    + "and t_status in('2','3','8', '11') "
-                    + "order by t_date, t_time, LineNo";
+                    + "and t_status in('2','3','8', '11') order by t_date, t_time, LineNo";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             return mappingListBean(rs);
         } catch (Exception e) {
@@ -407,14 +385,11 @@ public class CbTransactionSaveControl extends BaseControl {
     public boolean updateStateTable(CbTransactionSaveBean bean, int lineNoOld, String t_date) {
         try {
             String sql = "UPDATE cb_transaction_save "
-                    + "SET PrintChk= 'N',"
-                    + "LineNo='" + bean.getLineNo() + "',"
+                    + "SET PrintChk= 'N', LineNo='" + bean.getLineNo() + "',"
                     + "t_index='" + bean.getT_index() + "' "
                     + "WHERE t_acccode='" + bean.getT_acccode() + "' "
-                    + "AND LineNo='" + lineNoOld + "' "
-                    + "AND t_docno='" + bean.getT_docno() + "' "
-                    + "AND t_booktype='" + bean.getT_booktype() + "' "
-                    + "AND t_date='" + t_date + "'";
+                    + "AND LineNo='" + lineNoOld + "' AND t_docno='" + bean.getT_docno() + "' "
+                    + "AND t_booktype='" + bean.getT_booktype() + "' AND t_date='" + t_date + "'";
             return MySQLConnect.exeUpdate(sql) > 0;
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -426,13 +401,10 @@ public class CbTransactionSaveControl extends BaseControl {
     public boolean updateStateTable2(CbTransactionSaveBean bean, int lineNoOld, String t_date) {
         try {
             String sql = "UPDATE cb_transaction_save "
-                    + "SET LineNo='" + bean.getLineNo() + "', "
-                    + "t_index='" + bean.getT_index() + "' "
+                    + "SET LineNo='" + bean.getLineNo() + "', t_index='" + bean.getT_index() + "' "
                     + "WHERE t_acccode='" + bean.getT_acccode() + "' "
-                    + "AND LineNo='" + lineNoOld + "' "
-                    + "AND t_docno='" + bean.getT_docno() + "' "
-                    + "AND t_booktype='" + bean.getT_booktype() + "' "
-                    + "AND t_date='" + t_date + "'";
+                    + "AND LineNo='" + lineNoOld + "' AND t_docno='" + bean.getT_docno() + "' "
+                    + "AND t_booktype='" + bean.getT_booktype() + "' AND t_date='" + t_date + "'";
             MySQLConnect.exeUpdate(sql);
             return MySQLConnect.exeUpdate(sql) > 0;
         } catch (Exception e) {
@@ -445,8 +417,7 @@ public class CbTransactionSaveControl extends BaseControl {
     public List<CbTransactionSaveBean> listAllByAccountCode(String txtAccCode, String loanDocPrefix) {
         try {
             String sql = "select * from cb_transaction_save "
-                    + "where t_acccode='" + txtAccCode + "' "
-                    + "and LineNo>0 "
+                    + "where t_acccode='" + txtAccCode + "' and LineNo>0 "
                     + "and printchk='N' and t_booktype<>'" + loanDocPrefix + "' "
                     + "order by t_index";
             ResultSet rs = MySQLConnect.getResultSet(sql);
@@ -461,8 +432,7 @@ public class CbTransactionSaveControl extends BaseControl {
     public void updateWhereBookTypeNotIn(String txtAccCode, String loanDocPrefix, String paymentDocPrefix) {
         try {
             String sql = "update cb_transaction_save "
-                    + "set PrintChk='Y' "
-                    + "where t_acccode='" + txtAccCode + "' "
+                    + "set PrintChk='Y' where t_acccode='" + txtAccCode + "' "
                     + "and printChk='N' and t_booktype not in"
                     + "('" + loanDocPrefix + "','" + paymentDocPrefix + "') ";
             MySQLConnect.exeUpdate(sql);
@@ -475,8 +445,7 @@ public class CbTransactionSaveControl extends BaseControl {
     public void updateWhereBookTypeNotInAndLineNo(String acccode, String lineNo, String booktype) {
         try {
             String sql = "update cb_transaction_save "
-                    + "set PrintChk='Y' "
-                    + "where t_acccode='" + acccode + "' "
+                    + "set PrintChk='Y' where t_acccode='" + acccode + "' "
                     + "and lineNo='" + lineNo + "' "
                     + "and printChk='N' and t_booktype<>'" + booktype + "' ";
             MySQLConnect.exeUpdate(sql);
@@ -489,12 +458,9 @@ public class CbTransactionSaveControl extends BaseControl {
     public void updateWhereCustCodeAccode(double balance, String custCode, String accCode, String t_docno, String t_time) {
         try {
             String sql = "update cb_transaction_save set "
-                    + "t_balance='" + balance + "' "
-                    + "where t_custcode='" + custCode + "' "
-                    + "and t_acccode='" + accCode + "' "
-                    + "and t_docno='" + t_docno + "' "
-                    + "and t_time='" + t_time + "' "
-                    + "and t_status in('2','3','8')";
+                    + "t_balance='" + balance + "' where t_custcode='" + custCode + "' "
+                    + "and t_acccode='" + accCode + "' and t_docno='" + t_docno + "' "
+                    + "and t_time='" + t_time + "' and t_status in('2','3','8')";
             MySQLConnect.exeUpdate(sql);
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -504,12 +470,9 @@ public class CbTransactionSaveControl extends BaseControl {
 
     public List<CbTransactionSaveBean> getTdateList(String custCode, String accCode) {
         List<CbTransactionSaveBean> listBean = new ArrayList<>();
-        String sql = "select t_date from cb_transaction_save "
-                + "where t_status in('2','3','8') "
-                + "and t_custcode='" + custCode + "' "
-                + "and t_acccode='" + accCode + "' "
-                + "group by t_date "
-                + "order by t_date";
+        String sql = "select t_date from cb_transaction_save where t_status in('2','3','8') "
+                + "and t_custcode='" + custCode + "' and t_acccode='" + accCode + "' "
+                + "group by t_date order by t_date";
         try (ResultSet rs = MySQLConnect.getResultSet(sql)) {
             while (rs.next()) {
                 CbTransactionSaveBean bean = new CbTransactionSaveBean();
@@ -527,10 +490,8 @@ public class CbTransactionSaveControl extends BaseControl {
     public List<CbTransactionSaveBean> getListByAccoundCode(String accCode) {
         List<CbTransactionSaveBean> listBean = new ArrayList<>();
         try {
-            String sql = "select * from cb_transaction_save "
-                    + "where t_acccode='" + accCode + "' "
-                    + "and t_status in('2','3','8', '11') "
-                    + "order by t_date, t_time";
+            String sql = "select * from cb_transaction_save where t_acccode='" + accCode + "' "
+                    + "and t_status in('2','3','8', '11') order by t_date, t_time";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             while (rs.next()) {
                 CbTransactionSaveBean bean = mappingBean(rs);
@@ -548,12 +509,9 @@ public class CbTransactionSaveControl extends BaseControl {
     public void updateWhereAccountAndStatus(int line_no, int t_index, String accCode, String t_date, String t_time) {
         try {
             MySQLConnect.exeUpdate("update cb_transaction_save "
-                    + "set LineNo=" + line_no + ", t_index='" + t_index + "' "
-                    + "where t_acccode='" + accCode + "' "
-                    + "and t_date='" + t_date + "' "
-                    + "and t_time='" + t_time + "' "
-                    + "and t_status in('2','3','8', '11') "
-                    + "order by t_date, t_time");
+                    + "set LineNo=" + line_no + ", t_index='" + t_index + "' where t_acccode='" + accCode + "' "
+                    + "and t_date='" + t_date + "' and t_time='" + t_time + "' "
+                    + "and t_status in('2','3','8', '11') order by t_date, t_time");
         } catch (Exception e) {
             logger.error(e.getMessage());
             MessageAlert.errorPopup(this.getClass(), e.getMessage());

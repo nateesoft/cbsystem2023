@@ -1,5 +1,8 @@
 package th.co.cbank.project.model.mapping;
 
+import lombok.Data;
+
+@Data
 public class PayInterestAmtMapping {
 
     private int index;
@@ -8,53 +11,5 @@ public class PayInterestAmtMapping {
     private double balanceAmt;
     private double intAmt;
     private String custCode;
-
-    public int getIndex() {
-        return index;
-    }
-
-    public void setIndex(int index) {
-        this.index = index;
-    }
-
-    public String getAccountNo() {
-        return accountNo;
-    }
-
-    public void setAccountNo(String accountNo) {
-        this.accountNo = accountNo;
-    }
-
-    public String getAccountName() {
-        return accountName;
-    }
-
-    public void setAccountName(String accountName) {
-        this.accountName = accountName;
-    }
-
-    public double getBalanceAmt() {
-        return balanceAmt;
-    }
-
-    public void setBalanceAmt(double balanceAmt) {
-        this.balanceAmt = balanceAmt;
-    }
-
-    public double getIntAmt() {
-        return intAmt;
-    }
-
-    public void setIntAmt(double intAmt) {
-        this.intAmt = intAmt;
-    }
-
-    public String getCustCode() {
-        return custCode;
-    }
-
-    public void setCustCode(String custCode) {
-        this.custCode = custCode;
-    }
 
 }

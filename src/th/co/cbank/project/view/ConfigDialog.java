@@ -1419,10 +1419,9 @@ public class ConfigDialog extends BaseDialogSwing {
 
     private void tbUserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbUserMouseClicked
         if (evt.getClickCount() == 2) {
-            int rows = tbUser.getSelectedRow();
-            if (rows != -1) {
-                String userCode = tbUser.getValueAt(rows, 0).toString();
-                CbUserBean user = getUserControl().listUser(userCode);
+            if (tbUser.getSelectedRow() != -1) {
+                String userCode = tbUser.getValueAt(tbUser.getSelectedRow(), 0).toString();
+                CbUserBean user = getUserControl().getUser(userCode);
                 txtUserCode.setText(user.getUsername());
                 txtUserCode.setEditable(false);
                 txtUserPass.setText(user.getPassword());
@@ -1430,7 +1429,6 @@ public class ConfigDialog extends BaseDialogSwing {
                 txtLastName.setText(user.getLastname());
                 txtUserIDCode.setText(user.getIDCard());
                 cbGroup.setSelectedItem("" + user.getUsergroup());
-
                 txtUser_Addr.setText(user.getAddr_no());
                 txtUser_AddrNo.setText("" + user.getAddr_moo());
                 txtUser_AddrRoad.setText(user.getAddr_road());

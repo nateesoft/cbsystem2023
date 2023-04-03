@@ -97,7 +97,7 @@ public class DocumentGarunteeControl extends BaseControl {
     public boolean updateDocumentGaruntee(DocumentGarunteeBean documentGarunteeBean) {
         try {
             String sql = "update document_garuntee set "
-                    + "DOC_DESC='" + documentGarunteeBean.getDOC_DESC() + "', "
+                    + "DOC_DESC='" + ThaiUtil.Unicode2ASCII(documentGarunteeBean.getDOC_DESC()) + "', "
                     + "IMAGE1='" + documentGarunteeBean.getIMAGE1() + "', "
                     + "IMGAE2='" + documentGarunteeBean.getIMGAE2() + "', "
                     + "IMAGE3='" + documentGarunteeBean.getIMAGE3() + "' "

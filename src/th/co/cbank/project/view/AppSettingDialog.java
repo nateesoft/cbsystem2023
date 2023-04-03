@@ -4381,31 +4381,11 @@ public class AppSettingDialog extends BaseDialogSwing {
 
             cbPayType1.setSelectedIndex(bean.getCbPayType1());
             cbPayType2.setSelectedIndex(bean.getCbPayType2());
-            if (bean.getCbPayType3() > 0) {
-                cbPayType3.setSelectedIndex(bean.getCbPayType3() - 1);
-            } else {
-                cbPayType3.setSelectedIndex(0);
-            }
-            if (bean.getCbPayType4() > 0) {
-                cbPayType4.setSelectedIndex(bean.getCbPayType4() - 1);
-            } else {
-                cbPayType4.setSelectedIndex(0);
-            }
-            if (bean.getCbPayType5() > 0) {
-                cbPayType5.setSelectedIndex(bean.getCbPayType5() - 1);
-            } else {
-                cbPayType5.setSelectedIndex(0);
-            }
-            if (bean.getCbPayType6() > 0) {
-                cbPayType6.setSelectedIndex(bean.getCbPayType6() - 1);
-            } else {
-                cbPayType6.setSelectedIndex(0);
-            }
-            if (bean.getCbPayType7() > 0) {
-                cbPayType7.setSelectedIndex(bean.getCbPayType7() - 1);
-            } else {
-                cbPayType7.setSelectedIndex(0);
-            }
+            cbPayType3.setSelectedIndex(bean.getCbPayType3());
+            cbPayType4.setSelectedIndex(bean.getCbPayType4());
+            cbPayType5.setSelectedIndex(bean.getCbPayType5());
+            cbPayType6.setSelectedIndex(bean.getCbPayType6());
+            cbPayType7.setSelectedIndex(bean.getCbPayType7());
 
             txtPayINT.setText(NumberFormat.showDouble2(bean.getPayINT()));
             txtSaveRunning.setText("" + bean.getSaveRunning());
@@ -4651,9 +4631,7 @@ public class AppSettingDialog extends BaseDialogSwing {
         } else {
             bean.setTypeCondition("3");
         }
-
         bean.setRDType2(Double.parseDouble(txtRDType2.getText()));
-
         bean.setCbRDType2(cbRDType2.getSelectedIndex());
         if (rdTypeDay.isSelected()) {
             bean.setRdTypeDialy("D");
@@ -4662,7 +4640,6 @@ public class AppSettingDialog extends BaseDialogSwing {
         } else if (rdTypeYear.isSelected()) {
             bean.setRdTypeDialy("Y");
         }
-
         if (rdPayINT1.isSelected()) {
             bean.setPayType("1");
         } else if (rdPayINT2.isSelected()) {
@@ -4674,13 +4651,11 @@ public class AppSettingDialog extends BaseDialogSwing {
         } else {
             bean.setPayType("5");
         }
-
         try {
             bean.setTAX(Double.parseDouble(txtTax.getText()));
         } catch (NumberFormatException e) {
             System.err.println(e);
         }
-
         bean.setCbPayType1(cbPayType1.getSelectedIndex());
         bean.setCbPayType2(cbPayType2.getSelectedIndex());
         bean.setCbPayType3(cbPayType3.getSelectedIndex());
@@ -4692,9 +4667,7 @@ public class AppSettingDialog extends BaseDialogSwing {
         bean.setMaxDeposit(Double.parseDouble(txtFixOverDeposit.getText().replace(",", "")));
         bean.setSaveRunning(Integer.parseInt(txtSaveRunning.getText()));
         bean.setNoRunning(Integer.parseInt(txtNoRunning.getText()));
-
         bean.setSaveFee(Double.parseDouble(txtFee.getText()));
-
         bean.setMinDeposit(Double.parseDouble(txtMinDeposit.getText().replace(",", "")));
         bean.setMinWitdraw(Double.parseDouble(txtMinWitdraw.getText().replace(",", "")));
 

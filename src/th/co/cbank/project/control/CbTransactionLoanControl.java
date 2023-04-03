@@ -23,7 +23,7 @@ public class CbTransactionLoanControl extends BaseControl {
             bean.setT_time(rs.getString("T_time"));
             bean.setT_acccode(rs.getString("T_acccode"));
             bean.setT_custcode(rs.getString("T_custcode"));
-            bean.setT_description(rs.getString("T_description"));
+            bean.setT_description(ThaiUtil.ASCII2Unicode(rs.getString("T_description")));
             bean.setT_amount(rs.getDouble("T_amount"));
             bean.setT_empcode(rs.getString("T_empcode"));
             bean.setT_docno(rs.getString("T_docno"));
@@ -33,7 +33,6 @@ public class CbTransactionLoanControl extends BaseControl {
             bean.setLineNo(rs.getInt("LineNo"));
             bean.setPrintChk(rs.getString("PrintChk"));
             bean.setT_balance(rs.getDouble("T_balance"));
-//            bean.setT_old_balance(rs.getDouble("T_old_balance"));
             bean.setT_index(rs.getInt("T_index"));
             bean.setMoney_in(rs.getDouble("Money_in"));
             bean.setMoney_out(rs.getDouble("Money_out"));
@@ -89,8 +88,7 @@ public class CbTransactionLoanControl extends BaseControl {
     public List<CbTransactionLoanBean> listCbTransactionLoan(String t_acccode) {
         try {
             String sql = "select * from cb_transaction_loan "
-                    + "where t_acccode='" + t_acccode + "' "
-                    + "order by LineNo";
+                    + "where t_acccode='" + t_acccode + "' order by LineNo";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             return mappingBean(rs);
         } catch (Exception e) {
@@ -105,8 +103,7 @@ public class CbTransactionLoanControl extends BaseControl {
             String sql = "select * from cb_transaction_loan "
                     + "where t_acccode='" + t_acccode + "' "
                     + "and t_custcode='" + custCode + "' "
-                    + "and t_status in('7') "
-                    + "order by LineNo";
+                    + "and t_status in('7') order by LineNo";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             return mappingBean(rs);
         } catch (Exception e) {
@@ -122,13 +119,11 @@ public class CbTransactionLoanControl extends BaseControl {
             if (filterPrintCheck) {
                 addSql = " and PrintChk='N' ";
             }
-            String sql = "select * "
-                    + "from cb_transaction_loan "
+            String sql = "select * from cb_transaction_loan "
                     + "where t_acccode='" + accCode + "' "
                     + "and LineNo>0 "
                     + addSql
-                    + "and t_status in('10','7') "
-                    + "order by t_index";
+                    + "and t_status in('10','7') order by t_index";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             return mappingBean(rs);
         } catch (Exception e) {

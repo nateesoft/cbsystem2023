@@ -302,8 +302,8 @@ public class CbSaveAccountControl extends BaseControl {
         try {
             String sql = "update cb_save_account set "
                     + "B_CUST_CODE='" + bean.getB_CUST_CODE() + "', "
-                    + "B_CUST_NAME='" + bean.getB_CUST_NAME() + "', "
-                    + "B_CUST_LASTNAME='" + bean.getB_CUST_LASTNAME() + "', "
+                    + "B_CUST_NAME='" + ThaiUtil.Unicode2ASCII(bean.getB_CUST_NAME()) + "', "
+                    + "B_CUST_LASTNAME='" + ThaiUtil.Unicode2ASCII(bean.getB_CUST_LASTNAME()) + "', "
                     + "B_BALANCE='" + bean.getB_BALANCE() + "', "
                     + "B_INTEREST='" + bean.getB_INTEREST() + "' "
                     + "MEMBER_TYPE='" + bean.getMEMBER_TYPE() + "', "
@@ -311,11 +311,11 @@ public class CbSaveAccountControl extends BaseControl {
                     + "account_code='" + bean.getAccount_code() + "', "
                     + "account_status='" + bean.getAccount_status() + "', "
                     + "book_no='" + bean.getBook_no() + "', "
-                    + "book_evidence1='" + bean.getBook_evidence1() + "', "
-                    + "book_evidence2='" + bean.getBook_evidence2() + "',"
-                    + "book_evidence3='" + bean.getBook_evidence1() + "', "
-                    + "book_evidence4='" + bean.getBook_evidence2() + "',"
-                    + "remark='" + bean.getRemark() + "',"
+                    + "book_evidence1='" + ThaiUtil.Unicode2ASCII(bean.getBook_evidence1()) + "', "
+                    + "book_evidence2='" + ThaiUtil.Unicode2ASCII(bean.getBook_evidence2()) + "',"
+                    + "book_evidence3='" + ThaiUtil.Unicode2ASCII(bean.getBook_evidence1()) + "', "
+                    + "book_evidence4='" + ThaiUtil.Unicode2ASCII(bean.getBook_evidence2()) + "',"
+                    + "remark='" + ThaiUtil.Unicode2ASCII(bean.getRemark()) + "',"
                     + "hoon_balance='" + bean.getHoon_balance() + "',"
                     + "account_type='" + bean.getAccount_type() + "',"
                     + "B_TIME=curtime(),"
@@ -814,8 +814,8 @@ public class CbSaveAccountControl extends BaseControl {
         try {
             String sql = "update cb_save_account set "
                     + "B_CUST_CODE='" + bean.getB_CUST_CODE() + "', "
-                    + "B_CUST_NAME='" + bean.getB_CUST_NAME() + "', "
-                    + "B_CUST_LASTNAME='" + bean.getB_CUST_LASTNAME() + "', "
+                    + "B_CUST_NAME='" + ThaiUtil.Unicode2ASCII(bean.getB_CUST_NAME()) + "', "
+                    + "B_CUST_LASTNAME='" + ThaiUtil.Unicode2ASCII(bean.getB_CUST_LASTNAME()) + "', "
                     + "B_BALANCE=B_BALANCE+" + bean.getB_BALANCE() + " "
                     + "where B_CUST_CODE='" + bean.getB_CUST_CODE() + "'";
             update(sql);
@@ -833,8 +833,8 @@ public class CbSaveAccountControl extends BaseControl {
             try (ResultSet rs = MySQLConnect.getResultSet(sql)) {
                 if (rs.next()) {
                     bean.setB_CUST_CODE(rs.getString("B_CUST_CODE"));
-                    bean.setB_CUST_NAME(rs.getString("B_CUST_NAME"));
-                    bean.setB_CUST_LASTNAME(rs.getString("B_CUST_LASTNAME"));
+                    bean.setB_CUST_NAME(ThaiUtil.ASCII2Unicode(rs.getString("B_CUST_NAME")));
+                    bean.setB_CUST_LASTNAME(ThaiUtil.ASCII2Unicode(rs.getString("B_CUST_LASTNAME")));
                     bean.setB_BALANCE(rs.getDouble("B_BALANCE"));
                     bean.setB_INTEREST(rs.getDouble("B_INTEREST"));
                     bean.setB_START(rs.getDate("B_START"));

@@ -20,7 +20,6 @@ public class CbSaveConfigControl extends BaseControl {
             ResultSet rs = MySQLConnect.getResultSet(sql);
             while (rs.next()) {
                 CbSaveConfigBean bean = new CbSaveConfigBean();
-
                 bean.setTypeCode(rs.getString("TypeCode"));
                 bean.setTypeName(ThaiUtil.ASCII2Unicode(rs.getString("TypeName")));
                 bean.setTypeINT(rs.getDouble("TypeINT"));
@@ -43,7 +42,6 @@ public class CbSaveConfigControl extends BaseControl {
                 bean.setSaveRunning(rs.getInt("SaveRunning"));
                 bean.setNoRunning(rs.getInt("NoRunning"));
                 bean.setSaveFee(rs.getDouble("SaveFee"));
-
                 bean.setMinDeposit(rs.getDouble("min_deposit"));
                 bean.setMinWitdraw(rs.getDouble("min_withdraw"));
 
@@ -249,7 +247,7 @@ public class CbSaveConfigControl extends BaseControl {
         try {
             String sql = "update cb_save_config set "
                     + "TypeCode='" + bean.getTypeCode() + "', "
-                    + "TypeName='" + bean.getTypeName() + "', TypeINT='" + bean.getTypeINT() + "', "
+                    + "TypeName='" + ThaiUtil.Unicode2ASCII(bean.getTypeName()) + "', TypeINT='" + bean.getTypeINT() + "', "
                     + "TypeCondition='" + bean.getTypeCondition() + "', RDType2='" + bean.getRDType2() + "', "
                     + "cbRDType2='" + bean.getCbRDType2() + "', rdTypeDialy='" + bean.getRdTypeDialy() + "', "
                     + "payType='" + bean.getPayType() + "', cbPayType1='" + bean.getCbPayType1() + "', "
@@ -280,15 +278,12 @@ public class CbSaveConfigControl extends BaseControl {
         int MaxNO = 1;
         try {
             String sql = "select max(NoRunning) MAX_NO "
-                    + "from cb_save_config "
-                    + "where TypeCode='" + saveAccType + "';";
+                    + "from cb_save_config where TypeCode='" + saveAccType + "';";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             if (rs.next()) {
                 MaxNO = rs.getInt("MAX_NO");
                 if (MaxNO == 0) {
-                    String sqlUpd = "update cb_save_config set "
-                            + "NoRunning='1' "
-                            + "where TypeCode='" + saveAccType + "'";
+                    String sqlUpd = "update cb_save_config set NoRunning='1' where TypeCode='" + saveAccType + "'";
                     update(sqlUpd);
                 }
             }
@@ -309,8 +304,7 @@ public class CbSaveConfigControl extends BaseControl {
     public void updateMaxInt(String saveAccType) {
         try {
             String sql = "update cb_save_config set "
-                    + "NoRunning=NoRunning+1 "
-                    + "where TypeCode='" + saveAccType + "'";
+                    + "NoRunning=NoRunning+1 where TypeCode='" + saveAccType + "'";
             update(sql);
         } catch (Exception e) {
             logger.error(e.getMessage());

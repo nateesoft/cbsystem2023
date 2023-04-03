@@ -1220,8 +1220,8 @@ public class MainDialog extends BaseSwing {
     }//GEN-LAST:event_mnRptProfitCompanyActionPerformed
 
     private void mnSetupConfigActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mnSetupConfigActionPerformed
-        AppSettingDialog configDialog2 = new AppSettingDialog(this, true);
-        configDialog2.setVisible(true);
+        AppSettingDialog appSettingDialog = new AppSettingDialog(this, true);
+        appSettingDialog.setVisible(true);
 
         clearProfileForm();
     }//GEN-LAST:event_mnSetupConfigActionPerformed
