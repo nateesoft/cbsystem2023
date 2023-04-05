@@ -5,8 +5,11 @@ import java.awt.event.KeyEvent;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import org.apache.log4j.Logger;
+import th.co.cbank.project.control.CbSaveAccountControl;
+import th.co.cbank.project.model.CbSaveAccountBean;
 import th.co.cbank.util.JTableUtil;
 import th.co.cbank.util.MessageAlert;
+import th.co.cbank.util.NumberFormat;
 import th.co.cbank.util.TableUtil;
 
 public class TransactionAdvanceDialog extends BaseDialogSwing {
@@ -27,21 +30,41 @@ public class TransactionAdvanceDialog extends BaseDialogSwing {
         txtNetBalance.setText("" + netBalance);
         txtInt.setText("" + intAmt);
 
-        calc();
+        searchData();
     }
 
-    private void calc() {
+    private void searchData() {
         if (txtCustCode.getText().trim().equals("")) {
             txtCustCode.requestFocus();
         } else if (txtAccCode.getText().trim().equals("")) {
             txtAccCode.requestFocus();
         } else {
             clearModel();
-            List<String[]> modelList = TransactionAdvanceMethod.findData(txtCustCode.getText(), txtAccCode.getText(), true);
-            DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
-            for (String[] obj : modelList) {
-                model.addRow(obj);
+            String custCode = txtCustCode.getText();
+            String accCode = txtAccCode.getText();
+            CbSaveAccountControl saveAccountControl = new CbSaveAccountControl();
+            CbSaveAccountBean saveAccountBean = saveAccountControl.getSaveAccountBean(accCode);
+            List<String[]> modelList = TransactionAdvanceMethod.findData(custCode, accCode, true, saveAccountBean.getAccount_type());
+            if (modelList.isEmpty()) {
+                btnSave.setEnabled(false);
             }
+            DefaultTableModel model = (DefaultTableModel) tbItems.getModel();
+            for (String[] obj : modelList) {
+                if (checkOnlyDesc.isSelected()) {
+                    if (!obj[0].equals("")) {
+                        model.addRow(obj);
+                    }
+                } else {
+                    model.addRow(obj);
+                }
+            }
+
+            txtDeposit.setText(NumberFormat.showDouble2(TransactionAdvanceMethod.depositSummary));
+            txtWithdraw.setText(NumberFormat.showDouble2(TransactionAdvanceMethod.withdrawSummary));
+            txtInterest.setText(NumberFormat.showDouble2(TransactionAdvanceMethod.profitSummary));
+            txtBalanceAmt.setText(NumberFormat.showDouble2(TransactionAdvanceMethod.balanceSummary));
+            txtNetBalance.setText(NumberFormat.showDouble2(TransactionAdvanceMethod.netBalanceSummary));
+            txtInt.setText(NumberFormat.showDouble2(0));
         }
     }
 
@@ -53,27 +76,28 @@ public class TransactionAdvanceDialog extends BaseDialogSwing {
         txtCustCode = new javax.swing.JTextField();
         txtAccCode = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        btnSearch = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        tbItems = new javax.swing.JTable();
+        btnClose = new javax.swing.JButton();
+        btnClearSearch = new javax.swing.JButton();
+        btnSave = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel3 = new javax.swing.JLabel();
         txtDeposit = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         txtWithdraw = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
-        txtBalance = new javax.swing.JTextField();
+        txtBalanceAmt = new javax.swing.JTextField();
         jLabel6 = new javax.swing.JLabel();
         txtInterest = new javax.swing.JTextField();
         txtNetBalance = new javax.swing.JTextField();
         jLabel7 = new javax.swing.JLabel();
         txtInt = new javax.swing.JTextField();
+        checkOnlyDesc = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        setTitle("อัพเดตความเคลื่อนไหว");
+        setTitle("แสดงรายละเอียดความเคลื่อนไหว");
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel1.setText("รหัสสมาชิก");
@@ -97,15 +121,15 @@ public class TransactionAdvanceDialog extends BaseDialogSwing {
         jLabel2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel2.setText("เลขที่บัญชี");
 
-        jButton1.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jButton1.setText("ค้นหา");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnSearch.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnSearch.setText("ค้นหา");
+        btnSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnSearchActionPerformed(evt);
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tbItems.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -121,47 +145,47 @@ public class TransactionAdvanceDialog extends BaseDialogSwing {
                 return canEdit [columnIndex];
             }
         });
-        jTable1.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
-        jScrollPane1.setViewportView(jTable1);
-        if (jTable1.getColumnModel().getColumnCount() > 0) {
-            jTable1.getColumnModel().getColumn(0).setPreferredWidth(120);
-            jTable1.getColumnModel().getColumn(1).setPreferredWidth(100);
-            jTable1.getColumnModel().getColumn(2).setPreferredWidth(80);
-            jTable1.getColumnModel().getColumn(3).setPreferredWidth(120);
-            jTable1.getColumnModel().getColumn(4).setPreferredWidth(80);
-            jTable1.getColumnModel().getColumn(5).setPreferredWidth(120);
-            jTable1.getColumnModel().getColumn(6).setPreferredWidth(120);
-            jTable1.getColumnModel().getColumn(7).setPreferredWidth(100);
-            jTable1.getColumnModel().getColumn(8).setPreferredWidth(120);
-            jTable1.getColumnModel().getColumn(9).setPreferredWidth(100);
-            jTable1.getColumnModel().getColumn(10).setPreferredWidth(120);
-            jTable1.getColumnModel().getColumn(11).setPreferredWidth(100);
-            jTable1.getColumnModel().getColumn(12).setPreferredWidth(100);
-            jTable1.getColumnModel().getColumn(13).setPreferredWidth(120);
+        tbItems.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        jScrollPane1.setViewportView(tbItems);
+        if (tbItems.getColumnModel().getColumnCount() > 0) {
+            tbItems.getColumnModel().getColumn(0).setPreferredWidth(120);
+            tbItems.getColumnModel().getColumn(1).setPreferredWidth(100);
+            tbItems.getColumnModel().getColumn(2).setPreferredWidth(80);
+            tbItems.getColumnModel().getColumn(3).setPreferredWidth(120);
+            tbItems.getColumnModel().getColumn(4).setPreferredWidth(80);
+            tbItems.getColumnModel().getColumn(5).setPreferredWidth(120);
+            tbItems.getColumnModel().getColumn(6).setPreferredWidth(120);
+            tbItems.getColumnModel().getColumn(7).setPreferredWidth(100);
+            tbItems.getColumnModel().getColumn(8).setPreferredWidth(120);
+            tbItems.getColumnModel().getColumn(9).setPreferredWidth(100);
+            tbItems.getColumnModel().getColumn(10).setPreferredWidth(120);
+            tbItems.getColumnModel().getColumn(11).setPreferredWidth(100);
+            tbItems.getColumnModel().getColumn(12).setPreferredWidth(100);
+            tbItems.getColumnModel().getColumn(13).setPreferredWidth(120);
         }
 
-        jButton2.setBackground(new java.awt.Color(255, 0, 0));
-        jButton2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jButton2.setText("ออก (Close)");
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        btnClose.setBackground(new java.awt.Color(255, 0, 0));
+        btnClose.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnClose.setText("ออก (Close)");
+        btnClose.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                btnCloseActionPerformed(evt);
             }
         });
 
-        jButton3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jButton3.setText("ล้างการค้นหา");
-        jButton3.addActionListener(new java.awt.event.ActionListener() {
+        btnClearSearch.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnClearSearch.setText("ล้างการค้นหา");
+        btnClearSearch.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton3ActionPerformed(evt);
+                btnClearSearchActionPerformed(evt);
             }
         });
 
-        jButton4.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        jButton4.setText("บันทึกข้อมูล");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
+        btnSave.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnSave.setText("บันทึกข้อมูล");
+        btnSave.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                btnSaveActionPerformed(evt);
             }
         });
 
@@ -186,10 +210,10 @@ public class TransactionAdvanceDialog extends BaseDialogSwing {
         jLabel5.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel5.setText("เงินต้นคงเหลือ");
 
-        txtBalance.setEditable(false);
-        txtBalance.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        txtBalance.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txtBalance.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        txtBalanceAmt.setEditable(false);
+        txtBalanceAmt.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        txtBalanceAmt.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtBalanceAmt.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
 
         jLabel6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel6.setText("กำไร");
@@ -241,7 +265,7 @@ public class TransactionAdvanceDialog extends BaseDialogSwing {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(txtNetBalance, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
-                    .addComponent(txtBalance))
+                    .addComponent(txtBalanceAmt))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -254,7 +278,7 @@ public class TransactionAdvanceDialog extends BaseDialogSwing {
                     .addComponent(jLabel5)
                     .addComponent(jLabel4)
                     .addComponent(txtWithdraw, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtBalance, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtBalanceAmt, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -266,6 +290,14 @@ public class TransactionAdvanceDialog extends BaseDialogSwing {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        checkOnlyDesc.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        checkOnlyDesc.setText("แสดงเฉพาะที่มีรายการ");
+        checkOnlyDesc.addItemListener(new java.awt.event.ItemListener() {
+            public void itemStateChanged(java.awt.event.ItemEvent evt) {
+                checkOnlyDescItemStateChanged(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -276,19 +308,22 @@ public class TransactionAdvanceDialog extends BaseDialogSwing {
                     .addComponent(jLabel1)
                     .addComponent(jLabel2))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtCustCode, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE)
-                    .addComponent(txtAccCode))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton3)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtCustCode, javax.swing.GroupLayout.DEFAULT_SIZE, 148, Short.MAX_VALUE)
+                            .addComponent(txtAccCode))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnClearSearch))
+                    .addComponent(checkOnlyDesc))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton4)
+                .addComponent(btnSave)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
+                .addComponent(btnSearch)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton2))
+                .addComponent(btnClose))
             .addComponent(jScrollPane1)
         );
         layout.setVerticalGroup(
@@ -304,10 +339,12 @@ public class TransactionAdvanceDialog extends BaseDialogSwing {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel2)
                             .addComponent(txtAccCode, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnClearSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(checkOnlyDesc))
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 568, Short.MAX_VALUE))
@@ -317,47 +354,53 @@ public class TransactionAdvanceDialog extends BaseDialogSwing {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
         dispose();
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_btnCloseActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        calc();
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        searchData();
+    }//GEN-LAST:event_btnSearchActionPerformed
 
     private void txtCustCodeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCustCodeKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             txtAccCode.requestFocus();
         } else if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            jButton2ActionPerformed(null);
+            dispose();
         }
     }//GEN-LAST:event_txtCustCodeKeyPressed
 
     private void txtAccCodeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAccCodeKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            jButton1ActionPerformed(null);
-            jButton1.requestFocus();
+            searchData();
+            btnSearch.requestFocus();
         } else if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
             txtCustCode.requestFocus();
         }
     }//GEN-LAST:event_txtAccCodeKeyPressed
 
-    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+    private void btnClearSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearSearchActionPerformed
         clearForm();
-    }//GEN-LAST:event_jButton3ActionPerformed
+    }//GEN-LAST:event_btnClearSearchActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        double netBalance = Double.parseDouble(txtNetBalance.getText().replace(",", ""));
-        double intAmt = Double.parseDouble(txtInt.getText().replace(",", ""));
-        TransactionAdvanceMethod.updateSaveAccountAndProfile(txtCustCode.getText(), txtAccCode.getText(), netBalance, intAmt);
-        MessageAlert.infoPopup(this, "บันทึกข้อมูลเรียบร้อย");
-    }//GEN-LAST:event_jButton4ActionPerformed
+    private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed
+        saveUpdateProfile();
+    }//GEN-LAST:event_btnSaveActionPerformed
+
+    private void checkOnlyDescItemStateChanged(java.awt.event.ItemEvent evt) {//GEN-FIRST:event_checkOnlyDescItemStateChanged
+        if (checkOnlyDesc.isSelected()) {
+            btnSave.setEnabled(false);
+        } else {
+            btnSave.setEnabled(true);
+        }
+    }//GEN-LAST:event_checkOnlyDescItemStateChanged
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
+    private javax.swing.JButton btnClearSearch;
+    private javax.swing.JButton btnClose;
+    private javax.swing.JButton btnSave;
+    private javax.swing.JButton btnSearch;
+    private javax.swing.JCheckBox checkOnlyDesc;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -367,9 +410,9 @@ public class TransactionAdvanceDialog extends BaseDialogSwing {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable tbItems;
     private javax.swing.JTextField txtAccCode;
-    private javax.swing.JTextField txtBalance;
+    private javax.swing.JTextField txtBalanceAmt;
     private javax.swing.JTextField txtCustCode;
     private javax.swing.JTextField txtDeposit;
     private javax.swing.JTextField txtInt;
@@ -379,19 +422,19 @@ public class TransactionAdvanceDialog extends BaseDialogSwing {
     // End of variables declaration//GEN-END:variables
 
     private void initTable() {
-        th.co.cbank.util.JTableUtil.defaultTemplate(jTable1);
-        jTable1.setRowHeight(30);
-        JTableUtil.alignRight(jTable1, 3);
-        JTableUtil.alignRight(jTable1, 4);
-        JTableUtil.alignRight(jTable1, 5);
-        JTableUtil.alignRight(jTable1, 6);
-        JTableUtil.alignRight(jTable1, 7);
-        JTableUtil.alignRight(jTable1, 8);
-        JTableUtil.alignRight(jTable1, 9);
-        JTableUtil.alignRight(jTable1, 10);
-        JTableUtil.alignRight(jTable1, 11);
-        JTableUtil.alignRight(jTable1, 12);
-        JTableUtil.alignRight(jTable1, 13);
+        th.co.cbank.util.JTableUtil.defaultTemplate(tbItems);
+        tbItems.setRowHeight(30);
+        JTableUtil.alignRight(tbItems, 3);
+        JTableUtil.alignRight(tbItems, 4);
+        JTableUtil.alignRight(tbItems, 5);
+        JTableUtil.alignRight(tbItems, 6);
+        JTableUtil.alignRight(tbItems, 7);
+        JTableUtil.alignRight(tbItems, 8);
+        JTableUtil.alignRight(tbItems, 9);
+        JTableUtil.alignRight(tbItems, 10);
+        JTableUtil.alignRight(tbItems, 11);
+        JTableUtil.alignRight(tbItems, 12);
+        JTableUtil.alignRight(tbItems, 13);
 
         clearModel();
     }
@@ -400,10 +443,9 @@ public class TransactionAdvanceDialog extends BaseDialogSwing {
         txtCustCode.setText("");
         txtAccCode.setText("");
         clearModel();
-
         txtDeposit.setText("0.00");
         txtWithdraw.setText("0.00");
-        txtBalance.setText("0.00");
+        txtBalanceAmt.setText("0.00");
         txtInterest.setText("0.00");
         txtNetBalance.setText("0.00");
         txtInt.setText("0.00");
@@ -412,8 +454,15 @@ public class TransactionAdvanceDialog extends BaseDialogSwing {
     }
 
     private void clearModel() {
-        DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
+        DefaultTableModel model = (DefaultTableModel) tbItems.getModel();
         TableUtil.clearModel(model);
+    }
+
+    private void saveUpdateProfile() {
+        double balanceAmt = NumberFormat.toDouble(txtBalanceAmt.getText());
+        double intAmt = NumberFormat.toDouble(txtInt.getText());
+        TransactionAdvanceMethod.updateSaveAccountAndProfile(txtCustCode.getText(), txtAccCode.getText(), balanceAmt, intAmt);
+        MessageAlert.infoPopup(this, "บันทึกข้อมูลเรียบร้อย");
     }
 
 }

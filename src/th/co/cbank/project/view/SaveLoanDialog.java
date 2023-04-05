@@ -9,7 +9,7 @@ import javax.swing.table.JTableHeader;
 import org.apache.log4j.Logger;
 import th.co.cbank.project.constants.AppConstants;
 import th.co.cbank.project.model.CbLoanAccountBean;
-import th.co.cbank.util.NumberUtil;
+import th.co.cbank.util.NumberFormat;
 import th.co.cbank.util.TableUtil;
 
 public class SaveLoanDialog extends BaseDialogSwing {
@@ -203,7 +203,7 @@ public class SaveLoanDialog extends BaseDialogSwing {
                 loanAcc.getLoan_name(),
                 loanAcc.getCust_code(),
                 loanAcc.getProfile().getP_custName() + " " + loanAcc.getProfile().getP_custSurname(),
-                NumberUtil.toNumberFormat(loanAcc.getLoan_amount())
+                NumberFormat.toNumberFormat(loanAcc.getLoan_amount())
             });
         }
 

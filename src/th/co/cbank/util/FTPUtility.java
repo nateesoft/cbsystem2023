@@ -181,7 +181,7 @@ public class FTPUtility {
     public boolean connect() {
         ftp = new FTPClient();
         ftp.addProtocolCommandListener(new PrintCommandListener(new PrintWriter(System.out)));
-        ftp.setDefaultPort(Integer.parseInt(port));
+        ftp.setDefaultPort(NumberFormat.toInt(port));
         ftp.setDataTimeout(1000 * 15);
 
         try {

@@ -20,3 +20,18 @@ where cust_code='3610400295040' and loan_docno='1030000002';
 delete from cb_transaction_loan 
 where t_custcode='3610400295040' and t_docno='1030000002';
 
+2023/04/04
+รองรับการปรับอัตราดอกเบี้ยใหม่ โดยต้องเก็บอัตราดอกเบี้ยเก่าไว้ และปรับการคำนวณใหม่ให้รองรับ
+alter table cb_save_config 
+add column create_date datetime, 
+add column update_date datetime;
+create table cb_save_config_history select * from cb_save_config;
+alter table cb_hoon_config 
+add column create_date datetime, 
+add column update_date datetime;
+create table cb_hoon_config_history select * from cb_hoon_config;
+
+alter table cb_loan_config 
+add column create_date datetime, 
+add column update_date datetime;
+create table cb_loan_config_history select * from cb_loan_config;

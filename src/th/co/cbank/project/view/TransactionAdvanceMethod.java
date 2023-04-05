@@ -13,26 +13,30 @@ import th.co.cbank.project.control.Value;
 import th.co.cbank.project.model.CbSaveConfigBean;
 import th.co.cbank.project.model.CbTransactionSaveBean;
 import th.co.cbank.util.DateFormat;
+import th.co.cbank.util.MessageAlert;
 
 public class TransactionAdvanceMethod {
 
-    private static final CbSaveConfigControl saveConfigControl = new CbSaveConfigControl();
-    private static final CbTransactionLoanControl cbTransactionLoanControl = new CbTransactionLoanControl();
-    private static final CbTransactionSaveControl cbTransactionSaveControl = new CbTransactionSaveControl();
+    private static CbSaveConfigControl saveConfigControl = new CbSaveConfigControl();
+    private static CbTransactionLoanControl tranLoanControl = new CbTransactionLoanControl();
+    private static CbTransactionSaveControl tranSaveControl = new CbTransactionSaveControl();
+    private static CbSaveAccountControl saveAccountControl = new CbSaveAccountControl();
 
     public static double balanceAmount = 0;
     public static double interestAmount = 0;
 
     public static void updateSaveAccountAndProfile(String custCode, String accCode, double netBalance, double textInt) {
-        //update cb_save_account
-        CbSaveAccountControl saveAccountControl = new CbSaveAccountControl();
         saveAccountControl.updateSaveAccountAndProfile(netBalance, textInt, custCode, accCode);
-
-        //update cb_profile
-        saveAccountControl.updateSaveAccountAndProfile(accCode, custCode);
+        saveAccountControl.updateSaveAccountInProfile(accCode, custCode);
     }
 
-    public static List findData(String custCode, String accCode, boolean addModel) {
+    public static double depositSummary = 0.00;
+    public static double withdrawSummary = 0.00;
+    public static double balanceSummary = 0.00;
+    public static double profitSummary = 0.00;
+    public static double netBalanceSummary = 0.00;
+
+    public static List findData(String custCode, String accCode, boolean addModel, String accountType) {
         double show1 = 0.00;//ฝาก
         double show2 = 0.00;//ถอน
         double show3 = 0.00;//คงเหลือ
@@ -44,7 +48,6 @@ public class TransactionAdvanceMethod {
 
         List modelList = new ArrayList<>();
         String date = "";
-        CbTransactionSaveControl tranSaveControl = new CbTransactionSaveControl();
         List<CbTransactionSaveBean> listTransactionSaveReport = tranSaveControl.getTdateList(custCode, accCode);
         for (CbTransactionSaveBean bean : listTransactionSaveReport) {
             date += DateFormat.getLocale_ddMMyyyy(bean.getT_date()) + ",";
@@ -52,25 +55,29 @@ public class TransactionAdvanceMethod {
         date += DateFormat.getLocale_ddMMyyyy(new Date());
 
         //add to model
-        String[] dates = date.split(",");
-        Date dateStart = DateFormat.getLocal_ddMMyyyy(dates[0]);
-        Date dateEnd = DateFormat.getLocal_ddMMyyyy(dates[dates.length - 1]);
+        String[] dateTransaction = date.split(",");
+        Date dateStart = DateFormat.getLocal_ddMMyyyy(dateTransaction[0]);
+        Date dateEnd = DateFormat.getLocal_ddMMyyyy(dateTransaction[dateTransaction.length - 1]);
 
-        Calendar c = Calendar.getInstance();
-        c.setTime(dateStart);
+        Calendar currentTime = Calendar.getInstance();
+        currentTime.setTime(dateStart);
 
         boolean isLoop = false;
-        CbSaveConfigBean cfBean = saveConfigControl.listSaveConfig(accCode);
+        List<CbSaveConfigBean> listSaveConfig = saveConfigControl.listSaveConfigHistory();
+        if (listSaveConfig.isEmpty()) {
+            MessageAlert.errorPopup(TransactionAdvanceMethod.class, "ไม่พบข้อมูล Save Configuration!!!");
+            return new ArrayList<>();
+        }
         int dayCount = 0;
         String temp_date = "";
 
         double all_balance = 0.00;//เก็บยอดเงิน balance
         double all_interest = 0.00;//เก็บยอดยกมาของดอกเบี้ย
         double all_money = 0.00;//เงินต้น
-        int LineNo = 0;
+        int lineNo = 0;
 
         while (!isLoop) {
-            String dateStr = DateFormat.getLocale_ddMMyyyy(c.getTime());
+            String dateStr = DateFormat.getLocale_ddMMyyyy(currentTime.getTime());
             if (temp_date.equals("")) {
                 temp_date = dateStr;
             }
@@ -78,70 +85,72 @@ public class TransactionAdvanceMethod {
                 dayCount++;
             }
 
-            ItemRows data = new ItemRows();
-            data.setT_date(c.getTime());
-            data.setT_time("");
-            data.setT_docno("");
-            data.setRemark("");
-            data.setInterest_rate(cfBean.getTypeINT());
-            data.setT_day(dayCount);
-            data.setBalance(all_balance);
-            data.setT_interest((data.getT_day() * data.getInterest_rate() * all_balance) / (36500));
-            data.setT_interest_balance(all_interest);
-            data.setPrinciple(all_money);
+//            CbSaveConfigBean saveConfigBean = getSaveConfigByDateFromDB(currentTime.getTime(), accountType);
+            CbSaveConfigBean saveConfigBean = getSaveConfigByDate(currentTime.getTime(), listSaveConfig);
+
+            ItemRows itemRow = new ItemRows();
+            itemRow.setT_date(currentTime.getTime());
+            itemRow.setT_time("");
+            itemRow.setT_docno("");
+            itemRow.setRemark("");
+            itemRow.setInterest_rate(saveConfigBean.getTypeINT());
+            itemRow.setT_day(dayCount);
+            itemRow.setBalance(all_balance);
+            itemRow.setT_interest((itemRow.getT_day() * itemRow.getInterest_rate() * all_balance) / (36500));
+            itemRow.setT_interest_balance(all_interest);
+            itemRow.setPrinciple(all_money);
 
             boolean isDateIn = false;
-            for (int i = 0; i < dates.length; i++) {
-                if (dates[i].equals(DateFormat.getLocale_ddMMyyyy(c.getTime()))) {
-                    List<CbTransactionSaveBean> listBean = cbTransactionSaveControl.getTransaction(custCode, accCode, c.getTime());
+            for (String dateLoop : dateTransaction) {
+                if (dateLoop.equals(DateFormat.getLocale_ddMMyyyy(currentTime.getTime()))) {
+                    List<CbTransactionSaveBean> listBean = tranSaveControl.getTransaction(custCode, accCode, currentTime.getTime());
                     double temp_all_interest = all_interest;
 
-                    for (int j = 0; j < listBean.size(); j++) {
-                        CbTransactionSaveBean bean1 = (CbTransactionSaveBean) listBean.get(j);
+                    for (CbTransactionSaveBean transactionSaveBean : listBean) {
+                        ItemRows itemRow2 = new ItemRows();
+                        itemRow2.setInterest_rate(saveConfigBean.getTypeINT());
+                        itemRow2.setT_day(0);
 
-                        ItemRows data2 = new ItemRows();
-                        data2.setT_date(bean1.getT_date());
-                        data2.setT_time(bean1.getT_time());
-                        data2.setT_docno(bean1.getT_docno());
-                        all_balance += bean1.getT_amount();
+                        itemRow2.setT_date(transactionSaveBean.getT_date());
+                        itemRow2.setT_time(transactionSaveBean.getT_time());
+                        itemRow2.setT_docno(transactionSaveBean.getT_docno());
+                        all_balance += transactionSaveBean.getT_amount();
                         if (all_balance < 1) {
                             all_balance = 0;
                         }
 
                         //เก็บเฉพาะเงินต้น
-                        all_money += bean1.getT_amount();
-                        data2.setPrinciple(all_money);
-                        data2.setBalance(all_balance);
-                        data2.setT_interest((data2.getT_day() * data2.getInterest_rate() * all_balance) / (36500));
-                        data2.setT_day(0);
+                        all_money += transactionSaveBean.getT_amount();
+                        itemRow2.setPrinciple(all_money);
+                        itemRow2.setBalance(all_balance);
+                        itemRow2.setT_interest((itemRow2.getT_day() * itemRow2.getInterest_rate() * all_balance) / (36500));
 
-                        all_interest = data.getT_interest() + temp_all_interest;
+                        all_interest = itemRow.getT_interest() + temp_all_interest;
                         //temp_all_interest = 0;
 
-                        if (bean1.getT_amount() >= 0) {
-                            data2.setDeposit(bean1.getT_amount());
-                            data2.setRemark("<html><font color=blue><b>ฝากเงิน</b></font></html>");
-                            show1 += bean1.getT_amount();
-                            data2.setT_interest_balance(all_interest);
+                        if (transactionSaveBean.getT_amount() >= 0) {
+                            itemRow2.setDeposit(transactionSaveBean.getT_amount());
+                            itemRow2.setRemark("<html><font color=blue><b>ฝากเงิน</b></font></html>");
+                            show1 += transactionSaveBean.getT_amount();
+                            itemRow2.setT_interest_balance(all_interest);
                         } else {
-                            data2.setWithdraw(bean1.getT_amount());
-                            data2.setRemark("<html><font color=red><b>ถอนเงิน</b></font></html>");
-                            show2 += bean1.getT_amount() * -1;
-                            data2.setT_interest_balance(all_interest);
+                            itemRow2.setWithdraw(transactionSaveBean.getT_amount());
+                            itemRow2.setRemark("<html><font color=red><b>ถอนเงิน</b></font></html>");
+                            show2 += transactionSaveBean.getT_amount() * -1;
+                            itemRow2.setT_interest_balance(all_interest);
                         }
 
-                        data2.setInterest_rate(cfBean.getTypeINT());
-                        data2.setIsPrint("Y");
-                        LineNo++;
+                        itemRow2.setIsPrint("Y");
+                        lineNo++;
 
-                        data2.setLineNo("" + LineNo);
-                        data2.setProfit(data2.getBalance() - data2.getPrinciple());
+                        itemRow2.setLineNo("" + lineNo);
+                        itemRow2.setProfit(itemRow2.getBalance() - itemRow2.getPrinciple());
                         if (addModel) {
-                            modelList.add(data2.toObject());
+                            modelList.add(itemRow2.toObject());
                         }
 
                         //update recode
-                        cbTransactionSaveControl.updateWhereCustCodeAccode(data2.getBalance(), custCode, accCode, data2.getT_docno(), data2.getT_time());
+                        tranSaveControl.updateWhereCustCodeAccode(itemRow2.getBalance(), custCode, accCode, itemRow2.getT_docno(), itemRow2.getT_time());
                     }
 
                     isDateIn = true;
@@ -152,51 +161,51 @@ public class TransactionAdvanceMethod {
 
             boolean isUpdate = false;
             //check เงื่อนไขการจ่ายดอกเบี้ยเพิ่ม
-            if (cfBean.getPayType().equals("2")) {
-                int dd_db1 = cfBean.getCbPayType1();
-                int mm_db1 = cfBean.getCbPayType2();
+            if (saveConfigBean.getPayType().equals("2")) {
+                int dd_db1 = saveConfigBean.getCbPayType1() + 1;//เนื่องจากในฐานข้อมูลเก็บเป็น index ของ combobox เริ่มจาก 0
+                int mm_db1 = saveConfigBean.getCbPayType2();
                 Calendar c1 = Calendar.getInstance(Locale.ENGLISH);
-                c1.setTime(c.getTime());//เอาปีของความเคลื่อนไหวก่อนหน้า เพื่อเลือกวันที่คำนวณ
+                c1.setTime(currentTime.getTime());//เอาปีของความเคลื่อนไหวก่อนหน้า เพื่อเลือกวันที่คำนวณ
                 c1.set(Calendar.DATE, dd_db1);
-                c1.set(Calendar.MONTH, mm_db1 - 1);
-                if (c1.getTime().compareTo(c.getTime()) == 0) {
-                    data.setT_time("00:00:00");
-                    data.setRemark("<html><font color=green><b>ดอกเบี้ยทบเงินต้น</b></font></html>");
-                    data.setIsPrint("Y");
-                    LineNo++;
-                    data.setLineNo("" + LineNo);
+                c1.set(Calendar.MONTH, mm_db1);
+                if (c1.getTime().compareTo(currentTime.getTime()) == 0) {
+                    itemRow.setT_time("00:00:00");
+                    itemRow.setRemark("<html><font color=green><b>ดอกเบี้ยทบเงินต้น</b></font></html>");
+                    itemRow.setIsPrint("Y");
+                    lineNo++;
+                    itemRow.setLineNo("" + lineNo);
 
-                    data.setBalance(all_balance + data.getT_interest() + data.getT_interest_balance());
-                    data.setDeposit_interest(data.getT_interest() + data.getT_interest_balance());
-                    show4 += data.getDeposit_interest();
-                    data.setT_interest_balance(0);
+                    itemRow.setBalance(all_balance + itemRow.getT_interest() + itemRow.getT_interest_balance());
+                    itemRow.setDeposit_interest(itemRow.getT_interest() + itemRow.getT_interest_balance());
+                    show4 += itemRow.getDeposit_interest();
+                    itemRow.setT_interest_balance(0);
                     all_interest = 0;//clear ดอกเบี้ยทบต้นออก
-                    data.setT_interest(0);
+                    itemRow.setT_interest(0);
                     dayCount = 0;
-                    all_balance = data.getBalance();
+                    all_balance = itemRow.getBalance();
                     isUpdate = true;
 
                     //insert ดอกเบี้ยฝาก
-                    int lineNo = cbTransactionLoanControl.getLineByAccount(accCode);
-                    int tIndex = lineNo;
+                    int lineNoInterest = tranLoanControl.getLineByAccount(accCode);
+                    int tIndex = lineNoInterest;
                     if (tIndex > 24) {
                         tIndex = tIndex % 24;
                     }
                     CbTransactionSaveBean bean = new CbTransactionSaveBean();
-                    bean.setT_date(data.getT_date());
-                    bean.setT_time(data.getT_time());
+                    bean.setT_date(itemRow.getT_date());
+                    bean.setT_time(itemRow.getT_time());
                     bean.setT_acccode(accCode);
                     bean.setT_custcode(custCode);
                     bean.setT_description("ฝากเงิน(ดอกเบี้ย)");
-                    bean.setT_amount(data.getDeposit_interest());
+                    bean.setT_amount(itemRow.getDeposit_interest());
                     bean.setT_empcode("system");
                     bean.setT_docno("");
                     bean.setT_booktype("INT");
-                    bean.setLineNo(lineNo);
+                    bean.setLineNo(lineNoInterest);
                     bean.setPrintChk("N");
-                    bean.setT_balance(data.getBalance());
+                    bean.setT_balance(itemRow.getBalance());
                     bean.setT_index(tIndex);
-                    bean.setMoney_in(data.getDeposit_interest());
+                    bean.setMoney_in(itemRow.getDeposit_interest());
                     bean.setMoney_out(0);
                     bean.setBranchCode(Value.BRANCH_CODE);
                     bean.setT_interest(0);
@@ -204,48 +213,48 @@ public class TransactionAdvanceMethod {
                     bean.setT_status("11");
 
                     if (bean.getT_amount() > 0) {
-                        cbTransactionSaveControl.saveCbTransactionSave(bean);
+                        tranSaveControl.saveCbTransactionSave(bean);
                     }
                 }
-            } else if (cfBean.getPayType().equals("3")) {
+            } else if (saveConfigBean.getPayType().equals("3")) {
                 //ช่วงที่ 1
-                int dd_db1 = cfBean.getCbPayType3();
-                int mm_db1 = cfBean.getCbPayType4();
+                int dd_db1 = saveConfigBean.getCbPayType3() + 1;//เนื่องจากในฐานข้อมูลเก็บเป็น index ของ combobox เริ่มจาก 0
+                int mm_db1 = saveConfigBean.getCbPayType4();
                 Calendar c1 = Calendar.getInstance(Locale.ENGLISH);
-                c1.setTime(c.getTime());//เอาปีของความเคลื่อนไหวก่อนหน้า เพื่อเลือกวันที่คำนวณ
+                c1.setTime(currentTime.getTime());//เอาปีของความเคลื่อนไหวก่อนหน้า เพื่อเลือกวันที่คำนวณ
                 c1.set(Calendar.DATE, dd_db1);
-                c1.set(Calendar.MONTH, mm_db1 - 1);
+                c1.set(Calendar.MONTH, mm_db1);
                 //จบช่วงที่ 1
 
                 //ช่วงที่ 2
-                int dd_db2 = cfBean.getCbPayType5();
-                int mm_db2 = cfBean.getCbPayType6();
+                int dd_db2 = saveConfigBean.getCbPayType5() + 1;//เนื่องจากในฐานข้อมูลเก็บเป็น index ของ combobox เริ่มจาก 0
+                int mm_db2 = saveConfigBean.getCbPayType6();
                 Calendar c2 = Calendar.getInstance(Locale.ENGLISH);
-                c2.setTime(c.getTime());//เอาปีของความเคลื่อนไหวก่อนหน้า เพื่อเลือกวันที่คำนวณ
+                c2.setTime(currentTime.getTime());//เอาปีของความเคลื่อนไหวก่อนหน้า เพื่อเลือกวันที่คำนวณ
                 c2.set(Calendar.DATE, dd_db2);
-                c2.set(Calendar.MONTH, mm_db2 - 1);
+                c2.set(Calendar.MONTH, mm_db2);
                 //จบช่วงที่ 2
 
-                if (c1.getTime().compareTo(c.getTime()) == 0 || c2.getTime().compareTo(c.getTime()) == 0) {
-                    data.setT_time("00:00:00");
-                    data.setRemark("<html><font color=green><b>ดอกเบี้ยทบเงินต้น</b></font></html>");
-                    data.setIsPrint("Y");
-                    LineNo++;
-                    data.setLineNo("" + LineNo);
+                if (c1.getTime().compareTo(currentTime.getTime()) == 0 || c2.getTime().compareTo(currentTime.getTime()) == 0) {
+                    itemRow.setT_time("00:00:00");
+                    itemRow.setRemark("<html><font color=green><b>ดอกเบี้ยทบเงินต้น</b></font></html>");
+                    itemRow.setIsPrint("Y");
+                    lineNo++;
+                    itemRow.setLineNo("" + lineNo);
                     if (all_balance < 1) {
-                        data.setBalance(0);
-                        data.setT_interest(0);
-                        data.setT_interest_balance(0);
+                        itemRow.setBalance(0);
+                        itemRow.setT_interest(0);
+                        itemRow.setT_interest_balance(0);
                     } else {
-                        data.setBalance(all_balance + data.getT_interest() + data.getT_interest_balance());
+                        itemRow.setBalance(all_balance + itemRow.getT_interest() + itemRow.getT_interest_balance());
                     }
-                    data.setDeposit_interest(data.getT_interest() + data.getT_interest_balance());
-                    show4 += data.getDeposit_interest();
-                    data.setT_interest_balance(0);
+                    itemRow.setDeposit_interest(itemRow.getT_interest() + itemRow.getT_interest_balance());
+                    show4 += itemRow.getDeposit_interest();
+                    itemRow.setT_interest_balance(0);
                     all_interest = 0;//clear ดอกเบี้ยทบต้นออก
-                    data.setT_interest(0);
+                    itemRow.setT_interest(0);
                     dayCount = 0;
-                    all_balance = data.getBalance();
+                    all_balance = itemRow.getBalance();
                     isUpdate = true;
 
                     //insert ดอกเบี้ยฝาก
@@ -256,53 +265,53 @@ public class TransactionAdvanceMethod {
 //                    }
                     //insert ดอกเบี้ยฝาก
                     CbTransactionSaveBean bean = new CbTransactionSaveBean();
-                    bean.setT_date(data.getT_date());
-                    bean.setT_time(data.getT_time());
+                    bean.setT_date(itemRow.getT_date());
+                    bean.setT_time(itemRow.getT_time());
                     bean.setT_acccode(accCode);
                     bean.setT_custcode(custCode);
                     bean.setT_description("ฝากเงิน(ดอกเบี้ย)");
-                    bean.setT_amount(data.getDeposit_interest());
+                    bean.setT_amount(itemRow.getDeposit_interest());
                     bean.setT_empcode("system");
                     bean.setT_docno("");
                     bean.setT_booktype("INT");
                     bean.setLineNo(0);
                     bean.setPrintChk("N");
-                    bean.setT_balance(data.getBalance());
+                    bean.setT_balance(itemRow.getBalance());
                     bean.setT_index(0);
-                    bean.setMoney_in(data.getDeposit_interest());
+                    bean.setMoney_in(itemRow.getDeposit_interest());
                     bean.setMoney_out(0);
                     bean.setBranchCode(Value.BRANCH_CODE);
                     bean.setT_interest(0);
                     bean.setT_fee(0);
                     bean.setT_status("11");
                     if (bean.getT_amount() > 0) {
-                        cbTransactionSaveControl.saveCbTransactionSave(bean);
+                        tranSaveControl.saveCbTransactionSave(bean);
                     }
                 }
             }//end paytype 3
 
             if (!isDateIn) {
-                data.setProfit(data.getBalance() - data.getPrinciple());
+                itemRow.setProfit(itemRow.getBalance() - itemRow.getPrinciple());
                 if (addModel) {
-                    modelList.add(data.toObject());
+                    modelList.add(itemRow.toObject());
                 }
             }
 
             if (isDateIn && isUpdate) {
-                data.setProfit(data.getBalance() - data.getPrinciple());
+                itemRow.setProfit(itemRow.getBalance() - itemRow.getPrinciple());
                 if (addModel) {
-                    modelList.add(data.toObject());
+                    modelList.add(itemRow.toObject());
                 }
             }
 
-            if (c.getTime().compareTo(dateEnd) == 0) {
-                data.setProfit(data.getBalance() - data.getPrinciple());
+            if (currentTime.getTime().compareTo(dateEnd) == 0) {
+                itemRow.setProfit(itemRow.getBalance() - itemRow.getPrinciple());
                 if (addModel) {
-                    modelList.add(data.toObject());
+                    modelList.add(itemRow.toObject());
                 }
                 isLoop = true;
             } else {
-                c.add(Calendar.DATE, 1);
+                currentTime.add(Calendar.DATE, 1);
             }
         }//end while loop
 
@@ -312,14 +321,19 @@ public class TransactionAdvanceMethod {
         balanceAmount = all_balance;
         interestAmount = all_interest;
 
+        TransactionAdvanceMethod.depositSummary = show1;
+        TransactionAdvanceMethod.withdrawSummary = show2;
+        TransactionAdvanceMethod.balanceSummary = show3;
+        TransactionAdvanceMethod.profitSummary = show4;
+        TransactionAdvanceMethod.netBalanceSummary = balanceAmount;
+
         return modelList;
     }
 
     static void updateTransactionSaveRunning(String custCode, String accCode) {
         int t_index = 1;
         int line_no = 1;
-        CbTransactionSaveControl tranSaveControl = new CbTransactionSaveControl();
-        List<CbTransactionSaveBean> listTrans = tranSaveControl.getListByAccoundCode(accCode);
+        List<CbTransactionSaveBean> listTrans = tranSaveControl.getListByAccoundCode(accCode, custCode);
         for (CbTransactionSaveBean bean : listTrans) {
             String t_date = DateFormat.getMySQL_DateTime(bean.getT_date());
             if (line_no > 24) {
@@ -329,5 +343,22 @@ public class TransactionAdvanceMethod {
             t_index++;
             line_no++;
         }
+    }
+    
+    private static CbSaveConfigBean getSaveConfigByDate(Date dateCheck, List<CbSaveConfigBean> listSaveConfig) {
+        CbSaveConfigBean saveConfigBean = new CbSaveConfigBean();
+        for (CbSaveConfigBean bean : listSaveConfig) {
+            Date updateDb = DateFormat.getMySQL_DateTime(bean.getUpdate_date());
+            //ถ้าอยู่ระหว่าง createDate กับ updateDate ให้ return config เลย
+            if (updateDb.before(dateCheck)) {
+                saveConfigBean = bean;
+            }
+        }
+        return saveConfigBean;
+    }
+
+    private static CbSaveConfigBean getSaveConfigByDateFromDB(Date dateCheck, String typeCode) {
+        CbSaveConfigBean saveConfigBean = saveConfigControl.getLastConfigHistory(dateCheck, typeCode);
+        return saveConfigBean;
     }
 }

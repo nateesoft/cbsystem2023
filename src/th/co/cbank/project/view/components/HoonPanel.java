@@ -29,7 +29,6 @@ import th.co.cbank.util.DateChooseDialog;
 import th.co.cbank.util.DateFormat;
 import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.NumberFormat;
-import th.co.cbank.util.NumberUtil;
 
 public class HoonPanel extends javax.swing.JPanel {
 
@@ -1617,9 +1616,9 @@ public class HoonPanel extends javax.swing.JPanel {
     }
 
     private void btnSaveHoon() {
-        double qty = NumberUtil.toDouble(txtHoonQTY.getText());
-        double totalAmt = NumberUtil.toDouble(txtAmount.getText());
-        double cashPay = NumberUtil.toDouble(txtCashPay.getText());
+        double qty = NumberFormat.toDouble(txtHoonQTY.getText());
+        double totalAmt = NumberFormat.toDouble(txtAmount.getText());
+        double cashPay = NumberFormat.toDouble(txtCashPay.getText());
         double total = cashPay - totalAmt;
 
         if (qty <= 0) {
@@ -1655,7 +1654,7 @@ public class HoonPanel extends javax.swing.JPanel {
             cbTransactionSaveBean.setT_custcode(profileBean.getP_custCode());
             cbTransactionSaveBean.setT_description("ซื้อหุ้น");
             cbTransactionSaveBean.setT_status(AppConstants.CB_STATUS_BUY_HOON);
-            cbTransactionSaveBean.setT_amount(NumberUtil.toDouble(txtHoonQTY.getText()));
+            cbTransactionSaveBean.setT_amount(NumberFormat.toDouble(txtHoonQTY.getText()));
             cbTransactionSaveBean.setT_empcode(Value.USER_CODE);
             cbTransactionSaveBean.setT_docno(hoonDocNo);
             cbTransactionSaveBean.setRemark("ซื้อหุ้น");
@@ -1665,11 +1664,11 @@ public class HoonPanel extends javax.swing.JPanel {
             cbTransactionSaveBean.setT_index(0);
             cbTransactionSaveBean.setMoney_in(0.00);
             cbTransactionSaveBean.setMoney_out(0.00);
-            cbTransactionSaveBean.setT_hoon_rate(NumberUtil.toDouble(txtValueBaht.getText()));
+            cbTransactionSaveBean.setT_hoon_rate(NumberFormat.toDouble(txtValueBaht.getText()));
             cbTransactionSaveBean.setBranchCode(Value.BRANCH_CODE);
-            cbTransactionSaveBean.setT_hoon_amt(NumberUtil.toDouble(txtAmount.getText()));
-            cbTransactionSaveBean.setT_hoon_cash(NumberUtil.toDouble(txtCashPay.getText()));
-            cbTransactionSaveBean.setT_hoon_ton(NumberUtil.toDouble(txtHoonTon.getText()));
+            cbTransactionSaveBean.setT_hoon_amt(NumberFormat.toDouble(txtAmount.getText()));
+            cbTransactionSaveBean.setT_hoon_cash(NumberFormat.toDouble(txtCashPay.getText()));
+            cbTransactionSaveBean.setT_hoon_ton(NumberFormat.toDouble(txtHoonTon.getText()));
             cbTransactionSaveBean.setT_balance(saveAccountBean.getHoon_balance());
             cbTransactionSaveBean.setT_hoon(profileBean.getHoon_Qty() + (int) cbTransactionSaveBean.getT_amount());
 
@@ -1728,8 +1727,8 @@ public class HoonPanel extends javax.swing.JPanel {
     }
 
     private void txtTotalSellHoonAmountKeyReleased() {
-        double price = NumberUtil.toDouble(txtPriceValue.getText());
-        double total = NumberUtil.toDouble(txtTotalSellHoonAmount.getText());
+        double price = NumberFormat.toDouble(txtPriceValue.getText());
+        double total = NumberFormat.toDouble(txtTotalSellHoonAmount.getText());
         total *= price;
         txtTotalAmount.setText(NumberFormat.showDouble2(total));
     }
@@ -1747,8 +1746,8 @@ public class HoonPanel extends javax.swing.JPanel {
     }
 
     private void btnSellHoon() {
-        double qty = NumberUtil.toDouble(txtTotalSellHoonAmount.getText());
-        double balance = NumberUtil.toDouble(txtHoonBalance.getText());
+        double qty = NumberFormat.toDouble(txtTotalSellHoonAmount.getText());
+        double balance = NumberFormat.toDouble(txtHoonBalance.getText());
 
         if (qty <= 0) {
             MessageAlert.warningPopup(this, "จำนวนหุ้นที่ต้องการขายต้องมากกว่า 0!");
@@ -1785,7 +1784,7 @@ public class HoonPanel extends javax.swing.JPanel {
             cbTransactionSaveBean.setT_acccode(saveAccountBean.getAccount_code());
             cbTransactionSaveBean.setT_custcode(profileBean.getP_custCode());
             cbTransactionSaveBean.setT_description("ขายหุ้น");
-            cbTransactionSaveBean.setT_amount(NumberUtil.toDouble(txtTotalSellHoonAmount.getText()));
+            cbTransactionSaveBean.setT_amount(NumberFormat.toDouble(txtTotalSellHoonAmount.getText()));
             cbTransactionSaveBean.setT_empcode(Value.USER_CODE);
             cbTransactionSaveBean.setT_docno(hoonSellDocNo);
             cbTransactionSaveBean.setRemark("ขายหุ้น");
@@ -1796,10 +1795,10 @@ public class HoonPanel extends javax.swing.JPanel {
             cbTransactionSaveBean.setT_index(0);
             cbTransactionSaveBean.setMoney_in(0.00);
             cbTransactionSaveBean.setMoney_out(0.00);
-            cbTransactionSaveBean.setT_hoon_rate(NumberUtil.toDouble(txtPriceValue.getText()));
+            cbTransactionSaveBean.setT_hoon_rate(NumberFormat.toDouble(txtPriceValue.getText()));
             cbTransactionSaveBean.setBranchCode(Value.BRANCH_CODE);
 
-            double totalAmount = NumberUtil.toDouble(txtTotalAmount.getText());
+            double totalAmount = NumberFormat.toDouble(txtTotalAmount.getText());
             cbTransactionSaveBean.setT_hoon_amt(totalAmount);
             cbTransactionSaveBean.setT_hoon_cash(totalAmount);
             cbTransactionSaveBean.setT_hoon_ton(0);
@@ -1886,8 +1885,8 @@ public class HoonPanel extends javax.swing.JPanel {
             return;
         }
 
-        double hoonBalance = Double.parseDouble(txtTotalHoonBalance.getText().replace(",", ""));
-        double tranferAmt = Double.parseDouble(txtTotaTransferHoonAmt.getText().replace(",", ""));
+        double hoonBalance = NumberFormat.toDouble(txtTotalHoonBalance.getText());
+        double tranferAmt = NumberFormat.toDouble(txtTotaTransferHoonAmt.getText());
         if (tranferAmt >= hoonBalance) {
             MessageAlert.warningPopup(this, "คุณต้องการโอนหุ้นทั้งหมดจากบัญชีนี้");
             txtTotaTransferHoonAmt.setText("" + hoonBalance);
@@ -1913,7 +1912,7 @@ public class HoonPanel extends javax.swing.JPanel {
             cbTransactionSaveBean.setT_acccode(cbAccoutListTransfer.getSelectedItem().toString());
             cbTransactionSaveBean.setT_custcode(profileBean.getP_custCode());
             cbTransactionSaveBean.setT_description("โอนหุ้น");
-            cbTransactionSaveBean.setT_amount(NumberUtil.toInt(sHoonMoney));
+            cbTransactionSaveBean.setT_amount(NumberFormat.toInt(sHoonMoney));
             cbTransactionSaveBean.setT_empcode(Value.USER_CODE);
             cbTransactionSaveBean.setT_docno(transferHoonDocNo);
             cbTransactionSaveBean.setRemark("โอนหุ้น");
@@ -1930,7 +1929,7 @@ public class HoonPanel extends javax.swing.JPanel {
             cbTransactionSaveBean.setT_hoon_cash(0);
             cbTransactionSaveBean.setT_hoon_ton(0);
             cbTransactionSaveBean.setT_balance(saveAccountBean.getHoon_balance());
-            cbTransactionSaveBean.setT_hoon(NumberUtil.toInt(sHoonMoney));
+            cbTransactionSaveBean.setT_hoon(NumberFormat.toInt(sHoonMoney));
 
             if (cbTransactionSaveControl.saveCbTransactionSave(cbTransactionSaveBean)) {
                 String sql2 = "update cb_profile set "
@@ -1969,7 +1968,7 @@ public class HoonPanel extends javax.swing.JPanel {
             cbTransactionSaveBean.setT_acccode(saveAccountBean.getAccount_code());
             cbTransactionSaveBean.setT_custcode(profileBean.getP_custCode());
             cbTransactionSaveBean.setT_description("รับเข้าหุ้น");
-            cbTransactionSaveBean.setT_amount(NumberUtil.toInt(sHoonMoney));
+            cbTransactionSaveBean.setT_amount(NumberFormat.toInt(sHoonMoney));
             cbTransactionSaveBean.setT_empcode(Value.USER_CODE);
             cbTransactionSaveBean.setT_docno(transferHoonDocNo);
             cbTransactionSaveBean.setRemark("รับเข้าหุ้น");
@@ -1985,7 +1984,7 @@ public class HoonPanel extends javax.swing.JPanel {
             cbTransactionSaveBean.setT_hoon_cash(0);
             cbTransactionSaveBean.setT_hoon_ton(0);
             cbTransactionSaveBean.setT_balance(saveAccountBean.getHoon_balance());
-            cbTransactionSaveBean.setT_hoon(NumberUtil.toInt(sHoonMoney));
+            cbTransactionSaveBean.setT_hoon(NumberFormat.toInt(sHoonMoney));
 
             if (cbTransactionSaveControl.saveCbTransactionSave(cbTransactionSaveBean)) {
                 String sql3 = "update cb_profile set Hoon_Qty=Hoon_Qty+" + sHoonMoney + " where p_CustCode='" + txtTransferPerson.getText() + "';";
@@ -2021,10 +2020,10 @@ public class HoonPanel extends javax.swing.JPanel {
         double a = 0.00;
         double b = 0.00;
         if (!"".equals(txtHoonQTY.getText().trim())) {
-            a = NumberUtil.toDouble(txtHoonQTY.getText());
+            a = NumberFormat.toDouble(txtHoonQTY.getText());
         }
         if (!"".equals(txtValueBaht.getText().trim())) {
-            b = NumberUtil.toDouble(txtValueBaht.getText());
+            b = NumberFormat.toDouble(txtValueBaht.getText());
         }
 
         total = a * b;

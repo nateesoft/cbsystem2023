@@ -78,7 +78,7 @@ public class CbExpenseControl extends BaseControl {
         try {
             String sql = "update cb_expense set "
                     + "exp_id='" + bean.getExp_id() + "', "
-                    + "exp_desc='" + bean.getExp_desc() + "' "
+                    + "exp_desc='" + ThaiUtil.Unicode2ASCII(bean.getExp_desc()) + "' "
                     + "where exp_id='" + bean.getExp_id() + "'";
             update(sql);
             return true;

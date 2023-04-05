@@ -276,7 +276,7 @@ public class StringUtil {
                         } else if ((i == (intVal.length() - 2)) && (n.equals("1"))) {
                             bahtTH += "";
                         } else {
-                            bahtTH += num[Integer.parseInt(n)];
+                            bahtTH += num[NumberFormat.toInt(n)];
                         }
                         bahtTH += rank[(intVal.length() - i) - 1];
                     }

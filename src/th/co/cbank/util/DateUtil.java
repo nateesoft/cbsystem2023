@@ -68,7 +68,7 @@ public class DateUtil {
         SimpleDateFormat simD = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
         String[] data = simD.format(d).split("-");
 
-        return getLengthToCurrent(Integer.parseInt(data[0]), Integer.parseInt(data[1]) - 1, Integer.parseInt(data[2]));
+        return getLengthToCurrent(NumberFormat.toInt(data[0]), NumberFormat.toInt(data[1]) - 1, NumberFormat.toInt(data[2]));
     }
 
     //method สำหรับนับช่วงวัน ว่าจากวันนี้ ถึงวันนี้เป็นระยะเวลากี่วัน
@@ -101,9 +101,9 @@ public class DateUtil {
         SimpleDateFormat simp = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
         String[] date = simp.format(cTarget).split("-");
         cc2.set(
-                Integer.parseInt(date[0]),
-                Integer.parseInt(date[1]) - 1,
-                Integer.parseInt(date[2])
+                NumberFormat.toInt(date[0]),
+                NumberFormat.toInt(date[1]) - 1,
+                NumberFormat.toInt(date[2])
         );
 
         for (int i = 0; i < 36600; i++) {

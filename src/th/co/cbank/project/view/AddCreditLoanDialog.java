@@ -209,12 +209,7 @@ public class AddCreditLoanDialog extends BaseDialogSwing {
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             btnSave.requestFocus();
         } else {
-            try {
-                double d = Double.parseDouble(txtCreditLoanAmt.getText());
-                txtLoanMaxAmt.setText("" + d);
-            } catch (NumberFormatException e) {
-                System.err.println(e);
-            }
+            txtLoanMaxAmt.setText("" + NumberFormat.toDouble(txtCreditLoanAmt.getText()));
         }
     }//GEN-LAST:event_txtCreditLoanAmtKeyReleased
 
@@ -233,7 +228,7 @@ public class AddCreditLoanDialog extends BaseDialogSwing {
     }//GEN-LAST:event_btnCancelActionPerformed
 
     private void saveLoanAllow() {
-        double creditLoanAmt = Double.parseDouble(txtCreditLoanAmt.getText());
+        double creditLoanAmt = NumberFormat.toDouble(txtCreditLoanAmt.getText());
         CbProfileControl profileControl = new CbProfileControl();
         boolean isUpdate = profileControl.saveLoanAllow(profileCode, creditLoanAmt, empCode);
         if (isUpdate) {

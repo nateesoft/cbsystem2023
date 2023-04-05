@@ -84,7 +84,7 @@ public class ExcelUtil {
                     }
                 }
                 if (isLock) {
-                    addDouble(sheet, j, i + 1, Double.parseDouble(model.getValueAt(i, j).toString()));
+                    addDouble(sheet, j, i + 1, NumberFormat.toDouble(model.getValueAt(i, j).toString()));
                 } else {
                     addLabel(sheet, j, i + 1, model.getValueAt(i, j).toString());
                 }

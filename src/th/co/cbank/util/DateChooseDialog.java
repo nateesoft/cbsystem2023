@@ -42,11 +42,11 @@ public final class DateChooseDialog extends javax.swing.JDialog {
         initComponents();
 
         SimpleDateFormat sss = new SimpleDateFormat("yyyy");
-        int yearCurrent = Integer.parseInt(sss.format(new Date()));
+        int yearCurrent = NumberFormat.toInt(sss.format(new Date()));
         spYear.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(yearCurrent), null, null, Integer.valueOf(1)));
 
         SimpleDateFormat sM = new SimpleDateFormat("MM");
-        int month = Integer.parseInt(sM.format(new Date()));
+        int month = NumberFormat.toInt(sM.format(new Date()));
         monthSelected = month;
         cbMonth.setSelectedIndex(monthSelected - 1);
 
@@ -67,7 +67,7 @@ public final class DateChooseDialog extends javax.swing.JDialog {
         this.setLocation(point);
 
         SimpleDateFormat sss = new SimpleDateFormat("yyyy");
-        int yearCurrent = Integer.parseInt(sss.format(new Date()));
+        int yearCurrent = NumberFormat.toInt(sss.format(new Date()));
         spYear.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(yearCurrent), null, null, Integer.valueOf(1)));
         lbToday.requestFocus();
     }
@@ -399,7 +399,7 @@ private void cbMonthKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_c
 
         Calendar c = Calendar.getInstance();
         c.set(Calendar.MONTH, monthSelected);
-        int year = Integer.parseInt(spYear.getValue().toString());
+        int year = NumberFormat.toInt(spYear.getValue().toString());
         c.set(Calendar.YEAR, year);
 
         c.set(Calendar.DAY_OF_MONTH, 1);
@@ -501,28 +501,20 @@ private void cbMonthKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_c
         int column = tblCalendar.getSelectedColumn();
         String ndate = (String) model.getValueAt(row, column);
         if (!ndate.equals("")) {
-            int dayn = Integer.parseInt(ndate);
+            int dayn = NumberFormat.toInt(ndate);
             int month = cbMonth.getSelectedIndex();
-            int year;
-            try {
-                year = Integer.parseInt(String.valueOf(spYear.getValue()));
-                Calendar sDate = Calendar.getInstance();
-                sDate.set(Calendar.YEAR, year);
-                sDate.set(Calendar.MONTH, month);
-                sDate.set(Calendar.DAY_OF_MONTH, dayn);
-
-                selectedDate = sDate;
-                dispose();
-            } catch (NumberFormatException e) {
-
-                selectedDate = null;
-            }
-
+            int year = NumberFormat.toInt(String.valueOf(spYear.getValue()));
+            Calendar sDate = Calendar.getInstance();
+            sDate.set(Calendar.YEAR, year);
+            sDate.set(Calendar.MONTH, month);
+            sDate.set(Calendar.DAY_OF_MONTH, dayn);
+            selectedDate = sDate;
+            dispose();
         }
     }
 
     private void doInputAction() {
-        int year = Integer.parseInt(String.valueOf(spYear.getValue()));
+        int year = NumberFormat.toInt(String.valueOf(spYear.getValue()));
         curDay = new GregorianCalendar(year, monthSelected - 1, 1);
         showCalendar();
     }
@@ -531,7 +523,7 @@ private void cbMonthKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_c
         int forward = cbMonth.getSelectedIndex() + 1;
         if (forward == 12) {
             forward = 0;
-            int year = Integer.parseInt(spYear.getValue().toString()) + 1;
+            int year = NumberFormat.toInt(spYear.getValue().toString()) + 1;
             spYear.setValue(year);
         }
         cbMonth.setSelectedIndex(forward);
@@ -542,7 +534,7 @@ private void cbMonthKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_c
         int back = cbMonth.getSelectedIndex() - 1;
         if (back == -1) {
             back = 11;
-            int year = Integer.parseInt(spYear.getValue().toString()) - 1;
+            int year = NumberFormat.toInt(spYear.getValue().toString()) - 1;
             spYear.setValue(year);
         }
         cbMonth.setSelectedIndex(back);

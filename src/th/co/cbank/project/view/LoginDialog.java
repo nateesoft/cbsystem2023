@@ -3,10 +3,11 @@ package th.co.cbank.project.view;
 import java.awt.Frame;
 import java.awt.event.KeyEvent;
 import java.io.File;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 import java.util.Locale;
+import javax.swing.SwingWorker;
 import org.apache.log4j.Logger;
 import th.co.cbank.project.control.CbSaveAccountControl;
 import th.co.cbank.project.control.CbUserControl;
@@ -17,7 +18,6 @@ import th.co.cbank.util.ScrollText;
 import th.co.cbank.project.control.PrintCOM;
 import th.co.cbank.project.model.BranchBean;
 import th.co.cbank.project.model.CbGroupBean;
-import th.co.cbank.project.model.CbSaveAccountBean;
 import th.co.cbank.project.model.CbUserBean;
 import th.co.cbank.util.MessageAlert;
 
@@ -333,74 +333,73 @@ public class LoginDialog extends BaseDialogSwing {
         for (int i = 0; i < Value.ACCESS.length; i++) {
             Value.ACCESS[i] = "Y";
         }
-
-        logger.info("Start Login: " + txtUser.getText());
-
         CbUserControl userControl = new CbUserControl();
         CbUserBean userBean = userControl.getUserAndPass(txtUser.getText().trim(), txtPass.getText().trim());
-        try {
-            if (userBean != null) {
-                txtUser.setText("");
-                txtPass.setText("");
-                Value.USER_CODE = userBean.getUsername();
-                Value.USER_NAME = userBean.getName();
-                Value.USER_TIME = sdf.format(new Date());
-                Value.USER_LAST_NAME = userBean.getLastname();
-
-                BranchBean branchBean = getBranchControl().getData();
-                Value.BRANCH_CODE = branchBean.getCode();
-
-                getLoginControl().updateLogin(userBean.getUsername(), Value.USER_NAME, "Success", getTitle());
-
-                CbGroupBean groupBean = userControl.getPermission(userBean.getUsername());
-                String[] per = groupBean.getPermission().split(",");
-                System.arraycopy(per, 0, Value.ACCESS, 0, per.length);
-
-                PrintCOM printCom = new PrintCOM();
-                printCom.printLOG("Login by ... " + Value.USER_CODE + "   Start time: " + DateFormat.getLocale_ddMMyyyy(new Date()));
-
-                // process total balance all account
-                SimpleDateFormat simp = new SimpleDateFormat("ddMMyyyy");
-                if (!new File("process/process" + simp.format(new Date()) + ".txt").exists()) {
-                    MessageAlert.infoPopup(this.getClass(), "ระบบจะทำการประมวลผล ข้อมูลสมาชิกทั้งหมด กรุณารอสักครู่...\nข้อมูลจะถูกประมวลผล วันละ 1 ครั้งเท่านั้น");
-                    btnLogin.setEnabled(false);
-                    btnExit.setEnabled(false);
-                    List<CbSaveAccountBean> listBean = getSaveAccountControl().listCbSaveAccount();
-                    CbSaveAccountControl saveAccountControl = new CbSaveAccountControl();
-                    for (int i = 0; i < listBean.size(); i++) {
-                        CbSaveAccountBean bean = (CbSaveAccountBean) listBean.get(i);
-                        // update summary balance again
-                        saveAccountControl.updateSummaryBalanceFromTransaction(bean.getB_CUST_CODE(), bean.getAccount_code());
-                    }
-                    new File("process").mkdir();
-                    new File("process/process" + simp.format(new Date()) + ".txt").createNewFile();
-                }
-
-                dispose();
-                parent.setVisible(true);
-            } else {
-                MessageAlert.errorPopup(this, "รหัสผู้ใช้งานไม่ถูกต้อง หรือมีผู้ใช้งานอยู่แล้ว กรุณาตรวจสอบ !!!");
-                logger.error("รหัสผู้ใช้งานไม่ถูกต้อง หรือมีผู้ใช้งานอยู่แล้ว กรุณาตรวจสอบ !!!");
-                txtUser.setText("");
-                txtUser.requestFocus();
-                txtPass.setText("");
-
-                Value.USER_CODE = "";
-                Value.USER_NAME = "";
-            }
-
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            MessageAlert.errorPopup(this, "ไม่สามารถเข้าสู่ระบบได้ เนื่องจากเกิดปัญหาในการเชื่อมต่อฐานข้อมูล");
+        if (userBean == null) {
+            MessageAlert.errorPopup(this, "รหัสผู้ใช้งานไม่ถูกต้อง หรือมีผู้ใช้งานอยู่แล้ว กรุณาตรวจสอบ !!!");
+            logger.error("รหัสผู้ใช้งานไม่ถูกต้อง หรือมีผู้ใช้งานอยู่แล้ว กรุณาตรวจสอบ !!!");
             txtUser.setText("");
             txtUser.requestFocus();
             txtPass.setText("");
+
             Value.USER_CODE = "";
             Value.USER_NAME = "";
-
-            new File("cbanksystem.running").delete();
-            System.exit(0);
+            return;
         }
+
+        txtUser.setText("");
+        txtPass.setText("");
+        Value.USER_CODE = userBean.getUsername();
+        Value.USER_NAME = userBean.getName();
+        Value.USER_TIME = sdf.format(new Date());
+        Value.USER_LAST_NAME = userBean.getLastname();
+
+        BranchBean branchBean = getBranchControl().getData();
+        Value.BRANCH_CODE = branchBean.getCode();
+
+        getLoginControl().updateLogin(userBean.getUsername(), Value.USER_NAME, "Success", getTitle());
+
+        CbGroupBean groupBean = userControl.getPermission(userBean.getUsername());
+        String[] per = groupBean.getPermission().split(",");
+        System.arraycopy(per, 0, Value.ACCESS, 0, per.length);
+
+        PrintCOM printCom = new PrintCOM();
+        printCom.printLOG("Login by ... " + Value.USER_CODE + "   Start time: " + DateFormat.getLocale_ddMMyyyy(new Date()));
+
+        // process total balance all account
+        final SimpleDateFormat simp = new SimpleDateFormat("ddMMyyyy");
+        if (!new File("process/process" + simp.format(new Date()) + ".txt").exists()) {
+            btnLogin.setEnabled(false);
+            btnExit.setEnabled(false);
+
+            // จะไม่มีการประมวลผลแล้ว เพราะทำให้ยอดเพี้ยน remark: 04/04/2023
+//            final CbSaveAccountControl saveAccountControl = new CbSaveAccountControl();
+//            final LoadingDialog loading = new LoadingDialog(null, true, "ระบบจะทำการประมวลผล ข้อมูลสมาชิกทั้งหมด กรุณารอสักครู่", "...ข้อมูลจะถูกประมวลผล วันละ 1 ครั้งเท่านั้น");
+//
+//            SwingWorker<String, Void> worker = new SwingWorker<String, Void>() {
+//                @Override
+//                protected String doInBackground() throws Exception {
+//                    int resultUpdate = saveAccountControl.updateSummaryBalanceFromTransaction();
+//                    logger.info("Update " + resultUpdate + " records");
+//                    return "done";
+//                }
+//
+//                @Override
+//                protected void done() {
+//                    loading.dispose();
+//                }
+//            };
+//            worker.execute();
+//            loading.setVisible(true);
+            try {
+                new File("process").mkdir();
+                new File("process/process" + simp.format(new Date()) + ".txt").createNewFile();
+            } catch (IOException e) {
+            }
+        }
+
+        dispose();
+        parent.setVisible(true);
     }
 
     private void exit() {

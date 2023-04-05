@@ -61,6 +61,8 @@ public class CbLoanConfigControl extends BaseControl {
             bean.setCheckMinPayment(rs.getString("checkMinPayment"));
             bean.setMinPaymentPercent(rs.getInt("MinPayPercent"));
             bean.setMinPaymentBaht(rs.getDouble("MinPerBaht"));
+            bean.setCreate_date(rs.getString("create_date"));
+            bean.setUpdate_date(rs.getString("update_date"));
 
             listBean.add(bean);
         }
@@ -73,6 +75,20 @@ public class CbLoanConfigControl extends BaseControl {
         List<CbLoanConfigBean> listBean = new ArrayList<>();
         try {
             String sql = "select * from cb_loan_config";
+            ResultSet rs = MySQLConnect.getResultSet(sql);
+            return mappingBean(rs);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+
+        return listBean;
+    }
+    
+    public List<CbLoanConfigBean> listLoanConfigHistory() {
+        List<CbLoanConfigBean> listBean = new ArrayList<>();
+        try {
+            String sql = "select * from cb_loan_config_history";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             return mappingBean(rs);
         } catch (Exception e) {
@@ -106,7 +122,7 @@ public class CbLoanConfigControl extends BaseControl {
                     + "(LoanCode,LoanName,LoanINT,LoanFee,LoanPenaltyINT,LoanPenaltyDay,"
                     + "LoanMinAmount,IntFixed,IntBadDebt,IntTurnover,IntNormal,chkPIntCapital,"
                     + "chkPIntTable,LoanPerMonth,LoanRunning, BookNo,"
-                    + "MinPayPercent, MinPerBaht, checkMinPayment)  "
+                    + "MinPayPercent, MinPerBaht, checkMinPayment,create_date,update_date)  "
                     + "values('" + bean.getLoanCode() + "','" + ThaiUtil.Unicode2ASCII(bean.getLoanName()) + "',"
                     + "'" + bean.getLoanINT() + "','" + bean.getLoanFee() + "',"
                     + "'" + bean.getLoanPenaltyINT() + "','" + bean.getLoanPenaltyDay() + "',"
@@ -116,9 +132,8 @@ public class CbLoanConfigControl extends BaseControl {
                     + "'" + bean.getChkPIntTable() + "','" + bean.getLoanPerMonth() + "',"
                     + "'" + bean.getLoanRunning() + "', '" + bean.getBookNo() + "',"
                     + "'" + bean.getMinPaymentPercent() + "','" + bean.getMinPaymentBaht() + "',"
-                    + "'" + bean.getCheckMinPayment() + "')";
-            String sqlChk = "select * from cb_loan_config "
-                    + "where LoanCode='" + bean.getLoanCode() + "' ";
+                    + "'" + bean.getCheckMinPayment() + "',now(),now())";
+            String sqlChk = "select * from cb_loan_config where LoanCode='" + bean.getLoanCode() + "' ";
             ResultSet rs = MySQLConnect.getResultSet(sqlChk);
             if (rs.next()) {
                 isSave = updateLoanConfig(bean);
@@ -126,6 +141,11 @@ public class CbLoanConfigControl extends BaseControl {
                 update(sql);
                 isSave = true;
             }
+            
+            // save history
+            String sqlHistory = "insert into cb_loan_config_history "
+                    + "select * from cb_loan_config where LoanCode='" + bean.getLoanCode() + "'";
+            MySQLConnect.exeUpdate(sqlHistory);
 
             rs.close();
         } catch (Exception e) {
@@ -141,7 +161,7 @@ public class CbLoanConfigControl extends BaseControl {
         try {
             String sql = "update cb_loan_config set "
                     + "LoanCode='" + bean.getLoanCode() + "', "
-                    + "LoanName='" + bean.getLoanName() + "', "
+                    + "LoanName='" + ThaiUtil.Unicode2ASCII(bean.getLoanName()) + "', "
                     + "LoanINT='" + bean.getLoanINT() + "', "
                     + "LoanFee='" + bean.getLoanFee() + "', "
                     + "LoanPenaltyINT='" + bean.getLoanPenaltyINT() + "', "
@@ -173,8 +193,7 @@ public class CbLoanConfigControl extends BaseControl {
 
     public boolean deleteLoanMaster(String LoanCode) {
         try {
-            String sql = "delete from cb_loan_config "
-                    + "where LoanCode='" + LoanCode + "';";
+            String sql = "delete from cb_loan_config where LoanCode='" + LoanCode + "';";
             update(sql);
             return true;
         } catch (Exception e) {
@@ -187,10 +206,8 @@ public class CbLoanConfigControl extends BaseControl {
 
     public boolean updateRunningBookNo(String loan_type) {
         try {
-            String sql = "update cb_loan_config set "
-                    + "LoanRunning=LoanRunning+1,"
-                    + "BookNo=BookNo+1 "
-                    + "where LoanCode='" + loan_type + "'";
+            String sql = "update cb_loan_config set LoanRunning=LoanRunning+1,"
+                    + "BookNo=BookNo+1 where LoanCode='" + loan_type + "'";
             return MySQLConnect.exeUpdate(sql) > 0;
         } catch (Exception e) {
             logger.error(e.getMessage());

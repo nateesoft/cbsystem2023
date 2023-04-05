@@ -70,8 +70,7 @@ public class CbBondsmanControl extends BaseControl {
 
     public void deleteCbBondsman(String loan_docno, String idcard) {
         try {
-            String sql = "delete from cb_bondsman "
-                    + "where loan_docno='" + loan_docno + "' "
+            String sql = "delete from cb_bondsman where loan_docno='" + loan_docno + "' "
                     + "and idcard='" + idcard + "'";
             update(sql);
         } catch (Exception e) {
@@ -83,13 +82,11 @@ public class CbBondsmanControl extends BaseControl {
     public boolean saveCbBondsman(CbBondsmanBean bean) {
         boolean isSave = false;
         try {
-            String sql = "insert into cb_bondsman"
-                    + "(loan_docno,idcard,name,surname)  "
+            String sql = "insert into cb_bondsman(loan_docno,idcard,name,surname)  "
                     + "values('" + bean.getLoan_docno() + "','" + bean.getIdcard() + "',"
                     + "'" + ThaiUtil.Unicode2ASCII(bean.getName()) + "',"
                     + "'" + ThaiUtil.Unicode2ASCII(bean.getSurname()) + "')";
-            String sqlChk = "select * from cb_bondsman "
-                    + "where loan_docno='" + bean.getLoan_docno() + "' "
+            String sqlChk = "select * from cb_bondsman where loan_docno='" + bean.getLoan_docno() + "' "
                     + "and idcard='" + bean.getIdcard() + "'";
             ResultSet rs = MySQLConnect.getResultSet(sqlChk);
             if (rs.next()) {
@@ -97,8 +94,7 @@ public class CbBondsmanControl extends BaseControl {
             } else {
                 update(sql);
                 //ลบจำนวนที่สามารถค้ำประกันได้ออกไป
-                String sql2 = "update cb_profile set "
-                        + "ApproveLimit=ApproveLimit-1 "
+                String sql2 = "update cb_profile set ApproveLimit=ApproveLimit-1 "
                         + "where p_custCode='" + bean.getIdcard() + "';";
                 update(sql2);
                 isSave = true;
@@ -115,11 +111,9 @@ public class CbBondsmanControl extends BaseControl {
 
     public boolean updateCbBondsman(CbBondsmanBean bean) {
         try {
-            String sql = "update cb_bondsman set "
-                    + "name='" + ThaiUtil.Unicode2ASCII(bean.getName()) + "', "
+            String sql = "update cb_bondsman set name='" + ThaiUtil.Unicode2ASCII(bean.getName()) + "', "
                     + "surname='" + ThaiUtil.Unicode2ASCII(bean.getSurname()) + "' "
-                    + "where loan_docno='" + bean.getLoan_docno() + "' "
-                    + "and idcard='" + bean.getIdcard() + "'";
+                    + "where loan_docno='" + bean.getLoan_docno() + "' and idcard='" + bean.getIdcard() + "'";
             update(sql);
             return true;
         } catch (Exception e) {

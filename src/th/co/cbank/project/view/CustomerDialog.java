@@ -9,12 +9,11 @@ import javax.swing.table.JTableHeader;
 import org.apache.log4j.Logger;
 import th.co.cbank.util.JTableUtil;
 import th.co.cbank.util.DateFormat;
-import th.co.cbank.util.NumberFormat;
 import th.co.cbank.project.constants.AppConstants;
 import th.co.cbank.project.model.CbLoanAccountBean;
 import th.co.cbank.project.model.CbSaveAccountBean;
 import th.co.cbank.util.MessageAlert;
-import th.co.cbank.util.NumberUtil;
+import th.co.cbank.util.NumberFormat;
 import th.co.cbank.util.StringUtil;
 import th.co.cbank.util.TableUtil;
 
@@ -348,7 +347,7 @@ public class CustomerDialog extends BaseDialogSwing {
                     return;
                 }
 
-                double balanceAmt = NumberUtil.toDouble("" + tbLoanAccount.getValueAt(rows, 3));
+                double balanceAmt = NumberFormat.toDouble("" + tbLoanAccount.getValueAt(rows, 3));
                 if (balanceAmt == 0) {
                     MessageAlert.warningPopup(this, "ไม่พบยอดค้างชำระในระบบ !!!");
                     setAccountCode(null);

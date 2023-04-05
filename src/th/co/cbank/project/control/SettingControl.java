@@ -57,8 +57,7 @@ public class SettingControl extends BaseControl {
         try {
             String sql = "insert into cb_group (groupcode,groupname,permission)  "
                     + "values('" + bean.getGroupCode() + "','" + ThaiUtil.Unicode2ASCII(bean.getGroupName()) + "','" + bean.getPermission() + "')";
-            String sqlChk = "select * from cb_group "
-                    + "where groupcode='" + bean.getGroupCode() + "' ";
+            String sqlChk = "select * from cb_group where groupcode='" + bean.getGroupCode() + "' ";
             ResultSet rs = MySQLConnect.getResultSet(sqlChk);
             if (rs.next()) {
                 updateCbGroup(bean);
@@ -76,7 +75,7 @@ public class SettingControl extends BaseControl {
     public void updateCbGroup(GroupBean bean) {
         try {
             String sql = "update cb_group set "
-                    + "groupname='" + bean.getGroupName() + "', "
+                    + "groupname='" + ThaiUtil.Unicode2ASCII(bean.getGroupName()) + "', "
                     + "permission='" + bean.getPermission() + "' "
                     + "where groupcode='" + bean.getGroupCode() + "'";
             update(sql);

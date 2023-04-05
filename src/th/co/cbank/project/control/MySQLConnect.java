@@ -11,6 +11,7 @@ import java.sql.Statement;
 import java.util.Properties;
 import org.apache.log4j.Logger;
 import th.co.cbank.util.MessageAlert;
+import th.co.cbank.util.NumberFormat;
 
 public class MySQLConnect {
 
@@ -41,7 +42,7 @@ public class MySQLConnect {
             }
             USER = prop.getProperty("username");
             PASS = prop.getProperty("password");
-            PORT = Integer.parseInt(prop.getProperty("port"));
+            PORT = NumberFormat.toInt(prop.getProperty("port"));
             CHARSET = prop.getProperty("charset");
             String uUSE_FINGER = prop.getProperty("use_finger");
             if (uUSE_FINGER != null) {

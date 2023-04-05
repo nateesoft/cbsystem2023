@@ -12,6 +12,7 @@ import th.co.cbank.project.control.MemmasterControl;
 import th.co.cbank.project.model.CbHoonBalanceBean;
 import th.co.cbank.project.model.Memmaster;
 import th.co.cbank.util.MessageAlert;
+import th.co.cbank.util.NumberFormat;
 import th.co.cbank.util.TableUtil;
 
 public class HoonProfitDialog extends BaseDialogSwing {
@@ -45,7 +46,7 @@ public class HoonProfitDialog extends BaseDialogSwing {
         jLabel2 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
+        txtNetProfitAmount = new javax.swing.JTextField();
         jTextField2 = new javax.swing.JTextField();
         jTextField6 = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
@@ -117,18 +118,18 @@ public class HoonProfitDialog extends BaseDialogSwing {
         jLabel3.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel3.setText("บาท");
 
-        jTextField1.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        jTextField1.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
-        jTextField1.setText("0.00");
-        jTextField1.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
-        jTextField1.addFocusListener(new java.awt.event.FocusAdapter() {
+        txtNetProfitAmount.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
+        txtNetProfitAmount.setHorizontalAlignment(javax.swing.JTextField.RIGHT);
+        txtNetProfitAmount.setText("0.00");
+        txtNetProfitAmount.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        txtNetProfitAmount.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                jTextField1FocusGained(evt);
+                txtNetProfitAmountFocusGained(evt);
             }
         });
-        jTextField1.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtNetProfitAmount.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTextField1KeyPressed(evt);
+                txtNetProfitAmountKeyPressed(evt);
             }
         });
 
@@ -285,7 +286,7 @@ public class HoonProfitDialog extends BaseDialogSwing {
                                         .addComponent(jLabel17)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                         .addComponent(cbYear, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtNetProfitAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 261, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addGroup(jPanel1Layout.createSequentialGroup()
                                         .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -338,7 +339,7 @@ public class HoonProfitDialog extends BaseDialogSwing {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtNetProfitAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -545,19 +546,19 @@ public class HoonProfitDialog extends BaseDialogSwing {
         }
     }//GEN-LAST:event_jTextField6KeyPressed
 
-    private void jTextField1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTextField1KeyPressed
+    private void txtNetProfitAmountKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNetProfitAmountKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
             dispose();
         } else if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             compute();
             jTextField6.requestFocus();
         }
-    }//GEN-LAST:event_jTextField1KeyPressed
+    }//GEN-LAST:event_txtNetProfitAmountKeyPressed
 
-    private void jTextField1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField1FocusGained
-        jTextField1.selectAll();
-        jTextField1.requestFocus();
-    }//GEN-LAST:event_jTextField1FocusGained
+    private void txtNetProfitAmountFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtNetProfitAmountFocusGained
+        txtNetProfitAmount.selectAll();
+        txtNetProfitAmount.requestFocus();
+    }//GEN-LAST:event_txtNetProfitAmountFocusGained
 
     private void jTextField6FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTextField6FocusGained
         jTextField6.selectAll();
@@ -638,7 +639,6 @@ public class HoonProfitDialog extends BaseDialogSwing {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField10;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField4;
@@ -648,6 +648,7 @@ public class HoonProfitDialog extends BaseDialogSwing {
     private javax.swing.JTextField jTextField8;
     private javax.swing.JTextField jTextField9;
     private javax.swing.JTable tbTransaction;
+    private javax.swing.JTextField txtNetProfitAmount;
     private javax.swing.JTextField txtTotalBalance;
     private javax.swing.JTextField txtTotalHoonBalance;
     // End of variables declaration//GEN-END:variables
@@ -660,53 +661,25 @@ public class HoonProfitDialog extends BaseDialogSwing {
         double d7 = 0;
         double d8 = 0;
 
-        try {
-            String s = jTextField1.getText();
-            s = s.replace(",", "");
-            try {
-                jTextField1.setText(dec.format(Double.parseDouble(s)));
-            } catch (NumberFormatException e) {
-            }
-            d1 = Double.parseDouble(s);
-        } catch (NumberFormatException e) {
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
+        txtNetProfitAmount.setText(dec.format(NumberFormat.toDouble(txtNetProfitAmount.getText())));
+        d1 = NumberFormat.toDouble(txtNetProfitAmount.getText());
+        d2 = NumberFormat.toDouble(jTextField6.getText());
+        if (d2 == 0) {
+            jTextField2.setText(dec.format(0));
+        } else {
+            double t = (d2 / 100) * d1;
+            jTextField2.setText(dec.format(t));
+        }
+        d7 = NumberFormat.toDouble(jTextField2.getText());
+        d3 = NumberFormat.toDouble(jTextField7.getText());
+        if (d3 == 0) {
+            jTextField8.setText(dec.format(0));
+        } else {
+            double t = (d3 / 100) * d1;
+            jTextField8.setText(dec.format(t));
         }
 
-        try {
-            String s = jTextField6.getText();
-            s = s.replace(",", "");
-            d2 = Double.parseDouble(s);
-            if (d2 == 0) {
-                jTextField2.setText(dec.format(0));
-            } else {
-                double t = (d2 / 100) * d1;
-                jTextField2.setText(dec.format(t));
-            }
-
-            String ss = jTextField2.getText();
-            ss = ss.replace(",", "");
-            d7 = Double.parseDouble(ss);
-        } catch (NumberFormatException e) {
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
-        }
-
-        try {
-            String s = jTextField7.getText();
-            s = s.replace(",", "");
-            d3 = Double.parseDouble(s);
-            if (d3 == 0) {
-                jTextField8.setText(dec.format(0));
-            } else {
-                double t = (d3 / 100) * d1;
-                jTextField8.setText(dec.format(t));
-            }
-
-            String ss = jTextField8.getText();
-            ss = ss.replace(",", "");
-            d8 = Double.parseDouble(ss);
-        } catch (NumberFormatException e) {
-            MessageAlert.infoPopup(this.getClass(), e.getMessage());
-        }
+        d8 = NumberFormat.toDouble(jTextField8.getText());
 
         double total = d1 - d7 - d8;
         txtTotalBalance.setText(dec.format(total));
@@ -715,17 +688,14 @@ public class HoonProfitDialog extends BaseDialogSwing {
 
         double totalHoon = hoonBalanceControl.getTotalHoonVolumn();
         String sAA = txtTotalBalance.getText();
-        sAA = sAA.replace(",", "");
-        double aa = Double.parseDouble(sAA);
-        double bb = Double.parseDouble("0");
+        double aa = NumberFormat.toDouble(sAA);
+        double bb = NumberFormat.toDouble("0");
         jTextField4.setText(dec.format(aa - bb));
 
         String strX1 = txtTotalBalance.getText();
-        strX1 = strX1.replace(",", "");
         String strX2 = "0";
-        strX2 = strX2.replace(",", "");
-        double x1 = Double.parseDouble(strX1);
-        double x2 = Double.parseDouble(strX2);
+        double x1 = NumberFormat.toDouble(strX1);
+        double x2 = NumberFormat.toDouble(strX2);
         double total3 = ((x1 - x2) * 100) / d1;
         DecimalFormat ddInt = new DecimalFormat("#0.00");
         jTextField9.setText(ddInt.format(total3));
@@ -747,17 +717,17 @@ public class HoonProfitDialog extends BaseDialogSwing {
         CbHoonSummaryBean bean = new CbHoonSummaryBean();
         bean.setYear_at(cbYear.getSelectedItem().toString());
         bean.setUser_action(Value.USER_CODE);
-        bean.setProfit_total(Double.parseDouble(jTextField1.getText().replace(",", "")));
-        bean.setReduce_value_second(Integer.parseInt(jTextField6.getText().replace(",", "")));
-        bean.setReduce_benefit(Integer.parseInt(jTextField7.getText().replace(",", "")));
-        bean.setReduce_v_baht(Double.parseDouble(jTextField2.getText().replace(",", "")));
-        bean.setReduce_b_baht(Double.parseDouble(jTextField8.getText().replace(",", "")));
-        bean.setBalance_total(Double.parseDouble(txtTotalBalance.getText().replace(",", "")));
+        bean.setProfit_total(NumberFormat.toDouble(txtNetProfitAmount.getText()));
+        bean.setReduce_value_second(NumberFormat.toInt(jTextField6.getText()));
+        bean.setReduce_benefit(NumberFormat.toInt(jTextField7.getText()));
+        bean.setReduce_v_baht(NumberFormat.toDouble(jTextField2.getText()));
+        bean.setReduce_b_baht(NumberFormat.toDouble(jTextField8.getText()));
+        bean.setBalance_total(NumberFormat.toDouble(txtTotalBalance.getText()));
         bean.setDividend_buy(0);
-        bean.setDividend_money(Double.parseDouble(jTextField9.getText().replace(",", "")));
-        bean.setDividend_by(Double.parseDouble(jTextField10.getText().replace(",", "")));
-        bean.setDividend_baht(Double.parseDouble(jTextField4.getText().replace(",", "")));
-        bean.setDividend_value_baht(Double.parseDouble(jTextField5.getText().replace(",", "")));
+        bean.setDividend_money(NumberFormat.toDouble(jTextField9.getText()));
+        bean.setDividend_by(NumberFormat.toDouble(jTextField10.getText()));
+        bean.setDividend_baht(NumberFormat.toDouble(jTextField4.getText()));
+        bean.setDividend_value_baht(NumberFormat.toDouble(jTextField5.getText()));
 
         if (hoonBalanceControl.checkExitYearAt(bean.getYear_at())) {
             hoonBalanceControl.updateHoonSummary(bean);
@@ -806,7 +776,7 @@ public class HoonProfitDialog extends BaseDialogSwing {
         // load default        
         CbHoonSummaryBean bean = getSummaryControl().getData(cbYear.getSelectedItem().toString());
         if (bean != null) {
-            jTextField1.setText(dec.format(bean.getProfit_total()));
+            txtNetProfitAmount.setText(dec.format(bean.getProfit_total()));
             jTextField6.setText("" + bean.getReduce_value_second());
             jTextField2.setText(dec.format(bean.getReduce_v_baht()));
             jTextField7.setText("" + bean.getReduce_benefit());
@@ -818,18 +788,18 @@ public class HoonProfitDialog extends BaseDialogSwing {
             jTextField5.setText(dec.format(bean.getDividend_value_baht()));
 
             btnSave.setEnabled(false);
-            jTextField1.setEditable(false);
+            txtNetProfitAmount.setEditable(false);
             jTextField6.setEditable(false);
             jTextField7.setEditable(false);
         } else {
             btnSave.setEnabled(true);
-            jTextField1.setEditable(true);
+            txtNetProfitAmount.setEditable(true);
             jTextField6.setEditable(true);
             jTextField7.setEditable(true);
 
-            jTextField1.setText("0.00");
-            jTextField1.selectAll();
-            jTextField1.requestFocus();
+            txtNetProfitAmount.setText("0.00");
+            txtNetProfitAmount.selectAll();
+            txtNetProfitAmount.requestFocus();
 
             jTextField6.setText("0");
             jTextField7.setText("0");

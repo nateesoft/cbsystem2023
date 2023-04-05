@@ -73,13 +73,11 @@ public class CbExpTransactionControl extends BaseControl {
 
     public void saveCbExpTransaction(CbExpTransactionBean bean) {
         try {
-            String sql = "insert into cb_exp_transaction "
-                    + "(EXP_DOC,EXP_DATE,BRANCH_CODE,EMP_CODE,EXP_TYPE,EMP_AMOUNT)  "
+            String sql = "insert into cb_exp_transaction(EXP_DOC,EXP_DATE,BRANCH_CODE,EMP_CODE,EXP_TYPE,EMP_AMOUNT)  "
                     + "values('" + bean.getEXP_DOC() + "','" + DateFormat.getMySQL_Date(bean.getEXP_DATE()) + "',"
                     + "'" + bean.getBRANCH_CODE() + "','" + bean.getEMP_CODE() + "',"
                     + "'" + ThaiUtil.Unicode2ASCII(bean.getEXP_TYPE()) + "','" + bean.getEMP_AMOUNT() + "')";
-            String sqlChk = "select * from cb_exp_transaction "
-                    + "where EXP_DOC='" + bean.getEXP_DOC() + "'";
+            String sqlChk = "select * from cb_exp_transaction where EXP_DOC='" + bean.getEXP_DOC() + "'";
             ResultSet rs = MySQLConnect.getResultSet(sqlChk);
             if (rs.next()) {
                 updateCbExpTransaction(bean);

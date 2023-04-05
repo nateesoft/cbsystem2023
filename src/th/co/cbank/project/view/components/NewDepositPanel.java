@@ -22,7 +22,7 @@ import th.co.cbank.project.model.CbSaveConfigBean;
 import th.co.cbank.project.model.ConfigBean;
 import th.co.cbank.project.model.ProfileBean;
 import th.co.cbank.util.MessageAlert;
-import th.co.cbank.util.NumberUtil;
+import th.co.cbank.util.NumberFormat;
 
 public class NewDepositPanel extends javax.swing.JPanel {
 
@@ -413,7 +413,7 @@ public class NewDepositPanel extends javax.swing.JPanel {
             return;
         }
 
-        double saveFeeAmt = NumberUtil.toDouble(txtSaveFee.getText());
+        double saveFeeAmt = NumberFormat.toDouble(txtSaveFee.getText());
         if (saveFeeAmt < 0) {
             txtSaveFee.requestFocus();
             return;
@@ -444,7 +444,7 @@ public class NewDepositPanel extends javax.swing.JPanel {
         cbSaveAccountBean.setHoon_balance(0);
         String accType = getIDCombobox(cbAccType);
         cbSaveAccountBean.setAccount_type(accType);
-        cbSaveAccountBean.setB_FEE(NumberUtil.toDouble(txtSaveFee.getText()));
+        cbSaveAccountBean.setB_FEE(NumberFormat.toDouble(txtSaveFee.getText()));
         cbSaveAccountBean.setBranch_Code(Value.BRANCH_CODE);
         cbSaveAccountBean.setEmp_Code(Value.USER_CODE);
         ProfileBean pBean = profileControl.listCbProfile(cbSaveAccountBean.getB_CUST_CODE());

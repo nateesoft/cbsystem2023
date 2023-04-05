@@ -148,7 +148,7 @@ public class ConfigControl extends BaseControl {
                     + "LoanDocRunning='" + bean.getLoanDocRunning() + "', "
                     + "PrinterPassBook='" + bean.getPrinterPassBook() + "', "
                     + "PrintSlipType='" + bean.getPrintSlipType() + "', "
-                    + "PrintSlipDriverName='" + bean.getPrintSlipDriverName() + "', "
+                    + "PrintSlipDriverName='" + ThaiUtil.Unicode2ASCII(bean.getPrintSlipDriverName()) + "', "
                     + "PrintSlipPort='" + bean.getPrintSlipPort() + "', "
                     + "AccountPrefix='" + bean.getAccountPrefix() + "', "
                     + "AccountRunning='" + bean.getAccountRunning() + "', "

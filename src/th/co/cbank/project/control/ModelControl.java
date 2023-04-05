@@ -24,7 +24,7 @@ public class ModelControl extends BaseControl {
             while (rs.next()) {
                 LoadLoanMapping bean = new LoadLoanMapping();
                 bean.setLoan_docno(rs.getString("loan_docno"));
-                bean.setLoan_Credit_Balance(rs.getDouble("Loan_Credit_Balance"));
+                bean.setLoan_credit_balance(rs.getDouble("Loan_Credit_Balance"));
                 bean.setLoanName(ThaiUtil.ASCII2Unicode(rs.getString("LoanName")));
 
                 list.add(bean);

@@ -2147,9 +2147,9 @@ public class SavingDialog extends BaseDialogSwing {
             if (!txtDate.getText().equals("")) {
                 String[] db = txtDate.getText().split("/");
                 Calendar c = Calendar.getInstance();
-                int year = Integer.parseInt(db[2]);
-                int month = Integer.parseInt(db[1]);
-                int day = Integer.parseInt(db[0]);
+                int year = NumberFormat.toInt(db[2]);
+                int month = NumberFormat.toInt(db[1]);
+                int day = NumberFormat.toInt(db[0]);
 
                 c.set(year, month, day);
                 txtAge.setText("" + getAgeInt(c.getTime()));
@@ -2909,31 +2909,19 @@ public class SavingDialog extends BaseDialogSwing {
 
     private int getAgeInt(Date time) {
         SimpleDateFormat sThai = new SimpleDateFormat("yyyy");
-        try {
-            int yearCurrent = Integer.parseInt(sThai.format(new Date()));
-            int yearStart = Integer.parseInt(sThai.format(time));
-
-            return yearCurrent - yearStart;
-        } catch (NumberFormatException e) {
-            System.err.println(e);
-        }
-
-        return 0;
+        int yearCurrent = NumberFormat.toInt(sThai.format(new Date()));
+        int yearStart = NumberFormat.toInt(sThai.format(time));
+        return yearCurrent - yearStart;
     }
 
     private boolean saveData() {
         boolean feeCheck = false;
         //บันทึกข้อมูลลูกค้า
         boolean isSaveData;
-        try {
-            Double.parseDouble(txtFeeMember.getText().replace(",", ""));
+        if (NumberFormat.toDouble(txtFeeMember.getText()) != null) {
             feeCheck = true;
-        } catch (NumberFormatException e) {
-            System.err.println(e);
         }
-
         String idCard = txtCode.getText();
-
         if (idCard.trim().equals("")) {
             MessageAlert.warningPopup(this, "กรุณาระบุรหัสบัตรประชาชน/รหัสกลุ่มสมาชิก !");
             txtCode.setText("");
@@ -2965,15 +2953,15 @@ public class SavingDialog extends BaseDialogSwing {
         } else {
             ProfileBean bean = new ProfileBean();
             txtIndex.setText(getProfileControl().getMaxIndex());
-            bean.setP_index(Integer.parseInt(txtIndex.getText()));
+            bean.setP_index(NumberFormat.toInt(txtIndex.getText()));
             bean.setP_custType("1");
 
-            bean.setApproveLimit(Integer.parseInt(txtApproveLimit.getText()));
+            bean.setApproveLimit(NumberFormat.toInt(txtApproveLimit.getText()));
 
             bean.setP_custCode(idCard);
             bean.setP_custName(txtName.getText());
             bean.setP_custSurname(txtSurname.getText());
-            bean.setP_custAge(Integer.parseInt(txtAge.getText()));
+            bean.setP_custAge(NumberFormat.toInt(txtAge.getText()));
 
             bean.setP_custBirthDay(DateFormat.getLocal_ddMMyyyy(txtDate.getText()));
             bean.setP_member_start(DateFormat.getLocal_ddMMyyyy(txtMemberStartDate.getText()));
@@ -3042,13 +3030,7 @@ public class SavingDialog extends BaseDialogSwing {
             bean.setP_spouse_name(txtSpouseName.getText());
             bean.setP_spouse_surname(txtSpouseSurname.getText());
             bean.setP_spouse_sex(sex2);
-
-            try {
-                bean.setP_fee(Double.parseDouble(txtFeeMember.getText()));
-            } catch (NumberFormatException e) {
-                System.err.println(e);
-                bean.setP_fee(0.00);
-            }
+            bean.setP_fee(NumberFormat.toDouble(txtFeeMember.getText()));
 
             // move image
             if (this.imgFile != null) {
@@ -3078,12 +3060,8 @@ public class SavingDialog extends BaseDialogSwing {
                 }
             }
 
-            try {
-                double dd = Double.parseDouble(txtFeeProject.getText());
-                bean.setP_down_fee(dd);
-            } catch (NumberFormatException e) {
-                bean.setP_down_fee(0);
-            }
+            double dd = NumberFormat.toDouble(txtFeeProject.getText());
+            bean.setP_down_fee(dd);
 
             if (cb_prefix.getItemCount() == 0) {
                 bean.setP_prefix("คุณ");
@@ -3225,12 +3203,7 @@ public class SavingDialog extends BaseDialogSwing {
                     aBean4.setCompany_Name("" + cbProject.getSelectedItem());
                     aBean4.setCust_Code(idCard);
                     aBean4.setCust_Type("1");
-
-                    try {
-                        aBean4.setDown_rai(Integer.parseInt(txtDownRai.getText()));
-                    } catch (NumberFormatException e) {
-                        aBean4.setDown_rai(0);
-                    }
+                    aBean4.setDown_rai(NumberFormat.toInt(txtDownRai.getText()));
                     aBean4.setDown_deed_1(txtDownDeed1.getText());
                     aBean4.setDown_deed_2(txtDownDeed2.getText());
                     aBean4.setDown_deed_3(txtDownDeed3.getText());
@@ -3258,8 +3231,8 @@ public class SavingDialog extends BaseDialogSwing {
         JTableHeader tHeader = tbListPersonApp.getTableHeader();
         tHeader.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
 
-        double a1 = Double.parseDouble(txtFeeProject.getText());
-        double a2 = Double.parseDouble(txtFeeMember.getText());
+        double a1 = NumberFormat.toDouble(txtFeeProject.getText());
+        double a2 = NumberFormat.toDouble(txtFeeMember.getText());
         txtFeeTotal.setText(NumberFormat.showDouble2("" + (a1 + a2)));
 
         txtCode.requestFocus();
@@ -3284,23 +3257,12 @@ public class SavingDialog extends BaseDialogSwing {
             }
 
             cbMemberType.setEnabled(false);
-
             txtName.setText(profileBean.getP_custName());
             txtSurname.setText(profileBean.getP_custSurname());
             txtOccupation.setText(profileBean.getP_custOccupation());
-            try {
-                cbProfileStatus.setSelectedItem(Integer.parseInt(profileBean.getP_cust_status()));
-            } catch (NumberFormatException e) {
-                System.err.println(e);
-            }
-
+            cbProfileStatus.setSelectedItem(NumberFormat.toInt(profileBean.getP_cust_status()));
             cb_prefix.setSelectedItem(profileBean.getP_prefix());
-            try {
-                cbProfileStatus.setSelectedIndex(Integer.parseInt(profileBean.getP_cust_status()));
-            } catch (NumberFormatException e) {
-                System.err.println(e);
-            }
-
+            cbProfileStatus.setSelectedIndex(NumberFormat.toInt(profileBean.getP_cust_status()));
             cbReligion.setSelectedItem(profileBean.getP_cust_religion());
 
             txtDate.setText(DateFormat.getLocale_ddMMyyyy(profileBean.getP_custBirthDay()));
@@ -3518,18 +3480,11 @@ public class SavingDialog extends BaseDialogSwing {
     }
 
     private void computeTotalFee() {
-        try {
-            double a = Double.parseDouble(txtFeeMember.getText());
-            double b = Double.parseDouble(txtFeeProject.getText());
-            double total = a + b;
-            DecimalFormat dec = new DecimalFormat("#,##0.00");
-            txtFeeTotal.setText(dec.format(total));
-        } catch (NumberFormatException e) {
-            txtFeeMember.setText("0.00");
-            txtFeeProject.setText("0.00");
-            txtFeeTotal.setText("0.00");
-        }
-
+        double feeMemberAmt = NumberFormat.toDouble(txtFeeMember.getText());
+        double feeProjectAmt = NumberFormat.toDouble(txtFeeProject.getText());
+        double totalAmt = feeMemberAmt + feeProjectAmt;
+        DecimalFormat dec = new DecimalFormat("#,##0.00");
+        txtFeeTotal.setText(dec.format(totalAmt));
     }
 
     private void loadProjectList() {

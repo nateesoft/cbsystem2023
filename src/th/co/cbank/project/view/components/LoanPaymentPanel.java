@@ -33,7 +33,6 @@ import th.co.cbank.util.DateFormat;
 import th.co.cbank.util.JTableUtil;
 import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.NumberFormat;
-import th.co.cbank.util.NumberUtil;
 import th.co.cbank.util.TableUtil;
 
 public class LoanPaymentPanel extends javax.swing.JPanel {
@@ -760,7 +759,7 @@ public class LoanPaymentPanel extends javax.swing.JPanel {
             txtPaymentDate.setEditable(false);
 
             txtPaymentFee.setText("0.00"); //รอคำนวณค่าปรับจากระบบ
-            double feeAmt = NumberUtil.toDouble(txtPaymentFee.getText());
+            double feeAmt = NumberFormat.toDouble(txtPaymentFee.getText());
 
             txtIntBalance.setText(NumberFormat.showDouble2(loanAccountBean.getIntBalance())); //ดอกเบี้ยค้างชำระจากงวดที่แล้ว
             Date dateLastPayment = loanAccountBean.getPay_date() == null ? loanAccountBean.getLoan_docdate() : loanAccountBean.getPay_date();
@@ -787,7 +786,7 @@ public class LoanPaymentPanel extends javax.swing.JPanel {
     }
 
     private void paymentConfirm() {
-        double loanBalanceToPayment = NumberUtil.toDouble(txtBalanceToClose.getText());
+        double loanBalanceToPayment = NumberFormat.toDouble(txtBalanceToClose.getText());
         if (loanBalanceToPayment <= 0) {
             MessageAlert.warningPopup(this, "ไม่มียอดค้างชำระในระบบ :)");
             txtPaymentAmountCash.setText("0.00");
@@ -795,7 +794,7 @@ public class LoanPaymentPanel extends javax.swing.JPanel {
             txtPaymentAmountCash.requestFocus();
             return;
         }
-        double PaymentAmountCash = NumberUtil.toDouble(txtPaymentAmountCash.getText());
+        double PaymentAmountCash = NumberFormat.toDouble(txtPaymentAmountCash.getText());
         if (PaymentAmountCash <= 0) {
             MessageAlert.warningPopup(this, "กรุณาระบุจำนวนเงินรับชำระด้วย !");
             txtPaymentAmountCash.setText("0.00");
@@ -835,15 +834,15 @@ public class LoanPaymentPanel extends javax.swing.JPanel {
     }
 
     private void confirmPaymentEff() {
-        double backupPaymentAmountCash = NumberUtil.toDouble(txtPaymentAmountCash.getText());//จำนวนเงินที่ลูกค้าจ่าย
-        double paymentAmountCash = NumberUtil.toDouble(txtPaymentAmountCash.getText());//จำนวนเงินที่ลูกค้าจ่าย
+        double backupPaymentAmountCash = NumberFormat.toDouble(txtPaymentAmountCash.getText());//จำนวนเงินที่ลูกค้าจ่าย
+        double paymentAmountCash = NumberFormat.toDouble(txtPaymentAmountCash.getText());//จำนวนเงินที่ลูกค้าจ่าย
 
-        double interestToday = NumberUtil.toDouble(txtTodayInterest.getText());//ดอกเบี้ยที่คำนวณได้ของวันนี้
-        double intBalanceAmt = NumberUtil.toDouble(txtIntBalance.getText());//ดอกเบี้ยค้างชำระจากงวดที่แล้ว
+        double interestToday = NumberFormat.toDouble(txtTodayInterest.getText());//ดอกเบี้ยที่คำนวณได้ของวันนี้
+        double intBalanceAmt = NumberFormat.toDouble(txtIntBalance.getText());//ดอกเบี้ยค้างชำระจากงวดที่แล้ว
         double totalIntAmt = interestToday + intBalanceAmt;//รวมดอกเบี้ยที่ต้องชำระทั้งหมด
 
-        double paymentFee = NumberUtil.toDouble(txtPaymentFee.getText());//ค่าปรับชำระเกินจำนวน
-        double principleBalance = NumberUtil.toDouble(txtPrincipleBalance.getText());//เงินต้นคงเหลือ
+        double paymentFee = NumberFormat.toDouble(txtPaymentFee.getText());//ค่าปรับชำระเกินจำนวน
+        double principleBalance = NumberFormat.toDouble(txtPrincipleBalance.getText());//เงินต้นคงเหลือ
         if (paymentAmountCash < paymentFee) {
             MessageAlert.warningPopup(this, "จำนวนเงินที่รับชำระต้องมากกว่าค่าปรับ");
             return;
@@ -988,7 +987,7 @@ public class LoanPaymentPanel extends javax.swing.JPanel {
 
     private void confirmPayment2() {
         //จำนวนเงินที่รับชำระ
-        double PaymentAmountCash = NumberUtil.toDouble(txtPaymentAmountCash.getText());
+        double PaymentAmountCash = NumberFormat.toDouble(txtPaymentAmountCash.getText());
 
         if (PaymentAmountCash <= 0) {
             return;
@@ -998,7 +997,7 @@ public class LoanPaymentPanel extends javax.swing.JPanel {
         double returnLoanAmt = 0.00;
         double tempOver = 0.00;
 
-        double PaymentFee = NumberUtil.toDouble(txtPaymentFee.getText());
+        double PaymentFee = NumberFormat.toDouble(txtPaymentFee.getText());
         double Temp_PaymentFee = PaymentFee;
 
         List<CbLoanTablePaymentBean> listTable = cbLoanTablePaymentControl.listCbLoanTablePayment(loanAccountBean.getLoan_docno());
@@ -1145,9 +1144,9 @@ public class LoanPaymentPanel extends javax.swing.JPanel {
         loanBean.setRemark("");
         loanBean.setT_hoon(0);
         loanBean.setLineNo(cbTransactionLoanControl.getLineByAccount(loanAccountBean.getLoan_docno()));
-        double ArLoanIntLost = NumberUtil.toDouble(txtIntBadDebt.getText());
-        double ArLoanIntMgr = NumberUtil.toDouble(txtIntTurnover.getText());
-        double ArLoanIntInt = NumberUtil.toDouble(txtIntNormal.getText());
+        double ArLoanIntLost = NumberFormat.toDouble(txtIntBadDebt.getText());
+        double ArLoanIntMgr = NumberFormat.toDouble(txtIntTurnover.getText());
+        double ArLoanIntInt = NumberFormat.toDouble(txtIntNormal.getText());
         loanBean.setT_interest(ArLoanIntLost + ArLoanIntMgr + ArLoanIntInt);
         loanBean.setT_loan_int_ar_lost(ArLoanIntLost);
         loanBean.setT_loan_int_ar_mgr(ArLoanIntMgr);

@@ -450,12 +450,7 @@ public class ExpendFormDialog extends BaseDialogSwing {
         bean.setBRANCH_CODE(BRANCH_CODE.getText());
         bean.setEMP_CODE(EMP_CODE.getText());
         bean.setEXP_TYPE("" + EXP_TYPE.getSelectedItem());
-        try {
-            bean.setEMP_AMOUNT(Double.parseDouble(EMP_AMOUNT.getText()));
-        } catch (NumberFormatException e) {
-            EMP_AMOUNT.requestFocus();
-            return;
-        }
+        bean.setEMP_AMOUNT(NumberFormat.toDouble(EMP_AMOUNT.getText()));
 
         if (bean.getEMP_AMOUNT() <= 0) {
             EMP_AMOUNT.requestFocus();

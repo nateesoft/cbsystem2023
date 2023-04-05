@@ -12,6 +12,7 @@ import th.co.cbank.util.ThaiUtil;
 import th.co.cbank.project.model.ProfileMapping;
 import th.co.cbank.util.DateUtil;
 import th.co.cbank.util.MessageAlert;
+import th.co.cbank.util.NumberFormat;
 
 public class ProfileControl extends BaseControl {
 
@@ -349,26 +350,26 @@ public class ProfileControl extends BaseControl {
                     + "p_index='" + bean.getP_index() + "', "
                     + "p_custCode='" + bean.getP_custCode() + "', "
                     + "p_custType='" + bean.getP_custType() + "', "
-                    + "p_custName='" + bean.getP_custName() + "', "
-                    + "p_custSurname='" + bean.getP_custSurname() + "', "
+                    + "p_custName='" + ThaiUtil.Unicode2ASCII(bean.getP_custName()) + "', "
+                    + "p_custSurname='" + ThaiUtil.Unicode2ASCII(bean.getP_custSurname()) + "', "
                     + "p_custBirthDay='" + DateFormat.getMySQL_Date(bean.getP_custBirthDay()) + "', "
                     + "p_custAge='" + bean.getP_custAge() + "', "
                     + "p_custSex='" + bean.getP_custSex() + "', "
-                    + "p_custOccupation='" + bean.getP_custOccupation() + "', "
-                    + "p_custNation='" + bean.getP_custNation() + "', "
+                    + "p_custOccupation='" + ThaiUtil.Unicode2ASCII(bean.getP_custOccupation()) + "', "
+                    + "p_custNation='" + ThaiUtil.Unicode2ASCII(bean.getP_custNation()) + "', "
                     + "p_cust_status='" + bean.getP_cust_status() + "', "
                     + "p_cust_religion='" + bean.getP_cust_religion() + "', "
                     + "p_member_end='" + DateFormat.getMySQL_Date(bean.getP_member_end()) + "', "
-                    + "p_spouse_name='" + bean.getP_spouse_name() + "', "
-                    + "p_spouse_surname='" + bean.getP_spouse_surname() + "', "
-                    + "p_spouse_sex='" + bean.getP_spouse_sex() + "', "
+                    + "p_spouse_name='" + ThaiUtil.Unicode2ASCII(bean.getP_spouse_name()) + "', "
+                    + "p_spouse_surname='" + ThaiUtil.Unicode2ASCII(bean.getP_spouse_surname()) + "', "
+                    + "p_spouse_sex='" + ThaiUtil.Unicode2ASCII(bean.getP_spouse_sex()) + "', "
                     + "p_cust_pic_url='" + bean.getP_cust_pic_url() + "', "
-                    + "Status='" + bean.getStatus() + "', "
+                    + "Status='" + ThaiUtil.Unicode2ASCII(bean.getStatus()) + "', "
                     + "Dow_Incar_Rai='" + bean.getDowInCar_Target_Rai() + "',"
                     + "Dow_Incar_Date='" + DateFormat.getMySQL_Date(bean.getDowInCar_Target_Date()) + "',"
                     + "Dow_Incar_Tree='" + bean.getDowInCar_Target_Tree() + "',"
                     + "P_Down_Fee='" + bean.getP_down_fee() + "',"
-                    + "P_Prefix='" + bean.getP_prefix() + "',"
+                    + "P_Prefix='" + ThaiUtil.Unicode2ASCII(bean.getP_prefix()) + "',"
                     + "Card_Expire='" + DateFormat.getMySQL_Date(bean.getCard_Expire()) + "',"
                     + "p_member_type='" + bean.getP_member_type() + "' "
                     + "where p_custCode='" + bean.getP_custCode() + "'";
@@ -481,7 +482,7 @@ public class ProfileControl extends BaseControl {
 
     public ProfileBean initBean() {
         ProfileBean bean = new ProfileBean();
-        bean.setP_index(Integer.parseInt(getMaxIndex()));
+        bean.setP_index(NumberFormat.toInt(getMaxIndex()));
         bean.setP_custSex("M");
         bean.setP_custType("1");
         bean.setP_custAge(1);
