@@ -13,6 +13,7 @@ import th.co.cbank.project.control.CbSaveConfigControl;
 import th.co.cbank.project.control.Value;
 import th.co.cbank.project.model.CbCancelAccountBean;
 import th.co.cbank.util.MessageAlert;
+import th.co.cbank.util.NumberFormat;
 import th.co.cbank.util.TableUtil;
 
 public class CancelAccountDialog extends BaseDialogSwing {
@@ -230,7 +231,7 @@ public class CancelAccountDialog extends BaseDialogSwing {
         if (rowSel != -1) {
             String accountNo = tbMaster.getValueAt(rowSel, 2).toString();
             String accountType = tbMaster.getValueAt(rowSel, 5).toString();
-            int bookNo = Integer.parseInt(tbMaster.getValueAt(rowSel, 6).toString());
+            int bookNo = NumberFormat.toInt(tbMaster.getValueAt(rowSel, 6).toString());
             int conf = MessageAlert.showConfirm(this, "ท่านต้องการยกเลิกบัญชีเลขที่ " + accountNo + " ใช่หรือไม่ ?");
             if (conf == MessageAlert.YES_OPTION) {
                 CancelPwdDialog c = new CancelPwdDialog(null, true);

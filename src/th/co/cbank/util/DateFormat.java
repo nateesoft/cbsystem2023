@@ -76,6 +76,15 @@ public class DateFormat {
             return null;
         }
     }
+    
+    public static Date getMySQL_DateTime(String date) {
+        try {
+            return mysql_datetime_yyyyMMddHHmmss.parse(date);
+        } catch (ParseException e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
+    }
 
     public static String getMyFormat(SimpleDateFormat simp, Date d) {
         if (d != null) {

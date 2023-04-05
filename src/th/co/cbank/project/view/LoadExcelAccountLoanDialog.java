@@ -21,6 +21,7 @@ import th.co.cbank.project.model.CbLoanAccountBean;
 import th.co.cbank.project.model.CbLoanConfigBean;
 import th.co.cbank.project.model.ProfileBean;
 import th.co.cbank.util.MessageAlert;
+import th.co.cbank.util.NumberFormat;
 import th.co.cbank.util.TableUtil;
 
 public class LoadExcelAccountLoanDialog extends BaseDialogSwing {
@@ -265,7 +266,7 @@ public class LoadExcelAccountLoanDialog extends BaseDialogSwing {
                     idCard = lineData[0];
                 }
                 if (lineData.length > 1) {
-                    loanAmt = Double.parseDouble(lineData[1]);
+                    loanAmt = NumberFormat.toDouble(lineData[1]);
                 }
                 if (loanAmt == 0) {
                     lbMsg.setText("Loading.. " + idCard + " : not create new loan account: loan amount == " + loanAmt);
@@ -408,7 +409,7 @@ public class LoadExcelAccountLoanDialog extends BaseDialogSwing {
                 }
                 String[] lineData = line.split("=");
                 if (lineData.length > 1) {
-                    loanAmt = Double.parseDouble(lineData[1]);
+                    loanAmt = NumberFormat.toDouble(lineData[1]);
                 }
                 if (loanAmt == 0) {
                     continue;
@@ -418,7 +419,8 @@ public class LoadExcelAccountLoanDialog extends BaseDialogSwing {
             br.close();
 
             return count;
-        } catch (IOException | NumberFormatException e) {
+        } catch (IOException e) {
+            logger.error(e.getMessage());
             return 0;
         }
     }
@@ -447,10 +449,10 @@ public class LoadExcelAccountLoanDialog extends BaseDialogSwing {
                     idCard = lineData[0];
                 }
                 if (lineData.length > 1) {
-                    loanAmt = Double.parseDouble(lineData[1]);
+                    loanAmt = NumberFormat.toDouble(lineData[1]);
                 }
                 if (lineData.length > 2) {
-                    loanIntAmt = Double.parseDouble(lineData[2]);
+                    loanIntAmt = NumberFormat.toDouble(lineData[2]);
                 }
 
                 model.addRow(new Object[]{(count), idCard, loanAmt, loanIntAmt});

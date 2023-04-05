@@ -437,7 +437,7 @@ public class CbSaveAccountControl extends BaseControl {
                     String PAY_TYPE = rs.getString("payType");
                     if (PAY_TYPE.equals("1")) {
                         SimpleDateFormat sss = new SimpleDateFormat("dd", Locale.ENGLISH);
-                        int dd = Integer.parseInt(sss.format(c.getTime()));
+                        int dd = NumberFormat.toInt(sss.format(c.getTime()));
                         if (InterestControl.isEndOfMonth(dd)) {
                             totalAmount = getTotalAmountFromSummary(tempCust, totalInt, t_acccode);
 
@@ -461,8 +461,8 @@ public class CbSaveAccountControl extends BaseControl {
                     } else if (PAY_TYPE.equals("2")) {
                         SimpleDateFormat DD = new SimpleDateFormat("dd", Locale.ENGLISH);
                         SimpleDateFormat MM = new SimpleDateFormat("MM", Locale.ENGLISH);
-                        int dd = Integer.parseInt(DD.format(c.getTime()));
-                        int mm = Integer.parseInt(MM.format(c.getTime()));
+                        int dd = NumberFormat.toInt(DD.format(c.getTime()));
+                        int mm = NumberFormat.toInt(MM.format(c.getTime()));
                         if (dd == rs.getInt("cbPayType1") && mm == rs.getInt("cbPayType2")) {
                             totalAmount = getTotalAmountFromSummary(tempCust, totalInt, t_acccode);
 
@@ -486,8 +486,8 @@ public class CbSaveAccountControl extends BaseControl {
                     } else if (PAY_TYPE.equals("3")) {
                         SimpleDateFormat DD = new SimpleDateFormat("dd", Locale.ENGLISH);
                         SimpleDateFormat MM = new SimpleDateFormat("MM", Locale.ENGLISH);
-                        int dd = Integer.parseInt(DD.format(c.getTime()));
-                        int mm = Integer.parseInt(MM.format(c.getTime()));
+                        int dd = NumberFormat.toInt(DD.format(c.getTime()));
+                        int mm = NumberFormat.toInt(MM.format(c.getTime()));
 
                         int dd_db1 = rs.getInt("cbPayType3");
                         int mm_db1 = rs.getInt("cbPayType4");
@@ -518,12 +518,12 @@ public class CbSaveAccountControl extends BaseControl {
                         int monthAmt = rs.getInt("cbPayType7");
                         SimpleDateFormat simp = new SimpleDateFormat("MM/dd", Locale.ENGLISH);
                         String[] sp1 = simp.format(rs.getDate("t_date")).split("/");
-                        int dayDeposit = Integer.parseInt(sp1[1]);//วันที่ฝาก yyyy-MM-dd
-                        int monthDeposit = Integer.parseInt(sp1[0]);
+                        int dayDeposit = NumberFormat.toInt(sp1[1]);//วันที่ฝาก yyyy-MM-dd
+                        int monthDeposit = NumberFormat.toInt(sp1[0]);
 
                         String[] sp2 = simp.format(c.getTime()).split("/");
-                        int dayCurrent = Integer.parseInt(sp2[1]);
-                        int monthCurrent = Integer.parseInt(sp2[0]);
+                        int dayCurrent = NumberFormat.toInt(sp2[1]);
+                        int monthCurrent = NumberFormat.toInt(sp2[0]);
                         boolean isUpdate = false;
                         if (dayDeposit == dayCurrent && monthDeposit < monthCurrent) {//ตรงกับวันที่นั้น
                             if (monthCurrent % monthAmt == 0) {//ตรงกับเดือนที่กำหนด
@@ -899,9 +899,9 @@ public class CbSaveAccountControl extends BaseControl {
         String month = arr[1];
         String day = arr[2];
 
-        int y = Integer.parseInt(year);
-        int m = Integer.parseInt(month) - 1;
-        int d = Integer.parseInt(day);
+        int y = NumberFormat.toInt(year);
+        int m = NumberFormat.toInt(month) - 1;
+        int d = NumberFormat.toInt(day);
 
         CalendarBean bean = new CalendarBean();
         bean.setYear(y);
@@ -917,9 +917,9 @@ public class CbSaveAccountControl extends BaseControl {
         String month = arr[1];
         String day = arr[2];
 
-        int y = Integer.parseInt(year);
-        int m = Integer.parseInt(month) - 1;
-        int d = Integer.parseInt(day);
+        int y = NumberFormat.toInt(year);
+        int m = NumberFormat.toInt(month) - 1;
+        int d = NumberFormat.toInt(day);
 
         Calendar c = Calendar.getInstance(Locale.ENGLISH);
         c.set(y, m, d);
@@ -931,12 +931,12 @@ public class CbSaveAccountControl extends BaseControl {
         Calendar c = Calendar.getInstance();
         SimpleDateFormat s = new SimpleDateFormat("yyyy", Locale.ENGLISH);
         SimpleDateFormat d = new SimpleDateFormat("dd", Locale.ENGLISH);
-        int Y = Integer.parseInt(s.format(new Date()));
+        int Y = NumberFormat.toInt(s.format(new Date()));
         c.set(Y, 2, 1);
 
         c.add(Calendar.DATE, -1);
 
-        int T = Integer.parseInt(d.format(c.getTime()));
+        int T = NumberFormat.toInt(d.format(c.getTime()));
 
         int YYYY;
         if (T == 28) {
@@ -953,7 +953,7 @@ public class CbSaveAccountControl extends BaseControl {
         SimpleDateFormat yyyy = new SimpleDateFormat("yyyy", Locale.ENGLISH);
 
         Calendar cStart = Calendar.getInstance(Locale.ENGLISH);
-        cStart.set(Integer.parseInt(yyyy.format(new Date())), 0, 1);
+        cStart.set(NumberFormat.toInt(yyyy.format(new Date())), 0, 1);
         int dayRunning = 1;
         for (int i = 0; i < 366; i++) {
             String date1 = ddMm.format(cStart.getTime());
@@ -1251,13 +1251,27 @@ public class CbSaveAccountControl extends BaseControl {
         }
     }
 
+    public int updateSummaryBalanceFromTransaction() {
+        try {
+            String sql = "update cb_save_account ss set "
+                    + "b_balance=("
+                    + "(select sum(t_amount) sum_in from cb_transaction_save where t_status in(2,11) and t_custcode=ss.b_cust_code and t_acccode=ss.account_code)+"
+                    + "(select sum(t_amount) sum_out from cb_transaction_save where t_status in(3,8) and t_custcode=ss.b_cust_code and t_acccode=ss.account_code)"
+                    + ") where ss.account_code <> ''";
+            logger.info(sql);
+            return MySQLConnect.exeUpdate(sql);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+        return 0;
+    }
+
     public void updateSaveAccountAndProfile(double netBalance, double textInt, String custCode, String accCode) {
         try {
-            String sql = "update cb_save_account set "
-                    + "b_balance='" + netBalance + "',"
-                    + "b_interest='" + textInt + "' "
-                    + "where b_cust_code='" + custCode + "' "
-                    + "and account_code='" + accCode + "'";
+            String sql = "update cb_save_account "
+                    + "set b_balance='" + netBalance + "',b_interest='" + textInt + "' "
+                    + "where b_cust_code='" + custCode + "' and account_code='" + accCode + "'";
             MySQLConnect.exeUpdate(sql);
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -1265,7 +1279,7 @@ public class CbSaveAccountControl extends BaseControl {
         }
     }
 
-    public void updateSaveAccountAndProfile(String accCode, String custCode) {
+    public void updateSaveAccountInProfile(String accCode, String custCode) {
         try {
             String sql1 = "update cb_profile p set p.save_balance=("
                     + "select sum(s.b_balance) from cb_save_account s "

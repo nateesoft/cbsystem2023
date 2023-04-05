@@ -24,5 +24,7 @@ public class CbLoanConfigBean {
     private String checkMinPayment = "N";
     private double minPaymentPercent = 0;
     private double minPaymentBaht = 0.00;
+    private String create_date;
+    private String update_date;
 
 }

@@ -184,8 +184,6 @@ public class AppSettingDialog extends BaseDialogSwing {
         jLabel42 = new javax.swing.JLabel();
         txtFundINT = new javax.swing.JTextField();
         jLabel43 = new javax.swing.JLabel();
-        jScrollPane3 = new javax.swing.JScrollPane();
-        tbConfigSaveType = new javax.swing.JTable();
         btnSaveType = new javax.swing.JButton();
         btnCancelType = new javax.swing.JButton();
         jLabel72 = new javax.swing.JLabel();
@@ -207,6 +205,11 @@ public class AppSettingDialog extends BaseDialogSwing {
         txtNoRunning = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
         txtFee = new javax.swing.JTextField();
+        jTabbedPane2 = new javax.swing.JTabbedPane();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        tbConfigSave = new javax.swing.JTable();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tbConfigSaveHistory = new javax.swing.JTable();
         jPanel20 = new javax.swing.JPanel();
         jButton3 = new javax.swing.JButton();
         jPanel27 = new javax.swing.JPanel();
@@ -226,10 +229,13 @@ public class AppSettingDialog extends BaseDialogSwing {
         jLabel69 = new javax.swing.JLabel();
         jLabel70 = new javax.swing.JLabel();
         jLabel71 = new javax.swing.JLabel();
-        jScrollPane5 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
         jButton6 = new javax.swing.JButton();
         jButton7 = new javax.swing.JButton();
+        jTabbedPane3 = new javax.swing.JTabbedPane();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        tbConfigHoon = new javax.swing.JTable();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tbConfigHoonHistory = new javax.swing.JTable();
         jPanel19 = new javax.swing.JPanel();
         jPanel22 = new javax.swing.JPanel();
         jLabel54 = new javax.swing.JLabel();
@@ -257,8 +263,6 @@ public class AppSettingDialog extends BaseDialogSwing {
         jLabel56 = new javax.swing.JLabel();
         txtLoanPenaltyINT = new javax.swing.JTextField();
         jLabel57 = new javax.swing.JLabel();
-        jScrollPane4 = new javax.swing.JScrollPane();
-        tbLoanConfig = new javax.swing.JTable();
         jPanel26 = new javax.swing.JPanel();
         jLabel46 = new javax.swing.JLabel();
         txtLoanName = new javax.swing.JTextField();
@@ -286,6 +290,11 @@ public class AppSettingDialog extends BaseDialogSwing {
         jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
+        jTabbedPane4 = new javax.swing.JTabbedPane();
+        jScrollPane8 = new javax.swing.JScrollPane();
+        tbLoanConfig = new javax.swing.JTable();
+        jScrollPane9 = new javax.swing.JScrollPane();
+        tbLoanConfigHistory = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("ตั้งข้อมูลบัญชี/ลูกหนี้/หุ้น");
@@ -1272,7 +1281,7 @@ public class AppSettingDialog extends BaseDialogSwing {
                 .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(btnPrintTransaction4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(84, Short.MAX_VALUE))
+                .addContainerGap(63, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("ข้อมูลพื้นฐานโปรแกรม", jPanel7);
@@ -1656,34 +1665,6 @@ public class AppSettingDialog extends BaseDialogSwing {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        tbConfigSaveType.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "รหัส", "ชื่อประเภทเงินฝาก", "อัตราดอกเบี้ย/ปี"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        tbConfigSaveType.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tbConfigSaveTypeMouseClicked(evt);
-            }
-        });
-        jScrollPane3.setViewportView(tbConfigSaveType);
-        if (tbConfigSaveType.getColumnModel().getColumnCount() > 0) {
-            tbConfigSaveType.getColumnModel().getColumn(0).setPreferredWidth(80);
-            tbConfigSaveType.getColumnModel().getColumn(1).setPreferredWidth(200);
-            tbConfigSaveType.getColumnModel().getColumn(2).setPreferredWidth(150);
-        }
-
         btnSaveType.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         btnSaveType.setText("บันทึกข้อมูล");
         btnSaveType.addActionListener(new java.awt.event.ActionListener() {
@@ -1846,6 +1827,66 @@ public class AppSettingDialog extends BaseDialogSwing {
             }
         });
 
+        tbConfigSave.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "รหัส", "ชื่อประเภทเงินฝาก", "อัตราดอกเบี้ย/ปี"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tbConfigSave.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbConfigSaveMouseClicked(evt);
+            }
+        });
+        jScrollPane3.setViewportView(tbConfigSave);
+        if (tbConfigSave.getColumnModel().getColumnCount() > 0) {
+            tbConfigSave.getColumnModel().getColumn(0).setPreferredWidth(80);
+            tbConfigSave.getColumnModel().getColumn(1).setPreferredWidth(200);
+            tbConfigSave.getColumnModel().getColumn(2).setPreferredWidth(150);
+        }
+
+        jTabbedPane2.addTab("Current", jScrollPane3);
+
+        tbConfigSaveHistory.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "รหัส", "ชื่อประเภทเงินฝาก", "อัตราดอกเบี้ย/ปี", "วันที่สร้าง", "วันที่อัพเดต"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, true, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tbConfigSaveHistory.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbConfigSaveHistoryMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tbConfigSaveHistory);
+        if (tbConfigSaveHistory.getColumnModel().getColumnCount() > 0) {
+            tbConfigSaveHistory.getColumnModel().getColumn(0).setPreferredWidth(80);
+            tbConfigSaveHistory.getColumnModel().getColumn(1).setPreferredWidth(200);
+            tbConfigSaveHistory.getColumnModel().getColumn(2).setPreferredWidth(150);
+        }
+
+        jTabbedPane2.addTab("History", jScrollPane1);
+
         javax.swing.GroupLayout jPanel15Layout = new javax.swing.GroupLayout(jPanel15);
         jPanel15.setLayout(jPanel15Layout);
         jPanel15Layout.setHorizontalGroup(
@@ -1913,15 +1954,15 @@ public class AppSettingDialog extends BaseDialogSwing {
                                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                     .addComponent(jLabel77))))
                         .addComponent(jPanel16, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jPanel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jScrollPane3))
+                        .addComponent(jPanel18, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPanel15Layout.createSequentialGroup()
                         .addComponent(btnSaveType)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(btnSaveType1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCancelType, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(97, Short.MAX_VALUE))
+                        .addComponent(btnCancelType, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jTabbedPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 960, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel15Layout.setVerticalGroup(
             jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1967,13 +2008,13 @@ public class AppSettingDialog extends BaseDialogSwing {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPanel18, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
+                .addComponent(jTabbedPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel15Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnSaveType, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnCancelType, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(btnSaveType1, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                .addGap(13, 13, 13))
         );
 
         jTabbedPane1.addTab("ประเภทเงินฝาก", jPanel15);
@@ -2191,35 +2232,6 @@ public class AppSettingDialog extends BaseDialogSwing {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "รหัส", "ชื่อประเภทหุ้น", "อัตราเงินปันผล", "ราคาหุ้นต่อหน่วย"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        jTable2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTable2MouseClicked(evt);
-            }
-        });
-        jScrollPane5.setViewportView(jTable2);
-        if (jTable2.getColumnModel().getColumnCount() > 0) {
-            jTable2.getColumnModel().getColumn(0).setPreferredWidth(75);
-            jTable2.getColumnModel().getColumn(1).setPreferredWidth(300);
-            jTable2.getColumnModel().getColumn(2).setPreferredWidth(150);
-            jTable2.getColumnModel().getColumn(3).setPreferredWidth(150);
-        }
-
         jButton6.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jButton6.setText("ยกเลิก");
         jButton6.addActionListener(new java.awt.event.ActionListener() {
@@ -2236,6 +2248,68 @@ public class AppSettingDialog extends BaseDialogSwing {
             }
         });
 
+        tbConfigHoon.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "รหัส", "ชื่อประเภทหุ้น", "อัตราเงินปันผล", "ราคาหุ้นต่อหน่วย"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tbConfigHoon.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbConfigHoonMouseClicked(evt);
+            }
+        });
+        jScrollPane5.setViewportView(tbConfigHoon);
+        if (tbConfigHoon.getColumnModel().getColumnCount() > 0) {
+            tbConfigHoon.getColumnModel().getColumn(0).setPreferredWidth(75);
+            tbConfigHoon.getColumnModel().getColumn(1).setPreferredWidth(300);
+            tbConfigHoon.getColumnModel().getColumn(2).setPreferredWidth(150);
+            tbConfigHoon.getColumnModel().getColumn(3).setPreferredWidth(150);
+        }
+
+        jTabbedPane3.addTab("Current", jScrollPane5);
+
+        tbConfigHoonHistory.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "รหัส", "ชื่อประเภทหุ้น", "อัตราเงินปันผล", "ราคาหุ้นต่อหน่วย", "วันที่สร้าง", "วันที่อัพเดต"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tbConfigHoonHistory.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbConfigHoonHistoryMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(tbConfigHoonHistory);
+        if (tbConfigHoonHistory.getColumnModel().getColumnCount() > 0) {
+            tbConfigHoonHistory.getColumnModel().getColumn(0).setPreferredWidth(75);
+            tbConfigHoonHistory.getColumnModel().getColumn(1).setPreferredWidth(300);
+            tbConfigHoonHistory.getColumnModel().getColumn(2).setPreferredWidth(150);
+            tbConfigHoonHistory.getColumnModel().getColumn(3).setPreferredWidth(150);
+        }
+
+        jTabbedPane3.addTab("History", jScrollPane2);
+
         javax.swing.GroupLayout jPanel20Layout = new javax.swing.GroupLayout(jPanel20);
         jPanel20.setLayout(jPanel20Layout);
         jPanel20Layout.setHorizontalGroup(
@@ -2248,13 +2322,11 @@ public class AppSettingDialog extends BaseDialogSwing {
                         .addGap(4, 4, 4)
                         .addComponent(jButton7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jButton6)
-                        .addGap(650, 729, Short.MAX_VALUE))
+                        .addComponent(jButton6))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel20Layout.createSequentialGroup()
-                        .addGroup(jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jPanel27, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane5))
-                        .addContainerGap())))
+                        .addComponent(jPanel27, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addContainerGap())
+                    .addComponent(jTabbedPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 970, javax.swing.GroupLayout.PREFERRED_SIZE)))
         );
         jPanel20Layout.setVerticalGroup(
             jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2262,7 +2334,7 @@ public class AppSettingDialog extends BaseDialogSwing {
                 .addContainerGap()
                 .addComponent(jPanel27, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 489, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTabbedPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 481, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel20Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -2599,32 +2671,6 @@ public class AppSettingDialog extends BaseDialogSwing {
                 .addContainerGap())
         );
 
-        tbLoanConfig.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-
-            },
-            new String [] {
-                "รหัส", "ชื่อประเภทเงินกู้", "อัตราดอกเบี้ย/ปี(%)", "สำรองหนี้สูญ(%)", "ค่าดำเนินการ(%)", "ดอกเบี้ยเงินกู้(%)", "ประเภท", "ค่าปรับ(%)", "ชำระขั้นต่ำ"
-            }
-        ) {
-            boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false
-            };
-
-            public boolean isCellEditable(int rowIndex, int columnIndex) {
-                return canEdit [columnIndex];
-            }
-        });
-        tbLoanConfig.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tbLoanConfigMouseClicked(evt);
-            }
-        });
-        jScrollPane4.setViewportView(tbLoanConfig);
-        if (tbLoanConfig.getColumnModel().getColumnCount() > 0) {
-            tbLoanConfig.getColumnModel().getColumn(1).setPreferredWidth(300);
-        }
-
         jPanel26.setBackground(new java.awt.Color(255, 255, 255));
         jPanel26.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -2926,6 +2972,62 @@ public class AppSettingDialog extends BaseDialogSwing {
             }
         });
 
+        tbLoanConfig.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "รหัส", "ชื่อประเภทเงินกู้", "อัตราดอกเบี้ย/ปี(%)", "สำรองหนี้สูญ(%)", "ค่าดำเนินการ(%)", "ดอกเบี้ยเงินกู้(%)", "ประเภท", "ค่าปรับ(%)", "ชำระขั้นต่ำ", "วันที่สร้าง", "วันที่อัพเดต"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tbLoanConfig.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbLoanConfigMouseClicked(evt);
+            }
+        });
+        jScrollPane8.setViewportView(tbLoanConfig);
+        if (tbLoanConfig.getColumnModel().getColumnCount() > 0) {
+            tbLoanConfig.getColumnModel().getColumn(1).setPreferredWidth(300);
+        }
+
+        jTabbedPane4.addTab("Current", jScrollPane8);
+
+        tbLoanConfigHistory.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "รหัส", "ชื่อประเภทเงินกู้", "อัตราดอกเบี้ย/ปี(%)", "สำรองหนี้สูญ(%)", "ค่าดำเนินการ(%)", "ดอกเบี้ยเงินกู้(%)", "ประเภท", "ค่าปรับ(%)", "ชำระขั้นต่ำ", "วันที่สร้าง", "วันที่อัพเดต"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        tbLoanConfigHistory.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbLoanConfigHistoryMouseClicked(evt);
+            }
+        });
+        jScrollPane9.setViewportView(tbLoanConfigHistory);
+        if (tbLoanConfigHistory.getColumnModel().getColumnCount() > 0) {
+            tbLoanConfigHistory.getColumnModel().getColumn(1).setPreferredWidth(300);
+        }
+
+        jTabbedPane4.addTab("History", jScrollPane9);
+
         javax.swing.GroupLayout jPanel19Layout = new javax.swing.GroupLayout(jPanel19);
         jPanel19.setLayout(jPanel19Layout);
         jPanel19Layout.setHorizontalGroup(
@@ -2933,26 +3035,24 @@ public class AppSettingDialog extends BaseDialogSwing {
             .addGroup(jPanel19Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane4)
-                    .addGroup(jPanel19Layout.createSequentialGroup()
-                        .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addGroup(jPanel19Layout.createSequentialGroup()
-                                .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton8)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jButton5))
-                            .addGroup(jPanel19Layout.createSequentialGroup()
-                                .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(jPanel24, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(jPanel23, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jPanel22, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jPanel25, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(jPanel26, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
-                .addContainerGap())
+                    .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPanel19Layout.createSequentialGroup()
+                            .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 113, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jButton8)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jButton5))
+                        .addGroup(jPanel19Layout.createSequentialGroup()
+                            .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(jPanel24, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jPanel23, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jPanel22, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(jPanel25, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jPanel26, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jTabbedPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 960, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel19Layout.setVerticalGroup(
             jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -2969,14 +3069,14 @@ public class AppSettingDialog extends BaseDialogSwing {
                         .addComponent(jPanel25, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jPanel22, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 293, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jTabbedPane4, javax.swing.GroupLayout.DEFAULT_SIZE, 277, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addComponent(jButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(16, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         jTabbedPane1.addTab("ประเภทเงินกู้", jPanel19);
@@ -3005,7 +3105,7 @@ public class AppSettingDialog extends BaseDialogSwing {
         }
 
         bean.setSaveDocPrefix(txtSaveDocPrefix.getText());
-        bean.setSaveDocRunning(Integer.parseInt(txtSaveDocRunning.getText()));
+        bean.setSaveDocRunning(NumberFormat.toInt(txtSaveDocRunning.getText()));
 
         if (chkManual3.isSelected()) {
             bean.setHoonDocType("M");
@@ -3013,9 +3113,9 @@ public class AppSettingDialog extends BaseDialogSwing {
             bean.setHoonDocType("A");
         }
         bean.setHoonDocPrefix(txtHoonDocPrefix.getText());
-        bean.setHoonDocRunning(Integer.parseInt(txtHoonDocRunning.getText()));
+        bean.setHoonDocRunning(NumberFormat.toInt(txtHoonDocRunning.getText()));
         bean.setHoonTransferDocPrefix(txtHoonTranferDocPrefix.getText());
-        bean.setHoonTransferDocRunning(Integer.parseInt(txtHoonTransferDocRunning.getText()));
+        bean.setHoonTransferDocRunning(NumberFormat.toInt(txtHoonTransferDocRunning.getText()));
 
         if (chkManual4.isSelected()) {
             bean.setLoanDocType("M");
@@ -3024,7 +3124,7 @@ public class AppSettingDialog extends BaseDialogSwing {
         }
 
         bean.setLoanDocPrefix(txtLoanDocPrefix.getText());
-        bean.setLoanDocRunning(Integer.parseInt(txtLoanDocRunning.getText()));
+        bean.setLoanDocRunning(NumberFormat.toInt(txtLoanDocRunning.getText()));
         bean.setPrinterPassBook(cbPrinterPassBookName.getSelectedItem().toString());
 
         if (rd1.isSelected()) {
@@ -3041,7 +3141,7 @@ public class AppSettingDialog extends BaseDialogSwing {
             bean.setAccountDocType("A");
         }
         bean.setAccountPrefix(txtAccPrefix.getText());
-        bean.setAccountRunning(Integer.parseInt(txtAccRunning.getText()));
+        bean.setAccountRunning(NumberFormat.toInt(txtAccRunning.getText()));
 
         String[] dateSplit = txtProgramStartDate.getText().split("/");
         String date = dateSplit[2] + "-" + dateSplit[1] + "-" + dateSplit[0];
@@ -3059,60 +3159,19 @@ public class AppSettingDialog extends BaseDialogSwing {
         }
 
         bean.setWithdrawDocPrefix(txtWitdrawDocPrefix.getText());
-        try {
-            bean.setWithdrawDocRunning(Integer.parseInt(txtWitdrawDocRunning.getText()));
-        } catch (NumberFormatException e) {
-            bean.setWithdrawDocRunning(0);
-        }
-
+        bean.setWithdrawDocRunning(NumberFormat.toInt(txtWitdrawDocRunning.getText()));
         bean.setIntDocPrefix(txtIntDocPrefix.getText());
-        try {
-            bean.setIntDocRunning(Integer.parseInt(txtIntDocRunning.getText()));
-        } catch (NumberFormatException e) {
-            bean.setIntDocRunning(0);
-        }
-
+        bean.setIntDocRunning(NumberFormat.toInt(txtIntDocRunning.getText()));
         bean.setHoonSaleDocPrefix(txtHoonSaleDocPrefix.getText());
-        try {
-            bean.setHoonSaleDocRunning(Integer.parseInt(txtHoonSaleDocRunning.getText()));
-        } catch (NumberFormatException e) {
-            bean.setHoonSaleDocRunning(0);
-        }
-
+        bean.setHoonSaleDocRunning(NumberFormat.toInt(txtHoonSaleDocRunning.getText()));
         bean.setCompoundDocPrefix(txtHoonCompoundDocPrefix.getText());
-        try {
-            bean.setCompoundDocRunning(Integer.parseInt(txtHoonCompoundDocRunning.getText()));
-        } catch (NumberFormatException e) {
-            bean.setCompoundDocRunning(0);
-        }
-
+        bean.setCompoundDocRunning(NumberFormat.toInt(txtHoonCompoundDocRunning.getText()));
         bean.setPaymentDocPrefix(txtPaymentDocPrefix.getText());
-        try {
-            bean.setPaymentDocRunning(Integer.parseInt(txtPaymentDocRunning.getText()));
-        } catch (NumberFormatException e) {
-            bean.setPaymentDocRunning(0);
-        }
-
+        bean.setPaymentDocRunning(NumberFormat.toInt(txtPaymentDocRunning.getText()));
         bean.setFeePrefix(txtFeePrefix.getText());
-        try {
-            bean.setFeeRunning(Integer.parseInt(txtFeeRunning.getText()));
-        } catch (NumberFormatException e) {
-            bean.setFeeRunning(0);
-        }
-
-        try {
-            bean.setFeeAmt(Double.parseDouble(txtFeeAmt.getText()));
-        } catch (NumberFormatException e) {
-            bean.setFeeAmt(0);
-        }
-
-        try {
-            //txtNoteNo
-            bean.setNoteNo(Integer.parseInt(txtNoteNo.getText()));
-        } catch (NumberFormatException e) {
-            bean.setNoteNo(1);
-        }
-
+        bean.setFeeRunning(NumberFormat.toInt(txtFeeRunning.getText()));
+        bean.setFeeAmt(NumberFormat.toDouble(txtFeeAmt.getText()));
+        bean.setNoteNo(NumberFormat.toInt(txtNoteNo.getText()));
         bean.setBookSpec(cbBookSpec.getSelectedIndex());
 
         if (getConfigControl().saveConfig(bean)) {
@@ -3162,18 +3221,18 @@ public class AppSettingDialog extends BaseDialogSwing {
         txtPayINT.selectAll();
     }//GEN-LAST:event_txtPayINTFocusGained
 
-    private void tbConfigSaveTypeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbConfigSaveTypeMouseClicked
+    private void tbConfigSaveMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbConfigSaveMouseClicked
         if (evt.getClickCount() == 2) {
-            int rows = tbConfigSaveType.getSelectedRow();
+            int rows = tbConfigSave.getSelectedRow();
             if (rows > -1) {
-                loadData("" + tbConfigSaveType.getValueAt(rows, 0));
+                loadData("" + tbConfigSave.getValueAt(rows, 0));
             }
         }
-    }//GEN-LAST:event_tbConfigSaveTypeMouseClicked
+    }//GEN-LAST:event_tbConfigSaveMouseClicked
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         if (!txtHCode.getText().equals("")) {
-            save();
+            saveHoonConfig();
         } else {
             MessageAlert.warningPopup(this, "กรุณากรอกข้อมูลให้ครบถ้วน");
             txtHCode.requestFocus();
@@ -3243,11 +3302,11 @@ public class AppSettingDialog extends BaseDialogSwing {
         }
     }//GEN-LAST:event_txtHoonBuyMinKeyPressed
 
-    private void jTable2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable2MouseClicked
+    private void tbConfigHoonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbConfigHoonMouseClicked
         if (evt.getClickCount() == 2) {
-            int row = jTable2.getSelectedRow();
+            int row = tbConfigHoon.getSelectedRow();
             if (row != -1) {
-                String hCode = jTable2.getValueAt(row, 0).toString();
+                String hCode = tbConfigHoon.getValueAt(row, 0).toString();
                 CbHoonConfigBean bean = getHoonConfigControl().listCbHoonConfig(hCode);
                 txtHCode.setText(bean.getHoonCode());
                 txtHName.setText(bean.getHoonName());
@@ -3260,7 +3319,7 @@ public class AppSettingDialog extends BaseDialogSwing {
                 txtHName.requestFocus();
             }
         }
-    }//GEN-LAST:event_jTable2MouseClicked
+    }//GEN-LAST:event_tbConfigHoonMouseClicked
 
     private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
         resetHoon();
@@ -3278,16 +3337,6 @@ public class AppSettingDialog extends BaseDialogSwing {
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         resetConfigLoan();
     }//GEN-LAST:event_jButton5ActionPerformed
-
-    private void tbLoanConfigMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbLoanConfigMouseClicked
-        if (evt.getClickCount() == 2) {
-            int row = tbLoanConfig.getSelectedRow();
-            if (row != -1) {
-                String LoanCode = tbLoanConfig.getValueAt(row, 0).toString();
-                loadDataLoanConfig(LoanCode);
-            }
-        }
-    }//GEN-LAST:event_tbLoanConfigMouseClicked
 
     private void txtLoanCodeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLoanCodeKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
@@ -3716,57 +3765,27 @@ public class AppSettingDialog extends BaseDialogSwing {
     }//GEN-LAST:event_txtNoRunningFocusGained
 
     private void txtLoanMaxAmountFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLoanMaxAmountFocusLost
-        try {
-            double a = Double.parseDouble(txtLoanMaxAmount.getText().replace(",", ""));
-            txtLoanMaxAmount.setText(NumberFormat.showDouble2(a));
-        } catch (NumberFormatException e) {
-            txtLoanMaxAmount.setText("0.00");
-        }
+        txtLoanMaxAmount.setText(NumberFormat.showDouble2(NumberFormat.toDouble(txtLoanMaxAmount.getText())));
     }//GEN-LAST:event_txtLoanMaxAmountFocusLost
 
     private void txtLoanFeeFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLoanFeeFocusLost
-        try {
-            double a = Double.parseDouble(txtLoanFee.getText().replace(",", ""));
-            txtLoanFee.setText(NumberFormat.showDouble2(a));
-        } catch (NumberFormatException e) {
-            txtLoanFee.setText("0.00");
-        }
+        txtLoanFee.setText(NumberFormat.showDouble2(NumberFormat.toDouble(txtLoanFee.getText())));
     }//GEN-LAST:event_txtLoanFeeFocusLost
 
     private void txtIntBadDebtFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIntBadDebtFocusLost
-        try {
-            double a = Double.parseDouble(txtIntBadDebt.getText().replace(",", ""));
-            txtIntBadDebt.setText(NumberFormat.showDouble2(a));
-        } catch (NumberFormatException e) {
-            txtIntBadDebt.setText("0.00");
-        }
+        txtIntBadDebt.setText(NumberFormat.showDouble2(NumberFormat.toDouble(txtIntBadDebt.getText())));
     }//GEN-LAST:event_txtIntBadDebtFocusLost
 
     private void txtIntTurnoverFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIntTurnoverFocusLost
-        try {
-            double a = Double.parseDouble(txtIntTurnover.getText().replace(",", ""));
-            txtIntTurnover.setText(NumberFormat.showDouble2(a));
-        } catch (NumberFormatException e) {
-            txtIntTurnover.setText("0.00");
-        }
+        txtIntTurnover.setText(NumberFormat.showDouble2(NumberFormat.toDouble(txtIntTurnover.getText())));
     }//GEN-LAST:event_txtIntTurnoverFocusLost
 
     private void txtIntNormalFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIntNormalFocusLost
-        try {
-            double a = Double.parseDouble(txtIntNormal.getText().replace(",", ""));
-            txtIntNormal.setText(NumberFormat.showDouble2(a));
-        } catch (NumberFormatException e) {
-            txtIntNormal.setText("0.00");
-        }
+        txtIntNormal.setText(NumberFormat.showDouble2(NumberFormat.toDouble(txtIntNormal.getText())));
     }//GEN-LAST:event_txtIntNormalFocusLost
 
     private void txtMinPayBahtFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtMinPayBahtFocusLost
-        try {
-            double a = Double.parseDouble(txtMinPayBaht.getText().replace(",", ""));
-            txtMinPayBaht.setText(NumberFormat.showDouble2(a));
-        } catch (NumberFormatException e) {
-            txtMinPayBaht.setText("0.00");
-        }
+        txtMinPayBaht.setText(NumberFormat.showDouble2(NumberFormat.toDouble(txtMinPayBaht.getText())));
     }//GEN-LAST:event_txtMinPayBahtFocusLost
 
     private void txtMinPayPercentKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtMinPayPercentKeyPressed
@@ -3931,6 +3950,28 @@ public class AppSettingDialog extends BaseDialogSwing {
         txtFeeRunning.selectAll();
     }//GEN-LAST:event_txtFeeRunningFocusGained
 
+    private void tbConfigSaveHistoryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbConfigSaveHistoryMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tbConfigSaveHistoryMouseClicked
+
+    private void tbConfigHoonHistoryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbConfigHoonHistoryMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tbConfigHoonHistoryMouseClicked
+
+    private void tbLoanConfigMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbLoanConfigMouseClicked
+        if (evt.getClickCount() == 2) {
+            int row = tbLoanConfig.getSelectedRow();
+            if (row != -1) {
+                String LoanCode = tbLoanConfig.getValueAt(row, 0).toString();
+                loadDataLoanConfig(LoanCode);
+            }
+        }
+    }//GEN-LAST:event_tbLoanConfigMouseClicked
+
+    private void tbLoanConfigHistoryMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbLoanConfigHistoryMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_tbLoanConfigHistoryMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelType;
     private javax.swing.JButton btnPrintTransaction4;
@@ -4091,11 +4132,16 @@ public class AppSettingDialog extends BaseDialogSwing {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
+    private javax.swing.JScrollPane jScrollPane8;
+    private javax.swing.JScrollPane jScrollPane9;
     private javax.swing.JTabbedPane jTabbedPane1;
-    private javax.swing.JTable jTable2;
+    private javax.swing.JTabbedPane jTabbedPane2;
+    private javax.swing.JTabbedPane jTabbedPane3;
+    private javax.swing.JTabbedPane jTabbedPane4;
     private javax.swing.JRadioButton rd1;
     private javax.swing.JRadioButton rd2;
     private javax.swing.JRadioButton rdPayINT1;
@@ -4109,8 +4155,12 @@ public class AppSettingDialog extends BaseDialogSwing {
     private javax.swing.JRadioButton rdTypeDay;
     private javax.swing.JRadioButton rdTypeMonth;
     private javax.swing.JRadioButton rdTypeYear;
-    private javax.swing.JTable tbConfigSaveType;
+    private javax.swing.JTable tbConfigHoon;
+    private javax.swing.JTable tbConfigHoonHistory;
+    private javax.swing.JTable tbConfigSave;
+    private javax.swing.JTable tbConfigSaveHistory;
     private javax.swing.JTable tbLoanConfig;
+    private javax.swing.JTable tbLoanConfigHistory;
     private javax.swing.JTextField txtAccPrefix;
     private javax.swing.JTextField txtAccRunning;
     private javax.swing.JTextField txtFee;
@@ -4175,36 +4225,40 @@ public class AppSettingDialog extends BaseDialogSwing {
     private final JCheckBox[] chkAll = new JCheckBox[23];
 
     private void initChk() {
-        tbConfigSaveType.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
-        jTable2.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
+        tbConfigSave.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
+        tbConfigSaveHistory.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
+        tbConfigHoon.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
+        tbConfigHoonHistory.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
         tbLoanConfig.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
-        tbConfigSaveType.setRowHeight(30);
-        jTable2.setRowHeight(30);
+        tbLoanConfig.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
+
+        tbConfigSave.setRowHeight(30);
+        tbConfigSaveHistory.setRowHeight(30);
+        tbConfigHoon.setRowHeight(30);
+        tbConfigHoonHistory.setRowHeight(30);
+        tbLoanConfig.setRowHeight(30);
         tbLoanConfig.setRowHeight(30);
 
-        JTableHeader uGroup1 = tbConfigSaveType.getTableHeader();
-        uGroup1.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, AppConstants.DEFAULT_FONT_SIZE));
+        JTableHeader saveConfigHeader = tbConfigSave.getTableHeader();
+        saveConfigHeader.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, AppConstants.DEFAULT_FONT_SIZE));
 
-        JTableHeader uGroup2 = jTable2.getTableHeader();
-        uGroup2.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, AppConstants.DEFAULT_FONT_SIZE));
+        JTableHeader hoonConfigHeader = tbConfigHoon.getTableHeader();
+        hoonConfigHeader.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, AppConstants.DEFAULT_FONT_SIZE));
 
-        JTableHeader uGroup3 = tbLoanConfig.getTableHeader();
-        uGroup3.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, AppConstants.DEFAULT_FONT_SIZE));
+        JTableHeader loanConfigHeader = tbLoanConfig.getTableHeader();
+        loanConfigHeader.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, AppConstants.DEFAULT_FONT_SIZE));
+
+        JTableHeader saveConfigHeaderHistory = tbConfigSaveHistory.getTableHeader();
+        saveConfigHeaderHistory.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, AppConstants.DEFAULT_FONT_SIZE));
+
+        JTableHeader hoonConfigHeaderHistory = tbConfigHoonHistory.getTableHeader();
+        hoonConfigHeaderHistory.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, AppConstants.DEFAULT_FONT_SIZE));
+
+        JTableHeader loanConfigHeaderHistory = tbLoanConfig.getTableHeader();
+        loanConfigHeaderHistory.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, AppConstants.DEFAULT_FONT_SIZE));
 
         loadPrinterDriver();
         loadPort();
-    }
-
-    private void selectAll() {
-        for (JCheckBox chkAll1 : chkAll) {
-            chkAll1.setSelected(true);
-        }
-    }
-
-    private void unSelectAll() {
-        for (JCheckBox chkAll1 : chkAll) {
-            chkAll1.setSelected(false);
-        }
     }
 
     private void loadPrinterDriver() {
@@ -4314,7 +4368,7 @@ public class AppSettingDialog extends BaseDialogSwing {
     }
 
     private void loadDataSaveType() {
-        DefaultTableModel model = (DefaultTableModel) tbConfigSaveType.getModel();
+        DefaultTableModel model = (DefaultTableModel) tbConfigSave.getModel();
         TableUtil.clearModel(model);
 
         List<CbSaveConfigBean> listBean = getSaveConfigControl().listSaveConfig();
@@ -4324,6 +4378,22 @@ public class AppSettingDialog extends BaseDialogSwing {
                 bean.getTypeCode(),
                 bean.getTypeName(),
                 NumberFormat.showDouble2(bean.getTypeINT())
+            });
+        }
+
+        // load history
+        DefaultTableModel model2 = (DefaultTableModel) tbConfigSaveHistory.getModel();
+        TableUtil.clearModel(model2);
+
+        List<CbSaveConfigBean> listBean2 = getSaveConfigControl().listSaveConfigHistory();
+        for (int i = 0; i < listBean2.size(); i++) {
+            CbSaveConfigBean bean = (CbSaveConfigBean) listBean2.get(i);
+            model2.addRow(new Object[]{
+                bean.getTypeCode(),
+                bean.getTypeName(),
+                NumberFormat.showDouble2(bean.getTypeINT()),
+                bean.getCreate_date(),
+                bean.getUpdate_date()
             });
         }
     }
@@ -4427,54 +4497,60 @@ public class AppSettingDialog extends BaseDialogSwing {
         txtTypeCode.requestFocus();
     }
 
-    private void save() {
-        try {
-            CbHoonConfigBean bean = new CbHoonConfigBean();
-            bean.setHoonCode(txtHCode.getText());
-            bean.setHoonName(txtHName.getText());
-            bean.setHoonRate(Double.parseDouble(txtHoonRate.getText().replace(",", "")));
-            bean.setHoonVolumnMax(Integer.parseInt(txtHoonVolumnMax.getText().replace(",", "")));
-            bean.setHoonDeviden(Double.parseDouble(txtHoonDividen.getText().replace(",", "")));
-            bean.setHoonBuyMin(Integer.parseInt(txtHoonBuyMin.getText().replace(",", "")));
+    private void saveHoonConfig() {
+        CbHoonConfigBean bean = new CbHoonConfigBean();
+        bean.setHoonCode(txtHCode.getText());
+        bean.setHoonName(txtHName.getText());
+        bean.setHoonRate(NumberFormat.toDouble(txtHoonRate.getText()));
+        bean.setHoonVolumnMax(NumberFormat.toInt(txtHoonVolumnMax.getText()));
+        bean.setHoonDeviden(NumberFormat.toDouble(txtHoonDividen.getText()));
+        bean.setHoonBuyMin(NumberFormat.toInt(txtHoonBuyMin.getText()));
 
-            if (getHoonConfigControl().saveCbHoonConfig(bean)) {
-                MessageAlert.infoPopup(this, "บันทึกข้อมูลเรียบร้อย");
-                resetHoon();
-                loadHoonList();
-            }
-        } catch (NumberFormatException e) {
-            MessageAlert.errorPopup(this, e.getMessage());
-            logger.error(e.getMessage());
+        if (getHoonConfigControl().saveCbHoonConfig(bean)) {
+            MessageAlert.infoPopup(this, "บันทึกข้อมูลเรียบร้อย");
+            resetHoon();
+            loadHoonList();
         }
     }
 
     private double computeTaxINT() {
         double typeINT;
-        try {
-            typeINT = Double.parseDouble(txtTypeINT.getText());
-            double taxINT = Double.parseDouble(txtTax.getText());
-            typeINT = typeINT - (typeINT * taxINT / 100.00);
-            txtTypeINT.setText("" + typeINT);
-        } catch (NumberFormatException e) {
-            System.err.println(e);
-            return 0.00;
-        }
-
+        typeINT = NumberFormat.toDouble(txtTypeINT.getText());
+        double taxINT = NumberFormat.toDouble(txtTax.getText());
+        typeINT = typeINT - (typeINT * taxINT / 100.00);
+        txtTypeINT.setText("" + typeINT);
         return typeINT;
     }
 
     private void loadHoonList() {
-        DefaultTableModel model2 = (DefaultTableModel) jTable2.getModel();
-        TableUtil.clearModel(model2);
+        DefaultTableModel model = (DefaultTableModel) tbConfigHoon.getModel();
+        TableUtil.clearModel(model);
 
         List<CbHoonConfigBean> listHoonConfig = getHoonConfigControl().listCbHoonConfig();
         for (int i = 0; i < listHoonConfig.size(); i++) {
             CbHoonConfigBean hBean = (CbHoonConfigBean) listHoonConfig.get(i);
-            model2.addRow(new Object[]{
+            model.addRow(new Object[]{
                 hBean.getHoonCode(),
                 hBean.getHoonName(),
                 NumberFormat.showDouble2(hBean.getHoonDeviden()),
                 NumberFormat.showDouble2(hBean.getHoonRate())
+            });
+        }
+
+        // load history
+        DefaultTableModel model2 = (DefaultTableModel) tbConfigHoonHistory.getModel();
+        TableUtil.clearModel(model2);
+
+        List<CbHoonConfigBean> listHoonConfig2 = getHoonConfigControl().listCbHoonConfigHistory();
+        for (int i = 0; i < listHoonConfig2.size(); i++) {
+            CbHoonConfigBean hBean = (CbHoonConfigBean) listHoonConfig2.get(i);
+            model2.addRow(new Object[]{
+                hBean.getHoonCode(),
+                hBean.getHoonName(),
+                NumberFormat.showDouble2(hBean.getHoonDeviden()),
+                NumberFormat.showDouble2(hBean.getHoonRate()),
+                hBean.getCreate_date(),
+                hBean.getUpdate_date()
             });
         }
     }
@@ -4483,19 +4559,19 @@ public class AppSettingDialog extends BaseDialogSwing {
         CbLoanConfigBean lBean = new CbLoanConfigBean();
         lBean.setLoanCode(txtLoanCode.getText());
         lBean.setLoanName(txtLoanName.getText());
-        lBean.setLoanINT(Double.parseDouble(txtLoanINT.getText().replace(",", "")));
-        lBean.setLoanFee(Double.parseDouble(txtLoanFee.getText().replace(",", "")));
-        lBean.setLoanPenaltyINT(Double.parseDouble(txtLoanPenaltyINT.getText().replace(",", "")));
-        lBean.setLoanPenaltyDay(Integer.parseInt(txtLoanPenaltyDay.getText().replace(",", "")));
-        lBean.setLoanMinAmount(Double.parseDouble(txtLoanMaxAmount.getText().replace(",", "")));
+        lBean.setLoanINT(NumberFormat.toDouble(txtLoanINT.getText()));
+        lBean.setLoanFee(NumberFormat.toDouble(txtLoanFee.getText()));
+        lBean.setLoanPenaltyINT(NumberFormat.toDouble(txtLoanPenaltyINT.getText()));
+        lBean.setLoanPenaltyDay(NumberFormat.toInt(txtLoanPenaltyDay.getText()));
+        lBean.setLoanMinAmount(NumberFormat.toDouble(txtLoanMaxAmount.getText()));
         if (chkINT_FlatRate.isSelected()) {
             lBean.setIntFixed("F");
         } else if (chkINT_Effective_Rate.isSelected()) {
             lBean.setIntFixed("E");
         }
-        lBean.setIntBadDebt(Double.parseDouble(txtIntBadDebt.getText().replace(",", "")));
-        lBean.setIntTurnover(Double.parseDouble(txtIntTurnover.getText().replace(",", "")));
-        lBean.setIntNormal(Double.parseDouble(txtIntNormal.getText().replace(",", "")));
+        lBean.setIntBadDebt(NumberFormat.toDouble(txtIntBadDebt.getText()));
+        lBean.setIntTurnover(NumberFormat.toDouble(txtIntTurnover.getText()));
+        lBean.setIntNormal(NumberFormat.toDouble(txtIntNormal.getText()));
         if (chkPIntCapital.isSelected()) {
             lBean.setChkPIntCapital("1");
         } else {
@@ -4508,17 +4584,17 @@ public class AppSettingDialog extends BaseDialogSwing {
             lBean.setChkPIntTable("2");
         }
 
-        lBean.setLoanPerMonth(Integer.parseInt("" + txtLoanPerMonth.getText()));
-        lBean.setLoanRunning(Integer.parseInt("" + txtLoanRunning.getText()));
-        lBean.setBookNo(Integer.parseInt("" + txtLoanBookNo.getText()));
+        lBean.setLoanPerMonth(NumberFormat.toInt("" + txtLoanPerMonth.getText()));
+        lBean.setLoanRunning(NumberFormat.toInt("" + txtLoanRunning.getText()));
+        lBean.setBookNo(NumberFormat.toInt("" + txtLoanBookNo.getText()));
 
         String checkMinPayment = "N";
         if (chkMinPay.isSelected()) {
             checkMinPayment = "Y";
         }
         lBean.setCheckMinPayment(checkMinPayment);
-        lBean.setMinPaymentPercent(Double.parseDouble(txtMinPayPercent.getText().replace(",", "")));
-        lBean.setMinPaymentBaht(Double.parseDouble(txtMinPayBaht.getText().replace(",", "")));
+        lBean.setMinPaymentPercent(NumberFormat.toDouble(txtMinPayPercent.getText()));
+        lBean.setMinPaymentBaht(NumberFormat.toDouble(txtMinPayBaht.getText()));
 
         if (getLoanConfigControl().saveLoanConfig(lBean)) {
             MessageAlert.infoPopup(this, "บันทึกข้อมูลเรียบร้อย");
@@ -4585,13 +4661,13 @@ public class AppSettingDialog extends BaseDialogSwing {
     }
 
     private void loadConfigLoadList() {
-        DefaultTableModel model1 = (DefaultTableModel) tbLoanConfig.getModel();
-        TableUtil.clearModel(model1);
+        DefaultTableModel model = (DefaultTableModel) tbLoanConfig.getModel();
+        TableUtil.clearModel(model);
 
         List<CbLoanConfigBean> listLoan = getLoanConfigControl().listLoanConfig();
         for (int i = 0; i < listLoan.size(); i++) {
-            CbLoanConfigBean ll = (CbLoanConfigBean) listLoan.get(i);
-            String loanType = ll.getIntFixed();
+            CbLoanConfigBean loanConfigBean = (CbLoanConfigBean) listLoan.get(i);
+            String loanType = loanConfigBean.getIntFixed();
             switch (loanType) {
                 case AppConstants.INT_FLAT_RATE:
                     loanType = "ดอกเบี้ยคงที่";
@@ -4600,21 +4676,57 @@ public class AppSettingDialog extends BaseDialogSwing {
                     loanType = "ลดต้นลดดอก";
                     break;
             }
-            double per = ll.getMinPaymentPercent();
+            double per = loanConfigBean.getMinPaymentPercent();
             if (per == 0) {
-                per = ll.getMinPaymentBaht();
+                per = loanConfigBean.getMinPaymentBaht();
             }
 
-            model1.addRow(new Object[]{
-                ll.getLoanCode(),
-                ll.getLoanName(),
-                NumberFormat.showDouble2(ll.getLoanINT()),
-                NumberFormat.showDouble2(ll.getIntBadDebt()),
-                NumberFormat.showDouble2(ll.getIntTurnover()),
-                NumberFormat.showDouble2(ll.getIntNormal()),
+            model.addRow(new Object[]{
+                loanConfigBean.getLoanCode(),
+                loanConfigBean.getLoanName(),
+                NumberFormat.showDouble2(loanConfigBean.getLoanINT()),
+                NumberFormat.showDouble2(loanConfigBean.getIntBadDebt()),
+                NumberFormat.showDouble2(loanConfigBean.getIntTurnover()),
+                NumberFormat.showDouble2(loanConfigBean.getIntNormal()),
                 loanType,
-                NumberFormat.showDouble2(ll.getLoanPenaltyINT()),
+                NumberFormat.showDouble2(loanConfigBean.getLoanPenaltyINT()),
                 NumberFormat.showDouble2(per)
+            });
+        }
+
+        // load history
+        DefaultTableModel model2 = (DefaultTableModel) tbLoanConfigHistory.getModel();
+        TableUtil.clearModel(model2);
+
+        List<CbLoanConfigBean> listLoan2 = getLoanConfigControl().listLoanConfigHistory();
+        for (int i = 0; i < listLoan2.size(); i++) {
+            CbLoanConfigBean loanConfigBean = (CbLoanConfigBean) listLoan2.get(i);
+            String loanType = loanConfigBean.getIntFixed();
+            switch (loanType) {
+                case AppConstants.INT_FLAT_RATE:
+                    loanType = "ดอกเบี้ยคงที่";
+                    break;
+                case AppConstants.INT_EFFITIVE_RATE:
+                    loanType = "ลดต้นลดดอก";
+                    break;
+            }
+            double per = loanConfigBean.getMinPaymentPercent();
+            if (per == 0) {
+                per = loanConfigBean.getMinPaymentBaht();
+            }
+
+            model2.addRow(new Object[]{
+                loanConfigBean.getLoanCode(),
+                loanConfigBean.getLoanName(),
+                NumberFormat.showDouble2(loanConfigBean.getLoanINT()),
+                NumberFormat.showDouble2(loanConfigBean.getIntBadDebt()),
+                NumberFormat.showDouble2(loanConfigBean.getIntTurnover()),
+                NumberFormat.showDouble2(loanConfigBean.getIntNormal()),
+                loanType,
+                NumberFormat.showDouble2(loanConfigBean.getLoanPenaltyINT()),
+                NumberFormat.showDouble2(per),
+                loanConfigBean.getCreate_date(),
+                loanConfigBean.getUpdate_date()
             });
         }
     }
@@ -4631,7 +4743,7 @@ public class AppSettingDialog extends BaseDialogSwing {
         } else {
             bean.setTypeCondition("3");
         }
-        bean.setRDType2(Double.parseDouble(txtRDType2.getText()));
+        bean.setRDType2(NumberFormat.toDouble(txtRDType2.getText()));
         bean.setCbRDType2(cbRDType2.getSelectedIndex());
         if (rdTypeDay.isSelected()) {
             bean.setRdTypeDialy("D");
@@ -4651,11 +4763,7 @@ public class AppSettingDialog extends BaseDialogSwing {
         } else {
             bean.setPayType("5");
         }
-        try {
-            bean.setTAX(Double.parseDouble(txtTax.getText()));
-        } catch (NumberFormatException e) {
-            System.err.println(e);
-        }
+        bean.setTAX(NumberFormat.toDouble(txtTax.getText()));
         bean.setCbPayType1(cbPayType1.getSelectedIndex());
         bean.setCbPayType2(cbPayType2.getSelectedIndex());
         bean.setCbPayType3(cbPayType3.getSelectedIndex());
@@ -4663,13 +4771,13 @@ public class AppSettingDialog extends BaseDialogSwing {
         bean.setCbPayType5(cbPayType5.getSelectedIndex());
         bean.setCbPayType6(cbPayType6.getSelectedIndex());
         bean.setCbPayType7(cbPayType7.getSelectedIndex());
-        bean.setPayINT(Double.parseDouble(txtPayINT.getText()));
-        bean.setMaxDeposit(Double.parseDouble(txtFixOverDeposit.getText().replace(",", "")));
-        bean.setSaveRunning(Integer.parseInt(txtSaveRunning.getText()));
-        bean.setNoRunning(Integer.parseInt(txtNoRunning.getText()));
-        bean.setSaveFee(Double.parseDouble(txtFee.getText()));
-        bean.setMinDeposit(Double.parseDouble(txtMinDeposit.getText().replace(",", "")));
-        bean.setMinWitdraw(Double.parseDouble(txtMinWitdraw.getText().replace(",", "")));
+        bean.setPayINT(NumberFormat.toDouble(txtPayINT.getText()));
+        bean.setMaxDeposit(NumberFormat.toDouble(txtFixOverDeposit.getText()));
+        bean.setSaveRunning(NumberFormat.toInt(txtSaveRunning.getText()));
+        bean.setNoRunning(NumberFormat.toInt(txtNoRunning.getText()));
+        bean.setSaveFee(NumberFormat.toDouble(txtFee.getText()));
+        bean.setMinDeposit(NumberFormat.toDouble(txtMinDeposit.getText()));
+        bean.setMinWitdraw(NumberFormat.toDouble(txtMinWitdraw.getText()));
 
         if (getSaveConfigControl().saveCbSaveConfig(bean)) {
             MessageAlert.infoPopup(this, "บันทึกข้อมูลเรียบร้อยแล้ว");
@@ -4706,15 +4814,10 @@ public class AppSettingDialog extends BaseDialogSwing {
     }
 
     private void computeTotalNetINT() {
-        try {
-            double a = Double.parseDouble(txtIntBadDebt.getText().replace(",", ""));
-            double b = Double.parseDouble(txtIntTurnover.getText().replace(",", ""));
-            double c = Double.parseDouble(txtIntNormal.getText().replace(",", ""));
-            double total = (a + b + c);
-            txtLoanINT.setText(dec.format(total));
-        } catch (NumberFormatException e) {
-            System.err.println(e);
-        }
-
+        double a = NumberFormat.toDouble(txtIntBadDebt.getText());
+        double b = NumberFormat.toDouble(txtIntTurnover.getText());
+        double c = NumberFormat.toDouble(txtIntNormal.getText());
+        double total = (a + b + c);
+        txtLoanINT.setText(dec.format(total));
     }
 }

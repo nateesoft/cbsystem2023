@@ -14,11 +14,7 @@ public class PIDCheck {
         int sum = 0;
 
         for (int i = 0; i < 12; i++) {
-            try {
-                sum += Integer.parseInt(String.valueOf(id.charAt(i))) * (13 - i);
-            } catch (NumberFormatException e) {
-                return false;
-            }
+            sum += NumberFormat.toInt(String.valueOf(id.charAt(i))) * (13 - i);
         }
 
         return id.charAt(12) - '0' == ((11 - (sum % 11)) % 10);

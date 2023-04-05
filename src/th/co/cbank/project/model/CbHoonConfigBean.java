@@ -11,5 +11,7 @@ public class CbHoonConfigBean {
     private int hoonVolumnMax = 9999999;
     private double hoonDeviden = 0.00;
     private int hoonBuyMin = 0;
+    private String create_date;
+    private String update_date;
 
 }

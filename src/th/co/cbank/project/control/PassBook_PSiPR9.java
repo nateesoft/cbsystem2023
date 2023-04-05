@@ -16,6 +16,7 @@ import th.co.cbank.project.constants.AppConstants;
 import th.co.cbank.project.model.ConfigBean;
 import th.co.cbank.project.model.PrintSlipBean;
 import th.co.cbank.util.MessageAlert;
+import th.co.cbank.util.NumberFormat;
 
 public class PassBook_PSiPR9 {
 
@@ -45,13 +46,9 @@ public class PassBook_PSiPR9 {
         Map m = new HashMap();
         //convert line to in
         int lineInt = 1;
-        try {
-            lineInt = Integer.parseInt(line);
-            for (int i = 1; i < lineInt; i++) {
-                m.put("p" + i, "");
-            }
-        } catch (NumberFormatException e) {
-
+        lineInt = NumberFormat.toInt(line);
+        for (int i = 1; i < lineInt; i++) {
+            m.put("p" + i, "");
         }
         m.put("p" + line, param);
         for (int i = lineInt; i < 24; i++) {
@@ -97,13 +94,9 @@ public class PassBook_PSiPR9 {
         Map m = new HashMap();
         //convert line to in
         int lineInt = 1;
-        try {
-            lineInt = Integer.parseInt(line);
-            for (int i = 1; i < lineInt; i++) {
-                m.put("p" + i, "");
-            }
-        } catch (NumberFormatException e) {
-
+        lineInt = NumberFormat.toInt(line);
+        for (int i = 1; i < lineInt; i++) {
+            m.put("p" + i, "");
         }
         m.put("p" + line, param);
         for (int i = lineInt; i < 24; i++) {
@@ -154,7 +147,7 @@ public class PassBook_PSiPR9 {
             p[5] = addSpace(bean.getBalance());//เงินต้นคงเหลือ
             p[6] = addSpace(bean.getLine());//ชำระค่าปรับ
 
-            lineInt = Integer.parseInt(bean.getLine());
+            lineInt = NumberFormat.toInt(bean.getLine());
             if (lineInt == lineMax) {
                 m = getHashMap(m, p, lineInt);
                 if (print) {
@@ -196,7 +189,7 @@ public class PassBook_PSiPR9 {
             p[5] = addSpace(bean.getIn());//9,999.99;
             p[6] = addSpace(bean.getLine());//99;
 
-            lineInt = Integer.parseInt(bean.getLine());
+            lineInt = NumberFormat.toInt(bean.getLine());
             if (lineInt == lineMax) {
                 m = getHashMap(m, p, lineInt);
                 if (print) {

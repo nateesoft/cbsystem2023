@@ -11,12 +11,14 @@ import th.co.cbank.project.constants.AppConstants;
 import th.co.cbank.project.control.CbProfileControl;
 import th.co.cbank.project.control.CbSaveAccountControl;
 import th.co.cbank.project.control.CbTransactionSaveControl;
+import th.co.cbank.project.model.CbSaveAccountBean;
 import th.co.cbank.util.NumberFormat;
 import th.co.cbank.util.TableUtil;
 
 public class CheckAuditDialog extends BaseDialogSwing {
 
     private final Logger logger = Logger.getLogger(CheckAuditDialog.class);
+    private final CbSaveAccountControl saveAccountControl = new CbSaveAccountControl();
 
     public CheckAuditDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
@@ -492,8 +494,8 @@ public class CheckAuditDialog extends BaseDialogSwing {
         double withdraw = 0.00;
         for (Object[] data : listModel3) {
             model3.addRow(data);
-            deposit += Double.parseDouble(("" + data[4]).replace(",", ""));
-            withdraw += Double.parseDouble(("" + data[5]).replace(",", ""));
+            deposit += NumberFormat.toDouble(("" + data[4]));
+            withdraw += NumberFormat.toDouble(("" + data[5]));
         }
         txtDeposit.setText(NumberFormat.showDouble2(deposit));
         txtWithdraw.setText(NumberFormat.showDouble2(withdraw));
@@ -514,9 +516,9 @@ public class CheckAuditDialog extends BaseDialogSwing {
 
         int colAccount = tbSaveAccount.getSelectedColumn();
         String accCode = tbSaveAccount.getValueAt(colAccount, 1).toString();
-
+        CbSaveAccountBean saveAccBean = saveAccountControl.getSaveAccountBean(accCode);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        TransactionAdvanceMethod.findData(profileCode, accCode, false);
+        TransactionAdvanceMethod.findData(profileCode, accCode, false, saveAccBean.getAccount_type());
         double all_balance = TransactionAdvanceMethod.balanceAmount;
         double all_interest = TransactionAdvanceMethod.interestAmount;
         TransactionAdvanceMethod.updateSaveAccountAndProfile(profileCode, accCode, all_balance, all_interest);

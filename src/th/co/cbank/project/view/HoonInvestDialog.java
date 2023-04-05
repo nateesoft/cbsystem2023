@@ -10,7 +10,6 @@ import th.co.cbank.util.NumberFormat;
 import th.co.cbank.project.constants.AppConstants;
 import th.co.cbank.project.model.ProfileBean;
 import th.co.cbank.util.DateUtil;
-import th.co.cbank.util.NumberUtil;
 
 public class HoonInvestDialog extends BaseDialogSwing {
 
@@ -552,8 +551,8 @@ public class HoonInvestDialog extends BaseDialogSwing {
 
     private void txtReserveFundAmtKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtReserveFundAmtKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            double profitOpAmt = NumberUtil.toDouble(txtProfitOpAmt.getText());
-            double reserveFundAmt = NumberUtil.toDouble(txtReserveFundAmt.getText());
+            double profitOpAmt = NumberFormat.toDouble(txtProfitOpAmt.getText());
+            double reserveFundAmt = NumberFormat.toDouble(txtReserveFundAmt.getText());
             double total = profitOpAmt * reserveFundAmt / 100;
             balanceAmt = profitOpAmt - total;
             txtTotalReserveFundAmt.setText(NumberFormat.showDouble2(total));
@@ -656,18 +655,18 @@ public class HoonInvestDialog extends BaseDialogSwing {
     }
 
     private void calculate() {
-        double profitOpAmt = NumberUtil.toDouble(txtProfitOpAmt.getText());
-        double publicBenefitAmt = NumberUtil.toDouble(txtPublicBenefitAmt.getText());
+        double profitOpAmt = NumberFormat.toDouble(txtProfitOpAmt.getText());
+        double publicBenefitAmt = NumberFormat.toDouble(txtPublicBenefitAmt.getText());
         double totalBenefitAmt = profitOpAmt * publicBenefitAmt / 100;
         balanceAmt = profitOpAmt - totalBenefitAmt;
         txtTotalBenefitAmt.setText(NumberFormat.showDouble2(totalBenefitAmt));
 
-        double totalReserveFundAmt = NumberUtil.toDouble(txtTotalReserveFundAmt.getText());
+        double totalReserveFundAmt = NumberFormat.toDouble(txtTotalReserveFundAmt.getText());
         double netDividendAmt = profitOpAmt - (totalReserveFundAmt + totalBenefitAmt);
         txtNetDividendAmt.setText(NumberFormat.showDouble2(netDividendAmt));
 
         //total summary
-        double totalHoonAmt = NumberUtil.toDouble(txtTotalHoonAmt.getText());
+        double totalHoonAmt = NumberFormat.toDouble(txtTotalHoonAmt.getText());
         double dividendPerYearAmt = netDividendAmt / totalHoonAmt;
         txtDividendPerYearAmt.setText(NumberFormat.showDouble4(dividendPerYearAmt));
 
@@ -677,7 +676,7 @@ public class HoonInvestDialog extends BaseDialogSwing {
 
     private void loadData() {
         List<ProfileBean> listProfile = getProfileControl().listProfileHoon();
-        double dividendPerYearAmt = NumberUtil.toDouble(txtDividendPerYearAmt.getText());
+        double dividendPerYearAmt = NumberFormat.toDouble(txtDividendPerYearAmt.getText());
         for (ProfileBean bean : listProfile) {
 
             model.addRow(new Object[]{

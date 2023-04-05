@@ -12,6 +12,7 @@ import th.co.cbank.util.ThaiUtil;
 import th.co.cbank.project.model.ProfileMapping;
 import th.co.cbank.util.DateUtil;
 import th.co.cbank.util.MessageAlert;
+import th.co.cbank.util.NumberFormat;
 
 public class ProfileControl extends BaseControl {
 
@@ -481,7 +482,7 @@ public class ProfileControl extends BaseControl {
 
     public ProfileBean initBean() {
         ProfileBean bean = new ProfileBean();
-        bean.setP_index(Integer.parseInt(getMaxIndex()));
+        bean.setP_index(NumberFormat.toInt(getMaxIndex()));
         bean.setP_custSex("M");
         bean.setP_custType("1");
         bean.setP_custAge(1);

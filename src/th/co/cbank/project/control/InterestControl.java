@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import th.co.cbank.project.model.CbLoanAccountBean;
 import th.co.cbank.project.model.CbLoanConfigBean;
 import th.co.cbank.util.DateUtil;
+import th.co.cbank.util.NumberFormat;
 
 public class InterestControl {
 
@@ -40,7 +41,7 @@ public class InterestControl {
         SimpleDateFormat simD = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
         String[] data = simD.format(d).split("-");
 
-        return getLengthToCurrent(Integer.parseInt(data[0]), Integer.parseInt(data[1]) - 1, Integer.parseInt(data[2]));
+        return getLengthToCurrent(NumberFormat.toInt(data[0]), NumberFormat.toInt(data[1]) - 1, NumberFormat.toInt(data[2]));
     }
 
     public static int getMaxDayPerThisYear() {

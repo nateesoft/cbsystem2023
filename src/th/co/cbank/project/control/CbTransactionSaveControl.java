@@ -29,36 +29,33 @@ public class CbTransactionSaveControl extends BaseControl {
     }
 
     public CbTransactionSaveBean mappingBean(ResultSet rs) throws Exception {
-        CbTransactionSaveBean bean = null;
-        if (rs.next()) {
-            bean = new CbTransactionSaveBean();
-            bean.setT_date(rs.getDate("T_date"));
-            bean.setT_time(rs.getString("T_time"));
-            bean.setT_acccode(rs.getString("T_acccode"));
-            bean.setT_custcode(rs.getString("T_custcode"));
-            bean.setT_description(ThaiUtil.ASCII2Unicode(rs.getString("T_description")));
-            bean.setT_amount(rs.getDouble("T_amount"));
-            bean.setT_empcode(rs.getString("T_empcode"));
-            bean.setT_docno(rs.getString("t_docno"));
-            bean.setRemark(ThaiUtil.ASCII2Unicode(rs.getString("remark")));
-            bean.setT_booktype(rs.getString("T_booktype"));
-            bean.setT_hoon(rs.getInt("t_hoon"));
-            bean.setLineNo(rs.getInt("LineNo"));
-            bean.setPrintChk(rs.getString("PrintChk"));
-            bean.setT_balance(rs.getDouble("t_balance"));
-            bean.setT_index(rs.getInt("t_index"));
-            bean.setMoney_in(rs.getDouble("money_in"));
-            bean.setMoney_out(rs.getDouble("money_out"));
-            bean.setUpdate_interest(rs.getDate("update_interest"));
-            bean.setT_hoon_amt(rs.getDouble("t_hoon_amt"));
-            bean.setT_hoon_cash(rs.getDouble("t_hoon_cash"));
-            bean.setT_hoon_ton(rs.getDouble("t_hoon_ton"));
-            bean.setT_hoon_rate(rs.getDouble("t_hoon_rate"));
-            bean.setBranchCode(rs.getString("branch_code"));
-            bean.setT_interest(rs.getDouble("t_interest"));
-            bean.setT_fee(rs.getDouble("t_fee"));
-            bean.setT_status(rs.getString("t_status"));
-        }
+        CbTransactionSaveBean bean = new CbTransactionSaveBean();
+        bean.setT_date(rs.getDate("T_date"));
+        bean.setT_time(rs.getString("T_time"));
+        bean.setT_acccode(rs.getString("T_acccode"));
+        bean.setT_custcode(rs.getString("T_custcode"));
+        bean.setT_description(ThaiUtil.ASCII2Unicode(rs.getString("T_description")));
+        bean.setT_amount(rs.getDouble("T_amount"));
+        bean.setT_empcode(rs.getString("T_empcode"));
+        bean.setT_docno(rs.getString("t_docno"));
+        bean.setRemark(ThaiUtil.ASCII2Unicode(rs.getString("remark")));
+        bean.setT_booktype(rs.getString("T_booktype"));
+        bean.setT_hoon(rs.getInt("t_hoon"));
+        bean.setLineNo(rs.getInt("LineNo"));
+        bean.setPrintChk(rs.getString("PrintChk"));
+        bean.setT_balance(rs.getDouble("t_balance"));
+        bean.setT_index(rs.getInt("t_index"));
+        bean.setMoney_in(rs.getDouble("money_in"));
+        bean.setMoney_out(rs.getDouble("money_out"));
+        bean.setUpdate_interest(rs.getDate("update_interest"));
+        bean.setT_hoon_amt(rs.getDouble("t_hoon_amt"));
+        bean.setT_hoon_cash(rs.getDouble("t_hoon_cash"));
+        bean.setT_hoon_ton(rs.getDouble("t_hoon_ton"));
+        bean.setT_hoon_rate(rs.getDouble("t_hoon_rate"));
+        bean.setBranchCode(rs.getString("branch_code"));
+        bean.setT_interest(rs.getDouble("t_interest"));
+        bean.setT_fee(rs.getDouble("t_fee"));
+        bean.setT_status(rs.getString("t_status"));
         return bean;
     }
 
@@ -303,12 +300,15 @@ public class CbTransactionSaveControl extends BaseControl {
         return LineMax;
     }
 
-    public void updateLinePrint(String t_acccode, int lineNo, String t_date) {
+    public void updateLinePrint(String t_acccode, int lineNo, String t_date, int t_index) {
         try {
             String sql = "update cb_transaction_save set "
                     + "PrintChk='Y' where t_acccode='" + t_acccode + "' "
-                    + "and lineNo='" + lineNo + "' and t_date='" + t_date + "'";
-            update(sql);
+                    + "and lineNo='" + lineNo + "' "
+                    + "and t_date='" + t_date + "' "
+                    + "and t_index=" + t_index + "";
+            int result = update(sql);
+            System.out.println(result);
         } catch (Exception e) {
             logger.error(e.getMessage());
             MessageAlert.errorPopup(this.getClass(), e.getMessage());
@@ -368,10 +368,10 @@ public class CbTransactionSaveControl extends BaseControl {
         return list;
     }
 
-    public List<CbTransactionSaveBean> listSavingBookTransactionByAcccode(String accCode) {
+    public List<CbTransactionSaveBean> listSavingBookTransactionByAcccode(String accCode, String custCode) {
         try {
             String sql = "select * from cb_transaction_save "
-                    + "where t_acccode='" + accCode + "' "
+                    + "where t_acccode='" + accCode + "' and t_custcode='" + custCode + "' "
                     + "and t_status in('2','3','8', '11') order by t_date, t_time, LineNo";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             return mappingListBean(rs);
@@ -472,7 +472,7 @@ public class CbTransactionSaveControl extends BaseControl {
         List<CbTransactionSaveBean> listBean = new ArrayList<>();
         String sql = "select t_date from cb_transaction_save where t_status in('2','3','8') "
                 + "and t_custcode='" + custCode + "' and t_acccode='" + accCode + "' "
-                + "group by t_date order by t_date";
+                + "group by t_date order by t_date, t_time";
         try (ResultSet rs = MySQLConnect.getResultSet(sql)) {
             while (rs.next()) {
                 CbTransactionSaveBean bean = new CbTransactionSaveBean();
@@ -487,10 +487,11 @@ public class CbTransactionSaveControl extends BaseControl {
         return listBean;
     }
 
-    public List<CbTransactionSaveBean> getListByAccoundCode(String accCode) {
+    public List<CbTransactionSaveBean> getListByAccoundCode(String accCode, String custCode) {
         List<CbTransactionSaveBean> listBean = new ArrayList<>();
         try {
-            String sql = "select * from cb_transaction_save where t_acccode='" + accCode + "' "
+            String sql = "select * from cb_transaction_save "
+                    + "where t_acccode='" + accCode + "' and t_custcode='" + custCode + "' "
                     + "and t_status in('2','3','8', '11') order by t_date, t_time";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             while (rs.next()) {

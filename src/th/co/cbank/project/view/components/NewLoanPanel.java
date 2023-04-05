@@ -48,7 +48,6 @@ import th.co.cbank.util.ImagePreviewPanel;
 import th.co.cbank.util.JTableUtil;
 import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.NumberFormat;
-import th.co.cbank.util.NumberUtil;
 import th.co.cbank.util.StringUtil;
 import th.co.cbank.util.TableUtil;
 
@@ -1743,7 +1742,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_txtLoanAmtFocusGained
 
     private void txtLoanAmtFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLoanAmtFocusLost
-        double loanAmt = NumberUtil.toDouble(txtLoanAmt.getText());
+        double loanAmt = NumberFormat.toDouble(txtLoanAmt.getText());
         txtLoanAmt.setText(NumberFormat.showDouble2(loanAmt));
     }//GEN-LAST:event_txtLoanAmtFocusLost
 
@@ -1872,7 +1871,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_txtIntBadDebtFocusGained
 
     private void txtIntBadDebtFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIntBadDebtFocusLost
-        double intBadDebtAmt = NumberUtil.toDouble(txtIntBadDebt.getText());
+        double intBadDebtAmt = NumberFormat.toDouble(txtIntBadDebt.getText());
         txtIntBadDebt.setText(NumberFormat.showDouble2(intBadDebtAmt));
     }//GEN-LAST:event_txtIntBadDebtFocusLost
 
@@ -1887,7 +1886,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_txtIntTurnoverFocusGained
 
     private void txtIntTurnoverFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIntTurnoverFocusLost
-        double intTurnoverAmt = NumberUtil.toDouble(txtIntTurnover.getText());
+        double intTurnoverAmt = NumberFormat.toDouble(txtIntTurnover.getText());
         txtIntTurnover.setText(NumberFormat.showDouble2(intTurnoverAmt));
     }//GEN-LAST:event_txtIntTurnoverFocusLost
 
@@ -1902,7 +1901,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_txtIntNormalFocusGained
 
     private void txtIntNormalFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtIntNormalFocusLost
-        double intNormalAmt = NumberUtil.toDouble(txtIntNormal.getText());
+        double intNormalAmt = NumberFormat.toDouble(txtIntNormal.getText());
         txtIntNormal.setText(NumberFormat.showDouble2(intNormalAmt));
     }//GEN-LAST:event_txtIntNormalFocusLost
 
@@ -2209,7 +2208,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
     }
 
     private void enterLoan() {
-        double loanAmt = NumberUtil.toDouble(txtLoanAmt.getText());
+        double loanAmt = NumberFormat.toDouble(txtLoanAmt.getText());
         double limitLoanAmt = profileBean.getLoan_Credit_Balance();
         if (loanAmt > limitLoanAmt) {
             MessageAlert.warningPopup(this, "จำนวนเงินกู้เกินกำหนด กรุณาเพิ่มวงเงิน !");
@@ -2221,7 +2220,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
         jButton17.setEnabled(true);
 
         String strTxtLoanAmtPerPerson = txtLoanAmt.getText();
-        double txtLoanAmtPerPerson = NumberUtil.toDouble(strTxtLoanAmtPerPerson);
+        double txtLoanAmtPerPerson = NumberFormat.toDouble(strTxtLoanAmtPerPerson);
         String docType = getIDCombobox(cbLoanAcc);
         CbLoanConfigBean lBean = loanConfigControl.listLoanConfig(docType);
         double txtLoanFeeAmt = lBean.getLoanFee() * txtLoanAmtPerPerson / 100;
@@ -2349,7 +2348,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
         Date d = DateFormat.getLocal_ddMMyyyy(txtLoanDateStart.getText());
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(d);
-        int perMonth = NumberUtil.toInt(txtLoanPerMonth.getText());
+        int perMonth = NumberFormat.toInt(txtLoanPerMonth.getText());
         calendar.add(Calendar.MONTH, perMonth - 1);
         txtLoanDateEnd.setText(DateFormat.getLocale_ddMMyyyy(calendar.getTime()));
 
@@ -2365,9 +2364,9 @@ public class NewLoanPanel extends javax.swing.JPanel {
 
         //ให้แสดงเป็นบรรทัดเดียว requirement ใหม่
         if (AppConstants.INT_EFFITIVE_RATE.equals(loanConfigBean.getIntFixed())) {
-            loanAmt = NumberUtil.toDouble(txtLoanAmt.getText());
-            loanPerAmt = NumberUtil.toInt(txtLoanPerMonth.getText());
-            loanInt = NumberUtil.toDouble(txtLoanIntPercent.getText());
+            loanAmt = NumberFormat.toDouble(txtLoanAmt.getText());
+            loanPerAmt = NumberFormat.toInt(txtLoanPerMonth.getText());
+            loanInt = NumberFormat.toDouble(txtLoanIntPercent.getText());
             netTotal = (loanAmt + ((loanAmt * loanPerAmt * loanInt) / 100)) / loanPerAmt;
             _netTotal = (int) netTotal;
             double divide = loanAmt / loanPerAmt;
@@ -2378,9 +2377,9 @@ public class NewLoanPanel extends javax.swing.JPanel {
             TableUtil.clearModel(model);
 
             //สำรองหนี้สูญ
-            double intBadDebt = NumberUtil.toDouble(txtIntBadDebt.getText());
-            double intTurnover = NumberUtil.toDouble(txtIntTurnover.getText());
-            double intNormal = NumberUtil.toDouble(txtIntNormal.getText());
+            double intBadDebt = NumberFormat.toDouble(txtIntBadDebt.getText());
+            double intTurnover = NumberFormat.toDouble(txtIntTurnover.getText());
+            double intNormal = NumberFormat.toDouble(txtIntNormal.getText());
             Calendar c = Calendar.getInstance();
             Date dd = DateFormat.getLocal_ddMMyyyy(txtLoanDateStart.getText());
             c.setTime(dd);
@@ -2432,17 +2431,17 @@ public class NewLoanPanel extends javax.swing.JPanel {
         }
 
         if (AppConstants.INT_FLAT_RATE.equals(loanConfigBean.getIntFixed())) {
-            loanAmt = NumberUtil.toDouble(txtLoanAmt.getText());
-            loanPerAmt = NumberUtil.toInt(txtLoanPerMonth.getText());
+            loanAmt = NumberFormat.toDouble(txtLoanAmt.getText());
+            loanPerAmt = NumberFormat.toInt(txtLoanPerMonth.getText());
 
             //load table
             DefaultTableModel model = (DefaultTableModel) tbArGroup1.getModel();
             TableUtil.clearModel(model);
 
             //สำรองหนี้สูญ
-            double intBadDebt = NumberUtil.toDouble(txtIntBadDebt.getText());
-            double intTurnover = NumberUtil.toDouble(txtIntTurnover.getText());
-            double intNormal = NumberUtil.toDouble(txtIntNormal.getText());
+            double intBadDebt = NumberFormat.toDouble(txtIntBadDebt.getText());
+            double intTurnover = NumberFormat.toDouble(txtIntTurnover.getText());
+            double intNormal = NumberFormat.toDouble(txtIntNormal.getText());
             double totalInt = intBadDebt + intTurnover + intNormal;
             double dbBadDebt = ((loanAmt * loanPerAmt * intBadDebt) / 100) / loanPerAmt;
             double dbTurnover = ((loanAmt * loanPerAmt * intTurnover) / 100) / loanPerAmt;
@@ -2506,10 +2505,10 @@ public class NewLoanPanel extends javax.swing.JPanel {
             int iModelSize = model.getRowCount();
             double total = 0;
             for (int i = 0; i < iModelSize; i++) {
-                double data5 = NumberUtil.toDouble(model.getValueAt(i, 5).toString());
+                double data5 = NumberFormat.toDouble(model.getValueAt(i, 5).toString());
                 total += data5;
                 if (i == iModelSize - 1) {
-                    double a = NumberUtil.toDouble(txtB5.getText());
+                    double a = NumberFormat.toDouble(txtB5.getText());
                     double b = a - total;
                     data5 += b;
                     model.setValueAt(NumberFormat.showDouble2(data5), i, 5);
@@ -2525,7 +2524,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
                 txtLoanPerMonth.requestFocus();
                 return;
             }
-            int loanPerMonth = NumberUtil.toInt(txtLoanPerMonth.getText());
+            int loanPerMonth = NumberFormat.toInt(txtLoanPerMonth.getText());
             if (loanPerMonth <= 0) {
                 txtLoanPerMonth.setText("1");
                 loanPerMonth = 1;
@@ -2620,12 +2619,12 @@ public class NewLoanPanel extends javax.swing.JPanel {
         cbLoanAccountBean.setLoan_docno(loanDocNo);
         cbLoanAccountBean.setLoan_start_date(DateFormat.getLocal_ddMMyyyy(txtLoanDateStart.getText()));
         cbLoanAccountBean.setLoan_end_date(DateFormat.getLocal_ddMMyyyy(txtLoanDateEnd.getText()));
-        cbLoanAccountBean.setLoan_amount(NumberUtil.toDouble(txtLoanAmt.getText()));
-        cbLoanAccountBean.setLoan_interest(NumberUtil.toDouble(txtLoanIntPercent.getText()));
+        cbLoanAccountBean.setLoan_amount(NumberFormat.toDouble(txtLoanAmt.getText()));
+        cbLoanAccountBean.setLoan_interest(NumberFormat.toDouble(txtLoanIntPercent.getText()));
         cbLoanAccountBean.setLoan_person1(loan_person1);
         cbLoanAccountBean.setLoan_person2(loan_person2);
-        cbLoanAccountBean.setPayPerAmount(NumberUtil.toDouble(txtPayPerMonth.getText()));
-        cbLoanAccountBean.setPeriod_pay(NumberUtil.toInt(txtLoanPerMonth.getText()));
+        cbLoanAccountBean.setPayPerAmount(NumberFormat.toDouble(txtPayPerMonth.getText()));
+        cbLoanAccountBean.setPeriod_pay(NumberFormat.toInt(txtLoanPerMonth.getText()));
         cbLoanAccountBean.setChkPersonApprove("N");
         cbLoanAccountBean.setLoanCustomerPay(0);
         cbLoanAccountBean.setLoanPayMin(0);
@@ -2698,7 +2697,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
 
                 // get branch code
                 tLoanBean.setBranch_code(Value.BRANCH_CODE);
-                tLoanBean.setT_fee(NumberUtil.toDouble(txtLoanFee.getText()));
+                tLoanBean.setT_fee(NumberFormat.toDouble(txtLoanFee.getText()));
 
                 if (cbTransactionLoanControl.saveCbTransactionLoan(tLoanBean)) {
                     int confirm = MessageAlert.showConfirm(this, "ท่านต้องการบันทึกรายงานความเคลื่อนไหวลงสมุดใช่หรือไม่ ?");
@@ -2716,12 +2715,12 @@ public class NewLoanPanel extends javax.swing.JPanel {
                     cbLoanTablePaymentBean.setLoan_doc_no(loanDocNo);
                     cbLoanTablePaymentBean.setLoan_index(i + 1);
 
-                    double dBaseTotalAmount = NumberUtil.toDouble("" + tbArGroup1.getValueAt(i, 1));
-                    double dIntArLost = NumberUtil.toDouble("" + tbArGroup1.getValueAt(i, 2));
-                    double dIntArMgr = NumberUtil.toDouble("" + tbArGroup1.getValueAt(i, 3));
-                    double dIntArInt = NumberUtil.toDouble("" + tbArGroup1.getValueAt(i, 4));
-                    double dNetTotalAmt = NumberUtil.toDouble("" + tbArGroup1.getValueAt(i, 5));
-                    double dTableAvgCompute = NumberUtil.toDouble("" + tbArGroup1.getValueAt(i, 6));
+                    double dBaseTotalAmount = NumberFormat.toDouble("" + tbArGroup1.getValueAt(i, 1));
+                    double dIntArLost = NumberFormat.toDouble("" + tbArGroup1.getValueAt(i, 2));
+                    double dIntArMgr = NumberFormat.toDouble("" + tbArGroup1.getValueAt(i, 3));
+                    double dIntArInt = NumberFormat.toDouble("" + tbArGroup1.getValueAt(i, 4));
+                    double dNetTotalAmt = NumberFormat.toDouble("" + tbArGroup1.getValueAt(i, 5));
+                    double dTableAvgCompute = NumberFormat.toDouble("" + tbArGroup1.getValueAt(i, 6));
 
                     cbLoanTablePaymentBean.setBase_total_amount(dBaseTotalAmount);
                     cbLoanTablePaymentBean.setLoan_int_ar_lost(dIntArLost);
@@ -2908,7 +2907,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
     }
 
     private void btnPrintLoanPaper(String loanDocNo) {
-        double loanPerMonthAmt = NumberUtil.toDouble(txtPayPerMonth.getText());
+        double loanPerMonthAmt = NumberFormat.toDouble(txtPayPerMonth.getText());
         if (loanPerMonthAmt > 0) {
             PaperLoanJDialog paperLoanJDialog = new PaperLoanJDialog(null, true, loanDocNo);
             paperLoanJDialog.setVisible(true);
@@ -2916,13 +2915,13 @@ public class NewLoanPanel extends javax.swing.JPanel {
     }
 
     private boolean validateDataLoan() {
-        if (NumberUtil.toDouble(txtLoanAmt.getText()) <= 0) {
+        if (NumberFormat.toDouble(txtLoanAmt.getText()) <= 0) {
             MessageAlert.warningPopup(this, "กรุณาระบุจำนวนเงินที่ต้องการกู้ !");
             txtLoanAmt.selectAll();
             txtLoanAmt.requestFocus();
             return false;
         }
-        if (NumberUtil.toDouble(txtPayPerMonth.getText()) < 0) {
+        if (NumberFormat.toDouble(txtPayPerMonth.getText()) < 0) {
             MessageAlert.warningPopup(this, "จำนวนเงินผ่อนชำระต่องวด น้อยกว่า 0 บาท !");
             txtPayPerMonth.selectAll();
             txtPayPerMonth.requestFocus();
@@ -2932,9 +2931,9 @@ public class NewLoanPanel extends javax.swing.JPanel {
             return false;
         }
 
-        double loanAmt = NumberUtil.toDouble(txtLoanAmt.getText());
+        double loanAmt = NumberFormat.toDouble(txtLoanAmt.getText());
         double limitAmt = profileBean.getLoan_Credit_Balance();
-        int loanPerMonth = NumberUtil.toInt(txtLoanPerMonth.getText());
+        int loanPerMonth = NumberFormat.toInt(txtLoanPerMonth.getText());
         if (loanPerMonth <= 0) {
             MessageAlert.warningPopup(this, "จำนวนงวดที่กำหนดไม่ถูกต้อง !");
             txtLoanPerMonth.selectAll();

@@ -30,5 +30,6 @@ public class CbSaveConfigBean {
     private double SaveFee = 0.00;
     private double minDeposit = 0.00;
     private double minWitdraw = 0.00;
-
+    private String create_date;
+    private String update_date;
 }

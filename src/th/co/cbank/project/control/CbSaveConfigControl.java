@@ -2,11 +2,12 @@ package th.co.cbank.project.control;
 
 import java.sql.ResultSet;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.apache.log4j.Logger;
 import th.co.cbank.util.ThaiUtil;
-import th.co.cbank.project.model.CbSaveAccountBean;
 import th.co.cbank.project.model.CbSaveConfigBean;
+import th.co.cbank.util.DateFormat;
 import th.co.cbank.util.MessageAlert;
 
 public class CbSaveConfigControl extends BaseControl {
@@ -44,6 +45,99 @@ public class CbSaveConfigControl extends BaseControl {
                 bean.setSaveFee(rs.getDouble("SaveFee"));
                 bean.setMinDeposit(rs.getDouble("min_deposit"));
                 bean.setMinWitdraw(rs.getDouble("min_withdraw"));
+                bean.setCreate_date(rs.getString("create_date"));
+                bean.setUpdate_date(rs.getString("update_date"));
+
+                listBean.add(bean);
+            }
+            rs.close();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+
+        return listBean;
+    }
+
+    public List<CbSaveConfigBean> listSaveConfigHistory() {
+        List<CbSaveConfigBean> listBean = new ArrayList<>();
+        try {
+            String sql = "select * from cb_save_config_history order by create_date, update_date";
+            ResultSet rs = MySQLConnect.getResultSet(sql);
+            while (rs.next()) {
+                CbSaveConfigBean bean = new CbSaveConfigBean();
+                bean.setTypeCode(rs.getString("TypeCode"));
+                bean.setTypeName(ThaiUtil.ASCII2Unicode(rs.getString("TypeName")));
+                bean.setTypeINT(rs.getDouble("TypeINT"));
+                bean.setTypeCondition(rs.getString("TypeCondition"));
+                bean.setRDType2(rs.getDouble("RDType2"));
+                bean.setCbRDType2(rs.getInt("CbRDType2"));
+                bean.setRdTypeDialy(rs.getString("RdTypeDialy"));
+                bean.setPayType(rs.getString("PayType"));
+                bean.setCbPayType1(rs.getInt("CbPayType1"));
+                bean.setCbPayType2(rs.getInt("CbPayType2"));
+                bean.setCbPayType3(rs.getInt("CbPayType3"));
+                bean.setCbPayType4(rs.getInt("CbPayType4"));
+                bean.setCbPayType5(rs.getInt("CbPayType5"));
+                bean.setCbPayType6(rs.getInt("CbPayType6"));
+                bean.setCbPayType7(rs.getInt("CbPayType7"));
+                bean.setPayINT(rs.getDouble("PayINT"));
+                bean.setFundINT(rs.getDouble("FundINT"));
+                bean.setMaxDeposit(rs.getDouble("max_deposit"));
+                bean.setTAX(rs.getDouble("TAX"));
+                bean.setSaveRunning(rs.getInt("SaveRunning"));
+                bean.setNoRunning(rs.getInt("NoRunning"));
+                bean.setSaveFee(rs.getDouble("SaveFee"));
+                bean.setMinDeposit(rs.getDouble("min_deposit"));
+                bean.setMinWitdraw(rs.getDouble("min_withdraw"));
+                bean.setCreate_date(rs.getString("create_date"));
+                bean.setUpdate_date(rs.getString("update_date"));
+
+                listBean.add(bean);
+            }
+            rs.close();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+
+        return listBean;
+    }
+
+    public List<CbSaveConfigBean> listSaveConfigHistory(String accountType) {
+        List<CbSaveConfigBean> listBean = new ArrayList<>();
+        try {
+            String sql = "select * from cb_save_config_history "
+                    + "where TypeCode='" + accountType + "' order by create_date, update_date";
+            ResultSet rs = MySQLConnect.getResultSet(sql);
+            while (rs.next()) {
+                CbSaveConfigBean bean = new CbSaveConfigBean();
+                bean.setTypeCode(rs.getString("TypeCode"));
+                bean.setTypeName(ThaiUtil.ASCII2Unicode(rs.getString("TypeName")));
+                bean.setTypeINT(rs.getDouble("TypeINT"));
+                bean.setTypeCondition(rs.getString("TypeCondition"));
+                bean.setRDType2(rs.getDouble("RDType2"));
+                bean.setCbRDType2(rs.getInt("CbRDType2"));
+                bean.setRdTypeDialy(rs.getString("RdTypeDialy"));
+                bean.setPayType(rs.getString("PayType"));
+                bean.setCbPayType1(rs.getInt("CbPayType1"));
+                bean.setCbPayType2(rs.getInt("CbPayType2"));
+                bean.setCbPayType3(rs.getInt("CbPayType3"));
+                bean.setCbPayType4(rs.getInt("CbPayType4"));
+                bean.setCbPayType5(rs.getInt("CbPayType5"));
+                bean.setCbPayType6(rs.getInt("CbPayType6"));
+                bean.setCbPayType7(rs.getInt("CbPayType7"));
+                bean.setPayINT(rs.getDouble("PayINT"));
+                bean.setFundINT(rs.getDouble("FundINT"));
+                bean.setMaxDeposit(rs.getDouble("max_deposit"));
+                bean.setTAX(rs.getDouble("TAX"));
+                bean.setSaveRunning(rs.getInt("SaveRunning"));
+                bean.setNoRunning(rs.getInt("NoRunning"));
+                bean.setSaveFee(rs.getDouble("SaveFee"));
+                bean.setMinDeposit(rs.getDouble("min_deposit"));
+                bean.setMinWitdraw(rs.getDouble("min_withdraw"));
+                bean.setCreate_date(rs.getString("create_date"));
+                bean.setUpdate_date(rs.getString("update_date"));
 
                 listBean.add(bean);
             }
@@ -116,17 +210,11 @@ public class CbSaveConfigControl extends BaseControl {
         return isExists;
     }
 
-    public CbSaveConfigBean listSaveConfig(String accountCode) {
-        CbSaveAccountControl sac = new CbSaveAccountControl();
-        CbSaveAccountBean sBean = sac.getSaveAccountBean(accountCode);
-
-        if (sBean == null) {
-            return null;
-        }
+    public CbSaveConfigBean getConfigByTypeCode(String typeCode) {
         CbSaveConfigBean bean = new CbSaveConfigBean();
         try {
             String sql = "select * from cb_save_config "
-                    + "where TypeCode='" + sBean.getAccount_type() + "'";
+                    + "where TypeCode='" + typeCode + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             if (rs.next()) {
                 bean.setTypeCode(rs.getString("TypeCode"));
@@ -215,7 +303,8 @@ public class CbSaveConfigControl extends BaseControl {
             String sql = "insert into cb_save_config "
                     + "(TypeCode,TypeName,TypeINT,TypeCondition,RDType2,cbRDType2,rdTypeDialy,payType,cbPayType1,"
                     + "cbPayType2,cbPayType3,cbPayType4,cbPayType5,cbPayType6,cbPayType7,"
-                    + "PayINT,FundINT,max_deposit,TAX,SaveRunning,NoRunning, SaveFee, min_deposit, min_withdraw)  "
+                    + "PayINT,FundINT,max_deposit,TAX,SaveRunning,NoRunning, SaveFee, min_deposit, min_withdraw,"
+                    + "create_date,update_date)  "
                     + "values('" + bean.getTypeCode() + "','" + ThaiUtil.Unicode2ASCII(bean.getTypeName()) + "','" + bean.getTypeINT() + "',"
                     + "'" + bean.getTypeCondition() + "','" + bean.getRDType2() + "','" + bean.getCbRDType2() + "',"
                     + "'" + bean.getRdTypeDialy() + "','" + bean.getPayType() + "','" + bean.getCbPayType1() + "',"
@@ -223,15 +312,21 @@ public class CbSaveConfigControl extends BaseControl {
                     + "'" + bean.getCbPayType5() + "','" + bean.getCbPayType6() + "','" + bean.getCbPayType7() + "',"
                     + "'" + bean.getPayINT() + "','" + bean.getFundINT() + "','" + bean.getMaxDeposit() + "',"
                     + "'" + bean.getTAX() + "','" + bean.getSaveRunning() + "','" + bean.getNoRunning() + "',"
-                    + "'" + bean.getSaveFee() + "','" + bean.getMinDeposit() + "','" + bean.getMinWitdraw() + "')";
-            String sqlChk = "select * from cb_save_config "
-                    + "where TypeCode='" + bean.getTypeCode() + "' ";
+                    + "'" + bean.getSaveFee() + "','" + bean.getMinDeposit() + "','" + bean.getMinWitdraw() + "',"
+                    + "now(), now())";
+            String sqlChk = "select * from cb_save_config where TypeCode='" + bean.getTypeCode() + "' ";
             ResultSet rs = MySQLConnect.getResultSet(sqlChk);
             if (rs.next()) {
-                return updateCbSaveConfig(bean);
+                updateCbSaveConfig(bean);
             } else {
                 update(sql);
             }
+
+            // save history
+            String sqlHistory = "insert into cb_save_config_history "
+                    + "select * from cb_save_config where typecode='" + bean.getTypeCode() + "'";
+            int result = MySQLConnect.exeUpdate(sqlHistory);
+            logger.info("result: " + result);
 
             rs.close();
             return true;
@@ -262,7 +357,8 @@ public class CbSaveConfigControl extends BaseControl {
                     + "TAX='" + bean.getTAX() + "',"
                     + "SaveRunning='" + bean.getSaveRunning() + "',"
                     + "NoRunning='" + bean.getNoRunning() + "',"
-                    + "SaveFee='" + bean.getSaveFee() + "' "
+                    + "SaveFee='" + bean.getSaveFee() + "', "
+                    + "update_date=now() "
                     + "where TypeCode='" + bean.getTypeCode() + "'";
             update(sql);
             return true;
@@ -337,6 +433,51 @@ public class CbSaveConfigControl extends BaseControl {
             return false;
         }
         return true;
+    }
+
+    public CbSaveConfigBean getLastConfigHistory(Date dateCheck, String typeCode) {
+        CbSaveConfigBean bean = new CbSaveConfigBean();
+        try {
+            String sql = "select * from cb_save_config_history where typecode='" + typeCode + "' "
+                    + "and update_date <= '" + DateFormat.getMySQL_DateTime(dateCheck) + "' "
+                    + "order by update_date desc limit 1;";
+            ResultSet rs = MySQLConnect.getResultSet(sql);
+            if (rs.next()) {
+                bean.setTypeCode(rs.getString("TypeCode"));
+                bean.setTypeName(ThaiUtil.ASCII2Unicode(rs.getString("TypeName")));
+                bean.setTypeINT(rs.getDouble("TypeINT"));
+                bean.setTypeCondition(rs.getString("TypeCondition"));
+                bean.setRDType2(rs.getDouble("RDType2"));
+                bean.setCbRDType2(rs.getInt("CbRDType2"));
+                bean.setRdTypeDialy(rs.getString("RdTypeDialy"));
+                bean.setPayType(rs.getString("PayType"));
+                bean.setCbPayType1(rs.getInt("CbPayType1"));
+                bean.setCbPayType2(rs.getInt("CbPayType2"));
+                bean.setCbPayType3(rs.getInt("CbPayType3"));
+                bean.setCbPayType4(rs.getInt("CbPayType4"));
+                bean.setCbPayType5(rs.getInt("CbPayType5"));
+                bean.setCbPayType6(rs.getInt("CbPayType6"));
+                bean.setCbPayType7(rs.getInt("CbPayType7"));
+                bean.setPayINT(rs.getDouble("PayINT"));
+                bean.setFundINT(rs.getDouble("FundINT"));
+                bean.setMaxDeposit(rs.getDouble("max_deposit"));
+                bean.setTAX(rs.getDouble("TAX"));
+                bean.setSaveRunning(rs.getInt("SaveRunning"));
+                bean.setNoRunning(rs.getInt("NoRunning"));
+                bean.setSaveFee(rs.getDouble("SaveFee"));
+
+                bean.setMinDeposit(rs.getDouble("min_deposit"));
+                bean.setMinWitdraw(rs.getDouble("min_withdraw"));
+            } else {
+                bean = null;
+            }
+            rs.close();
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+
+        return bean;
     }
 
 }

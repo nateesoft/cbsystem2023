@@ -38,6 +38,7 @@ import th.co.cbank.project.report.model.SummaryHoonModel;
 import th.co.cbank.project.report.model.SummaryLoanModel;
 import th.co.cbank.util.DateFormat;
 import th.co.cbank.util.MessageAlert;
+import th.co.cbank.util.NumberFormat;
 
 public class ViewReport extends BaseControl {
 
@@ -515,14 +516,14 @@ public class ViewReport extends BaseControl {
             BranchControl bc = new BranchControl();
             BranchBean bBean = bc.getData();
             p.put("parameter1", bBean.getName());
-            CbSaveAccountControl sa = new CbSaveAccountControl();
-            CbSaveAccountBean sBean = sa.getSaveAccountBean(AccCode);
-            CbSaveConfigControl sc = new CbSaveConfigControl();
-            CbSaveConfigBean cBean = sc.listSaveConfig(AccCode);
-            p.put("parameter2", sBean.getB_CUST_CODE());
+            CbSaveAccountControl saveAccountControl = new CbSaveAccountControl();
+            CbSaveAccountBean saveAccountBean = saveAccountControl.getSaveAccountBean(AccCode);
+            CbSaveConfigControl saveConfigControl = new CbSaveConfigControl();
+            CbSaveConfigBean saveConfigBean = saveConfigControl.getConfigByTypeCode(saveAccountBean.getAccount_type());
+            p.put("parameter2", saveAccountBean.getB_CUST_CODE());
             p.put("parameter3", AccCode);
-            p.put("parameter4", cBean.getTypeName());
-            p.put("parameter5", sBean.getB_CUST_NAME() + " " + sBean.getB_CUST_LASTNAME());
+            p.put("parameter4", saveConfigBean.getTypeName());
+            p.put("parameter5", saveAccountBean.getB_CUST_NAME() + " " + saveAccountBean.getB_CUST_LASTNAME());
 
             JasperReport jasperReport = (JasperReport) JRLoader.loadObject(getClass().getResource(AppConstants.JASPER_SAVE_TRAN_REPORT));
             JasperPrint jasperPrint = JasperFillManager.fillReport(jasperReport, p, MySQLConnect.conn);
@@ -751,8 +752,8 @@ public class ViewReport extends BaseControl {
     public List<HoonReportAllModel> findShowAllReport(int selectedIndex, String txtDate1, String txtDate2, String custCode) {
         List<HoonReportAllModel> listBean = new ArrayList<>();
         String sql = "select (select code from cb_branch limit 0,1) code, t.*, p_custName,p_custSurname "
-                    + "from cb_transaction_save t left join cb_profile p on t.t_custcode=p.p_custcode "
-                    + "where 1=1 ";
+                + "from cb_transaction_save t left join cb_profile p on t.t_custcode=p.p_custcode "
+                + "where 1=1 ";
         switch (selectedIndex) {
             case 1:
                 sql += " and t_status in ('4') ";
@@ -802,18 +803,14 @@ public class ViewReport extends BaseControl {
     }
 
     private String getDateText(String date) {
-        SimpleDateFormat sssEng = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
-        try {
-            Calendar c = Calendar.getInstance();
-            String[] d = date.split("/");
-            int year = Integer.parseInt(d[2]);
-            int month = Integer.parseInt(d[1]) - 1;
-            int day = Integer.parseInt(d[0]);
-            c.set(year, month, day);
-            return sssEng.format(c.getTime());
-        } catch (NumberFormatException e) {
-            return sssEng.format(new Date());
-        }
+        SimpleDateFormat simple = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
+        Calendar calendar = Calendar.getInstance();
+        String[] dates = date.split("/");
+        int year = NumberFormat.toInt(dates[2]);
+        int month = NumberFormat.toInt(dates[1]) - 1;
+        int day = NumberFormat.toInt(dates[0]);
+        calendar.set(year, month, day);
+        return simple.format(calendar.getTime());
     }
 
     public List<LoanReportAllModel> getLoanReportAll(String txtDate1, String txtDate2, String txtAccCode, String txtCustCode) {

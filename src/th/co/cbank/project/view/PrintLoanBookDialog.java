@@ -393,7 +393,7 @@ public class PrintLoanBookDialog extends BaseDialogSwing {
         if (selectRow == -1) {
             return;
         }
-        int lineNo = Integer.parseInt("" + tbTransaction.getValueAt(selectRow, 10));
+        int lineNo = NumberFormat.toInt("" + tbTransaction.getValueAt(selectRow, 10));
         String t_booktype = "" + tbTransaction.getValueAt(selectRow, 1);
         String t_docno = "" + tbTransaction.getValueAt(selectRow, 11);
 

@@ -42,7 +42,6 @@ import th.co.cbank.util.JTableUtil;
 import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.MoneyToWord;
 import th.co.cbank.util.NumberFormat;
-import th.co.cbank.util.NumberUtil;
 import th.co.cbank.util.TableUtil;
 
 public class DepositPanel extends javax.swing.JPanel {
@@ -68,7 +67,7 @@ public class DepositPanel extends javax.swing.JPanel {
 
         this.profileBean = profileBean;
         this.saveAccountBean = saveAccountBean;
-        cbSaveConfigBean = saveConfigControl.listSaveConfig(saveAccountBean.getAccount_code());
+        cbSaveConfigBean = saveConfigControl.getConfigByTypeCode(saveAccountBean.getAccount_type());
         configBean = configControl.getConfigBean();
 
         jTabbedPane8.setEnabledAt(0, false);
@@ -355,7 +354,6 @@ public class DepositPanel extends javax.swing.JPanel {
                         .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(txtDepCode, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtBalance, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 107, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel19Layout.createSequentialGroup()
                                 .addGroup(jPanel19Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -515,11 +513,9 @@ public class DepositPanel extends javax.swing.JPanel {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(btnTransactionSaveDialog, javax.swing.GroupLayout.PREFERRED_SIZE, 243, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jLabel170)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addGroup(jLayeredPane2Layout.createSequentialGroup()
-                                .addComponent(jPanel19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE)))))
+                                .addComponent(jLabel170))
+                            .addComponent(jPanel19, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         jLayeredPane2Layout.setVerticalGroup(
@@ -1391,6 +1387,7 @@ public class DepositPanel extends javax.swing.JPanel {
             tbTransSave.getColumnModel().getColumn(1).setPreferredWidth(100);
             tbTransSave.getColumnModel().getColumn(2).setPreferredWidth(100);
             tbTransSave.getColumnModel().getColumn(5).setPreferredWidth(120);
+            tbTransSave.getColumnModel().getColumn(6).setPreferredWidth(250);
         }
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
@@ -1437,7 +1434,7 @@ public class DepositPanel extends javax.swing.JPanel {
 
     private void txtDepositBahtKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtDepositBahtKeyReleased
         if (txtDepositBaht.getText().trim().length() != 0) {
-            double d = NumberUtil.toDouble(txtDepositBaht.getText());
+            double d = NumberFormat.toDouble(txtDepositBaht.getText());
             MoneyToWord c = new MoneyToWord(d);
             lbMoneyText.setText("(" + c.toString() + ")");
             return;
@@ -1477,11 +1474,11 @@ public class DepositPanel extends javax.swing.JPanel {
 
     private void btnTransactionSaveDialogActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTransactionSaveDialogActionPerformed
         if (!"".equals(saveAccountBean.getAccount_code()) && !"".equals(profileBean.getP_custCode())) {
-            TransactionAdvanceDialog ta = new TransactionAdvanceDialog(null, true);
-            double balanceAmt = Double.parseDouble(txtBalance.getText().replace(",", ""));
-            double intAmt = Double.parseDouble(txtBalanceInterest.getText().replace(",", ""));
-            ta.initFormValues(profileBean.getP_custCode(), saveAccountBean.getAccount_code(), balanceAmt, intAmt);
-            ta.setVisible(true);
+            TransactionAdvanceDialog transactionAdvanceDialog = new TransactionAdvanceDialog(null, true);
+            double balanceAmt = NumberFormat.toDouble(txtBalance.getText());
+            double intAmt = NumberFormat.toDouble(txtBalanceInterest.getText());
+            transactionAdvanceDialog.initFormValues(profileBean.getP_custCode(), saveAccountBean.getAccount_code(), balanceAmt, intAmt);
+            transactionAdvanceDialog.setVisible(true);
         }
     }//GEN-LAST:event_btnTransactionSaveDialogActionPerformed
 
@@ -1504,7 +1501,7 @@ public class DepositPanel extends javax.swing.JPanel {
 
     private void txtWithdrawalBahtKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtWithdrawalBahtKeyReleased
         if (txtWithdrawalBaht.getText().trim().length() != 0) {
-            MoneyToWord c = new MoneyToWord(NumberUtil.toDouble(txtWithdrawalBaht.getText()));
+            MoneyToWord c = new MoneyToWord(NumberFormat.toDouble(txtWithdrawalBaht.getText()));
             lbMoneyText1.setText("(" + c.toString() + ")");
         } else {
             lbMoneyText1.setText("(...)");
@@ -1804,7 +1801,7 @@ public class DepositPanel extends javax.swing.JPanel {
     }
 
     private void saveAccountAct() {
-        double balance = NumberUtil.toDouble(txtDepositBaht.getText());
+        double balance = NumberFormat.toDouble(txtDepositBaht.getText());
         if (balance <= 0) {
             txtDepositBaht.requestFocus();
             return;
@@ -1846,8 +1843,8 @@ public class DepositPanel extends javax.swing.JPanel {
         transactionSaveBean.setT_custcode(profileBean.getP_custCode());
         transactionSaveBean.setT_description("ฝากเงิน");
         transactionSaveBean.setT_status(AppConstants.CB_STATUS_SAVE);
-        transactionSaveBean.setT_amount(NumberUtil.toDouble(dMoney));
-        transactionSaveBean.setMoney_in(NumberUtil.toDouble(dMoney));
+        transactionSaveBean.setT_amount(NumberFormat.toDouble(dMoney));
+        transactionSaveBean.setMoney_in(NumberFormat.toDouble(dMoney));
         transactionSaveBean.setMoney_out(0.00);
         transactionSaveBean.setT_empcode(Value.USER_CODE);
         transactionSaveBean.setT_docno(newDepositNo);
@@ -1982,27 +1979,33 @@ public class DepositPanel extends javax.swing.JPanel {
     }
 
     private void btnWithdrawMoney() {
-        double withdrawAmount = NumberUtil.toDouble(txtWithdrawalBaht.getText());
+        double balanceTotal = NumberFormat.toDouble(txtBalanceTotal.getText());
+        double withdrawAmount = NumberFormat.toDouble(txtWithdrawalBaht.getText());
         if (withdrawAmount <= 0) {
+            txtWithdrawalBaht.requestFocus();
             return;
         }
-
         if (withdrawAmount < cbSaveConfigBean.getMinWitdraw()) {
             MessageAlert.warningPopup(this, "ท่านต้องถอนเงินไม่ต่ำกว่า " + cbSaveConfigBean.getMinWitdraw());
+            txtWithdrawalBaht.requestFocus();
             return;
         }
-
+        if (withdrawAmount > balanceTotal) {
+            MessageAlert.warningPopup(this, "จำนวนเงินที่ต้องการถอนมากกว่า จำนวนเงินที่มีในระบบ");
+            txtWithdrawalBaht.requestFocus();
+            return;
+        }
         if (!checkAllowWithdraw()) {
             MessageAlert.warningPopup(this, "ท่านไม่มีสิทธิ์ถอนเงิน หรือระบุจำนวนสมาชิกที่สามารถถอนได้ไม่ครบถ้วน !");
+            txtWithdrawalBaht.requestFocus();
             return;
         }
-
         withdrawAccountAct();
     }
 
     private void withdrawAccountAct() {
-        double total = NumberUtil.toDouble(txtBalanceTotal.getText());
-        double balance = NumberUtil.toDouble(txtWithdrawalBaht.getText());
+        double total = NumberFormat.toDouble(txtBalanceTotal.getText());
+        double balance = NumberFormat.toDouble(txtWithdrawalBaht.getText());
         if (balance > 0 && balance <= total) {
             withdraw();
             return;
@@ -2017,7 +2020,7 @@ public class DepositPanel extends javax.swing.JPanel {
     }
 
     private void withdraw() {
-        double withdrawalBahtAmt = NumberUtil.toDouble(txtWithdrawalBaht.getText());
+        double withdrawalBahtAmt = NumberFormat.toDouble(txtWithdrawalBaht.getText());
         if (withdrawalBahtAmt < 0) {
             txtWithdrawalBaht.requestFocus();
         }
@@ -2042,9 +2045,9 @@ public class DepositPanel extends javax.swing.JPanel {
             cbTransactionSaveBean.setT_custcode(profileBean.getP_custCode());
             cbTransactionSaveBean.setT_description("ถอนเงิน");
             cbTransactionSaveBean.setT_status(AppConstants.CB_STATUS_WITHDRAW);
-            cbTransactionSaveBean.setT_amount(-NumberUtil.toDouble(wMoney));
+            cbTransactionSaveBean.setT_amount(-NumberFormat.toDouble(wMoney));
             cbTransactionSaveBean.setMoney_in(0.00);
-            cbTransactionSaveBean.setMoney_out(NumberUtil.toDouble(wMoney));
+            cbTransactionSaveBean.setMoney_out(NumberFormat.toDouble(wMoney));
             cbTransactionSaveBean.setT_empcode(Value.USER_CODE);
             cbTransactionSaveBean.setT_docno(withdrawDoc);
             cbTransactionSaveBean.setRemark(txtRemark2.getText());
@@ -2172,9 +2175,9 @@ public class DepositPanel extends javax.swing.JPanel {
             cbTransactionSaveBean.setT_custcode(profileBean.getP_custCode());
             cbTransactionSaveBean.setT_description("ปิดบัญชี");
             cbTransactionSaveBean.setT_status(AppConstants.CB_STATUS_CLOSE_SAVE);
-            cbTransactionSaveBean.setT_amount(-NumberUtil.toDouble(cMoney));
+            cbTransactionSaveBean.setT_amount(-NumberFormat.toDouble(cMoney));
             cbTransactionSaveBean.setMoney_in(0.00);
-            cbTransactionSaveBean.setMoney_out(NumberUtil.toDouble(cMoney));
+            cbTransactionSaveBean.setMoney_out(NumberFormat.toDouble(cMoney));
             cbTransactionSaveBean.setT_empcode(Value.USER_CODE);
             cbTransactionSaveBean.setT_docno(closeAccountDocNo);
             cbTransactionSaveBean.setRemark(txtCloseRemark.getText());
@@ -2190,7 +2193,7 @@ public class DepositPanel extends javax.swing.JPanel {
 
             if (cbTransactionSaveControl.saveCbTransactionSave(cbTransactionSaveBean)) {
                 saveAccountControl.updateAccountStatusAndRemark(AppConstants.CB_STATUS_CLOSE_SAVE, txtCloseRemark.getText(), saveAccountBean.getAccount_code());
-                profileControl.updateSaveBalance(NumberUtil.toDouble(cMoney), profileBean.getP_custCode());
+                profileControl.updateSaveBalance(NumberFormat.toDouble(cMoney), profileBean.getP_custCode());
                 configControl.updateWithdrawDocRunning();
 
                 MessageAlert.infoPopup(this, "ดำเนินการปิดบัญชีเงินฝากเรียบร้อยแล้ว");

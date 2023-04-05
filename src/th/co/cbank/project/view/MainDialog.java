@@ -81,7 +81,7 @@ public class MainDialog extends BaseSwing {
 
     private boolean cancelProfileStatus(ProfileBean profileBean) {
         String status = profileBean.getStatus();
-        if ("Cancel".equals(status)) {
+        if (status != null && "Cancel".equals(status)) {
             MessageAlert.warningPopup(this, "รหัสผู้ใช้งานนี้ได้ถูกยกเลิกออกจากระบบแล้ว !");
             txtProfileCode.setText("");
             txtProfileCode.requestFocus();
@@ -258,7 +258,7 @@ public class MainDialog extends BaseSwing {
         jMenuItem37 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle("ระบบบริหารธนาคารชุมชน V 1.1-2023.03.29");
+        setTitle("ระบบบริหารธนาคารชุมชน V 1.1-2023.04.06");
         setBackground(new java.awt.Color(255, 255, 255));
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {

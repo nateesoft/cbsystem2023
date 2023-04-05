@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import th.co.cbank.util.JTableUtil;
 import th.co.cbank.util.NumberFormat;
 import th.co.cbank.project.constants.AppConstants;
+import th.co.cbank.project.control.CbSaveAccountControl;
 import th.co.cbank.project.control.CbTransactionSaveControl;
 import th.co.cbank.project.model.CbSaveAccountBean;
 import th.co.cbank.project.model.CbSaveConfigBean;
@@ -194,7 +195,7 @@ public class PrintSavingBookDialog extends BaseDialogSwing {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel5)
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel6, javax.swing.GroupLayout.DEFAULT_SIZE, 436, Short.MAX_VALUE)
                     .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jLabel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -241,7 +242,7 @@ public class PrintSavingBookDialog extends BaseDialogSwing {
                                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 141, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(btnFind)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 467, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(btnClose)))))
                 .addContainerGap())
         );
@@ -322,9 +323,14 @@ public class PrintSavingBookDialog extends BaseDialogSwing {
                 DefaultTableModel model = (DefaultTableModel) tbTransaction.getModel();
                 clearModel(model);
                 SimpleDateFormat simp = new SimpleDateFormat("dd/MM/yy", Locale.ENGLISH);
-                List<CbTransactionSaveBean> transactionSave = transactionSaveControl.listSavingBookTransactionByAcccode(txtAccCode.getText());
+                CbSaveAccountControl saveAccountControl = new CbSaveAccountControl();
+                CbSaveAccountBean accountBean = saveAccountControl.getSaveAccountBean(txtAccCode.getText());
+                List<CbTransactionSaveBean> transactionSave = transactionSaveControl.listSavingBookTransactionByAcccode(txtAccCode.getText(), accountBean.getB_CUST_CODE());
                 int backupLineNo = 0;
                 int backupIndex = 0;
+                if (transactionSave.size() > 0) {
+                    btnPrint1.setEnabled(true);
+                }
                 for (CbTransactionSaveBean bean : transactionSave) {
                     Object[] p = new Object[12];
                     p[0] = simp.format(bean.getT_date());//01/05/58
@@ -371,6 +377,7 @@ public class PrintSavingBookDialog extends BaseDialogSwing {
         if (rd1.isSelected()) {
             printFrontBook();
         } else {
+            btnPrint1.setEnabled(false);
             saveStateTable();
             printTransactionSaveAgain(false);
         }
@@ -452,14 +459,18 @@ public class PrintSavingBookDialog extends BaseDialogSwing {
                         bean1.setIn("");
                     }
 
-                    bean1.setLine("" + tBean.getLineNo());
+                    int lineNo = tBean.getLineNo();
+                    if (lineNo == 0) {
+                        lineNo = tBean.getT_index() > 24 ? 1 : tBean.getT_index();
+                    }
+                    bean1.setLine("" + lineNo);
                     bean1.setDoc_no(tBean.getT_docno());
                     bean1.setIn(NumberFormat.showDouble2(tBean.getT_interest()));
 
                     listBean.add(bean1);
 
                     // update line print chk
-                    getCbTransactionSaveControl().updateLinePrint(tBean.getT_acccode(), tBean.getLineNo(), "" + tBean.getT_date());
+                    getCbTransactionSaveControl().updateLinePrint(tBean.getT_acccode(), tBean.getLineNo(), "" + tBean.getT_date(), tBean.getT_index());
                 }
 
                 if (!preview) {
@@ -479,15 +490,14 @@ public class PrintSavingBookDialog extends BaseDialogSwing {
         int size = model.getRowCount();
         for (int i = 0; i < size; i++) {
             boolean isCheck = Boolean.parseBoolean("" + tbTransaction.getValueAt(i, 7));
-            int lineNo = Integer.parseInt("" + tbTransaction.getValueAt(i, 6));
+            int lineNo = NumberFormat.toInt("" + tbTransaction.getValueAt(i, 6));
             String t_booktype = "" + tbTransaction.getValueAt(i, 1);
             String t_docno = "" + tbTransaction.getValueAt(i, 8);
             String t_date = "" + tbTransaction.getValueAt(i, 9);
-            int lineNoOld = Integer.parseInt("" + tbTransaction.getValueAt(i, 10));
-            int t_index = Integer.parseInt("" + tbTransaction.getValueAt(i, 11));
+            int lineNoOld = NumberFormat.toInt("" + tbTransaction.getValueAt(i, 10));
+            int t_index = NumberFormat.toInt("" + tbTransaction.getValueAt(i, 11));
 
             CbTransactionSaveBean bean = new CbTransactionSaveBean();
-            bean.setLineNo(lineNo);
             bean.setT_index(t_index);
             bean.setT_acccode(txtAccCode.getText());
             bean.setLineNo(lineNoOld);
@@ -495,6 +505,9 @@ public class PrintSavingBookDialog extends BaseDialogSwing {
             bean.setT_booktype(t_booktype);
 
             if (isCheck) {
+                if (lineNoOld == 0) {
+                    bean.setLineNo(lineNo);
+                }
                 transactionSaveControl.updateStateTable(bean, lineNoOld, t_date);
             } else {
                 transactionSaveControl.updateStateTable2(bean, lineNoOld, t_date);

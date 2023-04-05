@@ -94,7 +94,7 @@ public final class MoneyToWord {
                 .toCharArray();
 
         for (int index = digits.length; index > 0; --index) {
-            int digit = Integer.parseInt(String.valueOf(digits[digits.length
+            int digit = NumberFormat.toInt(String.valueOf(digits[digits.length
                     - index]));
             String digit_text = DIGIT_WORDS[digit];
             int scale_idx = ((1 < index)

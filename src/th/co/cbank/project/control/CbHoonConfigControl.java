@@ -22,6 +22,8 @@ public class CbHoonConfigControl extends BaseControl {
             bean.setHoonVolumnMax(rs.getInt("HoonVolumnMax"));
             bean.setHoonDeviden(rs.getDouble("HoonDeviden"));
             bean.setHoonBuyMin(rs.getInt("HoonBuyMin"));
+            bean.setCreate_date(rs.getString("create_date"));
+            bean.setUpdate_date(rs.getString("update_date"));
 
             listBean.add(bean);
         }
@@ -32,6 +34,18 @@ public class CbHoonConfigControl extends BaseControl {
     public List<CbHoonConfigBean> listCbHoonConfig() {
         try {
             String sql = "select * from cb_hoon_config";
+            ResultSet rs = MySQLConnect.getResultSet(sql);
+            return mappingBean(rs);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+            return new ArrayList();
+        }
+    }
+    
+    public List<CbHoonConfigBean> listCbHoonConfigHistory() {
+        try {
+            String sql = "select * from cb_hoon_config_history";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             return mappingBean(rs);
         } catch (Exception e) {
@@ -60,15 +74,14 @@ public class CbHoonConfigControl extends BaseControl {
         boolean isSave = false;
         try {
             String sql = "insert into cb_hoon_config "
-                    + "(hoonCode,hoonName,hoonRate,hoonVolumnMax,hoonDeviden,hoonBuyMin)  "
+                    + "(hoonCode,hoonName,hoonRate,hoonVolumnMax,hoonDeviden,hoonBuyMin,create_date,update_date)  "
                     + "values('" + bean.getHoonCode() + "',"
                     + "'" + ThaiUtil.Unicode2ASCII(bean.getHoonName()) + "',"
                     + "'" + bean.getHoonRate() + "',"
                     + "'" + bean.getHoonVolumnMax() + "',"
                     + "'" + bean.getHoonDeviden() + "',"
-                    + "'" + bean.getHoonBuyMin() + "')";
-            String sqlChk = "select * from cb_hoon_config "
-                    + "where HoonCode='" + bean.getHoonCode() + "' ";
+                    + "'" + bean.getHoonBuyMin() + "',now(),now())";
+            String sqlChk = "select * from cb_hoon_config where HoonCode='" + bean.getHoonCode() + "' ";
             ResultSet rs = MySQLConnect.getResultSet(sqlChk);
             if (rs.next()) {
                 isSave = updateCbHoonConfig(bean);
@@ -76,6 +89,11 @@ public class CbHoonConfigControl extends BaseControl {
                 update(sql);
                 isSave = true;
             }
+            
+            // save history
+            String sqlHistory = "insert into cb_hoon_config_history "
+                    + "select * from cb_hoon_config where HoonCode='" + bean.getHoonCode() + "'";
+            MySQLConnect.exeUpdate(sqlHistory);
 
             rs.close();
         } catch (Exception e) {
@@ -94,7 +112,8 @@ public class CbHoonConfigControl extends BaseControl {
                     + "hoonRate='" + bean.getHoonRate() + "', "
                     + "hoonVolumnMax='" + bean.getHoonVolumnMax() + "', "
                     + "hoonDeviden='" + bean.getHoonDeviden() + "', "
-                    + "hoonBuyMin='" + bean.getHoonBuyMin() + "' "
+                    + "hoonBuyMin='" + bean.getHoonBuyMin() + "', "
+                    + "update_date=now() "
                     + "where HoonCode='" + bean.getHoonCode() + "'";
             update(sql);
             return true;

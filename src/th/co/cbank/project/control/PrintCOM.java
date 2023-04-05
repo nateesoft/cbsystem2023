@@ -757,8 +757,8 @@ public final class PrintCOM extends BaseControl {
         BranchControl bc = new BranchControl();
         BranchBean bBean = bc.getData();
 
-        double feeProjectAmt = Double.parseDouble(feeProject);
-        double feeMemberAmt = Double.parseDouble(feeMember);
+        double feeProjectAmt = NumberFormat.toDouble(feeProject);
+        double feeMemberAmt = NumberFormat.toDouble(feeMember);
 
         CbFeeTransactionControl feeCon = new CbFeeTransactionControl();
 
@@ -913,7 +913,7 @@ public final class PrintCOM extends BaseControl {
         BranchControl bc = new BranchControl();
         BranchBean bBean = bc.getData();
 
-        double feeOpenAmt = Double.parseDouble(feeOpenAcc);
+        double feeOpenAmt = NumberFormat.toDouble(feeOpenAcc);
 
         CbFeeTransactionControl feeCon = new CbFeeTransactionControl();
 
@@ -1023,7 +1023,7 @@ public final class PrintCOM extends BaseControl {
         BranchControl bc = new BranchControl();
         BranchBean bBean = bc.getData();
 
-        double feeLoanOpenAmt = Double.parseDouble(feeLoanOpen);
+        double feeLoanOpenAmt = NumberFormat.toDouble(feeLoanOpen);
 
         CbFeeTransactionControl feeCon = new CbFeeTransactionControl();
 

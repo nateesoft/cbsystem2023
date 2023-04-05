@@ -15,26 +15,23 @@ public class CbUserControl extends BaseControl {
     private final Logger logger = Logger.getLogger(CbUserControl.class);
 
     public CbUserBean mappingBean(ResultSet rs) throws SQLException {
-        CbUserBean bean = null;
-        if (rs.next()) {
-            bean = new CbUserBean();
-            bean.setUsername(rs.getString("Username"));
-            bean.setPassword(rs.getString("Password"));
-            bean.setName(ThaiUtil.ASCII2Unicode(rs.getString("Name")));
-            bean.setLastname(ThaiUtil.ASCII2Unicode(rs.getString("Lastname")));
-            bean.setUsergroup(rs.getString("Usergroup"));
-            bean.setIDCard(rs.getString("IDCard"));
-            bean.setAddr_no(rs.getString("Addr_no"));
-            bean.setAddr_moo(rs.getString("Addr_moo"));
-            bean.setAddr_road(ThaiUtil.ASCII2Unicode(rs.getString("Addr_road")));
-            bean.setAddr_soi(ThaiUtil.ASCII2Unicode(rs.getString("Addr_soi")));
-            bean.setAddr_tambon(ThaiUtil.ASCII2Unicode(rs.getString("Addr_tambon")));
-            bean.setAddr_amphur(ThaiUtil.ASCII2Unicode(rs.getString("Addr_amphur")));
-            bean.setAddr_province(ThaiUtil.ASCII2Unicode(rs.getString("Addr_province")));
-            bean.setAddr_post(rs.getString("Addr_post"));
-            bean.setAddr_tel(rs.getString("Addr_tel"));
-            bean.setAddr_tel_home(rs.getString("Addr_tel_home"));
-        }
+        CbUserBean bean = new CbUserBean();
+        bean.setUsername(rs.getString("Username"));
+        bean.setPassword(rs.getString("Password"));
+        bean.setName(ThaiUtil.ASCII2Unicode(rs.getString("Name")));
+        bean.setLastname(ThaiUtil.ASCII2Unicode(rs.getString("Lastname")));
+        bean.setUsergroup(rs.getString("Usergroup"));
+        bean.setIDCard(rs.getString("IDCard"));
+        bean.setAddr_no(rs.getString("Addr_no"));
+        bean.setAddr_moo(rs.getString("Addr_moo"));
+        bean.setAddr_road(ThaiUtil.ASCII2Unicode(rs.getString("Addr_road")));
+        bean.setAddr_soi(ThaiUtil.ASCII2Unicode(rs.getString("Addr_soi")));
+        bean.setAddr_tambon(ThaiUtil.ASCII2Unicode(rs.getString("Addr_tambon")));
+        bean.setAddr_amphur(ThaiUtil.ASCII2Unicode(rs.getString("Addr_amphur")));
+        bean.setAddr_province(ThaiUtil.ASCII2Unicode(rs.getString("Addr_province")));
+        bean.setAddr_post(rs.getString("Addr_post"));
+        bean.setAddr_tel(rs.getString("Addr_tel"));
+        bean.setAddr_tel_home(rs.getString("Addr_tel_home"));
 
         return bean;
     }
@@ -67,7 +64,9 @@ public class CbUserControl extends BaseControl {
         CbUserBean bean = null;
         String sql = "select * from cb_user where username='" + username + "'";
         try (ResultSet rs = MySQLConnect.getResultSet(sql)) {
-            bean = mappingBean(rs);
+            if(rs.next()){
+                bean = mappingBean(rs);
+            }
         } catch (Exception e) {
             logger.error(e.getMessage());
             MessageAlert.errorPopup(this.getClass(), e.getMessage());
@@ -152,7 +151,9 @@ public class CbUserControl extends BaseControl {
         String sql = "select * from cb_user where username='" + user + "' "
                 + "and password=md5('" + pass + "') ";
         try (ResultSet rs = MySQLConnect.getResultSet(sql)) {
-            return mappingBean(rs);
+            if(rs.next()){
+                return mappingBean(rs);
+            }
         } catch (Exception e) {
             logger.error(e.getMessage());
             MessageAlert.errorPopup(this.getClass(), e.getMessage());
