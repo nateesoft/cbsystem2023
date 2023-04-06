@@ -9,7 +9,6 @@ import java.util.List;
 import java.util.Locale;
 import javax.swing.table.DefaultTableModel;
 import org.apache.log4j.Logger;
-import th.co.cbank.util.JTableUtil;
 import th.co.cbank.util.NumberFormat;
 import th.co.cbank.project.constants.AppConstants;
 import th.co.cbank.project.control.CbSaveAccountControl;
@@ -30,6 +29,7 @@ public class PrintSavingBookDialog extends BaseDialogSwing {
     public PrintSavingBookDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("PrintSavingBookDialog init");
     }
 
     @SuppressWarnings("unchecked")
@@ -316,9 +316,9 @@ public class PrintSavingBookDialog extends BaseDialogSwing {
                 tbTransaction.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
                 tbTransaction.setRowHeight(30);
 
-                JTableUtil.alignRight(tbTransaction, 2);
-                JTableUtil.alignRight(tbTransaction, 3);
-                JTableUtil.alignRight(tbTransaction, 4);
+                TableUtil.alignRight(tbTransaction, 2);
+                TableUtil.alignRight(tbTransaction, 3);
+                TableUtil.alignRight(tbTransaction, 4);
 
                 DefaultTableModel model = (DefaultTableModel) tbTransaction.getModel();
                 clearModel(model);

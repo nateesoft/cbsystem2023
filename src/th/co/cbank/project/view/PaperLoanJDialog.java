@@ -30,6 +30,7 @@ public class PaperLoanJDialog extends BaseDialogSwing {
     public PaperLoanJDialog(java.awt.Frame parent, boolean modal, String loanAccountCode) {
         super(parent, modal);
         initComponents();
+        logger.debug("PaperLoanJDialog init");
 
         this.loanAccountCode = loanAccountCode;
         initLoad();

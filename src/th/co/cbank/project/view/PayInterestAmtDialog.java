@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import org.apache.log4j.Logger;
-import th.co.cbank.util.JTableUtil;
 import th.co.cbank.util.DateFormat;
 import th.co.cbank.util.NumberFormat;
 import th.co.cbank.project.model.mapping.PayInterestAmtMapping;
@@ -25,6 +24,8 @@ public class PayInterestAmtDialog extends BaseDialogSwing {
     public PayInterestAmtDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("PayInterestAmtDialog init");
+        
         this.parent = parent;
 
         initTable();
@@ -204,10 +205,10 @@ public class PayInterestAmtDialog extends BaseDialogSwing {
     // End of variables declaration//GEN-END:variables
 
     private void initTable() {
-        th.co.cbank.util.JTableUtil.defaultTemplate(tbData);
+        th.co.cbank.util.TableUtil.defaultTemplate(tbData);
         tbData.setRowHeight(30);
-        JTableUtil.alignRight(tbData, 3);
-        JTableUtil.alignRight(tbData, 4);
+        TableUtil.alignRight(tbData, 3);
+        TableUtil.alignRight(tbData, 4);
 
         clearModel();
     }

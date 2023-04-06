@@ -38,6 +38,7 @@ public class LoadExcelAccountLoanDialog extends BaseDialogSwing {
     public LoadExcelAccountLoanDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("LoadExcelAccountLoanDialog init");
 
         model = (DefaultTableModel) tbData.getModel();
         tbData.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
@@ -426,7 +427,6 @@ public class LoadExcelAccountLoanDialog extends BaseDialogSwing {
     }
 
     private void loadData() {
-        String idCard1 = "";
         double loanAmt = 0.0;
         double loanIntAmt = 0.0;
 
@@ -439,7 +439,6 @@ public class LoadExcelAccountLoanDialog extends BaseDialogSwing {
             int count = 0;
             while ((line = br.readLine()) != null) {
                 count++;
-                idCard1 = line;
                 if (line.equals("")) {
                     continue;
                 }
@@ -458,8 +457,8 @@ public class LoadExcelAccountLoanDialog extends BaseDialogSwing {
                 model.addRow(new Object[]{(count), idCard, loanAmt, loanIntAmt});
             }
             br.close();
-        } catch (Exception e) {
-
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
         }
     }
 

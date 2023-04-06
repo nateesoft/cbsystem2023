@@ -17,6 +17,7 @@ public class PrefixDialog extends BaseDialogSwing {
     public PrefixDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("PrefixDialog init");
 
         initTable();
         loadPrefixData();

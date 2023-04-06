@@ -4,7 +4,6 @@ import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -35,6 +34,7 @@ public class OpenAccountReport extends BaseDialogSwing {
     public OpenAccountReport(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("OpenAccountReport init");
 
         this.parent = parent;
 

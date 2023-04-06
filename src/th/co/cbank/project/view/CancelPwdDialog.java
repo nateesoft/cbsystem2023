@@ -13,6 +13,7 @@ public class CancelPwdDialog extends BaseDialogSwing {
     public CancelPwdDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("CancelPwdDialog init");
     }
 
     public boolean isPwdOk() {

@@ -57,6 +57,8 @@ public class MainDialog extends BaseSwing {
 
     public MainDialog(java.awt.Frame parent, boolean modal) {
         initComponents();
+        logger.debug("MainDialog init");
+        
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         System.out.println(this.getTitle());
         try {
@@ -1853,11 +1855,6 @@ public class MainDialog extends BaseSwing {
             txtAccCode.setEditable(false);
         }
         showListSelect();
-    }
-
-    public void updateInterest() {
-        WaitDialog waitDialog = new WaitDialog(this, true);
-        waitDialog.setVisible(true);
     }
 
     private void txtProfileCodeKeyPressedAction(java.awt.event.KeyEvent evt) {

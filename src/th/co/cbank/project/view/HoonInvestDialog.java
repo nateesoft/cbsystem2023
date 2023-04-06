@@ -15,17 +15,14 @@ public class HoonInvestDialog extends BaseDialogSwing {
 
     private final Logger logger = Logger.getLogger(HoonInvestDialog.class);
     private DefaultTableModel model;
-    private double balanceAmt = 0;
 
     public HoonInvestDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("HoonInvestDialog init");
 
         initTable();
-        lbBranchName.setText(getBranchControl().getData().getName());
-        lbDateProcess.setText(DateUtil.getCurrentDateStr());
-
-        txtTotalHoonAmt.setText(NumberFormat.showDouble2(getProfileControl().getTotalHoonQty()));
+        initData();
 
         txtProfitOpAmt.requestFocus();
     }
@@ -554,7 +551,6 @@ public class HoonInvestDialog extends BaseDialogSwing {
             double profitOpAmt = NumberFormat.toDouble(txtProfitOpAmt.getText());
             double reserveFundAmt = NumberFormat.toDouble(txtReserveFundAmt.getText());
             double total = profitOpAmt * reserveFundAmt / 100;
-            balanceAmt = profitOpAmt - total;
             txtTotalReserveFundAmt.setText(NumberFormat.showDouble2(total));
             txtPublicBenefitAmt.requestFocus();
         }
@@ -658,7 +654,6 @@ public class HoonInvestDialog extends BaseDialogSwing {
         double profitOpAmt = NumberFormat.toDouble(txtProfitOpAmt.getText());
         double publicBenefitAmt = NumberFormat.toDouble(txtPublicBenefitAmt.getText());
         double totalBenefitAmt = profitOpAmt * publicBenefitAmt / 100;
-        balanceAmt = profitOpAmt - totalBenefitAmt;
         txtTotalBenefitAmt.setText(NumberFormat.showDouble2(totalBenefitAmt));
 
         double totalReserveFundAmt = NumberFormat.toDouble(txtTotalReserveFundAmt.getText());
@@ -696,5 +691,12 @@ public class HoonInvestDialog extends BaseDialogSwing {
 
     private void saveData() {
 
+    }
+
+    private void initData() {
+        lbBranchName.setText(getBranchControl().getData().getName());
+        lbDateProcess.setText(DateUtil.getCurrentDateStr());
+
+        txtTotalHoonAmt.setText(NumberFormat.showDouble2(getProfileControl().getTotalHoonQty()));
     }
 }

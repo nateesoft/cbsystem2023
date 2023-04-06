@@ -38,7 +38,6 @@ import th.co.cbank.project.view.TransactionAdvanceDialog;
 import th.co.cbank.project.view.TransactionAdvanceMethod;
 import th.co.cbank.util.DateChooseDialog;
 import th.co.cbank.util.DateFormat;
-import th.co.cbank.util.JTableUtil;
 import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.MoneyToWord;
 import th.co.cbank.util.NumberFormat;
@@ -62,6 +61,7 @@ public class DepositPanel extends javax.swing.JPanel {
 
     public DepositPanel(ProfileBean profileBean, CbSaveAccountBean saveAccountBean, int selectIndex) {
         initComponents();
+        logger.debug("DepositPanel init");
 
         initLoadTable();
 
@@ -1912,9 +1912,9 @@ public class DepositPanel extends javax.swing.JPanel {
                 + "order by t_date desc,t_time desc ";
         List<CbTransactionSaveBean> listSave = cbTransactionSaveControl.listTransactionSave(where);
         DefaultTableModel modelTbTransSave = (DefaultTableModel) tbTransSave.getModel();
-        JTableUtil.alignRight(tbTransSave, 3);
-        JTableUtil.alignRight(tbTransSave, 4);
-        JTableUtil.alignRight(tbTransSave, 5);
+        TableUtil.alignRight(tbTransSave, 3);
+        TableUtil.alignRight(tbTransSave, 4);
+        TableUtil.alignRight(tbTransSave, 5);
         TableUtil.clearModel(modelTbTransSave);
         String type = "";
         for (CbTransactionSaveBean sBean : listSave) {

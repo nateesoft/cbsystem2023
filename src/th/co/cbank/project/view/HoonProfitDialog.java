@@ -24,6 +24,7 @@ public class HoonProfitDialog extends BaseDialogSwing {
     public HoonProfitDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("HoonProfitDialog init");
 
         loadSummary();
 

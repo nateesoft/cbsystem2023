@@ -1,7 +1,6 @@
 package th.co.cbank.project.view;
 
 import javax.swing.JFrame;
-import org.apache.log4j.Logger;
 import th.co.cbank.project.control.AddressControl;
 import th.co.cbank.project.control.BranchControl;
 import th.co.cbank.project.control.CbBondsmanControl;

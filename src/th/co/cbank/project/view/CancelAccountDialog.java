@@ -23,6 +23,7 @@ public class CancelAccountDialog extends BaseDialogSwing {
     public CancelAccountDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("CancelAccountDialog init");
 
         initTable();
         findAccount();

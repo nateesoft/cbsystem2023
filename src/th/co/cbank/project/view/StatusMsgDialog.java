@@ -17,6 +17,7 @@ public class StatusMsgDialog extends BaseDialogSwing {
     public StatusMsgDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("StatusMsgDialog init");
 
         initTable();
         loadExpenseData();

@@ -7,9 +7,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import javax.swing.SwingWorker;
 import org.apache.log4j.Logger;
-import th.co.cbank.project.control.CbSaveAccountControl;
 import th.co.cbank.project.control.CbUserControl;
 import th.co.cbank.util.DateFormat;
 import th.co.cbank.project.control.Value;
@@ -30,6 +28,7 @@ public class LoginDialog extends BaseDialogSwing {
     public LoginDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("LoginDialog init");
 
         this.parent = parent;
         String textNews = ReadText.readTextToString("news.txt").trim();

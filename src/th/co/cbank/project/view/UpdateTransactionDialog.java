@@ -1,6 +1,7 @@
 package th.co.cbank.project.view;
 
 import java.util.List;
+import org.apache.log4j.Logger;
 import th.co.cbank.project.control.CbSaveAccountControl;
 import th.co.cbank.project.control.CbTransactionSaveControl;
 import th.co.cbank.project.model.CbSaveAccountBean;
@@ -8,12 +9,14 @@ import th.co.cbank.util.MessageAlert;
 
 public class UpdateTransactionDialog extends javax.swing.JDialog {
 
+    private final Logger logger = Logger.getLogger(UpdateTransactionDialog.class);
     private final CbSaveAccountControl saveAccountControl = new CbSaveAccountControl();
     private final CbTransactionSaveControl cbTransactionSaveControl = new CbTransactionSaveControl();
 
     public UpdateTransactionDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.info("UpdateTransactionDialog init");
     }
 
     @SuppressWarnings("unchecked")
@@ -172,6 +175,7 @@ public class UpdateTransactionDialog extends javax.swing.JDialog {
     // End of variables declaration//GEN-END:variables
 
     private void process() {
+        logger.info("=> process");
         String txtCustomerCode = txtCustCode.getText();
         String txtAccountNumber = txtAccountNo.getText();
         String sqlPlus = "";

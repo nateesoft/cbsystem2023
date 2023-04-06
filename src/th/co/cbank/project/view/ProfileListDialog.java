@@ -11,7 +11,6 @@ import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import org.apache.log4j.Logger;
-import th.co.cbank.util.JTableUtil;
 import th.co.cbank.util.DateFormat;
 import th.co.cbank.project.constants.AppConstants;
 import th.co.cbank.project.model.CbMemberTypeBean;
@@ -28,6 +27,7 @@ public class ProfileListDialog extends BaseDialogSwing {
     public ProfileListDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("ProfileListDialog init");
 
         this.parent = parent;
 
@@ -404,20 +404,8 @@ public class ProfileListDialog extends BaseDialogSwing {
     private void loadData() {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         TableUtil.clearModel(model);
-
-        Date d1 = DateFormat.getLocal_ddMMyyyy(txtDate1.getText());
-        String sql = "select p.*, group_concat(account_code) listAcc, group_concat(loan_docno) listLoan "
-                + "from cb_profile p left join cb_save_account s on p.p_custcode=s.b_cust_code "
-                + "left join cb_loan_account l on p.p_custcode=l.cust_code "
-                + "where 1=1 "
-                + "and p_member_start >= '" + DateFormat.getMySQL_Date(d1) + "' ";
-        if (cbMemberType.getSelectedIndex() != 0) {
-            sql += " and p_member_type='" + cbMemberType.getSelectedIndex() + "' ";
-        }
-
-        sql += " group by p.p_custCode order by p.p_index ";
-
-        List<ProfileMapping> listProfile = getProfileControl().searchProfile(sql);
+        
+        List<ProfileMapping> listProfile = getProfileControl().searchProfile2(txtDate1.getText(), cbMemberType.getSelectedIndex());
         int i1 = 0;
         int i2 = 0;
         for (int i = 0; i < listProfile.size(); i++) {
@@ -451,8 +439,8 @@ public class ProfileListDialog extends BaseDialogSwing {
             });
         }
 
-        JTableUtil.sortDouble(jTable1, 7);
-        JTableUtil.sortDouble(jTable1, 10);
+        TableUtil.sortDouble(jTable1, 7);
+        TableUtil.sortDouble(jTable1, 10);
 
         jTextField1.setText("" + i1);
         jTextField2.setText("" + i2);
@@ -465,16 +453,16 @@ public class ProfileListDialog extends BaseDialogSwing {
         JTableHeader tHeader = jTable1.getTableHeader();
         tHeader.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, AppConstants.DEFAULT_FONT_SIZE));
 
-        JTableUtil.alignCenter(jTable1, 0);
-        JTableUtil.alignCenter(jTable1, 1);
-        JTableUtil.alignCenter(jTable1, 4);
-        JTableUtil.alignCenter(jTable1, 5);
-        JTableUtil.alignCenter(jTable1, 6);
-        JTableUtil.alignCenter(jTable1, 10);
+        TableUtil.alignCenter(jTable1, 0);
+        TableUtil.alignCenter(jTable1, 1);
+        TableUtil.alignCenter(jTable1, 4);
+        TableUtil.alignCenter(jTable1, 5);
+        TableUtil.alignCenter(jTable1, 6);
+        TableUtil.alignCenter(jTable1, 10);
 
-        JTableUtil.alignRight(jTable1, 7);
-        JTableUtil.alignRight(jTable1, 8);
-        JTableUtil.alignRight(jTable1, 9);
+        TableUtil.alignRight(jTable1, 7);
+        TableUtil.alignRight(jTable1, 8);
+        TableUtil.alignRight(jTable1, 9);
 
         List<CbMemberTypeBean> listM = getMemberTypeControl().listMemberType();
         cbMemberType.addItem("เลือกทั้งหมด");

@@ -21,6 +21,7 @@ public class ListMenuDialog extends BaseDialogSwing {
             CbSaveAccountBean saveAccountBean, CbLoanAccountBean loanAccountBean, List<CbSaveAccountBean> listSaveAccounts, List<CbLoanAccountBean> listLoanAccounts, String selectAccountType) {
         super(parent, modal);
         initComponents();
+        logger.debug("ListMenuDialog init");
 
         this.saveAccountBean = saveAccountBean;
         this.loanAccountBean = loanAccountBean;

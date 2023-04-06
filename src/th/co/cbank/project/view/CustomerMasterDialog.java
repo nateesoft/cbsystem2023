@@ -19,6 +19,7 @@ public class CustomerMasterDialog extends BaseDialogSwing {
     public CustomerMasterDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("CustomerMasterDialog init");
 
         initTable();
         findCustomer();

@@ -29,6 +29,7 @@ public class PrintLoanBookDialog extends BaseDialogSwing {
     public PrintLoanBookDialog(java.awt.Frame parent, boolean modal, String accCode) {
         super(parent, modal);
         initComponents();
+        logger.debug("PrintLoanBookDialog init");
 
         if (StringUtil.isNotNullString(accCode)) {
             txtLoanCode.setText(accCode);

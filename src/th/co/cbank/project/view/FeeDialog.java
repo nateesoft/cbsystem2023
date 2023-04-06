@@ -17,6 +17,7 @@ public class FeeDialog extends BaseDialogSwing {
     public FeeDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("FeeDialog init");
 
         initTable();
         loadExpenseData();
@@ -296,7 +297,6 @@ public class FeeDialog extends BaseDialogSwing {
     private void resetData() {
         txtExpendId.setText("");
         txtExpendName.setText("");
-
         txtExpendId.setEditable(true);
         txtExpendId.requestFocus();
     }

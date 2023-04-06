@@ -27,12 +27,12 @@ public class HoonReportAllDialog extends BaseDialogSwing {
     private SimpleDateFormat simp = new SimpleDateFormat("dd/MM/yyyy");
     private DecimalFormat dec = new DecimalFormat("#,##0.00");
     private Frame parent;
-    private String sqlShow;
     private final ViewReport viewReport = new ViewReport();
 
     public HoonReportAllDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("HoonReportAllDialog");
 
         this.parent = parent;
 

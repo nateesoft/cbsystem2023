@@ -22,6 +22,7 @@ public class ListWithdrawConfirmDialog extends BaseDialogSwing {
     public ListWithdrawConfirmDialog(java.awt.Frame parent, boolean modal, PrintSlipBean psBean) {
         super(parent, modal);
         initComponents();
+        logger.debug("ListWithdrawConfirmDialog init");
 
         this.psBean = psBean;
         this.parent = parent;

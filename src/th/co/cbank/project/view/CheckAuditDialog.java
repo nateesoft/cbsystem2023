@@ -23,48 +23,10 @@ public class CheckAuditDialog extends BaseDialogSwing {
     public CheckAuditDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("CheckAuditDialog init");
 
         clearAllModel();
-
-        tbProfile.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
-        tbSaveAccount.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
-        tbTransaction.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
-        tbTransactionLoan.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
-
-        tbProfile.setRowHeight(30);
-        tbSaveAccount.setRowHeight(30);
-        tbTransaction.setRowHeight(30);
-        tbTransactionLoan.setRowHeight(30);
-
-        JTableHeader h1 = tbProfile.getTableHeader();
-        h1.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, 12));
-
-        JTableHeader h2 = tbSaveAccount.getTableHeader();
-        h2.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, 12));
-
-        JTableHeader h3 = tbTransaction.getTableHeader();
-        h3.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, 12));
-
-        JTableHeader h4 = tbTransactionLoan.getTableHeader();
-        h4.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, 12));
-
-        // init table
-        TableUtil.alignTable(tbProfile, 3, SwingConstants.RIGHT);
-        TableUtil.alignTable(tbProfile, 4, SwingConstants.RIGHT);
-        TableUtil.alignTable(tbProfile, 5, SwingConstants.RIGHT);
-
-        TableUtil.alignTable(tbTransaction, 3, SwingConstants.RIGHT);
-        TableUtil.alignTable(tbTransaction, 4, SwingConstants.RIGHT);
-        TableUtil.alignTable(tbTransaction, 5, SwingConstants.RIGHT);
-        TableUtil.alignTable(tbTransaction, 6, SwingConstants.RIGHT);
-        TableUtil.alignTable(tbTransaction, 7, SwingConstants.RIGHT);
-
-        TableUtil.alignTable(tbSaveAccount, 2, SwingConstants.RIGHT);
-        TableUtil.alignTable(tbSaveAccount, 3, SwingConstants.RIGHT);
-
-        TableUtil.alignTable(tbTransactionLoan, 3, SwingConstants.RIGHT);
-        TableUtil.alignTable(tbTransactionLoan, 4, SwingConstants.RIGHT);
-        TableUtil.alignTable(tbTransactionLoan, 5, SwingConstants.RIGHT);
+        initTable();
 
         tbProfile.requestFocus();
     }
@@ -482,8 +444,6 @@ public class CheckAuditDialog extends BaseDialogSwing {
         TableUtil.clearModel(model4);
 
         String custCode = "" + tbProfile.getValueAt(tbProfile.getSelectedRow(), 1);
-        CbSaveAccountControl saveAccountControl = new CbSaveAccountControl();
-
         List<Object[]> listModel2 = saveAccountControl.getAccountWhereCustCode(custCode);
         for (Object[] data : listModel2) {
             model2.addRow(data);
@@ -527,5 +487,47 @@ public class CheckAuditDialog extends BaseDialogSwing {
 
         // reload data
         clearAllModel();
+    }
+
+    private void initTable() {
+        tbProfile.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
+        tbSaveAccount.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
+        tbTransaction.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
+        tbTransactionLoan.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
+
+        tbProfile.setRowHeight(30);
+        tbSaveAccount.setRowHeight(30);
+        tbTransaction.setRowHeight(30);
+        tbTransactionLoan.setRowHeight(30);
+
+        JTableHeader h1 = tbProfile.getTableHeader();
+        h1.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, 12));
+
+        JTableHeader h2 = tbSaveAccount.getTableHeader();
+        h2.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, 12));
+
+        JTableHeader h3 = tbTransaction.getTableHeader();
+        h3.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, 12));
+
+        JTableHeader h4 = tbTransactionLoan.getTableHeader();
+        h4.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, 12));
+
+        // init table
+        TableUtil.alignTable(tbProfile, 3, SwingConstants.RIGHT);
+        TableUtil.alignTable(tbProfile, 4, SwingConstants.RIGHT);
+        TableUtil.alignTable(tbProfile, 5, SwingConstants.RIGHT);
+
+        TableUtil.alignTable(tbTransaction, 3, SwingConstants.RIGHT);
+        TableUtil.alignTable(tbTransaction, 4, SwingConstants.RIGHT);
+        TableUtil.alignTable(tbTransaction, 5, SwingConstants.RIGHT);
+        TableUtil.alignTable(tbTransaction, 6, SwingConstants.RIGHT);
+        TableUtil.alignTable(tbTransaction, 7, SwingConstants.RIGHT);
+
+        TableUtil.alignTable(tbSaveAccount, 2, SwingConstants.RIGHT);
+        TableUtil.alignTable(tbSaveAccount, 3, SwingConstants.RIGHT);
+
+        TableUtil.alignTable(tbTransactionLoan, 3, SwingConstants.RIGHT);
+        TableUtil.alignTable(tbTransactionLoan, 4, SwingConstants.RIGHT);
+        TableUtil.alignTable(tbTransactionLoan, 5, SwingConstants.RIGHT);
     }
 }

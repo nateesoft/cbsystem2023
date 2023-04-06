@@ -16,6 +16,7 @@ public class InputWithdrawDialog extends BaseDialogSwing {
     public InputWithdrawDialog(java.awt.Frame parent, boolean modal, List<CbWithdrawAllowBean> listBean) {
         super(parent, modal);
         initComponents();
+        logger.debug("InputWithdrawDialog init");
 
         this.listBean = listBean;
     }

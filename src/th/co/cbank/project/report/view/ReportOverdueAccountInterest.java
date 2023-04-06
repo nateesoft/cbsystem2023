@@ -12,7 +12,6 @@ import th.co.cbank.project.model.CbLoanAccountBean;
 import th.co.cbank.util.ClipboardUtil;
 import th.co.cbank.util.DateChooseDialog;
 import th.co.cbank.util.DateFormat;
-import th.co.cbank.util.JTableUtil;
 import th.co.cbank.util.NumberFormat;
 import th.co.cbank.util.TableUtil;
 
@@ -25,6 +24,8 @@ public class ReportOverdueAccountInterest extends javax.swing.JDialog {
     public ReportOverdueAccountInterest(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("ReportOverdueAccountInterest init");
+        
         this.parent = parent;
 
         initTable();
@@ -311,7 +312,7 @@ public class ReportOverdueAccountInterest extends javax.swing.JDialog {
     }//GEN-LAST:event_txtCode2MouseClicked
 
     private void btnExcelFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcelFileActionPerformed
-        JTableUtil.exportData("Report-Overdue-Account-Interest", tbReport, this);
+        TableUtil.exportData("Report-Overdue-Account-Interest", tbReport, this);
     }//GEN-LAST:event_btnExcelFileActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -363,14 +364,14 @@ public class ReportOverdueAccountInterest extends javax.swing.JDialog {
 
     private void initTable() {
         model = (DefaultTableModel) tbReport.getModel();
-        JTableUtil.defaultTemplate(tbReport);
+        TableUtil.defaultTemplate(tbReport);
 
-        JTableUtil.alignCenter(tbReport, 3);
-        JTableUtil.alignCenter(tbReport, 4);
-        JTableUtil.alignCenter(tbReport, 5);
-        JTableUtil.alignRight(tbReport, 6);
-        JTableUtil.alignRight(tbReport, 7);
-        JTableUtil.alignRight(tbReport, 8);
-        JTableUtil.alignRight(tbReport, 9);
+        TableUtil.alignCenter(tbReport, 3);
+        TableUtil.alignCenter(tbReport, 4);
+        TableUtil.alignCenter(tbReport, 5);
+        TableUtil.alignRight(tbReport, 6);
+        TableUtil.alignRight(tbReport, 7);
+        TableUtil.alignRight(tbReport, 8);
+        TableUtil.alignRight(tbReport, 9);
     }
 }

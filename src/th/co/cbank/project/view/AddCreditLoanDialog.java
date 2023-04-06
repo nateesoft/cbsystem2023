@@ -16,7 +16,8 @@ public class AddCreditLoanDialog extends BaseDialogSwing {
     public AddCreditLoanDialog(java.awt.Frame parent, boolean modal, String profileCode, String empCode) {
         super(parent, modal);
         initComponents();
-
+        logger.debug("AddCreditLoanDialog init");
+        
         this.profileCode = profileCode;
         this.empCode = empCode;
         initLoadData();
@@ -208,9 +209,9 @@ public class AddCreditLoanDialog extends BaseDialogSwing {
     private void txtCreditLoanAmtKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCreditLoanAmtKeyReleased
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             btnSave.requestFocus();
-        } else {
-            txtLoanMaxAmt.setText("" + NumberFormat.toDouble(txtCreditLoanAmt.getText()));
+            return;
         }
+        txtLoanMaxAmt.setText("" + NumberFormat.toDouble(txtCreditLoanAmt.getText()));
     }//GEN-LAST:event_txtCreditLoanAmtKeyReleased
 
     private void btnSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSaveActionPerformed

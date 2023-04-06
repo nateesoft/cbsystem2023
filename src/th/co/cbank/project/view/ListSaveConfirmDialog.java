@@ -22,6 +22,7 @@ public class ListSaveConfirmDialog extends BaseDialogSwing {
     public ListSaveConfirmDialog(java.awt.Frame parent, boolean modal, PrintSlipBean psBean) {
         super(parent, modal);
         initComponents();
+        logger.debug("ListSaveConfirmDialog init");
 
         this.psBean = psBean;
         this.parent = parent;
@@ -96,8 +97,8 @@ public class ListSaveConfirmDialog extends BaseDialogSwing {
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        PassBook_PSiPR9 v = new PassBook_PSiPR9();
-        v.printSlipSaveBook(psBean);
+        PassBook_PSiPR9 passBook = new PassBook_PSiPR9();
+        passBook.printSlipSaveBook(psBean);
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed

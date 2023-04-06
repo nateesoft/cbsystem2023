@@ -55,6 +55,7 @@ public class SavingDialog extends BaseDialogSwing {
         super(parent, modal);
         this.parent = parent;
         initComponents();
+        logger.debug("SavingDialog init");
 
         this.isRegister = isRegister;
         this.profileCode = profileCode;

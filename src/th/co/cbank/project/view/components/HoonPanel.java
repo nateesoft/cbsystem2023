@@ -45,6 +45,7 @@ public class HoonPanel extends javax.swing.JPanel {
 
     public HoonPanel(ProfileBean profileBean, CbSaveAccountBean saveAccountBean, int selectIndex) {
         initComponents();
+        logger.debug("HoonPanel init");
 
         jTabbedPane5.setEnabledAt(0, false);
         jTabbedPane5.setEnabledAt(1, false);

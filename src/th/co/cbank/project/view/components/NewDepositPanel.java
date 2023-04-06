@@ -38,6 +38,7 @@ public class NewDepositPanel extends javax.swing.JPanel {
 
     public NewDepositPanel(ProfileBean profileBean) {
         initComponents();
+        logger.debug("NewDepositPanel init");
 
         this.profileBean = profileBean;
 

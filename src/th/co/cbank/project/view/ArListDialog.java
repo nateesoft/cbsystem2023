@@ -6,7 +6,6 @@ import javax.swing.table.DefaultTableModel;
 import org.apache.log4j.Logger;
 import th.co.cbank.project.control.CbLoanAccountControl;
 import th.co.cbank.project.model.ProfileBean;
-import th.co.cbank.util.JTableUtil;
 import th.co.cbank.util.TableUtil;
 
 public class ArListDialog extends javax.swing.JDialog {
@@ -18,10 +17,11 @@ public class ArListDialog extends javax.swing.JDialog {
     public ArListDialog(java.awt.Frame parent, boolean modal, JTextField textField) {
         super(parent, modal);
         initComponents();
+        logger.debug("ArListDialog init");
 
         this.textField = textField;
         model = (DefaultTableModel) tbArList.getModel();
-        JTableUtil.defaultTemplate(tbArList);
+        TableUtil.defaultTemplate(tbArList);
     }
 
     @SuppressWarnings("unchecked")

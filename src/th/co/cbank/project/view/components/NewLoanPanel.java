@@ -45,7 +45,6 @@ import th.co.cbank.project.view.PaperLoanJDialog;
 import th.co.cbank.util.DateChooseDialog;
 import th.co.cbank.util.DateFormat;
 import th.co.cbank.util.ImagePreviewPanel;
-import th.co.cbank.util.JTableUtil;
 import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.NumberFormat;
 import th.co.cbank.util.StringUtil;
@@ -72,6 +71,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
 
     public NewLoanPanel(ProfileBean profileBean, String empCode) {
         initComponents();
+        logger.debug("NewLoanPanel init");
 
         initLoadTable();
 
@@ -2772,13 +2772,13 @@ public class NewLoanPanel extends javax.swing.JPanel {
     private void loadLoanDetail(String loanDocNo) {
         List<CbLoanTablePaymentBean> listTable = cbLoanTablePaymentControl.listCbLoanTablePayment(loanDocNo);
         DefaultTableModel md = (DefaultTableModel) tbArGroup1.getModel();
-        JTableUtil.alignCenter(tbArGroup1, 0);
-        JTableUtil.alignRight(tbArGroup1, 1);
-        JTableUtil.alignCenter(tbArGroup1, 2);
-        JTableUtil.alignRight(tbArGroup1, 3);
-        JTableUtil.alignRight(tbArGroup1, 4);
-        JTableUtil.alignRight(tbArGroup1, 5);
-        JTableUtil.alignCenter(tbArGroup1, 6);
+        TableUtil.alignCenter(tbArGroup1, 0);
+        TableUtil.alignRight(tbArGroup1, 1);
+        TableUtil.alignCenter(tbArGroup1, 2);
+        TableUtil.alignRight(tbArGroup1, 3);
+        TableUtil.alignRight(tbArGroup1, 4);
+        TableUtil.alignRight(tbArGroup1, 5);
+        TableUtil.alignCenter(tbArGroup1, 6);
         TableUtil.clearModel(md);
 
         for (int i = 0; i < listTable.size(); i++) {

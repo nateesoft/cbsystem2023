@@ -12,6 +12,7 @@ public class SummaryDialyDialog extends javax.swing.JDialog {
     public SummaryDialyDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("SummaryDialyDialog init");
 
         initTable();
     }

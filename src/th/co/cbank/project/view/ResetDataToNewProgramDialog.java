@@ -21,6 +21,7 @@ public class ResetDataToNewProgramDialog extends BaseDialogSwing {
     public ResetDataToNewProgramDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("ResetDataToNewProgramDialog init");
 
         tbListTable.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
         tbListTable.setRowHeight(30);

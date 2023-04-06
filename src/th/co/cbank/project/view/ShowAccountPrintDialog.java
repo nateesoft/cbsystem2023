@@ -22,6 +22,7 @@ public class ShowAccountPrintDialog extends BaseDialogSwing {
     public ShowAccountPrintDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("ShowAccountPrintDialog init");
 
         loadListAccount();
     }

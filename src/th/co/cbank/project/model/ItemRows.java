@@ -1,10 +1,10 @@
-package th.co.cbank.project.view;
+package th.co.cbank.project.model;
 
 import java.util.Date;
 import th.co.cbank.util.DateFormat;
 import th.co.cbank.util.NumberFormat;
 
-class ItemRows {
+public class ItemRows {
 
     private Date t_date;
     private String t_time;

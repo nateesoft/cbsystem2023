@@ -18,6 +18,7 @@ public class MemberTypeDialog extends BaseDialogSwing {
     public MemberTypeDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("MemberTypeDialog init");
 
         initTable();
         loadMemberTypeData();

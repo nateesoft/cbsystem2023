@@ -14,6 +14,7 @@ public class DatabaseDumpDialog extends BaseDialogSwing {
     public DatabaseDumpDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("DatabaseDumpDialog init");
     }
 
     class DumpDB {

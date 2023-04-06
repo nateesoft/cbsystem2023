@@ -12,9 +12,7 @@ public class EditProfileDialog extends BaseDialogSwing {
     public EditProfileDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
-
-        txtCustCode.setText("");
-        txtCustName.setText("");
+        logger.debug("EditProfileDialog init");
 
         txtCustCode.requestFocus();
     }

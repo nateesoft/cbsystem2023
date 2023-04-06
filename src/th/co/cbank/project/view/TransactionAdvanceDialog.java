@@ -7,7 +7,6 @@ import javax.swing.table.DefaultTableModel;
 import org.apache.log4j.Logger;
 import th.co.cbank.project.control.CbSaveAccountControl;
 import th.co.cbank.project.model.CbSaveAccountBean;
-import th.co.cbank.util.JTableUtil;
 import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.NumberFormat;
 import th.co.cbank.util.TableUtil;
@@ -19,6 +18,8 @@ public class TransactionAdvanceDialog extends BaseDialogSwing {
     public TransactionAdvanceDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("TransactionAdvanceDialog init");
+
         setBounds(GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds());
 
         initTable();
@@ -422,19 +423,19 @@ public class TransactionAdvanceDialog extends BaseDialogSwing {
     // End of variables declaration//GEN-END:variables
 
     private void initTable() {
-        th.co.cbank.util.JTableUtil.defaultTemplate(tbItems);
+        th.co.cbank.util.TableUtil.defaultTemplate(tbItems);
         tbItems.setRowHeight(30);
-        JTableUtil.alignRight(tbItems, 3);
-        JTableUtil.alignRight(tbItems, 4);
-        JTableUtil.alignRight(tbItems, 5);
-        JTableUtil.alignRight(tbItems, 6);
-        JTableUtil.alignRight(tbItems, 7);
-        JTableUtil.alignRight(tbItems, 8);
-        JTableUtil.alignRight(tbItems, 9);
-        JTableUtil.alignRight(tbItems, 10);
-        JTableUtil.alignRight(tbItems, 11);
-        JTableUtil.alignRight(tbItems, 12);
-        JTableUtil.alignRight(tbItems, 13);
+        TableUtil.alignRight(tbItems, 3);
+        TableUtil.alignRight(tbItems, 4);
+        TableUtil.alignRight(tbItems, 5);
+        TableUtil.alignRight(tbItems, 6);
+        TableUtil.alignRight(tbItems, 7);
+        TableUtil.alignRight(tbItems, 8);
+        TableUtil.alignRight(tbItems, 9);
+        TableUtil.alignRight(tbItems, 10);
+        TableUtil.alignRight(tbItems, 11);
+        TableUtil.alignRight(tbItems, 12);
+        TableUtil.alignRight(tbItems, 13);
 
         clearModel();
     }

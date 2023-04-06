@@ -22,6 +22,7 @@ public class ShowAccountDialog extends BaseDialogSwing {
     public ShowAccountDialog(java.awt.Frame parent, boolean modal, String IDCard) {
         super(parent, modal);
         initComponents();
+        logger.debug("ShowAccountDialog init");
 
         Value.CUST_ACCOUNT_CODE = null;
         loadListAccount();

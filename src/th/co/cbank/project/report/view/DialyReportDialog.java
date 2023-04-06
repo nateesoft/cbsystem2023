@@ -20,6 +20,7 @@ public class DialyReportDialog extends BaseDialogSwing {
     public DialyReportDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("DialyReportDialog init");
 
         this.parent = parent;
         init();
