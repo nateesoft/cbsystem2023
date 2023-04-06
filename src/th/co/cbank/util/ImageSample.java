@@ -4,11 +4,9 @@ import java.awt.AlphaComposite;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
-import org.apache.log4j.Logger;
 
 public class ImageSample {
 
-    private final Logger logger = Logger.getLogger(ImageSample.class);
     private static final int IMG_WIDTH = 320;
     private static final int IMG_HEIGHT = 320;
 

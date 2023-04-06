@@ -11,12 +11,10 @@ import java.awt.font.TextLayout;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import javax.swing.JComponent;
-import org.apache.log4j.Logger;
 import th.co.cbank.project.constants.AppConstants;
 
 public class ScrollText extends JComponent {
 
-    private final Logger logger = Logger.getLogger(ScrollText.class);
     private BufferedImage image;
     private Dimension imageSize;
     private volatile int currOffset;

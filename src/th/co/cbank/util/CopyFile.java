@@ -1,6 +1,5 @@
 package th.co.cbank.util;
 
-import common.Logger;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -9,8 +8,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 public class CopyFile {
-
-    private final Logger logger = Logger.getLogger(CopyFile.class);
 
     public static void copy(File source, File dest) {
         try {

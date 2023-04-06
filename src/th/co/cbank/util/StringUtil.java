@@ -7,11 +7,8 @@ import java.text.DecimalFormat;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import org.apache.log4j.Logger;
 
 public class StringUtil {
-
-    private final Logger logger = Logger.getLogger(StringUtil.class);
 
     public static String getString(String inputData) {
         if (inputData == null || "".equals(inputData.trim())) {

@@ -13,7 +13,6 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
-import org.apache.log4j.Logger;
 import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.ss.usermodel.Cell;
@@ -25,8 +24,6 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import th.co.cbank.project.constants.AppConstants;
 
 public class TableUtil {
-
-    private final Logger logger = Logger.getLogger(TableUtil.class);
 
     public static void initTable(JTable table) {
         JTableHeader hTable = table.getTableHeader();

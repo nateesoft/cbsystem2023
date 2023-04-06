@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
 import javax.swing.table.DefaultTableModel;
-
 import jxl.CellView;
 import jxl.Workbook;
 import jxl.WorkbookSettings;
@@ -18,11 +17,9 @@ import jxl.write.WritableSheet;
 import jxl.write.WritableWorkbook;
 import jxl.write.WriteException;
 import jxl.write.biff.RowsExceededException;
-import org.apache.log4j.Logger;
 
 public class ExcelUtil {
 
-    private final Logger logger = Logger.getLogger(ExcelUtil.class);
     private WritableCellFormat timesBoldUnderline;
     private WritableCellFormat times;
     private String inputFile;
