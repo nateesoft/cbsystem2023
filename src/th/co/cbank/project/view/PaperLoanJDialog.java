@@ -170,7 +170,7 @@ public class PaperLoanJDialog extends BaseDialogSwing {
         params.put("p5", loanAccountBean.getLoan_docno());
 
         ProfileBean profileBean = getProfileControl().findOneByCustCode(loanAccountBean.getCust_code());
-        AddressBean addressBean = getAddressControl().getOne(profileBean.getP_custCode(), "1");
+        AddressBean addressBean = getAddressControl().findOneByCustCodeAddrType(profileBean.getP_custCode(), "1");
 
         params.put("p6", profileBean.getP_custName() + " " + profileBean.getP_custSurname());
         params.put("p7", "" + profileBean.getP_custAge());
@@ -239,7 +239,7 @@ public class PaperLoanJDialog extends BaseDialogSwing {
             params.put("p5", pBean1.getP_custName() + " " + pBean1.getP_custSurname());
             params.put("p6", "" + pBean1.getP_custAge());
             params.put("p7", "" + pBean1.getP_custNation());
-            AddressBean bean1 = getAddressControl().getOne(pBean1.getP_custCode(), "1");
+            AddressBean bean1 = getAddressControl().findOneByCustCodeAddrType(pBean1.getP_custCode(), "1");
             params.put("p8", "" + bean1.getAddr_No());
             params.put("p9", "" + bean1.getAddr_Moo());
             params.put("p10", "" + bean1.getAddr_Soi());
@@ -258,7 +258,7 @@ public class PaperLoanJDialog extends BaseDialogSwing {
                 params.put("p19", pBean2.getP_custName() + " " + pBean2.getP_custSurname());
                 params.put("p20", "" + pBean2.getP_custAge());
                 params.put("p21", "" + pBean2.getP_custNation());
-                AddressBean bean2 = getAddressControl().getOne(pBean2.getP_custCode(), "1");
+                AddressBean bean2 = getAddressControl().findOneByCustCodeAddrType(pBean2.getP_custCode(), "1");
                 params.put("p22", "" + bean2.getAddr_No());
                 params.put("p23", "" + bean2.getAddr_Moo());
                 params.put("p24", "" + bean2.getAddr_Soi());

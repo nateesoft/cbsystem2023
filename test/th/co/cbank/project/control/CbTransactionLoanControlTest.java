@@ -59,7 +59,7 @@ public class CbTransactionLoanControlTest {
      * Test of listCbTransactionLoan method, of class CbTransactionLoanControl.
      */
     @Test
-    public void testListCbTransactionLoan_0args() {
+    public void testListCbTransactionLoan() {
         System.out.println("listCbTransactionLoan");
         CbTransactionLoanControl instance = new CbTransactionLoanControl();
         List<CbTransactionLoanBean> expResult = null;
@@ -75,25 +75,27 @@ public class CbTransactionLoanControlTest {
     @Test
     public void testListTransactionLoan() {
         System.out.println("listTransactionLoan");
-        String where = "";
+        String accountCode = "";
+        String loanDocPrefix = "";
+        String paymentDocPrefix = "";
         CbTransactionLoanControl instance = new CbTransactionLoanControl();
         List<CbTransactionLoanBean> expResult = null;
-        List<CbTransactionLoanBean> result = instance.listTransactionLoan(where);
+        List<CbTransactionLoanBean> result = instance.listTransactionLoan(accountCode, loanDocPrefix, paymentDocPrefix);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");
     }
 
     /**
-     * Test of listCbTransactionLoan method, of class CbTransactionLoanControl.
+     * Test of listByAccountCode method, of class CbTransactionLoanControl.
      */
     @Test
-    public void testListCbTransactionLoan_String() {
-        System.out.println("listCbTransactionLoan");
+    public void testListByAccountCode() {
+        System.out.println("listByAccountCode");
         String t_acccode = "";
         CbTransactionLoanControl instance = new CbTransactionLoanControl();
         List<CbTransactionLoanBean> expResult = null;
-        List<CbTransactionLoanBean> result = instance.listCbTransactionLoan(t_acccode);
+        List<CbTransactionLoanBean> result = instance.listByAccountCode(t_acccode);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");

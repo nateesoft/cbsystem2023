@@ -12,6 +12,7 @@ import th.co.cbank.project.model.CbLoanAccountBean;
 import th.co.cbank.util.ClipboardUtil;
 import th.co.cbank.util.DateChooseDialog;
 import th.co.cbank.util.DateFormat;
+import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.NumberFormat;
 import th.co.cbank.util.TableUtil;
 
@@ -25,7 +26,7 @@ public class ReportOverdueAccountInterest extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         logger.debug("ReportOverdueAccountInterest init");
-        
+
         this.parent = parent;
 
         initTable();
@@ -295,7 +296,9 @@ public class ReportOverdueAccountInterest extends javax.swing.JDialog {
 
     private void tbReportMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbReportMouseClicked
         if (evt.getButton() == 3) {
-            ClipboardUtil.copyTableContent(tbReport);
+            if (ClipboardUtil.copyTableContent(tbReport) != null) {
+                MessageAlert.infoPopup(ClipboardUtil.class, "Copy data to clipboard");
+            }
         }
     }//GEN-LAST:event_tbReportMouseClicked
 

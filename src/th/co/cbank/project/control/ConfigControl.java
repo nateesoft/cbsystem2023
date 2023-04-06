@@ -253,4 +253,13 @@ public class ConfigControl extends BaseControl {
         }
     }
 
+    public void updateSaveDocRunning() {
+        try {
+            MySQLConnect.exeUpdate("update cb_config set SaveDocRunning=SaveDocRunning+1");
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+    }
+
 }

@@ -1,7 +1,6 @@
 package th.co.cbank.project.control;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -9,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import org.apache.log4j.Logger;
+import th.co.cbank.project.constants.AppConstants;
 import th.co.cbank.util.DateFormat;
 import th.co.cbank.util.ThaiUtil;
 import th.co.cbank.project.model.BalanceBean;
@@ -139,7 +139,8 @@ public class CbSaveAccountControl extends BaseControl {
             String sql = "select t_custcode, t_acccode "
                     + "from cb_transaction_save "
                     + "where update_interest<curdate() "
-                    + "and t_status in('2','3','8') "
+                    + "and t_status "
+                    + "in('" + AppConstants.CB_STATUS_SAVE + "','" + AppConstants.CB_STATUS_WITHDRAW + "','" + AppConstants.CB_STATUS_CLOSE_SAVE + "') "
                     + "and t_custcode<>'null' "
                     + "and t_acccode<>'' "
                     + "group by t_custcode, t_acccode "
@@ -372,7 +373,7 @@ public class CbSaveAccountControl extends BaseControl {
                     + "from cb_save_config c, cb_save_account s, cb_transaction_save t "
                     + "where c.typecode=s.account_type "
                     + "and s.account_code=t.t_acccode "
-                    + "and t_status in('2','3','8') ";
+                    + "and t_status in('" + AppConstants.CB_STATUS_SAVE + "','" + AppConstants.CB_STATUS_WITHDRAW + "','" + AppConstants.CB_STATUS_CLOSE_SAVE + "') ";
             if (custCode.equals("") && accoutCode.equals("")) {
                 sql += " and update_interest<curdate() ";
             } else {
@@ -580,7 +581,7 @@ public class CbSaveAccountControl extends BaseControl {
             String sql1 = "select t_custcode, sum(t_amount) t_amount,sum(t_interest) t_interest "
                     + "from cb_transaction_save "
                     + "where t_custcode='" + tempCust + "' "
-                    + "and t_status in('2','3','8') "
+                    + "and t_status in('" + AppConstants.CB_STATUS_SAVE + "','" + AppConstants.CB_STATUS_WITHDRAW + "','" + AppConstants.CB_STATUS_CLOSE_SAVE + "') "
                     + "and t_acccode='" + t_acccode + "' "
                     + "group by t_custcode";
             try (ResultSet rs1 = MySQLConnect.getResultSet(sql1)) {
@@ -601,7 +602,7 @@ public class CbSaveAccountControl extends BaseControl {
         try {
             String sql = "select t_date,t_time,t_acccode,t_custcode,t_amount, t_interest,t_balance "
                     + "from cb_transaction_save "
-                    + "where t_status in('2','3','8') "
+                    + "where t_status in('" + AppConstants.CB_STATUS_SAVE + "','" + AppConstants.CB_STATUS_WITHDRAW + "','" + AppConstants.CB_STATUS_CLOSE_SAVE + "') "
                     + "order by t_custcode, t_date, t_time;";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             double totalAmount = 0;
@@ -630,7 +631,7 @@ public class CbSaveAccountControl extends BaseControl {
                             + "where t_custcode='" + rs.getString("t_custcode") + "' "
                             + "and t_acccode='" + rs.getString("t_acccode") + "' "
                             + "and t_time='" + rs.getString("t_time") + "' "
-                            + "and t_status in('2','3','8') ";
+                            + "and t_status in('" + AppConstants.CB_STATUS_SAVE + "','" + AppConstants.CB_STATUS_WITHDRAW + "','" + AppConstants.CB_STATUS_CLOSE_SAVE + "') ";
                     update(sqlUpd);
                 }
             }
@@ -686,7 +687,7 @@ public class CbSaveAccountControl extends BaseControl {
         try {
             String sql = "select t_custcode, t_acccode, sum(t_amount) t_amount "
                     + "from cb_transaction_save "
-                    + "where t_status in('2','3','8') "
+                    + "where t_status in('" + AppConstants.CB_STATUS_SAVE + "','" + AppConstants.CB_STATUS_WITHDRAW + "','" + AppConstants.CB_STATUS_CLOSE_SAVE + "') "
                     + "group by t_acccode, t_custcode";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             while (rs.next()) {
@@ -710,7 +711,7 @@ public class CbSaveAccountControl extends BaseControl {
         try {
             String sql = "select t_custcode, t_acccode, t_amount, LineNo, t_index,t_balance "
                     + "from cb_transaction_save "
-                    + "where t_status in('2','3','8') "
+                    + "where t_status in('" + AppConstants.CB_STATUS_SAVE + "','" + AppConstants.CB_STATUS_WITHDRAW + "','" + AppConstants.CB_STATUS_CLOSE_SAVE + "') "
                     + "order by t_custcode, t_acccode, t_date, t_time;";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             double totalAmt = 0.00;
@@ -1221,11 +1222,13 @@ public class CbSaveAccountControl extends BaseControl {
         try {
             String sql1 = "select ifnull(("
                     + "select sum(t_amount) sum_in from cb_transaction_save t1 	"
-                    + "where t_custcode=s.b_cust_code and t_acccode=s.account_code and t_status in(2,11) "
+                    + "where t_custcode=s.b_cust_code and t_acccode=s.account_code "
+                    + "and t_status in('" + AppConstants.CB_STATUS_SAVE + "','" + AppConstants.CB_STATUS_ADD_INT + "') "
                     + "order by t_date, t_time"
                     + "),0)+ifnull(("
                     + "select sum(t_amount) sum_out from cb_transaction_save t2 "
-                    + "where t_custcode=s.b_cust_code and t_acccode=s.account_code and t_status in(3, 8) order by t_date, t_time"
+                    + "where t_custcode=s.b_cust_code and t_acccode=s.account_code "
+                    + "and t_status in('" + AppConstants.CB_STATUS_WITHDRAW + "', '" + AppConstants.CB_STATUS_CLOSE_SAVE + "') order by t_date, t_time"
                     + "),0) total_balance "
                     + "from cb_save_account s where s.b_cust_code='" + custCode + "' and s.account_code='" + accCode + "';";
             double totalBalance;
@@ -1254,8 +1257,10 @@ public class CbSaveAccountControl extends BaseControl {
         try {
             String sql = "update cb_save_account ss set "
                     + "b_balance=("
-                    + "(select sum(t_amount) sum_in from cb_transaction_save where t_status in(2,11) and t_custcode=ss.b_cust_code and t_acccode=ss.account_code)+"
-                    + "(select sum(t_amount) sum_out from cb_transaction_save where t_status in(3,8) and t_custcode=ss.b_cust_code and t_acccode=ss.account_code)"
+                    + "(select sum(t_amount) sum_in from cb_transaction_save "
+                    + "where t_status in('" + AppConstants.CB_STATUS_SAVE + "','" + AppConstants.CB_STATUS_ADD_INT + "') and t_custcode=ss.b_cust_code and t_acccode=ss.account_code)+"
+                    + "(select sum(t_amount) sum_out from cb_transaction_save "
+                    + "where t_status in('" + AppConstants.CB_STATUS_WITHDRAW + "', '" + AppConstants.CB_STATUS_CLOSE_SAVE + "') and t_custcode=ss.b_cust_code and t_acccode=ss.account_code)"
                     + ") where ss.account_code <> ''";
             logger.info(sql);
             return MySQLConnect.exeUpdate(sql);
@@ -1299,6 +1304,17 @@ public class CbSaveAccountControl extends BaseControl {
                     + "B_Update=curdate(),"
                     + "account_status='" + CB_STATUS_CLOSE_SAVE + "',"
                     + "remark='" + ThaiUtil.Unicode2ASCII(remark) + "' "
+                    + "where account_code='" + account_code + "'";
+            MySQLConnect.exeUpdate(sql);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+    }
+
+    public void updateBalanceByAccountCode(String dMoney, String account_code) {
+        try {
+            String sql = "update cb_save_account set B_Balance = B_Balance+" + dMoney + " "
                     + "where account_code='" + account_code + "'";
             MySQLConnect.exeUpdate(sql);
         } catch (Exception e) {

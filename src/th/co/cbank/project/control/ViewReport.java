@@ -756,13 +756,13 @@ public class ViewReport extends BaseControl {
                 + "where 1=1 ";
         switch (selectedIndex) {
             case 1:
-                sql += " and t_status in ('4') ";
+                sql += " and t_status in ('" + AppConstants.CB_STATUS_BUY_HOON + "') ";
                 break;
             case 2:
-                sql += " and t_status in ('5') ";
+                sql += " and t_status in ('" + AppConstants.CB_STATUS_SALE_HOON + "') ";
                 break;
             default:
-                sql += " and t_status in ('4','5') ";
+                sql += " and t_status in ('" + AppConstants.CB_STATUS_BUY_HOON + "','" + AppConstants.CB_STATUS_SALE_HOON + "') ";
                 break;
         }
         if (!txtDate1.equals("") && !txtDate2.equals("")) {
@@ -822,7 +822,7 @@ public class ViewReport extends BaseControl {
                 + "inner join cb_profile p on p.p_custcode=a.cust_code "
                 + "where 1=1 "
                 + "and t.t_custcode=p.p_custcode "
-                + "and t_status in('10') ";
+                + "and t_status in('" + AppConstants.CB_STATUS_LOAN + "') ";
         if (!txtDate1.equals("") && !txtDate2.equals("")) {
             Date date1 = DateFormat.getLocal_ddMMyyyy(txtDate1);
             Date date2 = DateFormat.getLocal_ddMMyyyy(txtDate2);
@@ -870,7 +870,7 @@ public class ViewReport extends BaseControl {
                 + "from cb_transaction_loan t inner join cb_profile p "
                 + "on t.t_custcode=p.p_custcode "
                 + "where 1=1 "
-                + "and t_status in('7') ";
+                + "and t_status in('" + AppConstants.CB_STATUS_PAYMENT + "') ";
 
         if (!txtDate1.equals("") && !txtDate2.equals("")) {
             Date date1 = DateFormat.getLocal_ddMMyyyy(txtDate1);
@@ -966,19 +966,22 @@ public class ViewReport extends BaseControl {
         if (selectedIndex > -1) {
             switch (selectedIndex) {
                 case 0:
-                    sql += " and t_status in('1','2','3','8') ";
+                    sql += " and t_status in('" + AppConstants.CB_STATUS_OPEN_SAVE + "',"
+                            + "'" + AppConstants.CB_STATUS_SAVE + "',"
+                            + "'" + AppConstants.CB_STATUS_WITHDRAW + "',"
+                            + "'" + AppConstants.CB_STATUS_CLOSE_SAVE + "') ";
                     break;
                 case 1:
-                    sql += " and t_status in('1') ";
+                    sql += " and t_status in('" + AppConstants.CB_STATUS_OPEN_SAVE + "') ";
                     break;
                 case 2:
-                    sql += " and t_status in('2') ";
+                    sql += " and t_status in('" + AppConstants.CB_STATUS_SAVE + "') ";
                     break;
                 case 3:
-                    sql += " and t_status in('3') ";
+                    sql += " and t_status in('" + AppConstants.CB_STATUS_WITHDRAW + "') ";
                     break;
                 case 4:
-                    sql += " and t_status in('8') ";
+                    sql += " and t_status in('" + AppConstants.CB_STATUS_SAVE + "') ";
                     break;
                 default:
                     break;
@@ -1128,7 +1131,10 @@ public class ViewReport extends BaseControl {
         SummaryDepositModel bean = new SummaryDepositModel();
         String sql = "select sum(money_in), sum(money_out), sum(money_in-money_out) t_balance, "
                 + "sum(t_interest), sum(t_fee) from cb_transaction_save "
-                + "where t_date='" + dateMySQL + "' and t_status in('1','2','3','8') ";
+                + "where t_date='" + dateMySQL + "' and t_status in('" + AppConstants.CB_STATUS_OPEN_SAVE + "',"
+                + "'" + AppConstants.CB_STATUS_SAVE + "',"
+                + "'" + AppConstants.CB_STATUS_WITHDRAW + "',"
+                + "'" + AppConstants.CB_STATUS_CLOSE_SAVE + "') ";
         try (ResultSet rs = MySQLConnect.getResultSet(sql)) {
             if (rs.next()) {
                 bean.setSumMoneyIn(rs.getDouble(1));
@@ -1149,7 +1155,10 @@ public class ViewReport extends BaseControl {
         bean.setT_status("");
         String sql = "select t_status, sum(t_amount), sum(t_hoon_amt) "
                 + "from cb_transaction_save where t_date='" + dateMySQL + "' "
-                + "and t_status in('4','5','9') group by t_status";
+                + "and t_status in('" + AppConstants.CB_STATUS_BUY_HOON + "',"
+                + "'" + AppConstants.CB_STATUS_SALE_HOON + "',"
+                + "'" + AppConstants.CB_STATUS_TRANS_HOON + "') "
+                + "group by t_status";
         try (ResultSet rs = MySQLConnect.getResultSet(sql)) {
             if (rs.next()) {
                 bean.setT_status(rs.getString("t_satus"));
@@ -1167,7 +1176,7 @@ public class ViewReport extends BaseControl {
         SummaryLoanModel bean = new SummaryLoanModel();
         bean.setT_status("");
         String sql = "select t_status, sum(t_amount) from cb_transaction_save "
-                + "where t_date='" + dateMySQL + "' and t_status in('10','7') group by t_status";
+                + "where t_date='" + dateMySQL + "' and t_status in('" + AppConstants.CB_STATUS_LOAN + "','" + AppConstants.CB_STATUS_PAYMENT + "') group by t_status";
         try (ResultSet rs = MySQLConnect.getResultSet(sql)) {
             if (rs.next()) {
                 bean.setT_status(rs.getString("t_satus"));

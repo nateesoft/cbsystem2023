@@ -2149,15 +2149,15 @@ public class NewLoanPanel extends javax.swing.JPanel {
         switch (cbAddrType.getSelectedIndex()) {
             case 0:
                 //ที่อยู่ปัจจุบัน
-                addressBean = addressControl.getOne(txtLoanCustID.getText(), "1");
+                addressBean = addressControl.findOneByCustCodeAddrType(txtLoanCustID.getText(), AppConstants.ADDRESS_CURRENT);
                 break;
             case 1:
                 //ที่อยู่ตามบัตรประชาชน
-                addressBean = addressControl.getOne(txtLoanCustID.getText(), "2");
+                addressBean = addressControl.findOneByCustCodeAddrType(txtLoanCustID.getText(), AppConstants.ADDRESS_ON_CID);
                 break;
             case 2:
                 //ที่อยู่ที่ทำงาน
-                addressBean = addressControl.getOne(txtLoanCustID.getText(), "3");
+                addressBean = addressControl.findOneByCustCodeAddrType(txtLoanCustID.getText(), AppConstants.ADDRESS_OFFICE);
                 break;
             default:
                 addressBean = new AddressBean();
@@ -2642,7 +2642,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
         cbLoanAccountBean.setBook_no(generateAutoBookNo());
         cbLoanAccountBean.setLoan_type(getIDCombobox(cbLoanAcc));
 
-        boolean isStep1 = false;
+        boolean isStep1;
         if (loanAccountControl.createNewLoan(cbLoanAccountBean)) {
             // save boundman
             for (int i = 0; i < bonsmanModel.getRowCount(); i++) {
@@ -2811,11 +2811,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
         List<ReportOrangeBean> listBean = new ArrayList<>();
         ConfigBean configBean = configControl.findOne();
 
-        String where = " and t_acccode='" + accountCode + "' "
-                + "and printchk='N' and LineNo>0 and t_booktype "
-                + "in ('" + configBean.getLoanDocPrefix() + "','" + configBean.getPaymentDocPrefix() + "') "
-                + "order by t_index ";
-        List<CbTransactionLoanBean> listLoan = cbTransactionLoanControl.listTransactionLoan(where);
+        List<CbTransactionLoanBean> listLoan = cbTransactionLoanControl.listTransactionLoan(accountCode, configBean.getLoanDocPrefix(), configBean.getPaymentDocPrefix());
         SimpleDateFormat sim = new SimpleDateFormat("dd/MM/yy");
 
         for (CbTransactionLoanBean loanBean : listLoan) {

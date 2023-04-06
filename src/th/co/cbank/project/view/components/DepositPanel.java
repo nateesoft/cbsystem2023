@@ -1862,15 +1862,9 @@ public class DepositPanel extends javax.swing.JPanel {
 
         if (cbTransactionSaveControl.saveCbTransactionSave(transactionSaveBean)) {
             txtDepCode.setText(newDepositNo);
-
-            String sql = "update cb_save_account set B_Balance = B_Balance+" + dMoney + " where account_code='" + saveAccountBean.getAccount_code() + "'";
-            saveAccountControl.update(sql);
-
-            String sql2 = "update cb_profile set Save_Balance=Save_Balance+" + dMoney + " where P_CustCode='" + profileBean.getP_custCode() + "'";
-            profileControl.update(sql2);
-
-            sql = "update cb_config set SaveDocRunning=SaveDocRunning+1";
-            configControl.update(sql);
+            saveAccountControl.updateBalanceByAccountCode(dMoney, saveAccountBean.getAccount_code());
+            profileControl.updateSaveBalanceByCustCode(dMoney, profileBean.getP_custCode());
+            configControl.updateSaveDocRunning();
 
             MessageAlert.infoPopup(this, "บันทึกข้อมูลการฝากเงินเรียบร้อยแล้ว");
             TransactionAdvanceMethod.updateSaveAccountAndProfile(profileBean.getP_custCode(), saveAccountBean.getAccount_code(), transactionSaveBean.getT_balance(), transactionSaveBean.getT_interest());
@@ -1906,11 +1900,8 @@ public class DepositPanel extends javax.swing.JPanel {
         }
     }
 
-    public void loadTransactionPerson(String accoutCode) {
-        String where = " and t_acccode='" + accoutCode + "' "
-                + "and t_status in('2','3','8','11') "
-                + "order by t_date desc,t_time desc ";
-        List<CbTransactionSaveBean> listSave = cbTransactionSaveControl.listTransactionSave(where);
+    public void loadTransactionPerson(String accountCode) {
+        List<CbTransactionSaveBean> listSave = cbTransactionSaveControl.listTransactionSave(accountCode);
         DefaultTableModel modelTbTransSave = (DefaultTableModel) tbTransSave.getModel();
         TableUtil.alignRight(tbTransSave, 3);
         TableUtil.alignRight(tbTransSave, 4);
@@ -1957,14 +1948,6 @@ public class DepositPanel extends javax.swing.JPanel {
                 desc
             });
         }
-    }
-
-    private void resetDepositMoney() {
-        txtDepositBaht.setText("0.00");
-        lbMoneyText.setText("(...)");
-        txtAccCodeLoad.setText("");
-
-        txtDepositBaht.requestFocus();
     }
 
     private void showDocAuto3() {

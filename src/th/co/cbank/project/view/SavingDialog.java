@@ -3309,7 +3309,7 @@ public class SavingDialog extends BaseDialogSwing {
             txtFeeTotal.setText("" + (profileBean.getP_fee() + profileBean.getP_down_fee()));
 
             //show Address
-            AddressBean aBean1 = getAddressControl().getOne(profileBean.getP_custCode(), "1");
+            AddressBean aBean1 = getAddressControl().findOneByCustCodeAddrType(profileBean.getP_custCode(), "1");
             txtAddNo1.setText(aBean1.getAddr_No());
             txtAddrMoo1.setText(aBean1.getAddr_Moo());
             txtAddrMooName1.setText(aBean1.getAddr_MooName());
@@ -3322,7 +3322,7 @@ public class SavingDialog extends BaseDialogSwing {
             txtAddrMobile1.setText(aBean1.getAddr_Mobile());
             txtAddrTel1.setText(aBean1.getAddr_Tel());
 
-            AddressBean aBean = getAddressControl().getOne(profileBean.getP_custCode(), "2");
+            AddressBean aBean = getAddressControl().findOneByCustCodeAddrType(profileBean.getP_custCode(), "2");
             txtAddrNo2.setText(aBean.getAddr_No());
             txtAddrMoo2.setText(aBean.getAddr_Moo());
             txtAddrMooName2.setText(aBean.getAddr_MooName());
@@ -3333,7 +3333,7 @@ public class SavingDialog extends BaseDialogSwing {
             txtAddrProvince2.setText(aBean.getAddr_Province());
             txtAddrPost2.setText(aBean.getAddr_Post());
 
-            AddressBean aBean3 = getAddressControl().getOne(profileBean.getP_custCode(), "3");
+            AddressBean aBean3 = getAddressControl().findOneByCustCodeAddrType(profileBean.getP_custCode(), "3");
             txtAddr3ComName.setText(aBean3.getCompany_Name());
             txtAddrNo3.setText(aBean3.getAddr_No());
             txtAddrMoo3.setText(aBean3.getAddr_Moo());
@@ -3345,7 +3345,7 @@ public class SavingDialog extends BaseDialogSwing {
             txtAddrProvince3.setText(aBean3.getAddr_Province());
             txtAddrPost3.setText(aBean3.getAddr_Post());
 
-            AddressBean aBean4 = getAddressControl().getOne(profileBean.getP_custCode(), "4");
+            AddressBean aBean4 = getAddressControl().findOneByCustCodeAddrType(profileBean.getP_custCode(), "4");
             if (aBean4 != null) {
                 String pjName = aBean4.getCompany_Name();
                 if (pjName == null) {

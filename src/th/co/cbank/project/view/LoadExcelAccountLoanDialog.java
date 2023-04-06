@@ -330,7 +330,7 @@ public class LoadExcelAccountLoanDialog extends BaseDialogSwing {
                     tLoanBean.setT_empcode(Value.USER_CODE);
                     tLoanBean.setT_docno(loanDocNo);
                     tLoanBean.setRemark("");
-                    tLoanBean.setT_status("10");
+                    tLoanBean.setT_status(AppConstants.CB_STATUS_LOAN);
 
                     ConfigBean cBean = getConfigControl().findOne();
                     tLoanBean.setT_booktype(cBean.getLoanDocPrefix());

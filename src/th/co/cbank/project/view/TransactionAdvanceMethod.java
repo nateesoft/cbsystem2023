@@ -6,6 +6,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import th.co.cbank.project.constants.AppConstants;
 import th.co.cbank.project.control.CbSaveAccountControl;
 import th.co.cbank.project.control.CbSaveConfigControl;
 import th.co.cbank.project.control.CbTransactionLoanControl;
@@ -211,7 +212,7 @@ public class TransactionAdvanceMethod {
                     bean.setBranchCode(Value.BRANCH_CODE);
                     bean.setT_interest(0);
                     bean.setT_fee(0);
-                    bean.setT_status("11");
+                    bean.setT_status(AppConstants.CB_STATUS_ADD_INT);
 
                     if (bean.getT_amount() > 0) {
                         tranSaveControl.saveCbTransactionSave(bean);
@@ -284,7 +285,7 @@ public class TransactionAdvanceMethod {
                     bean.setBranchCode(Value.BRANCH_CODE);
                     bean.setT_interest(0);
                     bean.setT_fee(0);
-                    bean.setT_status("11");
+                    bean.setT_status(AppConstants.CB_STATUS_ADD_INT);
                     if (bean.getT_amount() > 0) {
                         tranSaveControl.saveCbTransactionSave(bean);
                     }

@@ -66,12 +66,12 @@ public class AddressControlTest {
      */
     @Test
     public void testGetOne() {
-        System.out.println("getOne");
+        System.out.println("findOneByCustCodeAddrType");
         String Cust_Code = "";
         String addrType = "";
         AddressControl instance = new AddressControl();
         AddressBean expResult = null;
-        AddressBean result = instance.getOne(Cust_Code, addrType);
+        AddressBean result = instance.findOneByCustCodeAddrType(Cust_Code, addrType);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");

@@ -11,7 +11,7 @@ import javax.swing.JTable;
 
 public class ClipboardUtil {
 
-    public static void copyTableContent(JTable table) {
+    public static String copyTableContent(JTable table) {
         int rowSel = table.getSelectedRow();
         int colSel = table.getSelectedColumn();
         if (rowSel != -1) {
@@ -19,8 +19,9 @@ public class ClipboardUtil {
             StringSelection stringSelection = new StringSelection(myString.replace(",", ""));
             Clipboard clipboard = Toolkit.getDefaultToolkit().getSystemClipboard();
             clipboard.setContents(stringSelection, null);
-            MessageAlert.infoPopup(ClipboardUtil.class, "Copy data to clipboard");
+            return myString;
         }
+        return null;
     }
 
     public static void paste() {
@@ -32,7 +33,7 @@ public class ClipboardUtil {
             robot.keyRelease(controlKey);
             robot.keyRelease(VK_V);
         } catch (AWTException e) {
-            MessageAlert.infoPopup(ClipboardUtil.class, e.getMessage());
+            MessageAlert.errorPopup(ClipboardUtil.class, e.getMessage());
         }
 
     }
