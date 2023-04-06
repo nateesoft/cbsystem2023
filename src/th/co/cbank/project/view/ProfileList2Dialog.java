@@ -409,7 +409,7 @@ public class ProfileList2Dialog extends BaseDialogSwing {
         double totalLoanAmt = 0.00;
         for (int i = 0; i < listProfile.size(); i++) {
             ProfileMapping bean = (ProfileMapping) listProfile.get(i);
-            CbMemberTypeBean mBean = getMemberTypeControl().listMemberType(bean.getProfileBean().getP_member_type());
+            CbMemberTypeBean mBean = getMemberTypeControl().findOneByTypeCode(bean.getProfileBean().getP_member_type());
             if (bean.getProfileBean().getP_member_type() == null) {
                 bean.getProfileBean().setP_member_type("1");
             }

@@ -245,7 +245,7 @@ public class PrefixDialog extends BaseDialogSwing {
         if (evt.getClickCount() == 2) {
             int rows = tbProject.getSelectedRow();
             if (rows != -1) {
-                CbPrefixBean bean = getPrefixControl().listPrefix("" + tbProject.getValueAt(rows, 0));
+                CbPrefixBean bean = getPrefixControl().findOneByCode("" + tbProject.getValueAt(rows, 0));
                 txtCode.setText(bean.getCode());
                 txtName.setText(bean.getName());
 

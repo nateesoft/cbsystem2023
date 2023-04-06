@@ -147,7 +147,7 @@ public class CbUserControl extends BaseControl {
         return isValid;
     }
 
-    public CbUserBean getUserAndPass(String user, String pass) {
+    public CbUserBean findOneByUserPass(String user, String pass) {
         String sql = "select * from cb_user where username='" + user + "' "
                 + "and password=md5('" + pass + "') ";
         try (ResultSet rs = MySQLConnect.getResultSet(sql)) {
@@ -161,7 +161,7 @@ public class CbUserControl extends BaseControl {
         return null;
     }
 
-    public CbGroupBean getPermission(String user) {
+    public CbGroupBean findGroupPermissionByUser(String user) {
         CbGroupBean bean = new CbGroupBean();
         String sql = "select permission from cb_group g inner join cb_user u "
                 + "on g.groupcode=u.usergroup "

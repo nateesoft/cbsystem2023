@@ -775,7 +775,7 @@ public class HoonProfitDialog extends BaseDialogSwing {
 
     private void loadDefault() {
         // load default        
-        CbHoonSummaryBean bean = getSummaryControl().getData(cbYear.getSelectedItem().toString());
+        CbHoonSummaryBean bean = getSummaryControl().findOneByYear(cbYear.getSelectedItem().toString());
         if (bean != null) {
             txtNetProfitAmount.setText(dec.format(bean.getProfit_total()));
             jTextField6.setText("" + bean.getReduce_value_second());

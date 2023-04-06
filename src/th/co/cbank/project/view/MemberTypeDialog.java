@@ -270,7 +270,7 @@ public class MemberTypeDialog extends BaseDialogSwing {
         if (evt.getClickCount() == 2) {
             int rows = tbMemberType.getSelectedRow();
             if (rows != -1) {
-                CbMemberTypeBean bean = getMemberTypeControl().listMemberType("" + tbMemberType.getValueAt(rows, 0));
+                CbMemberTypeBean bean = getMemberTypeControl().findOneByTypeCode("" + tbMemberType.getValueAt(rows, 0));
                 txtTypeCode.setText(bean.getTypeCode());
                 txtTypeName.setText(bean.getTypeName());
                 if (bean.getMemberCount() > 1) {

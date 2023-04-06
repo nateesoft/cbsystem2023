@@ -272,7 +272,7 @@ public class ProfileControl extends BaseControl {
         return listBean;
     }
 
-    public ProfileBean listCbProfile(String P_custCode) {
+    public ProfileBean findOneByCustCode(String P_custCode) {
         try {
             String sql = "select * from cb_profile where P_custCode='" + P_custCode + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);
@@ -320,7 +320,7 @@ public class ProfileControl extends BaseControl {
         }
     }
 
-    public ProfileBean getPIndex(String pIndex) {
+    public ProfileBean findOneByIndex(String pIndex) {
         try {
             String sql = "select * from cb_profile where p_index='" + pIndex + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);
@@ -517,7 +517,7 @@ public class ProfileControl extends BaseControl {
         return pMax;
     }
 
-    public ProfileBean initBean() {
+    public ProfileBean getInitialBean() {
         ProfileBean bean = new ProfileBean();
         bean.setP_index(NumberFormat.toInt(getMaxIndex()));
         bean.setP_custSex("M");

@@ -67,8 +67,8 @@ public class DepositPanel extends javax.swing.JPanel {
 
         this.profileBean = profileBean;
         this.saveAccountBean = saveAccountBean;
-        cbSaveConfigBean = saveConfigControl.getConfigByTypeCode(saveAccountBean.getAccount_type());
-        configBean = configControl.getConfigBean();
+        cbSaveConfigBean = saveConfigControl.findOneByTypeCode(saveAccountBean.getAccount_type());
+        configBean = configControl.findOne();
 
         jTabbedPane8.setEnabledAt(0, false);
         jTabbedPane8.setEnabledAt(1, false);
@@ -2139,7 +2139,7 @@ public class DepositPanel extends javax.swing.JPanel {
     }
 
     private void clearWithdraw() {
-        saveAccountBean = saveAccountControl.getSaveAccountBean(saveAccountBean.getAccount_code());
+        saveAccountBean = saveAccountControl.findOneByAccountCode(saveAccountBean.getAccount_code());
         txtBalanceTotal.setText(NumberFormat.showDouble2(saveAccountBean.getB_BALANCE()));
         txtWithdrawalBaht.setText("0.00");
         txtRemark2.setText("");
@@ -2223,7 +2223,7 @@ public class DepositPanel extends javax.swing.JPanel {
     }
 
     private void loadSummary() {
-        SaveSummaryBean saveSummaryBean = saveSummaryControl.getSaveData();
+        SaveSummaryBean saveSummaryBean = saveSummaryControl.findOneSummary();
 
         jTextField2.setText("" + saveSummaryBean.getAccountAll());
         jTextField3.setText(NumberFormat.showDouble2(saveSummaryBean.getSaveAll()));
@@ -2246,7 +2246,7 @@ public class DepositPanel extends javax.swing.JPanel {
     }
 
     private void clearDeposit() {
-        saveAccountBean = saveAccountControl.getSaveAccountBean(saveAccountBean.getAccount_code());
+        saveAccountBean = saveAccountControl.findOneByAccountCode(saveAccountBean.getAccount_code());
         txtBalance.setText(NumberFormat.showDouble2(saveAccountBean.getB_BALANCE()));
         txtBalanceInterest.setText(NumberFormat.showDouble2(saveAccountBean.getB_INTEREST()));
 

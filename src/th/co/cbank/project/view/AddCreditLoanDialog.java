@@ -258,7 +258,7 @@ public class AddCreditLoanDialog extends BaseDialogSwing {
     // End of variables declaration//GEN-END:variables
 
     private void initLoadData() {
-        ProfileBean profileBean = getProfileControl().listCbProfile(profileCode);
+        ProfileBean profileBean = getProfileControl().findOneByCustCode(profileCode);
         txtCreditLoanAmt.setText(NumberFormat.showDouble2(profileBean.getLoan_Credit_Amt()));
         txtLoanBalance.setText(NumberFormat.showDouble2(profileBean.getLoan_Balance()));
         txtLoanMaxAmt.setText(NumberFormat.showDouble2(profileBean.getLoan_Credit_Balance()));

@@ -324,7 +324,7 @@ public class PrintSavingBookDialog extends BaseDialogSwing {
                 clearModel(model);
                 SimpleDateFormat simp = new SimpleDateFormat("dd/MM/yy", Locale.ENGLISH);
                 CbSaveAccountControl saveAccountControl = new CbSaveAccountControl();
-                CbSaveAccountBean accountBean = saveAccountControl.getSaveAccountBean(txtAccCode.getText());
+                CbSaveAccountBean accountBean = saveAccountControl.findOneByAccountCode(txtAccCode.getText());
                 List<CbTransactionSaveBean> transactionSave = transactionSaveControl.listSavingBookTransactionByAcccode(txtAccCode.getText(), accountBean.getB_CUST_CODE());
                 int backupLineNo = 0;
                 int backupIndex = 0;
@@ -417,13 +417,13 @@ public class PrintSavingBookDialog extends BaseDialogSwing {
     private void printFrontBook() {
         //print หน้าปกสมุด
         PassBook_PSiPR9 view = new PassBook_PSiPR9();
-        CbSaveAccountBean saveBean = getSaveAccountControl().getSaveAccountBean(txtAccCode.getText());
+        CbSaveAccountBean saveBean = getSaveAccountControl().findOneByAccountCode(txtAccCode.getText());
 
         String accCode = saveBean.getAccount_code();
         String accName = saveBean.getB_CUST_NAME() + "  " + saveBean.getB_CUST_LASTNAME();
         String bookNo = saveBean.getBook_no();
         String accType = saveBean.getAccount_type();
-        CbSaveConfigBean bean = getSaveConfigControl().listSaveConfig1(accType);
+        CbSaveConfigBean bean = getSaveConfigControl().findOneByTypeCode(accType);
 
         view.printFrontBook(accCode, accName, bookNo, accType + " - " + bean.getTypeName());
     }

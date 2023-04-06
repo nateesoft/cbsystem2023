@@ -52,7 +52,7 @@ public class CbCancelAccountControl extends BaseControl {
         }
     }
 
-    public CbCancelAccountBean getCbCancelAccount(String date_cancel) {
+    public CbCancelAccountBean findOneByDateCancel(String date_cancel) {
         try {
             String sql = "select * from cb_cancel_account where date_cancel='" + date_cancel + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);

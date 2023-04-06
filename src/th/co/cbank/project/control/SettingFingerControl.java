@@ -59,7 +59,7 @@ public class SettingFingerControl extends BaseControl {
         return isExist;
     }
 
-    public SettingBean getData() {
+    public SettingBean findOne() {
         SettingBean bean = null;
         try {
             String sql = "select * from cb_setting";
@@ -78,30 +78,6 @@ public class SettingFingerControl extends BaseControl {
                 bean.setVAT2(rs.getDouble("VAT2"));
                 bean.setBASE_DEPOSIT2(rs.getDouble("BASE_DEPOSIT2"));
                 bean.setBASE_WITHDRAWAL2(rs.getDouble("BASE_WITHDRAWAL2"));
-            }
-            rs.close();
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            MessageAlert.errorPopup(this.getClass(), e.getMessage());
-        }
-
-        return bean;
-    }
-
-    public SettingBean getData6() {
-        SettingBean bean = null;
-        try {
-            String sql = "select * from cb_setting";
-            ResultSet rs = MySQLConnect.getResultSet(sql);
-            if (rs.next()) {
-                bean = new SettingBean();
-                bean.setINTEREST(rs.getDouble("INTEREST2"));
-                bean.setVAT(rs.getDouble("VAT2"));
-                bean.setBASE_DEPOSIT(rs.getDouble("BASE_DEPOSIT2"));
-                bean.setBASE_WITHDRAWAL(rs.getDouble("BASE_WITHDRAWAL2"));
-                bean.setUPDATE_DATE(rs.getString("UPDATE_DATE"));
-                bean.setPWD(rs.getString("PWD"));
-                bean.setDayCI(rs.getInt("Day_CI"));
             }
             rs.close();
         } catch (Exception e) {

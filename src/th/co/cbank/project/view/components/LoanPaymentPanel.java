@@ -753,7 +753,7 @@ public class LoanPaymentPanel extends javax.swing.JPanel {
         txtPrincipleBalance.setText(NumberFormat.showDouble2(loanAccountBean.getLoan_amount()));
 
         //compute interest
-        CbLoanConfigBean loanConfigBean = loanConfigControl.listLoanConfig(loanAccountBean.getLoan_type());
+        CbLoanConfigBean loanConfigBean = loanConfigControl.findOneByLoanCode(loanAccountBean.getLoan_type());
         if (loanConfigBean.getIntFixed().equals("E")) {
             isEffitiveRate = true;
             txtPaymentDate.setEditable(false);
@@ -907,7 +907,7 @@ public class LoanPaymentPanel extends javax.swing.JPanel {
         cbTransactionLoanBean.setT_empcode(Value.USER_CODE);
 
         String paymentDocNo;
-        ConfigBean configBean = configControl.getConfigBean();
+        ConfigBean configBean = configControl.findOne();
         if (configBean.getBranchPrefix().equals("Y")) {
             BranchBean branchBean = branchControl.getData();
             paymentDocNo = branchBean.getCode() + configBean.getPaymentDocPrefix() + getRunning(configBean.getPaymentDocRunning());

@@ -44,7 +44,7 @@ public class TransactionAdvanceDialog extends BaseDialogSwing {
             String custCode = txtCustCode.getText();
             String accCode = txtAccCode.getText();
             CbSaveAccountControl saveAccountControl = new CbSaveAccountControl();
-            CbSaveAccountBean saveAccountBean = saveAccountControl.getSaveAccountBean(accCode);
+            CbSaveAccountBean saveAccountBean = saveAccountControl.findOneByAccountCode(accCode);
             List<String[]> modelList = TransactionAdvanceMethod.findData(custCode, accCode, true, saveAccountBean.getAccount_type());
             if (modelList.isEmpty()) {
                 btnSave.setEnabled(false);

@@ -55,9 +55,9 @@ public class CbHoonConfigControl extends BaseControl {
         }
     }
 
-    public CbHoonConfigBean listCbHoonConfig(String id) {
+    public CbHoonConfigBean findOneByHoonCode(String hoonCode) {
         try {
-            ResultSet rs = MySQLConnect.getResultSet("select * from cb_hoon_config where HoonCode='" + id + "'");
+            ResultSet rs = MySQLConnect.getResultSet("select * from cb_hoon_config where HoonCode='" + hoonCode + "'");
             List<CbHoonConfigBean> listBean = mappingBean(rs);
             if (listBean.isEmpty()) {
                 return null;

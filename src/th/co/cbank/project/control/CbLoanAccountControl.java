@@ -156,10 +156,10 @@ public class CbLoanAccountControl extends BaseControl {
         return listBean;
     }
 
-    public CbLoanAccountBean findLoanByIdCard(String idCard) {
+    public CbLoanAccountBean findOneByCustCode(String custCode) {
         CbLoanAccountBean bean = null;
         try {
-            String sql = "select * from cb_loan_account where cust_code='" + idCard + "'";
+            String sql = "select * from cb_loan_account where cust_code='" + custCode + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             if (rs.next()) {
                 bean = new CbLoanAccountBean();
@@ -207,7 +207,7 @@ public class CbLoanAccountControl extends BaseControl {
         return bean;
     }
 
-    public CbLoanAccountBean listLoanAccount(String Loan_docno) {
+    public CbLoanAccountBean findOneByLoanDocNo(String Loan_docno) {
         CbLoanAccountBean bean = null;
         try {
             String sql = "select a.*,c.LoanName "
@@ -428,7 +428,7 @@ public class CbLoanAccountControl extends BaseControl {
         }
     }
 
-    public CbLoanAccountBean initBean() {
+    public CbLoanAccountBean getInitBean() {
         CbLoanAccountBean lb = new CbLoanAccountBean();
         lb.setLoan_datePay(DateFormat.getEnglish_ddMMyyyy("01/01/2015"));
         lb.setSysdate(new Date());
@@ -447,7 +447,7 @@ public class CbLoanAccountControl extends BaseControl {
         return lb;
     }
 
-    public CbLoanAccountBean getLoanAccount(String Loan_docno, String custCode) {
+    public CbLoanAccountBean findOneByLoanDocNoAndCustCode(String Loan_docno, String custCode) {
         CbLoanAccountBean bean = null;
         try {
             String sql = "select * from cb_loan_account "

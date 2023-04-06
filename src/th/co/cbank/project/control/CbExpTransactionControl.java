@@ -55,9 +55,9 @@ public class CbExpTransactionControl extends BaseControl {
         }
     }
 
-    public CbExpTransactionBean getCbExpTransaction(String EXP_DOC) {
+    public CbExpTransactionBean findOneByExpDoc(String expDoc) {
         try {
-            String sql = "select * from cb_exp_transaction where EXP_DOC='" + EXP_DOC + "'";
+            String sql = "select * from cb_exp_transaction where EXP_DOC='" + expDoc + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             List<CbExpTransactionBean> listBean = mappingBean(rs);
             if (listBean.isEmpty()) {

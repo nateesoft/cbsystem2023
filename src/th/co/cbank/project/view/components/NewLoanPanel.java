@@ -1764,7 +1764,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
         AddCreditLoanDialog addCreditLoanDialog = new AddCreditLoanDialog(null, true, profileBean.getP_custCode(), empCode);
         addCreditLoanDialog.setVisible(true);
 
-        profileBean = profileControl.listCbProfile(profileBean.getP_custCode());
+        profileBean = profileControl.findOneByCustCode(profileBean.getP_custCode());
         lbLoanCreditBalance.setText("วงเงินในการกู้คงเหลือ " + profileBean.getLoan_Credit_Balance() + " บาท");
     }//GEN-LAST:event_btnApproveMoreMoneyActionPerformed
 
@@ -1935,7 +1935,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
         approveDialog.setVisible(true);
 
         if (approveDialog.getCUST_CODE() != null) {
-            ProfileBean profileApprove = profileControl.listCbProfile(approveDialog.getCUST_CODE());
+            ProfileBean profileApprove = profileControl.findOneByCustCode(approveDialog.getCUST_CODE());
             txtLoanCustCode.setText(profileApprove.getP_custCode());
             txtLoanCustName.setText(profileApprove.getP_custName());
             txtLoanCustSurname.setText(profileApprove.getP_custSurname());
@@ -2149,15 +2149,15 @@ public class NewLoanPanel extends javax.swing.JPanel {
         switch (cbAddrType.getSelectedIndex()) {
             case 0:
                 //ที่อยู่ปัจจุบัน
-                addressBean = addressControl.listProfileAddress(txtLoanCustID.getText(), "1");
+                addressBean = addressControl.getOne(txtLoanCustID.getText(), "1");
                 break;
             case 1:
                 //ที่อยู่ตามบัตรประชาชน
-                addressBean = addressControl.listProfileAddress(txtLoanCustID.getText(), "2");
+                addressBean = addressControl.getOne(txtLoanCustID.getText(), "2");
                 break;
             case 2:
                 //ที่อยู่ที่ทำงาน
-                addressBean = addressControl.listProfileAddress(txtLoanCustID.getText(), "3");
+                addressBean = addressControl.getOne(txtLoanCustID.getText(), "3");
                 break;
             default:
                 addressBean = new AddressBean();
@@ -2222,7 +2222,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
         String strTxtLoanAmtPerPerson = txtLoanAmt.getText();
         double txtLoanAmtPerPerson = NumberFormat.toDouble(strTxtLoanAmtPerPerson);
         String docType = getIDCombobox(cbLoanAcc);
-        CbLoanConfigBean lBean = loanConfigControl.listLoanConfig(docType);
+        CbLoanConfigBean lBean = loanConfigControl.findOneByLoanCode(docType);
         double txtLoanFeeAmt = lBean.getLoanFee() * txtLoanAmtPerPerson / 100;
         txtLoanFee.setText(NumberFormat.showDouble2(txtLoanFeeAmt));
 
@@ -2239,7 +2239,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
     private void cbLoanAccItemStateChangedAction(ItemEvent evt) {
         if (evt.getStateChange() == 1) {
             String id = getIDCombobox(cbLoanAcc);
-            CbLoanConfigBean loanBean = loanConfigControl.listLoanConfig(id);
+            CbLoanConfigBean loanBean = loanConfigControl.findOneByLoanCode(id);
             if (loanBean != null) {
                 switch (loanBean.getIntFixed()) {
                     case AppConstants.INT_FLAT_RATE:
@@ -2311,7 +2311,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
 
     private void cbLoanTypePaymentItemStateChanged() {
         String id = getIDCombobox(cbLoanAcc);
-        CbLoanConfigBean cbLoanConfigBean = loanConfigControl.listLoanConfig(id);
+        CbLoanConfigBean cbLoanConfigBean = loanConfigControl.findOneByLoanCode(id);
         if (cbLoanConfigBean != null) {
             double intPerYear = cbLoanConfigBean.getLoanINT();//ต่อปี
             double intPerMonth = intPerYear / 12;
@@ -2357,7 +2357,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
 
     private void computeBahtPerMonth() {
         String loanType = getIDCombobox(cbLoanAcc);
-        CbLoanConfigBean loanConfigBean = loanConfigControl.listLoanConfig(loanType);
+        CbLoanConfigBean loanConfigBean = loanConfigControl.findOneByLoanCode(loanType);
         double loanAmt, loanInt, netTotal;
         int loanPerAmt;
         int _netTotal;
@@ -2531,7 +2531,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
             }
 
             String docType = getIDCombobox(cbLoanAcc);
-            CbLoanConfigBean cbLoanConfigBean = loanConfigControl.listLoanConfig(docType);
+            CbLoanConfigBean cbLoanConfigBean = loanConfigControl.findOneByLoanCode(docType);
             if (loanPerMonth > cbLoanConfigBean.getLoanPerMonth()) {
                 MessageAlert.warningPopup(this, "ท่านกู้เกินจำนวนงวดตามที่สัญญากำหนดไว้ ต้องไม่เกิน " + cbLoanConfigBean.getLoanPerMonth() + " งวด");
                 txtLoanPerMonth.selectAll();
@@ -2545,7 +2545,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
     }
 
     private void addBoundsman() {
-        ProfileBean profileApprove = profileControl.listCbProfile(txtLoanCustCode.getText());
+        ProfileBean profileApprove = profileControl.findOneByCustCode(txtLoanCustCode.getText());
         if ("".equals(txtLoanCustCode.getText()) || profileApprove == null) {
             MessageAlert.warningPopup(this, "ข้อมูลรหัสผู้ค้ำประกันไม่ถูกต้อง !!!");
             txtLoanCustCode.selectAll();
@@ -2599,8 +2599,8 @@ public class NewLoanPanel extends javax.swing.JPanel {
     private void saveLoanForm() {
         //update front book
         String docType = getIDCombobox(cbLoanAcc);
-        CbLoanConfigBean cbLoanConfigBean = loanConfigControl.listLoanConfig(docType);
-        ConfigBean configBean = configControl.getConfigBean();
+        CbLoanConfigBean cbLoanConfigBean = loanConfigControl.findOneByLoanCode(docType);
+        ConfigBean configBean = configControl.findOne();
         String loanDocNo;
         if (configBean.getBranchPrefix().equals("Y")) {
             BranchBean bBean = branchControl.getData();
@@ -2795,7 +2795,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
             });
         }
 
-        DocumentGarunteeBean documentGarunteeBean = documentGarunteeControl.getDocumentGaruntee(loanDocNo);
+        DocumentGarunteeBean documentGarunteeBean = documentGarunteeControl.findOneByDocNo(loanDocNo);
         if (documentGarunteeBean != null) {
             txtAssetGaruntee1.setText(documentGarunteeBean.getDOC_DESC());
             txtImg1.setText(documentGarunteeBean.getIMAGE1());
@@ -2809,7 +2809,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
         PassBook_PSiPR9 passBookPsiPr9 = new PassBook_PSiPR9();
 
         List<ReportOrangeBean> listBean = new ArrayList<>();
-        ConfigBean configBean = configControl.getConfigBean();
+        ConfigBean configBean = configControl.findOne();
 
         String where = " and t_acccode='" + accountCode + "' "
                 + "and printchk='N' and LineNo>0 and t_booktype "
@@ -2901,7 +2901,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
         String barcode = accCode;
         String accName = profileName + " ";
         String accType = getNamCB(cbLoanAcc);
-        CbLoanAccountBean cbLoanAccountBean = loanAccountControl.listLoanAccount(loanDocNo);
+        CbLoanAccountBean cbLoanAccountBean = loanAccountControl.findOneByLoanDocNo(loanDocNo);
         String bookNo = "" + cbLoanAccountBean.getBook_no();
         view.printLoanFrontBook(accCode, accName, bookNo, barcode, accType);
     }
@@ -2942,7 +2942,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
         }
 
         String docType = getIDCombobox(cbLoanAcc);
-        CbLoanConfigBean cbLoanConfigBean = loanConfigControl.listLoanConfig(docType);
+        CbLoanConfigBean cbLoanConfigBean = loanConfigControl.findOneByLoanCode(docType);
         if (loanPerMonth > cbLoanConfigBean.getLoanPerMonth()) {
             MessageAlert.warningPopup(this, "ท่านกู้เกินจำนวนงวดตามที่สัญญากำหนดไว้ ต้องไม่เกิน " + cbLoanConfigBean.getLoanPerMonth() + " งวด");
             return false;

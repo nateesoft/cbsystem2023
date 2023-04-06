@@ -32,11 +32,11 @@ public class CbPrefixControl extends BaseControl {
         return listBean;
     }
 
-    public CbPrefixBean listPrefix(String pj_id) {
+    public CbPrefixBean findOneByCode(String code) {
         CbPrefixBean bean = new CbPrefixBean();
         try {
             String sql = "select * from cb_prefix "
-                    + "where code='" + pj_id + "'";
+                    + "where code='" + code + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             if (rs.next()) {
                 bean.setCode(rs.getString("code"));

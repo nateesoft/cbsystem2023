@@ -172,7 +172,7 @@ public class CbTransactionSaveControl extends BaseControl {
         }
     }
 
-    public CbTransactionSaveBean listCbTransactionSave(String T_custcode) {
+    public CbTransactionSaveBean findOneByCustCode(String T_custcode) {
         try {
             String sql = "select * from cb_transaction_save where T_custcode='" + T_custcode + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);
@@ -188,7 +188,7 @@ public class CbTransactionSaveControl extends BaseControl {
         }
     }
 
-    public CbTransactionSaveBean checkTransactionSave(String T_DocNO) {
+    public CbTransactionSaveBean findOneByDocNo(String T_DocNO) {
         try {
             String sql = "select * from cb_transaction_save where t_docno='" + T_DocNO + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);

@@ -74,7 +74,7 @@ public class ConfigControl extends BaseControl {
         }
     }
 
-    public ConfigBean getConfigBean() {
+    public ConfigBean findOne() {
         try {
             String sql = "select * from cb_config";
             ResultSet rs = MySQLConnect.getResultSet(sql);

@@ -255,7 +255,7 @@ public class LoadExcelAccountLoanDialog extends BaseDialogSwing {
             while ((line = br.readLine()) != null) {
                 lbMsg.setText("Loading.. " + line);
                 taLog.append(lbMsg.getText() + "\n\n");
-                CbLoanConfigBean lBean = getLoanConfigControl().listLoanConfig(loanCode);
+                CbLoanConfigBean lBean = getLoanConfigControl().findOneByLoanCode(loanCode);
 
                 idCard1 = line;
                 if (line.equals("")) {
@@ -276,7 +276,7 @@ public class LoadExcelAccountLoanDialog extends BaseDialogSwing {
                 }
                 i++;
                 pbLoad.setValue(i);
-                ProfileBean proBean = getProfileControl().listCbProfile(idCard);
+                ProfileBean proBean = getProfileControl().findOneByCustCode(idCard);
                 if (proBean != null) {
                     //update credit limit
                     lbMsg.setText("Loading.. " + idCard + " : update loan credit: " + loanAmt);
@@ -286,7 +286,7 @@ public class LoadExcelAccountLoanDialog extends BaseDialogSwing {
                     //create new profile
                     lbMsg.setText("Loading.. " + line + " : create profile: " + idCard);
                     taLog.append(lbMsg.getText() + "\n");
-                    proBean = getProfileControl().initBean();
+                    proBean = getProfileControl().getInitialBean();
                     proBean.setP_custCode(idCard);
                     proBean.setP_custName("");
                     proBean.setP_custSurname("");
@@ -300,7 +300,7 @@ public class LoadExcelAccountLoanDialog extends BaseDialogSwing {
 
                 //save loan account
                 String loanDocNo = bBean.getCode() + lBean.getLoanCode() + dec.format(lBean.getLoanRunning());
-                CbLoanAccountBean loanBean = getLoanAccountControl().initBean();
+                CbLoanAccountBean loanBean = getLoanAccountControl().getInitBean();
                 loanBean.setLoan_docno(loanDocNo);
                 loanBean.setLoan_docdate(DateFormat.getEnglish_ddMMyyyy(fixStringDate));
                 loanBean.setCust_code(proBean.getP_custCode());
@@ -332,7 +332,7 @@ public class LoadExcelAccountLoanDialog extends BaseDialogSwing {
                     tLoanBean.setRemark("");
                     tLoanBean.setT_status("10");
 
-                    ConfigBean cBean = getConfigControl().getConfigBean();
+                    ConfigBean cBean = getConfigControl().findOne();
                     tLoanBean.setT_booktype(cBean.getLoanDocPrefix());
                     tLoanBean.setLineNo(getCbTransactionLoanControl().getLineByAccount(loanDocNo));
                     tLoanBean.setPrintChk("N");
@@ -351,7 +351,7 @@ public class LoadExcelAccountLoanDialog extends BaseDialogSwing {
                     //save loan table
                     lbMsg.setText("Loading.. " + idCard + " : save table payment: " + loanDocNo);
                     taLog.append(lbMsg.getText() + "\n");
-                    CbLoanTablePaymentBean loanTbPayBean = getCbLoanTablePaymentControl().initBean();
+                    CbLoanTablePaymentBean loanTbPayBean = getCbLoanTablePaymentControl().getInitialBean();
                     loanTbPayBean.setLoan_doc_no(loanDocNo);
                     loanTbPayBean.setNet_total_pay(loanAmt);
                     loanTbPayBean.setBase_total_amount(loanAmt);

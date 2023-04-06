@@ -116,7 +116,7 @@ public class ListSaveConfirmDialog extends BaseDialogSwing {
         PassBook_PSiPR9 passBook = new PassBook_PSiPR9();
 
         List<ReportGreenBean> listReportGreen = new ArrayList<>();
-        ConfigBean configBean = getConfigControl().getConfigBean();
+        ConfigBean configBean = getConfigControl().findOne();
 
         CbTransactionSaveControl tranSaveControl = new CbTransactionSaveControl();
         List<CbTransactionSaveBean> listTranBean = tranSaveControl.getTransactionByBookType(txtAccCode, configBean.getLoanDocPrefix(), configBean.getPaymentDocPrefix());

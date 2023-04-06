@@ -245,7 +245,7 @@ public class ProjectDialog extends BaseDialogSwing {
         if (evt.getClickCount() == 2) {
             int rows = tbProject.getSelectedRow();
             if (rows != -1) {
-                CbProjectBean bean = getProjectControl().listProject("" + tbProject.getValueAt(rows, 0));
+                CbProjectBean bean = getProjectControl().findOneByPjId("" + tbProject.getValueAt(rows, 0));
                 txtProjectCode.setText(bean.getProductCode());
                 txtProjectName.setText(bean.getProductName());
 

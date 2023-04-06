@@ -10,7 +10,7 @@ public class SaveSummaryControl extends BaseControl {
 
     private final Logger logger = Logger.getLogger(SaveSummaryControl.class);
 
-    public SaveSummaryBean getSaveData() {
+    public SaveSummaryBean findOneSummary() {
         SaveSummaryBean bean = new SaveSummaryBean();
         try {
             String sql = "select count(b_cust_code) total, "

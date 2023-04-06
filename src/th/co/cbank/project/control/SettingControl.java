@@ -34,10 +34,10 @@ public class SettingControl extends BaseControl {
         return listBean;
     }
 
-    public GroupBean listCbGroup(String groupcode) {
+    public GroupBean findOneByGroupCode(String groupCode) {
         GroupBean bean = new GroupBean();
         try {
-            String sql = "select * from cb_group where groupcode='" + groupcode + "'";
+            String sql = "select * from cb_group where groupcode='" + groupCode + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             if (rs.next()) {
                 bean.setGroupCode(rs.getString("Groupcode"));

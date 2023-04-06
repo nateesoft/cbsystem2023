@@ -1,6 +1,7 @@
 package th.co.cbank.project.control;
 
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -208,7 +209,7 @@ public class CbSaveAccountControl extends BaseControl {
         return listBean;
     }
 
-    public CbSaveAccountBean getSaveAccountBean(String account_code) {
+    public CbSaveAccountBean findOneByAccountCode(String account_code) {
         try {
             String sql = "select * from cb_save_account where Account_code='" + account_code + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);
@@ -226,7 +227,7 @@ public class CbSaveAccountControl extends BaseControl {
 
     }
 
-    public CbSaveAccountBean getSaveAccount(String where) {
+    public CbSaveAccountBean findOneByConditionWhere(String where) {
         try {
             String sql = "select * from cb_save_account where 1=1 ";
             if (StringUtil.isNotNullString(where)) {
@@ -825,20 +826,18 @@ public class CbSaveAccountControl extends BaseControl {
         }
     }
 
-    public BalanceBean getBalance(String Cust_Code) {
+    public BalanceBean findBalanceBeanByCustCode(String Cust_Code) {
         BalanceBean bean = new BalanceBean();
-        try {
-            String sql = "select * from cb_save_account "
-                    + "where B_Cust_Code='" + Cust_Code + "' ";
-            try (ResultSet rs = MySQLConnect.getResultSet(sql)) {
-                if (rs.next()) {
-                    bean.setB_CUST_CODE(rs.getString("B_CUST_CODE"));
-                    bean.setB_CUST_NAME(ThaiUtil.ASCII2Unicode(rs.getString("B_CUST_NAME")));
-                    bean.setB_CUST_LASTNAME(ThaiUtil.ASCII2Unicode(rs.getString("B_CUST_LASTNAME")));
-                    bean.setB_BALANCE(rs.getDouble("B_BALANCE"));
-                    bean.setB_INTEREST(rs.getDouble("B_INTEREST"));
-                    bean.setB_START(rs.getDate("B_START"));
-                }
+        String sql = "select * from cb_save_account "
+                + "where B_Cust_Code='" + Cust_Code + "' ";
+        try (ResultSet rs = MySQLConnect.getResultSet(sql)) {
+            if (rs.next()) {
+                bean.setB_CUST_CODE(rs.getString("B_CUST_CODE"));
+                bean.setB_CUST_NAME(ThaiUtil.ASCII2Unicode(rs.getString("B_CUST_NAME")));
+                bean.setB_CUST_LASTNAME(ThaiUtil.ASCII2Unicode(rs.getString("B_CUST_LASTNAME")));
+                bean.setB_BALANCE(rs.getDouble("B_BALANCE"));
+                bean.setB_INTEREST(rs.getDouble("B_INTEREST"));
+                bean.setB_START(rs.getDate("B_START"));
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -869,8 +868,8 @@ public class CbSaveAccountControl extends BaseControl {
         SimpleDateFormat sToday = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
         dateEnd = sToday.format(new Date());
 
-        CalendarBean c1 = getDateInt(dateString);
-        CalendarBean c2 = getDateInt(dateEnd);
+        CalendarBean c1 = findCalendarBeanByDate(dateString);
+        CalendarBean c2 = findCalendarBeanByDate(dateEnd);
 
         Calendar cStart = Calendar.getInstance();
         Calendar cEnd = Calendar.getInstance();
@@ -893,7 +892,7 @@ public class CbSaveAccountControl extends BaseControl {
         return dayRunning;
     }
 
-    public CalendarBean getDateInt(String date) {
+    public CalendarBean findCalendarBeanByDate(String date) {
         String[] arr = date.split("-");
         String year = arr[0];
         String month = arr[1];
@@ -972,12 +971,12 @@ public class CbSaveAccountControl extends BaseControl {
         SimpleDateFormat simp = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 
-        CalendarBean c1 = getDateInt(dIn1);
+        CalendarBean c1 = findCalendarBeanByDate(dIn1);
         CalendarBean c2;
         if (dIn2.equals("now")) {
-            c2 = getDateInt(s.format(new Date()));
+            c2 = findCalendarBeanByDate(s.format(new Date()));
         } else {
-            c2 = getDateInt(dIn2);
+            c2 = findCalendarBeanByDate(dIn2);
         }
 
         Calendar cStart = Calendar.getInstance(Locale.ENGLISH);
@@ -1028,7 +1027,7 @@ public class CbSaveAccountControl extends BaseControl {
             ResultSet rs = MySQLConnect.getResultSet(sql);
 
             SettingFingerControl sc = new SettingFingerControl();
-            SettingBean sb = sc.getData();
+            SettingBean sb = sc.findOne();
             double Vat = 0.00;
             double IC = 0.00;
             if (sb != null) {
@@ -1044,8 +1043,8 @@ public class CbSaveAccountControl extends BaseControl {
                 String bCustCode = rs.getString("B_CUST_CODE");
                 String bStart = rs.getString("B_START");
 
-                CalendarBean c1 = getDateInt(bStart);
-                CalendarBean c2 = getDateInt(s.format(new Date()));
+                CalendarBean c1 = findCalendarBeanByDate(bStart);
+                CalendarBean c2 = findCalendarBeanByDate(s.format(new Date()));
                 Calendar cStart = Calendar.getInstance(Locale.ENGLISH);
                 cStart.set(c1.getYear(), c1.getMonth(), c1.getDay());
                 Calendar cEnd = Calendar.getInstance(Locale.ENGLISH);

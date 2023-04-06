@@ -119,9 +119,9 @@ public class CustFileControl extends BaseControl {
         return new ArrayList();
     }
 
-    public CustfileBean load(String SP_Code) {
+    public CustfileBean findOneBySpCode(String spCode) {
         try {
-            String sql = "select * from custfile where sp_code='" + SP_Code + "'";
+            String sql = "select * from custfile where sp_code='" + spCode + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             List<CustfileBean> listBean = mappingBean(rs);
             if (listBean.isEmpty()) {

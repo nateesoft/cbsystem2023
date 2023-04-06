@@ -150,10 +150,10 @@ public class CbSaveConfigControl extends BaseControl {
         return listBean;
     }
 
-    public CbSaveConfigBean listSaveConfig1(String TypeCode) {
+    public CbSaveConfigBean findOneByTypeCode(String typeCode) {
         CbSaveConfigBean bean = new CbSaveConfigBean();
         try {
-            String sql = "select * from cb_save_config where TypeCode='" + TypeCode + "'";
+            String sql = "select * from cb_save_config where TypeCode='" + typeCode + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             if (rs.next()) {
                 bean.setTypeCode(rs.getString("TypeCode"));
@@ -208,94 +208,6 @@ public class CbSaveConfigControl extends BaseControl {
         }
 
         return isExists;
-    }
-
-    public CbSaveConfigBean getConfigByTypeCode(String typeCode) {
-        CbSaveConfigBean bean = new CbSaveConfigBean();
-        try {
-            String sql = "select * from cb_save_config "
-                    + "where TypeCode='" + typeCode + "'";
-            ResultSet rs = MySQLConnect.getResultSet(sql);
-            if (rs.next()) {
-                bean.setTypeCode(rs.getString("TypeCode"));
-                bean.setTypeName(ThaiUtil.ASCII2Unicode(rs.getString("TypeName")));
-                bean.setTypeINT(rs.getDouble("TypeINT"));
-                bean.setTypeCondition(rs.getString("TypeCondition"));
-                bean.setRDType2(rs.getDouble("RDType2"));
-                bean.setCbRDType2(rs.getInt("CbRDType2"));
-                bean.setRdTypeDialy(rs.getString("RdTypeDialy"));
-                bean.setPayType(rs.getString("PayType"));
-                bean.setCbPayType1(rs.getInt("CbPayType1"));
-                bean.setCbPayType2(rs.getInt("CbPayType2"));
-                bean.setCbPayType3(rs.getInt("CbPayType3"));
-                bean.setCbPayType4(rs.getInt("CbPayType4"));
-                bean.setCbPayType5(rs.getInt("CbPayType5"));
-                bean.setCbPayType6(rs.getInt("CbPayType6"));
-                bean.setCbPayType7(rs.getInt("CbPayType7"));
-                bean.setPayINT(rs.getDouble("PayINT"));
-                bean.setFundINT(rs.getDouble("FundINT"));
-                bean.setMaxDeposit(rs.getDouble("max_deposit"));
-                bean.setTAX(rs.getDouble("TAX"));
-                bean.setSaveRunning(rs.getInt("SaveRunning"));
-                bean.setNoRunning(rs.getInt("NoRunning"));
-                bean.setSaveFee(rs.getDouble("SaveFee"));
-
-                bean.setMinDeposit(rs.getDouble("min_deposit"));
-                bean.setMinWitdraw(rs.getDouble("min_withdraw"));
-            } else {
-                bean = null;
-            }
-            rs.close();
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            MessageAlert.errorPopup(this.getClass(), e.getMessage());
-        }
-
-        return bean;
-    }
-
-    public CbSaveConfigBean loadConfig(String TypeCode) {
-        CbSaveConfigBean bean = new CbSaveConfigBean();
-        try {
-            String sql = "select * from cb_save_config "
-                    + "where TypeCode='" + TypeCode + "'";
-            ResultSet rs = MySQLConnect.getResultSet(sql);
-            if (rs.next()) {
-                bean.setTypeCode(rs.getString("TypeCode"));
-                bean.setTypeName(ThaiUtil.ASCII2Unicode(rs.getString("TypeName")));
-                bean.setTypeINT(rs.getDouble("TypeINT"));
-                bean.setTypeCondition(rs.getString("TypeCondition"));
-                bean.setRDType2(rs.getDouble("RDType2"));
-                bean.setCbRDType2(rs.getInt("CbRDType2"));
-                bean.setRdTypeDialy(rs.getString("RdTypeDialy"));
-                bean.setPayType(rs.getString("PayType"));
-                bean.setCbPayType1(rs.getInt("CbPayType1"));
-                bean.setCbPayType2(rs.getInt("CbPayType2"));
-                bean.setCbPayType3(rs.getInt("CbPayType3"));
-                bean.setCbPayType4(rs.getInt("CbPayType4"));
-                bean.setCbPayType5(rs.getInt("CbPayType5"));
-                bean.setCbPayType6(rs.getInt("CbPayType6"));
-                bean.setCbPayType7(rs.getInt("CbPayType7"));
-                bean.setPayINT(rs.getDouble("PayINT"));
-                bean.setFundINT(rs.getDouble("FundINT"));
-                bean.setMaxDeposit(rs.getDouble("max_deposit"));
-                bean.setTAX(rs.getDouble("TAX"));
-                bean.setSaveRunning(rs.getInt("SaveRunning"));
-                bean.setNoRunning(rs.getInt("NoRunning"));
-                bean.setSaveFee(rs.getDouble("SaveFee"));
-
-                bean.setMinDeposit(rs.getDouble("min_deposit"));
-                bean.setMinWitdraw(rs.getDouble("min_withdraw"));
-            } else {
-                bean = null;
-            }
-            rs.close();
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            MessageAlert.errorPopup(this.getClass(), e.getMessage());
-        }
-
-        return bean;
     }
 
     public boolean saveCbSaveConfig(CbSaveConfigBean bean) {
@@ -435,7 +347,7 @@ public class CbSaveConfigControl extends BaseControl {
         return true;
     }
 
-    public CbSaveConfigBean getLastConfigHistory(Date dateCheck, String typeCode) {
+    public CbSaveConfigBean findOneByUpdateDateTypeCode(Date dateCheck, String typeCode) {
         CbSaveConfigBean bean = new CbSaveConfigBean();
         try {
             String sql = "select * from cb_save_config_history where typecode='" + typeCode + "' "

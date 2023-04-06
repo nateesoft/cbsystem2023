@@ -1590,7 +1590,7 @@ public class HoonPanel extends javax.swing.JPanel {
 
     private void initHoon() {
         String hType = getIDCombobox(cbHoonType);
-        CbHoonConfigBean cbHoonConfigBean = hoonConfigControl.listCbHoonConfig(hType);
+        CbHoonConfigBean cbHoonConfigBean = hoonConfigControl.findOneByHoonCode(hType);
         if (cbHoonConfigBean != null) {
             txtValueBaht.setText(NumberFormat.showDouble2(cbHoonConfigBean.getHoonRate()));
             txtPriceValue.setText("" + cbHoonConfigBean.getHoonRate());
@@ -1640,7 +1640,7 @@ public class HoonPanel extends javax.swing.JPanel {
     private void saveBuyHoon() {
         //บันทึกข้อมูลการซื้อหุ้น
         String hoonDocNo;
-        ConfigBean configBean = configControl.getConfigBean();
+        ConfigBean configBean = configControl.findOne();
         if ("Y".equals(configBean.getBranchPrefix())) {
             BranchBean branchBean = branchControl.getData();
             hoonDocNo = branchBean.getCode() + configBean.getHoonDocPrefix() + getRunning(configBean.getHoonDocRunning());
@@ -1706,7 +1706,7 @@ public class HoonPanel extends javax.swing.JPanel {
     }
 
     private void loadSummary() {
-        SaveSummaryBean saveSummaryBean = saveSummaryControl.getSaveData();
+        SaveSummaryBean saveSummaryBean = saveSummaryControl.findOneSummary();
         jTextField14.setText("" + saveSummaryBean.getHoon_balance_all());
         jTextField16.setText(NumberFormat.showDouble2(saveSummaryBean.getHoon_value_amount_all()));
         jTextField24.setText(NumberFormat.showDouble2(saveSummaryBean.getHoon_buy_today()));
@@ -1771,7 +1771,7 @@ public class HoonPanel extends javax.swing.JPanel {
     private void saveSaleHoon() {
         //บันทึกข้อมูลการขายหุ้น
         String hoonSellDocNo;
-        ConfigBean bean = configControl.getConfigBean();
+        ConfigBean bean = configControl.findOne();
         if ("Y".equals(bean.getBranchPrefix())) {
             BranchBean bBean = branchControl.getData();
             hoonSellDocNo = bBean.getCode() + bean.getHoonSaleDocPrefix() + getRunning(bean.getHoonSaleDocRunning());
@@ -1841,7 +1841,7 @@ public class HoonPanel extends javax.swing.JPanel {
     }
 
     private void resetSaleHoon() {
-        saveAccountBean = saveAccountControl.getSaveAccountBean(saveAccountBean.getAccount_code());
+        saveAccountBean = saveAccountControl.findOneByAccountCode(saveAccountBean.getAccount_code());
 
         txtHoonAmt.setText("" + saveAccountBean.getHoon_balance());
         txtHoonBalance.setText("" + saveAccountBean.getHoon_balance());
@@ -1899,7 +1899,7 @@ public class HoonPanel extends javax.swing.JPanel {
     private void transferHoon() {
         //update transactoin การโอนหุ้น
         String transferHoonDocNo;
-        ConfigBean bean = configControl.getConfigBean();
+        ConfigBean bean = configControl.findOne();
         if ("Y".equals(bean.getBranchPrefix())) {
             BranchBean bBean = branchControl.getData();
             transferHoonDocNo = bBean.getCode() + bean.getHoonTransferDocPrefix() + getRunning(bean.getHoonTransferDocRunning());

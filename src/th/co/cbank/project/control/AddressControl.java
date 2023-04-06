@@ -56,7 +56,7 @@ public class AddressControl extends BaseControl {
         }
     }
 
-    public AddressBean listProfileAddress(String Cust_Code, String addrType) {
+    public AddressBean getOne(String Cust_Code, String addrType) {
         try {
             String sql = "select * from cb_profile_address where Cust_Code='" + Cust_Code + "' "
                     + "and addr_type='" + addrType + "'";

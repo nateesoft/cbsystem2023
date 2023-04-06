@@ -3252,7 +3252,7 @@ public class AppSettingDialog extends BaseDialogSwing {
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             if (!txtHCode.getText().equals("")) {
                 String hCode = txtHCode.getText();
-                CbHoonConfigBean bean = getHoonConfigControl().listCbHoonConfig(hCode);
+                CbHoonConfigBean bean = getHoonConfigControl().findOneByHoonCode(hCode);
                 if (bean != null) {
                     txtHCode.setEditable(false);
                     txtHCode.setText(bean.getHoonCode());
@@ -3308,7 +3308,7 @@ public class AppSettingDialog extends BaseDialogSwing {
             int row = tbConfigHoon.getSelectedRow();
             if (row != -1) {
                 String hCode = tbConfigHoon.getValueAt(row, 0).toString();
-                CbHoonConfigBean bean = getHoonConfigControl().listCbHoonConfig(hCode);
+                CbHoonConfigBean bean = getHoonConfigControl().findOneByHoonCode(hCode);
                 txtHCode.setText(bean.getHoonCode());
                 txtHName.setText(bean.getHoonName());
                 txtHoonRate.setText(dec.format(bean.getHoonRate()));
@@ -4283,7 +4283,7 @@ public class AppSettingDialog extends BaseDialogSwing {
     }
 
     private void loadInitConfig() {
-        ConfigBean bean = getConfigControl().getConfigBean();
+        ConfigBean bean = getConfigControl().findOne();
         if (bean == null) {
             return;
         }
@@ -4386,7 +4386,7 @@ public class AppSettingDialog extends BaseDialogSwing {
     }
 
     private void loadData(String typeCode) {
-        CbSaveConfigBean bean = getSaveConfigControl().loadConfig(typeCode);
+        CbSaveConfigBean bean = getSaveConfigControl().findOneByTypeCode(typeCode);
         if (bean == null) {
             txtTypeCode.requestFocus();
         } else {
@@ -4592,7 +4592,7 @@ public class AppSettingDialog extends BaseDialogSwing {
     }
 
     private void loadDataLoanConfig(String LoanCode) {
-        CbLoanConfigBean bean = getLoanConfigControl().listLoanConfig(LoanCode);
+        CbLoanConfigBean bean = getLoanConfigControl().findOneByLoanCode(LoanCode);
         if (bean != null) {
             txtLoanCode.setText(bean.getLoanCode());
             txtLoanName.setText(bean.getLoanName());

@@ -476,7 +476,7 @@ public class CheckAuditDialog extends BaseDialogSwing {
 
         int colAccount = tbSaveAccount.getSelectedColumn();
         String accCode = tbSaveAccount.getValueAt(colAccount, 1).toString();
-        CbSaveAccountBean saveAccBean = saveAccountControl.getSaveAccountBean(accCode);
+        CbSaveAccountBean saveAccBean = saveAccountControl.findOneByAccountCode(accCode);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
         TransactionAdvanceMethod.findData(profileCode, accCode, false, saveAccBean.getAccount_type());
         double all_balance = TransactionAdvanceMethod.balanceAmount;

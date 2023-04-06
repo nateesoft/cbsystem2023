@@ -245,7 +245,7 @@ public class StatusMsgDialog extends BaseDialogSwing {
         if (evt.getClickCount() == 2) {
             int rows = tbStatus.getSelectedRow();
             if (rows != -1) {
-                CbStatusBean bean = getStatusControl().listExpense("" + tbStatus.getValueAt(rows, 0));
+                CbStatusBean bean = getStatusControl().findOneByExpId("" + tbStatus.getValueAt(rows, 0));
                 txtExpendId.setText(bean.getExp_id());
                 txtExpendName.setText(bean.getExp_desc());
 

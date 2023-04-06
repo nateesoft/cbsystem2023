@@ -245,7 +245,7 @@ public class ExpendDialog extends BaseDialogSwing {
         if (evt.getClickCount() == 2) {
             int rows = tbExpend.getSelectedRow();
             if (rows != -1) {
-                CbExpenseBean bean = getExpenseControl().listExpense("" + tbExpend.getValueAt(rows, 0));
+                CbExpenseBean bean = getExpenseControl().findOneByExpId("" + tbExpend.getValueAt(rows, 0));
                 txtExpendId.setText(bean.getExp_id());
                 txtExpendName.setText(bean.getExp_desc());
 

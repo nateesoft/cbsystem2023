@@ -333,7 +333,7 @@ public class LoginDialog extends BaseDialogSwing {
             Value.ACCESS[i] = "Y";
         }
         CbUserControl userControl = new CbUserControl();
-        CbUserBean userBean = userControl.getUserAndPass(txtUser.getText().trim(), txtPass.getText().trim());
+        CbUserBean userBean = userControl.findOneByUserPass(txtUser.getText().trim(), txtPass.getText().trim());
         if (userBean == null) {
             MessageAlert.errorPopup(this, "รหัสผู้ใช้งานไม่ถูกต้อง หรือมีผู้ใช้งานอยู่แล้ว กรุณาตรวจสอบ !!!");
             logger.error("รหัสผู้ใช้งานไม่ถูกต้อง หรือมีผู้ใช้งานอยู่แล้ว กรุณาตรวจสอบ !!!");
@@ -358,7 +358,7 @@ public class LoginDialog extends BaseDialogSwing {
 
         getLoginControl().updateLogin(userBean.getUsername(), Value.USER_NAME, "Success", getTitle());
 
-        CbGroupBean groupBean = userControl.getPermission(userBean.getUsername());
+        CbGroupBean groupBean = userControl.findGroupPermissionByUser(userBean.getUsername());
         String[] per = groupBean.getPermission().split(",");
         System.arraycopy(per, 0, Value.ACCESS, 0, per.length);
 

@@ -335,10 +335,10 @@ public class PrintLoanBookDialog extends BaseDialogSwing {
     private void printLoanFrontBook() {
         //print หน้าปกสมุด
         PassBook_PSiPR9 view = new PassBook_PSiPR9();
-        CbLoanAccountBean loanBean = getLoanAccountControl().listLoanAccount(txtLoanCode.getText());
-        ProfileBean pBean = getProfileControl().listCbProfile(loanBean.getCust_code());
+        CbLoanAccountBean loanBean = getLoanAccountControl().findOneByLoanDocNo(txtLoanCode.getText());
+        ProfileBean pBean = getProfileControl().findOneByCustCode(loanBean.getCust_code());
 
-        CbLoanConfigBean lBean = getLoanConfigControl().listLoanConfig(loanBean.getLoan_type());
+        CbLoanConfigBean lBean = getLoanConfigControl().findOneByLoanCode(loanBean.getLoan_type());
 
         String accCode = txtLoanCode.getText();
         String accName = pBean.getP_custName() + "  " + pBean.getP_custSurname();

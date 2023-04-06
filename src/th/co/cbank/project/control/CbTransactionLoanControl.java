@@ -133,7 +133,7 @@ public class CbTransactionLoanControl extends BaseControl {
         }
     }
 
-    public CbTransactionLoanBean getCbTransactionLoan(String t_date) {
+    public CbTransactionLoanBean findOneByTDate(String t_date) {
         try {
             String sql = "select * from cb_transaction_loan where t_date='" + t_date + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);

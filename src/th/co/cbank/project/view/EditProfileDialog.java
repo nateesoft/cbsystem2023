@@ -269,7 +269,7 @@ public class EditProfileDialog extends BaseDialogSwing {
     // End of variables declaration//GEN-END:variables
 
     private void findData() {
-        ProfileBean profileBean = getProfileControl().listCbProfile(txtCustCode.getText());
+        ProfileBean profileBean = getProfileControl().findOneByCustCode(txtCustCode.getText());
         if (profileBean != null) {
             String code = profileBean.getP_custCode();
             String name = profileBean.getP_custName();
@@ -285,7 +285,7 @@ public class EditProfileDialog extends BaseDialogSwing {
     }
 
     private void findIndex() {
-        ProfileBean profileBean = getProfileControl().getPIndex(txtCustIndex.getText());
+        ProfileBean profileBean = getProfileControl().findOneByIndex(txtCustIndex.getText());
         if (profileBean != null) {
             String code = profileBean.getP_custCode();
             String name = profileBean.getP_custName();

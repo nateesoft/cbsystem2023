@@ -116,7 +116,7 @@ public class ListWithdrawConfirmDialog extends BaseDialogSwing {
         PassBook_PSiPR9 passbook = new PassBook_PSiPR9();
 
         List<ReportGreenBean> listBean = new ArrayList<>();
-        ConfigBean configBean = getConfigControl().getConfigBean();
+        ConfigBean configBean = getConfigControl().findOne();
 
         CbTransactionSaveControl tranSaveControl = new CbTransactionSaveControl();
         List<CbTransactionSaveBean> listTranSave = tranSaveControl.getTransactionByBookType(txtAccCode, txtAccCode, txtAccCode);

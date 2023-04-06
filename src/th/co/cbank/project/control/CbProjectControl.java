@@ -33,7 +33,7 @@ public class CbProjectControl extends BaseControl {
         return listBean;
     }
 
-    public CbProjectBean listProject(String pj_id) {
+    public CbProjectBean findOneByPjId(String pj_id) {
         CbProjectBean bean = new CbProjectBean();
         try {
             String sql = "select * from cb_project where pj_id='" + pj_id + "'";

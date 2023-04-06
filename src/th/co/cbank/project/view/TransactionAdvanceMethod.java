@@ -359,7 +359,7 @@ public class TransactionAdvanceMethod {
     }
 
     private static CbSaveConfigBean getSaveConfigByDateFromDB(Date dateCheck, String typeCode) {
-        CbSaveConfigBean saveConfigBean = saveConfigControl.getLastConfigHistory(dateCheck, typeCode);
+        CbSaveConfigBean saveConfigBean = saveConfigControl.findOneByUpdateDateTypeCode(dateCheck, typeCode);
         return saveConfigBean;
     }
 }

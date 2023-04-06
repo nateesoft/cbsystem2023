@@ -54,7 +54,7 @@ public class ViewReport extends BaseControl {
             SimpleDateFormat sTime = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
             Map parameters = new HashMap();
             ProfileControl pc = new ProfileControl();
-            ProfileBean bean = pc.listCbProfile(CustCode);
+            ProfileBean bean = pc.findOneByCustCode(CustCode);
             String sql = "select p.p_custCode,p.p_custName,hoon_qty,"
                     + "t_docno,t_hoon,t_hoon_amt,t_hoon_cash,t_hoon_ton,"
                     + "t_hoon_rate,branch_code,t_amount "
@@ -124,7 +124,7 @@ public class ViewReport extends BaseControl {
             SimpleDateFormat sTime = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
             Map parameters = new HashMap();
             ProfileControl pc = new ProfileControl();
-            ProfileBean bean = pc.listCbProfile(CustCode);
+            ProfileBean bean = pc.findOneByCustCode(CustCode);
             String sql = "select p.p_custCode,p.p_custName,hoon_qty,"
                     + "t_docno,t_hoon,t_hoon_amt,t_hoon_cash,t_hoon_ton,"
                     + "t_hoon_rate,branch_code,t_amount "
@@ -194,7 +194,7 @@ public class ViewReport extends BaseControl {
             SimpleDateFormat sTime = new SimpleDateFormat("HH:mm:ss", Locale.ENGLISH);
             Map parameters = new HashMap();
             ProfileControl pc = new ProfileControl();
-            ProfileBean bean = pc.listCbProfile(CustCode);
+            ProfileBean bean = pc.findOneByCustCode(CustCode);
             String sql = "select p.p_custCode,p.p_custName,hoon_qty,"
                     + "t_docno,t_hoon,t_hoon_amt,t_hoon_cash,t_hoon_ton,"
                     + "t_hoon_rate,branch_code,t_amount "
@@ -517,9 +517,9 @@ public class ViewReport extends BaseControl {
             BranchBean bBean = bc.getData();
             p.put("parameter1", bBean.getName());
             CbSaveAccountControl saveAccountControl = new CbSaveAccountControl();
-            CbSaveAccountBean saveAccountBean = saveAccountControl.getSaveAccountBean(AccCode);
+            CbSaveAccountBean saveAccountBean = saveAccountControl.findOneByAccountCode(AccCode);
             CbSaveConfigControl saveConfigControl = new CbSaveConfigControl();
-            CbSaveConfigBean saveConfigBean = saveConfigControl.getConfigByTypeCode(saveAccountBean.getAccount_type());
+            CbSaveConfigBean saveConfigBean = saveConfigControl.findOneByTypeCode(saveAccountBean.getAccount_type());
             p.put("parameter2", saveAccountBean.getB_CUST_CODE());
             p.put("parameter3", AccCode);
             p.put("parameter4", saveConfigBean.getTypeName());
