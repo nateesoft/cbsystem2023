@@ -38,7 +38,7 @@ public class TransactionAdvanceMethod {
     public static double profitSummary = 0.00;
     public static double netBalanceSummary = 0.00;
 
-    public static List findData(String custCode, String accCode, boolean addModel, String accountType) {
+    public static List findData(String custCode, String accCode, boolean addModel, String accountType, boolean showTranAll) {
         double show1 = 0.00;//ฝาก
         double show2 = 0.00;//ถอน
         double show3 = 0.00;//คงเหลือ
@@ -50,7 +50,7 @@ public class TransactionAdvanceMethod {
 
         List modelList = new ArrayList<>();
         String date = "";
-        List<CbTransactionSaveBean> listTransactionSaveReport = tranSaveControl.getTdateList(custCode, accCode);
+        List<CbTransactionSaveBean> listTransactionSaveReport = tranSaveControl.getTdateList(custCode, accCode, showTranAll);
         for (CbTransactionSaveBean bean : listTransactionSaveReport) {
             date += DateFormat.getLocale_ddMMyyyy(bean.getT_date()) + ",";
         }

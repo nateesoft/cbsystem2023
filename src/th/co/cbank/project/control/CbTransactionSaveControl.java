@@ -10,7 +10,6 @@ import th.co.cbank.util.DateFormat;
 import th.co.cbank.project.model.CbTransactionSaveBean;
 import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.NumberFormat;
-import th.co.cbank.util.StringUtil;
 import th.co.cbank.util.ThaiUtil;
 
 public class CbTransactionSaveControl extends BaseControl {
@@ -157,7 +156,10 @@ public class CbTransactionSaveControl extends BaseControl {
             String sql = "select * from cb_transaction_save "
                     + "where t_acccode='" + accCode + "' "
                     + "and LineNo>0 and PrintChk='N' "
-                    + "and t_status in('" + AppConstants.CB_STATUS_SAVE + "','" + AppConstants.CB_STATUS_WITHDRAW + "','" + AppConstants.CB_STATUS_CLOSE_SAVE + "') order by t_index";
+                    + "and t_status in('" + AppConstants.CB_STATUS_SAVE + "',"
+                    + "'" + AppConstants.CB_STATUS_WITHDRAW + "',"
+                    + "'" + AppConstants.CB_STATUS_CLOSE_SAVE + "') "
+                    + "order by t_index";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             return mappingListBean(rs);
         } catch (Exception e) {
@@ -200,9 +202,9 @@ public class CbTransactionSaveControl extends BaseControl {
         }
     }
 
-    public CbTransactionSaveBean findOneByDocNo(String T_DocNO) {
+    public CbTransactionSaveBean findOneByDocNo(String docNo) {
         try {
-            String sql = "select * from cb_transaction_save where t_docno='" + T_DocNO + "'";
+            String sql = "select * from cb_transaction_save where t_docno='" + docNo + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             List<CbTransactionSaveBean> listBean = mappingListBean(rs);
             if (listBean.isEmpty()) {
@@ -384,7 +386,10 @@ public class CbTransactionSaveControl extends BaseControl {
         try {
             String sql = "select * from cb_transaction_save "
                     + "where t_acccode='" + accCode + "' and t_custcode='" + custCode + "' "
-                    + "and t_status in('2','3','8', '11') order by t_date, t_time, LineNo";
+                    + "and t_status in('" + AppConstants.CB_STATUS_SAVE + "',"
+                    + "'" + AppConstants.CB_STATUS_WITHDRAW + "',"
+                    + "'" + AppConstants.CB_STATUS_CLOSE_SAVE + "', "
+                    + "'" + AppConstants.CB_STATUS_ADD_INT + "') order by t_date, t_time, LineNo";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             return mappingListBean(rs);
         } catch (Exception e) {
@@ -472,7 +477,10 @@ public class CbTransactionSaveControl extends BaseControl {
             String sql = "update cb_transaction_save set "
                     + "t_balance='" + balance + "' where t_custcode='" + custCode + "' "
                     + "and t_acccode='" + accCode + "' and t_docno='" + t_docno + "' "
-                    + "and t_time='" + t_time + "' and t_status in('2','3','8')";
+                    + "and t_time='" + t_time + "' "
+                    + "and t_status in('" + AppConstants.CB_STATUS_SAVE + "',"
+                    + "'" + AppConstants.CB_STATUS_WITHDRAW + "',"
+                    + "'" + AppConstants.CB_STATUS_CLOSE_SAVE + "')";
             MySQLConnect.exeUpdate(sql);
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -480,10 +488,18 @@ public class CbTransactionSaveControl extends BaseControl {
         }
     }
 
-    public List<CbTransactionSaveBean> getTdateList(String custCode, String accCode) {
+    public List<CbTransactionSaveBean> getTdateList(String custCode, String accCode, boolean showAllTransaction) {
         List<CbTransactionSaveBean> listBean = new ArrayList<>();
-        String sql = "select t_date from cb_transaction_save where t_status in('2','3','8') "
+        String addCondition = "";
+        if (!showAllTransaction) {
+            addCondition = "and transaction_date is null ";
+        }
+        String sql = "select t_date from cb_transaction_save "
+                + "where t_status in('" + AppConstants.CB_STATUS_SAVE + "',"
+                + "'" + AppConstants.CB_STATUS_WITHDRAW + "',"
+                + "'" + AppConstants.CB_STATUS_CLOSE_SAVE + "') "
                 + "and t_custcode='" + custCode + "' and t_acccode='" + accCode + "' "
+                + addCondition
                 + "group by t_date order by t_date, t_time";
         try (ResultSet rs = MySQLConnect.getResultSet(sql)) {
             while (rs.next()) {
@@ -527,6 +543,16 @@ public class CbTransactionSaveControl extends BaseControl {
                     + "and t_date='" + t_date + "' and t_time='" + t_time + "' "
                     + "and t_status in('" + AppConstants.CB_STATUS_SAVE + "','" + AppConstants.CB_STATUS_WITHDRAW + "',"
                     + "'" + AppConstants.CB_STATUS_CLOSE_SAVE + "', '" + AppConstants.CB_STATUS_ADD_INT + "') order by t_date, t_time");
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+    }
+
+    public void updateTransactionDateAll() {
+        try {
+            String sql = "update cb_transaction_save set transaction_date=curdate() ";
+            MySQLConnect.exeUpdate(sql);
         } catch (Exception e) {
             logger.error(e.getMessage());
             MessageAlert.errorPopup(this.getClass(), e.getMessage());

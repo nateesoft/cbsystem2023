@@ -1274,7 +1274,8 @@ public class CbSaveAccountControl extends BaseControl {
     public void updateSaveAccountAndProfile(double netBalance, double textInt, String custCode, String accCode) {
         try {
             String sql = "update cb_save_account "
-                    + "set b_balance='" + netBalance + "',b_interest='" + textInt + "' "
+                    + "set b_balance='" + netBalance + "',"
+                    + "b_interest='" + textInt + "' "
                     + "where b_cust_code='" + custCode + "' and account_code='" + accCode + "'";
             MySQLConnect.exeUpdate(sql);
         } catch (Exception e) {

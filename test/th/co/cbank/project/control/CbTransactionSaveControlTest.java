@@ -454,7 +454,7 @@ public class CbTransactionSaveControlTest {
         String accCode = "";
         CbTransactionSaveControl instance = new CbTransactionSaveControl();
         List<CbTransactionSaveBean> expResult = null;
-        List<CbTransactionSaveBean> result = instance.getTdateList(custCode, accCode);
+        List<CbTransactionSaveBean> result = instance.getTdateList(custCode, accCode, false);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");

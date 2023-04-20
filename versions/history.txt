@@ -35,3 +35,8 @@ alter table cb_loan_config
 add column create_date datetime, 
 add column update_date datetime;
 create table cb_loan_config_history select * from cb_loan_config;
+
+v1.2
+เพิ่มวันที่อัพเดต transaction_date สำหรับรายการที่มีการ re-process การคำนวณไปแล้ว
+เพื่อความรวดเร็วในการทำงานครั้งต่อไป
+alter table cb_transaction_save add column transaction_date date null;
