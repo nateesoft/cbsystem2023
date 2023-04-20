@@ -53,7 +53,7 @@ public class CbWithdrawAllowControl extends BaseControl {
         }
     }
 
-    public CbWithdrawAllowBean getCbWithdrawAllow(String account_no) {
+    public CbWithdrawAllowBean findOneyByAccountNo(String account_no) {
         try {
             String sql = "select * from cb_withdraw_allow where account_no='" + account_no + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);

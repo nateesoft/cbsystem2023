@@ -14,6 +14,7 @@ public class RegisterDialog extends BaseDialogSwing {
     public RegisterDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("RegisterDialog init");
     }
 
     @SuppressWarnings("unchecked")

@@ -1,10 +1,6 @@
 package th.co.cbank.util;
 
-import org.apache.log4j.Logger;
-
 public class PIDCheck {
-
-    private final Logger logger = Logger.getLogger(PIDCheck.class);
 
     public static boolean checkPID(String id) {
         if (id.length() != 13) {

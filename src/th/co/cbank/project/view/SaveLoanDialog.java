@@ -20,6 +20,7 @@ public class SaveLoanDialog extends BaseDialogSwing {
     public SaveLoanDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("SaveLoanDialog init");
 
         initTable();
     }

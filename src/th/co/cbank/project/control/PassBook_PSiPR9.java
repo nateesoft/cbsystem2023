@@ -314,7 +314,7 @@ public class PassBook_PSiPR9 {
     private void printBookGreen(Map m) {
         String sourceFileName;
         ConfigControl cc = new ConfigControl();
-        ConfigBean cBean = cc.getConfigBean();
+        ConfigBean cBean = cc.findOne();
         switch (cBean.getBookSpec()) {
             case 0:
                 sourceFileName = AppConstants.JASPER_TRAN_GREEN_2_0;

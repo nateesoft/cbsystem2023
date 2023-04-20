@@ -38,9 +38,9 @@ public class CbMemberTypeControl extends BaseControl {
         }
     }
 
-    public CbMemberTypeBean listMemberType(String pj_id) {
+    public CbMemberTypeBean findOneByTypeCode(String typeCode) {
         try {
-            String sql = "select * from cb_member_type where type_code='" + pj_id + "'";
+            String sql = "select * from cb_member_type where type_code='" + typeCode + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             List<CbMemberTypeBean> listBean = mappingBean(rs);
             if (listBean.isEmpty()) {

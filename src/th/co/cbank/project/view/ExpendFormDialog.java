@@ -27,6 +27,7 @@ public class ExpendFormDialog extends BaseDialogSwing {
     public ExpendFormDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("ExpendFormDialog init");
 
         this.parent = parent;
 

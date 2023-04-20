@@ -99,7 +99,7 @@ public class CbLoanConfigControl extends BaseControl {
         return listBean;
     }
 
-    public CbLoanConfigBean listLoanConfig(String loanCode) {
+    public CbLoanConfigBean findOneByLoanCode(String loanCode) {
         try {
             String sql = "select * from cb_loan_config where LoanCode='" + loanCode + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);

@@ -222,7 +222,19 @@ public class ProfileControl extends BaseControl {
         }
     }
 
-    public List<ProfileMapping> searchProfile(String sql) {
+    public List<ProfileMapping> searchProfile(String txtDate, int selectIndex) {
+        Date d1 = DateFormat.getLocal_ddMMyyyy(txtDate);
+        String sql = "select p.*, group_concat(account_code) listAcc, group_concat(loan_docno) listLoan "
+                + "from cb_profile p left join cb_save_account s on p.p_custcode=s.b_cust_code "
+                + "left join cb_loan_account l on p.p_custcode=l.cust_code "
+                + "where 1=1 "
+                + "and p_member_start <= '" + DateFormat.getMySQL_Date(d1) + "' ";
+        if (selectIndex != 0) {
+            sql += " and p_member_type='" + selectIndex + "' ";
+        }
+
+        sql += " group by p.p_custCode order by p.p_index ";
+
         List<ProfileMapping> listBean = new ArrayList<>();
         try {
             ResultSet rs = MySQLConnect.getResultSet(sql);
@@ -235,7 +247,32 @@ public class ProfileControl extends BaseControl {
         return listBean;
     }
 
-    public ProfileBean listCbProfile(String P_custCode) {
+    public List<ProfileMapping> searchProfile2(String txtDate, int selectIndex) {
+        Date d1 = DateFormat.getLocal_ddMMyyyy(txtDate);
+        String sql = "select p.*, group_concat(account_code) listAcc, group_concat(loan_docno) listLoan "
+                + "from cb_profile p left join cb_save_account s on p.p_custcode=s.b_cust_code "
+                + "left join cb_loan_account l on p.p_custcode=l.cust_code "
+                + "where 1=1 "
+                + "and p_member_start >= '" + DateFormat.getMySQL_Date(d1) + "' ";
+        if (selectIndex != 0) {
+            sql += " and p_member_type='" + selectIndex + "' ";
+        }
+
+        sql += " group by p.p_custCode order by p.p_index ";
+
+        List<ProfileMapping> listBean = new ArrayList<>();
+        try {
+            ResultSet rs = MySQLConnect.getResultSet(sql);
+            return mappingBean2(rs);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+
+        return listBean;
+    }
+
+    public ProfileBean findOneByCustCode(String P_custCode) {
         try {
             String sql = "select * from cb_profile where P_custCode='" + P_custCode + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);
@@ -283,7 +320,7 @@ public class ProfileControl extends BaseControl {
         }
     }
 
-    public ProfileBean getPIndex(String pIndex) {
+    public ProfileBean findOneByIndex(String pIndex) {
         try {
             String sql = "select * from cb_profile where p_index='" + pIndex + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);
@@ -480,7 +517,7 @@ public class ProfileControl extends BaseControl {
         return pMax;
     }
 
-    public ProfileBean initBean() {
+    public ProfileBean getInitialBean() {
         ProfileBean bean = new ProfileBean();
         bean.setP_index(NumberFormat.toInt(getMaxIndex()));
         bean.setP_custSex("M");
@@ -566,6 +603,17 @@ public class ProfileControl extends BaseControl {
     public void updateSaveBalance(double cMoney, String p_custCode) {
         try {
             String sql = "update cb_profile set Save_Balance=Save_Balance-" + cMoney + " "
+                    + "where P_CustCode='" + p_custCode + "'";
+            MySQLConnect.exeUpdate(sql);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+    }
+
+    public void updateSaveBalanceByCustCode(String dMoney, String p_custCode) {
+        try {
+            String sql = "update cb_profile set Save_Balance=Save_Balance+" + dMoney + " "
                     + "where P_CustCode='" + p_custCode + "'";
             MySQLConnect.exeUpdate(sql);
         } catch (Exception e) {

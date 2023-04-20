@@ -22,6 +22,7 @@ public class ListWithdrawConfirmDialog extends BaseDialogSwing {
     public ListWithdrawConfirmDialog(java.awt.Frame parent, boolean modal, PrintSlipBean psBean) {
         super(parent, modal);
         initComponents();
+        logger.debug("ListWithdrawConfirmDialog init");
 
         this.psBean = psBean;
         this.parent = parent;
@@ -115,7 +116,7 @@ public class ListWithdrawConfirmDialog extends BaseDialogSwing {
         PassBook_PSiPR9 passbook = new PassBook_PSiPR9();
 
         List<ReportGreenBean> listBean = new ArrayList<>();
-        ConfigBean configBean = getConfigControl().getConfigBean();
+        ConfigBean configBean = getConfigControl().findOne();
 
         CbTransactionSaveControl tranSaveControl = new CbTransactionSaveControl();
         List<CbTransactionSaveBean> listTranSave = tranSaveControl.getTransactionByBookType(txtAccCode, txtAccCode, txtAccCode);

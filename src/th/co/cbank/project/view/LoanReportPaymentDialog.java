@@ -30,6 +30,7 @@ public class LoanReportPaymentDialog extends BaseDialogSwing {
     public LoanReportPaymentDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("LoanReportPaymentDialog init");
 
         this.parent = parent;
 

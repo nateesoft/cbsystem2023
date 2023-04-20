@@ -28,6 +28,7 @@ public class FileConfigDialog extends BaseDialogSwing {
     public FileConfigDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("FileConfigDialog init");
 
         try {
             Image im = ImageIO.read(getClass().getResource("/img/deposit.png"));
@@ -688,7 +689,6 @@ public class FileConfigDialog extends BaseDialogSwing {
             if (ftp.connect()) {
                 ftp_list_dir.append("Start Download.\n");
                 File fileDownload = new File(tempFolder + "/" + fileName);
-                File fileExtract = new File("");
 
                 if (ftp.download(ftp_root_path.getText() + "/" + "update/" + fileName,
                         fileDownload)) {

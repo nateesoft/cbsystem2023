@@ -7,9 +7,7 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Locale;
-import javax.swing.SwingWorker;
 import org.apache.log4j.Logger;
-import th.co.cbank.project.control.CbSaveAccountControl;
 import th.co.cbank.project.control.CbUserControl;
 import th.co.cbank.util.DateFormat;
 import th.co.cbank.project.control.Value;
@@ -30,6 +28,7 @@ public class LoginDialog extends BaseDialogSwing {
     public LoginDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("LoginDialog init");
 
         this.parent = parent;
         String textNews = ReadText.readTextToString("news.txt").trim();
@@ -334,7 +333,7 @@ public class LoginDialog extends BaseDialogSwing {
             Value.ACCESS[i] = "Y";
         }
         CbUserControl userControl = new CbUserControl();
-        CbUserBean userBean = userControl.getUserAndPass(txtUser.getText().trim(), txtPass.getText().trim());
+        CbUserBean userBean = userControl.findOneByUserPass(txtUser.getText().trim(), txtPass.getText().trim());
         if (userBean == null) {
             MessageAlert.errorPopup(this, "รหัสผู้ใช้งานไม่ถูกต้อง หรือมีผู้ใช้งานอยู่แล้ว กรุณาตรวจสอบ !!!");
             logger.error("รหัสผู้ใช้งานไม่ถูกต้อง หรือมีผู้ใช้งานอยู่แล้ว กรุณาตรวจสอบ !!!");
@@ -359,7 +358,7 @@ public class LoginDialog extends BaseDialogSwing {
 
         getLoginControl().updateLogin(userBean.getUsername(), Value.USER_NAME, "Success", getTitle());
 
-        CbGroupBean groupBean = userControl.getPermission(userBean.getUsername());
+        CbGroupBean groupBean = userControl.findGroupPermissionByUser(userBean.getUsername());
         String[] per = groupBean.getPermission().split(",");
         System.arraycopy(per, 0, Value.ACCESS, 0, per.length);
 

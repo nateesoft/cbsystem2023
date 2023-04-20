@@ -4,7 +4,6 @@ import java.awt.Font;
 import java.awt.Frame;
 import java.awt.Point;
 import java.awt.event.KeyEvent;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -27,17 +26,15 @@ import th.co.cbank.util.TableUtil;
 public class CloseAccountReportDialog extends BaseDialogSwing {
 
     private final Logger logger = Logger.getLogger(CloseAccountReportDialog.class);
-
-    private final DecimalFormat dec = new DecimalFormat("#,##0.00");
     private final Frame parent;
     private String sqlAll;
 
     public CloseAccountReportDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("CloseAccountReportDialog init");
 
         this.parent = parent;
-
         initTable();
     }
 

@@ -1,9 +1,7 @@
 package th.co.cbank.project.view;
 
 import java.awt.event.KeyEvent;
-import java.util.List;
 import org.apache.log4j.Logger;
-import th.co.cbank.project.model.CbTransactionSaveBean;
 
 public class SummaryReportDialog extends BaseDialogSwing {
 
@@ -12,6 +10,7 @@ public class SummaryReportDialog extends BaseDialogSwing {
     public SummaryReportDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("SummaryReportDialog init");
 
         txtDate1.requestFocus();
     }
@@ -707,7 +706,6 @@ public class SummaryReportDialog extends BaseDialogSwing {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        loadData();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void txtDate1FocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtDate1FocusGained
@@ -810,15 +808,5 @@ public class SummaryReportDialog extends BaseDialogSwing {
     private javax.swing.JTextField txtSaveINT;
     private javax.swing.JTextField txtWithdraw;
     // End of variables declaration//GEN-END:variables
-
-    private void loadData() {
-        String date1 = "";
-        String date2 = "";
-        List<CbTransactionSaveBean> listTran = getCbTransactionSaveControl().listCbTransactionSave(date1, date2);
-        for (int i = 0; i < listTran.size(); i++) {
-            CbTransactionSaveBean bean = (CbTransactionSaveBean) listTran.get(i);
-
-        }
-    }
 
 }

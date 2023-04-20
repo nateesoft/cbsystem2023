@@ -12,6 +12,7 @@ public class WaitDialog extends BaseDialogSwing {
     public WaitDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("WaitDialog...");
 
         Thread t = new Thread(new Runnable() {
 

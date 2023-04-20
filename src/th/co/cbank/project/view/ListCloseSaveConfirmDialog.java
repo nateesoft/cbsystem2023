@@ -23,6 +23,7 @@ public class ListCloseSaveConfirmDialog extends BaseDialogSwing {
     public ListCloseSaveConfirmDialog(java.awt.Frame parent, boolean modal, PrintSlipBean psBean) {
         super(parent, modal);
         initComponents();
+        logger.debug("ListCloseSaveConfirmDialog init");
 
         this.psBean = psBean;
         this.parent = parent;
@@ -132,7 +133,7 @@ public class ListCloseSaveConfirmDialog extends BaseDialogSwing {
     private void printTransactionCloseBook(String txtAccCode) {
         //print รายการลงในสมุด
         PassBook_PSiPR9 passbookPsi = new PassBook_PSiPR9();
-        ConfigBean configBean = getConfigControl().getConfigBean();
+        ConfigBean configBean = getConfigControl().findOne();
 
         List<ReportGreenBean> listBean = new ArrayList<>();
         SimpleDateFormat sim = new SimpleDateFormat("dd/MM/yy");

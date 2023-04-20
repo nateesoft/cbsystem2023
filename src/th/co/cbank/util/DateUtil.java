@@ -5,11 +5,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import org.apache.log4j.Logger;
 
 public class DateUtil {
-
-    private final Logger logger = Logger.getLogger(DateUtil.class);
 
     public static int diff(Date date1, Date date2) {
         if (date1 == null || date2 == null) {

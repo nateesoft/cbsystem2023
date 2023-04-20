@@ -12,7 +12,7 @@ import th.co.cbank.project.model.CbLoanAccountBean;
 import th.co.cbank.util.ClipboardUtil;
 import th.co.cbank.util.DateChooseDialog;
 import th.co.cbank.util.DateFormat;
-import th.co.cbank.util.JTableUtil;
+import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.NumberFormat;
 import th.co.cbank.util.TableUtil;
 
@@ -25,6 +25,8 @@ public class ReportOverdueAccountAndSummary extends javax.swing.JDialog {
     public ReportOverdueAccountAndSummary(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("ReportOverdueAccountAndSummary init");
+
         this.parent = parent;
 
         initTable();
@@ -318,7 +320,9 @@ public class ReportOverdueAccountAndSummary extends javax.swing.JDialog {
 
     private void tbReportMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbReportMouseClicked
         if (evt.getButton() == 3) {
-            ClipboardUtil.copyTableContent(tbReport);
+            if (ClipboardUtil.copyTableContent(tbReport) != null) {
+                MessageAlert.infoPopup(ClipboardUtil.class, "Copy data to clipboard");
+            }
         }
     }//GEN-LAST:event_tbReportMouseClicked
 
@@ -335,7 +339,7 @@ public class ReportOverdueAccountAndSummary extends javax.swing.JDialog {
     }//GEN-LAST:event_txtCode2MouseClicked
 
     private void btnExcelFileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnExcelFileActionPerformed
-        JTableUtil.exportData("Report-Overdue-Account-And-Summary", tbReport, this);
+        TableUtil.exportData("Report-Overdue-Account-And-Summary", tbReport, this);
     }//GEN-LAST:event_btnExcelFileActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -398,13 +402,13 @@ public class ReportOverdueAccountAndSummary extends javax.swing.JDialog {
 
     private void initTable() {
         model = (DefaultTableModel) tbReport.getModel();
-        JTableUtil.defaultTemplate(tbReport);
+        TableUtil.defaultTemplate(tbReport);
 
-        JTableUtil.alignRight(tbReport, 2);
-        JTableUtil.alignRight(tbReport, 3);
-        JTableUtil.alignRight(tbReport, 4);
-        JTableUtil.alignCenter(tbReport, 5);
-        JTableUtil.alignRight(tbReport, 6);
+        TableUtil.alignRight(tbReport, 2);
+        TableUtil.alignRight(tbReport, 3);
+        TableUtil.alignRight(tbReport, 4);
+        TableUtil.alignCenter(tbReport, 5);
+        TableUtil.alignRight(tbReport, 6);
 
     }
 }

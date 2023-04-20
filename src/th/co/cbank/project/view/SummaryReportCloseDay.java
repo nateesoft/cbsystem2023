@@ -23,6 +23,7 @@ public class SummaryReportCloseDay extends BaseDialogSwing {
     public SummaryReportCloseDay(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("SummaryReportCloseDay init");
 
         this.parent = parent;
 

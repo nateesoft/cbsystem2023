@@ -20,6 +20,7 @@ public class ListCustomerDialog extends BaseDialogSwing {
     public ListCustomerDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("ListCustomerDialog init");
 
         initTable();
         txtSearch.requestFocus();

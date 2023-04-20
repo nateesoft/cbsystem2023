@@ -7,7 +7,6 @@ import javax.swing.table.DefaultTableModel;
 import org.apache.log4j.Logger;
 import th.co.cbank.project.control.CbSaveAccountControl;
 import th.co.cbank.project.model.CbSaveAccountBean;
-import th.co.cbank.util.JTableUtil;
 import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.NumberFormat;
 import th.co.cbank.util.TableUtil;
@@ -19,6 +18,8 @@ public class TransactionAdvanceDialog extends BaseDialogSwing {
     public TransactionAdvanceDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("TransactionAdvanceDialog init");
+
         setBounds(GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds());
 
         initTable();
@@ -43,8 +44,9 @@ public class TransactionAdvanceDialog extends BaseDialogSwing {
             String custCode = txtCustCode.getText();
             String accCode = txtAccCode.getText();
             CbSaveAccountControl saveAccountControl = new CbSaveAccountControl();
-            CbSaveAccountBean saveAccountBean = saveAccountControl.getSaveAccountBean(accCode);
-            List<String[]> modelList = TransactionAdvanceMethod.findData(custCode, accCode, true, saveAccountBean.getAccount_type());
+            CbSaveAccountBean saveAccountBean = saveAccountControl.findOneByAccountCode(accCode);
+            List<String[]> modelList = 
+                    TransactionAdvanceMethod.findData(custCode, accCode, true, saveAccountBean.getAccount_type(), chkAllTransaction.isSelected());
             if (modelList.isEmpty()) {
                 btnSave.setEnabled(false);
             }
@@ -95,6 +97,7 @@ public class TransactionAdvanceDialog extends BaseDialogSwing {
         jLabel7 = new javax.swing.JLabel();
         txtInt = new javax.swing.JTextField();
         checkOnlyDesc = new javax.swing.JCheckBox();
+        chkAllTransaction = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("แสดงรายละเอียดความเคลื่อนไหว");
@@ -298,6 +301,9 @@ public class TransactionAdvanceDialog extends BaseDialogSwing {
             }
         });
 
+        chkAllTransaction.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        chkAllTransaction.setText("แสดงทั้งหมดตั้งแต่เปิดร้าน");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -319,11 +325,16 @@ public class TransactionAdvanceDialog extends BaseDialogSwing {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnSave)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnSearch)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnClose))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnSave)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnSearch)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnClose)
+                        .addGap(0, 4, Short.MAX_VALUE))
+                    .addComponent(chkAllTransaction, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
             .addComponent(jScrollPane1)
         );
         layout.setVerticalGroup(
@@ -332,22 +343,27 @@ public class TransactionAdvanceDialog extends BaseDialogSwing {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1)
-                            .addComponent(txtCustCode, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(jLabel1)
+                                .addComponent(txtCustCode, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel2)
-                            .addComponent(txtAccCode, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnClearSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnSave, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(checkOnlyDesc))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLabel2)
+                                    .addComponent(txtAccCode, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnClearSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(checkOnlyDesc))
+                            .addComponent(chkAllTransaction)))
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 568, Short.MAX_VALUE))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 563, Short.MAX_VALUE))
         );
 
         pack();
@@ -401,6 +417,7 @@ public class TransactionAdvanceDialog extends BaseDialogSwing {
     private javax.swing.JButton btnSave;
     private javax.swing.JButton btnSearch;
     private javax.swing.JCheckBox checkOnlyDesc;
+    private javax.swing.JCheckBox chkAllTransaction;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -422,19 +439,19 @@ public class TransactionAdvanceDialog extends BaseDialogSwing {
     // End of variables declaration//GEN-END:variables
 
     private void initTable() {
-        th.co.cbank.util.JTableUtil.defaultTemplate(tbItems);
+        th.co.cbank.util.TableUtil.defaultTemplate(tbItems);
         tbItems.setRowHeight(30);
-        JTableUtil.alignRight(tbItems, 3);
-        JTableUtil.alignRight(tbItems, 4);
-        JTableUtil.alignRight(tbItems, 5);
-        JTableUtil.alignRight(tbItems, 6);
-        JTableUtil.alignRight(tbItems, 7);
-        JTableUtil.alignRight(tbItems, 8);
-        JTableUtil.alignRight(tbItems, 9);
-        JTableUtil.alignRight(tbItems, 10);
-        JTableUtil.alignRight(tbItems, 11);
-        JTableUtil.alignRight(tbItems, 12);
-        JTableUtil.alignRight(tbItems, 13);
+        TableUtil.alignRight(tbItems, 3);
+        TableUtil.alignRight(tbItems, 4);
+        TableUtil.alignRight(tbItems, 5);
+        TableUtil.alignRight(tbItems, 6);
+        TableUtil.alignRight(tbItems, 7);
+        TableUtil.alignRight(tbItems, 8);
+        TableUtil.alignRight(tbItems, 9);
+        TableUtil.alignRight(tbItems, 10);
+        TableUtil.alignRight(tbItems, 11);
+        TableUtil.alignRight(tbItems, 12);
+        TableUtil.alignRight(tbItems, 13);
 
         clearModel();
     }

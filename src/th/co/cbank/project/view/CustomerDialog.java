@@ -7,7 +7,6 @@ import java.util.List;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import org.apache.log4j.Logger;
-import th.co.cbank.util.JTableUtil;
 import th.co.cbank.util.DateFormat;
 import th.co.cbank.project.constants.AppConstants;
 import th.co.cbank.project.model.CbLoanAccountBean;
@@ -31,6 +30,7 @@ public class CustomerDialog extends BaseDialogSwing {
     public CustomerDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("CustomerDialog init");
 
         initTable();
         findCustomer();
@@ -393,15 +393,15 @@ public class CustomerDialog extends BaseDialogSwing {
         tbAccount.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
         tbAccount.setRowHeight(35);
 
-        JTableUtil.alignCenter(tbCustomer, 0);
-        JTableUtil.alignCenter(tbAccount, 0);
+        TableUtil.alignCenter(tbCustomer, 0);
+        TableUtil.alignCenter(tbAccount, 0);
 
         JTableHeader tHeader3 = tbLoanAccount.getTableHeader();
         tHeader3.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, AppConstants.DEFAULT_FONT_SIZE));
         tbLoanAccount.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
         tbLoanAccount.setRowHeight(35);
 
-        JTableUtil.alignCenter(tbLoanAccount, 0);
+        TableUtil.alignCenter(tbLoanAccount, 0);
     }
 
     private List<ProfileBean> listProfiles = null;

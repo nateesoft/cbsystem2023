@@ -13,6 +13,8 @@ public class GroupAlertDialog extends BaseDialogSwing {
     public GroupAlertDialog(java.awt.Frame parent, boolean modal, Point p) {
         super(parent, modal);
         initComponents();
+        logger.debug("GroupAlertDialog init");
+        
         SimpleDateFormat simp = new SimpleDateFormat("ddMMyyyy", Locale.ENGLISH);
         jLabel5.setText(jLabel5.getText() + " G" + simp.format(new Date()) + "01");
 

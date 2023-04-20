@@ -12,7 +12,6 @@ import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
 import javax.print.PrintService;
-import javax.swing.JCheckBox;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import org.apache.log4j.Logger;
@@ -34,6 +33,7 @@ public class AppSettingDialog extends BaseDialogSwing {
     public AppSettingDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("AppSettingDialog init");
 
         initChk();
         loadInitConfig();
@@ -42,6 +42,7 @@ public class AppSettingDialog extends BaseDialogSwing {
         loadConfigLoadList();
 
         txtAccPrefix.requestFocus();
+
     }
 
     @SuppressWarnings("unchecked")
@@ -3251,7 +3252,7 @@ public class AppSettingDialog extends BaseDialogSwing {
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             if (!txtHCode.getText().equals("")) {
                 String hCode = txtHCode.getText();
-                CbHoonConfigBean bean = getHoonConfigControl().listCbHoonConfig(hCode);
+                CbHoonConfigBean bean = getHoonConfigControl().findOneByHoonCode(hCode);
                 if (bean != null) {
                     txtHCode.setEditable(false);
                     txtHCode.setText(bean.getHoonCode());
@@ -3307,7 +3308,7 @@ public class AppSettingDialog extends BaseDialogSwing {
             int row = tbConfigHoon.getSelectedRow();
             if (row != -1) {
                 String hCode = tbConfigHoon.getValueAt(row, 0).toString();
-                CbHoonConfigBean bean = getHoonConfigControl().listCbHoonConfig(hCode);
+                CbHoonConfigBean bean = getHoonConfigControl().findOneByHoonCode(hCode);
                 txtHCode.setText(bean.getHoonCode());
                 txtHName.setText(bean.getHoonName());
                 txtHoonRate.setText(dec.format(bean.getHoonRate()));
@@ -4222,8 +4223,6 @@ public class AppSettingDialog extends BaseDialogSwing {
     private javax.swing.JTextField txtWitdrawDocRunning;
     // End of variables declaration//GEN-END:variables
 
-    private final JCheckBox[] chkAll = new JCheckBox[23];
-
     private void initChk() {
         tbConfigSave.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
         tbConfigSaveHistory.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
@@ -4262,41 +4261,29 @@ public class AppSettingDialog extends BaseDialogSwing {
     }
 
     private void loadPrinterDriver() {
-        try {
-            cbPrinterPassBookName.removeAllItems();
-            cbPrintSlipDriver.removeAllItems();
-
-            PrintService[] printService = PrinterJob.lookupPrintServices();
-            for (PrintService printService1 : printService) {
-                cbPrinterPassBookName.addItem(printService1.getName());
-                cbPrintSlipDriver.addItem(printService1.getName());
-            }
-        } catch (Exception e) {
-            System.err.println(e);
+        cbPrinterPassBookName.removeAllItems();
+        cbPrintSlipDriver.removeAllItems();
+        PrintService[] printService = PrinterJob.lookupPrintServices();
+        for (PrintService printService1 : printService) {
+            cbPrinterPassBookName.addItem(printService1.getName());
+            cbPrintSlipDriver.addItem(printService1.getName());
         }
-
     }
 
     private void loadPort() {
-        try {
-            CommPortIdentifier portId;
-            cbPrinterDirect.removeAllItems();
-            Enumeration portList = CommPortIdentifier.getPortIdentifiers();
-            while (portList.hasMoreElements()) {
-                portId = (CommPortIdentifier) portList.nextElement();
-                if (portId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
-                    cbPrinterDirect.addItem(portId.getName());
-                }
+        CommPortIdentifier portId;
+        cbPrinterDirect.removeAllItems();
+        Enumeration portList = CommPortIdentifier.getPortIdentifiers();
+        while (portList.hasMoreElements()) {
+            portId = (CommPortIdentifier) portList.nextElement();
+            if (portId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
+                cbPrinterDirect.addItem(portId.getName());
             }
-        } catch (Exception e) {
-            System.err.println(e);
         }
-
     }
 
     private void loadInitConfig() {
-        ConfigBean bean = getConfigControl().getConfigBean();
-
+        ConfigBean bean = getConfigControl().findOne();
         if (bean == null) {
             return;
         }
@@ -4399,7 +4386,7 @@ public class AppSettingDialog extends BaseDialogSwing {
     }
 
     private void loadData(String typeCode) {
-        CbSaveConfigBean bean = getSaveConfigControl().loadConfig(typeCode);
+        CbSaveConfigBean bean = getSaveConfigControl().findOneByTypeCode(typeCode);
         if (bean == null) {
             txtTypeCode.requestFocus();
         } else {
@@ -4605,7 +4592,7 @@ public class AppSettingDialog extends BaseDialogSwing {
     }
 
     private void loadDataLoanConfig(String LoanCode) {
-        CbLoanConfigBean bean = getLoanConfigControl().listLoanConfig(LoanCode);
+        CbLoanConfigBean bean = getLoanConfigControl().findOneByLoanCode(LoanCode);
         if (bean != null) {
             txtLoanCode.setText(bean.getLoanCode());
             txtLoanName.setText(bean.getLoanName());

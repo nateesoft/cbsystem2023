@@ -32,7 +32,7 @@ public class CbStatusControl extends BaseControl {
         return listBean;
     }
 
-    public CbStatusBean listExpense(String exp_id) {
+    public CbStatusBean findOneByExpId(String exp_id) {
         CbStatusBean bean = new CbStatusBean();
         String sql = "select * from cb_status where exp_id='" + exp_id + "'";
         try (ResultSet rs = MySQLConnect.getResultSet(sql)) {

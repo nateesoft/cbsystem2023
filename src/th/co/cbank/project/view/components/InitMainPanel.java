@@ -8,6 +8,7 @@ public class InitMainPanel extends javax.swing.JPanel {
 
     public InitMainPanel() {
         initComponents();
+        logger.debug("InitMainPanel init");
     }
 
     @SuppressWarnings("unchecked")

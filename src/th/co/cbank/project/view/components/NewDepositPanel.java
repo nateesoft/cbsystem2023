@@ -38,6 +38,7 @@ public class NewDepositPanel extends javax.swing.JPanel {
 
     public NewDepositPanel(ProfileBean profileBean) {
         initComponents();
+        logger.debug("NewDepositPanel init");
 
         this.profileBean = profileBean;
 
@@ -379,8 +380,8 @@ public class NewDepositPanel extends javax.swing.JPanel {
         String newAccountNo = "";
         String newBookNo = "";
         String docType = getIDCombobox(cbAccType);
-        CbSaveConfigBean sBean = saveConfigControl.listSaveConfig1(docType);
-        ConfigBean bean = configControl.getConfigBean();
+        CbSaveConfigBean sBean = saveConfigControl.findOneByTypeCode(docType);
+        ConfigBean bean = configControl.findOne();
         if (bean.getBranchPrefix().equals("Y")) {
             BranchBean bBean = branchControl.getData();
             newAccountNo = bBean.getCode() + sBean.getTypeCode() + getRunning(sBean.getSaveRunning());
@@ -447,13 +448,13 @@ public class NewDepositPanel extends javax.swing.JPanel {
         cbSaveAccountBean.setB_FEE(NumberFormat.toDouble(txtSaveFee.getText()));
         cbSaveAccountBean.setBranch_Code(Value.BRANCH_CODE);
         cbSaveAccountBean.setEmp_Code(Value.USER_CODE);
-        ProfileBean pBean = profileControl.listCbProfile(cbSaveAccountBean.getB_CUST_CODE());
+        ProfileBean pBean = profileControl.findOneByCustCode(cbSaveAccountBean.getB_CUST_CODE());
         cbSaveAccountBean.setMEMBER_TYPE(pBean.getP_member_type());
         cbSaveAccountBean.setAccount_status("1");
 
         if (saveAccountControl.saveSaveAccount(cbSaveAccountBean)) {
             // save fee transaction            
-            CbFeeBean feeBean = cbFeeControl.getCbFee("2");
+            CbFeeBean feeBean = cbFeeControl.findOneByExpId("2");
             if (feeBean != null) {
                 if (cbSaveAccountBean.getB_FEE() > 0) {
                     CbFeeTransactionBean feeTBean = new CbFeeTransactionBean();

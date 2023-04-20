@@ -313,7 +313,7 @@ public final class PrintCOM extends BaseControl {
     public void printLOG(String msg) {
 
         ConfigControl cc = new ConfigControl();
-        ConfigBean cBean = cc.getConfigBean();
+        ConfigBean cBean = cc.findOne();
         if (cBean == null) {
             return;
         }
@@ -557,7 +557,7 @@ public final class PrintCOM extends BaseControl {
     //WORK
     public void printPaymentLoan(PrintBean pBean) {
         ConfigControl cc = new ConfigControl();
-        ConfigBean cBean = cc.getConfigBean();
+        ConfigBean cBean = cc.findOne();
         if (cBean.getPrintSlipPort() == null || cBean.getPrintSlipPort().equals("")) {
             MessageAlert.infoPopup(this.getClass(), "กรุณาติดตั้ง Comport สำหรับปริ้นเตอร์ !!!");
             return;
@@ -652,7 +652,7 @@ public final class PrintCOM extends BaseControl {
     //WORK
     public void printPaymentLoan(CbTransactionLoanBean cbTransactionLoanBean) {
         ConfigControl cc = new ConfigControl();
-        ConfigBean cBean = cc.getConfigBean();
+        ConfigBean cBean = cc.findOne();
         if (cBean.getPrintSlipPort() == null || cBean.getPrintSlipPort().equals("")) {
             MessageAlert.infoPopup(this.getClass(), "กรุณาติดตั้ง Comport สำหรับปริ้นเตอร์ !!!");
             return;
@@ -686,10 +686,10 @@ public final class PrintCOM extends BaseControl {
                     initPrinter();
 
                     CbLoanAccountControl cbLoanAccountControl = new CbLoanAccountControl();
-                    CbLoanAccountBean cbLoanAccountBean = cbLoanAccountControl.listLoanAccount(cbTransactionLoanBean.getT_acccode());
+                    CbLoanAccountBean cbLoanAccountBean = cbLoanAccountControl.findOneByLoanDocNo(cbTransactionLoanBean.getT_acccode());
 
                     CbLoanConfigControl cbLoanConfigControl = new CbLoanConfigControl();
-                    CbLoanConfigBean cbLoanConfigBean = cbLoanConfigControl.listLoanConfig(cbLoanAccountBean.getLoan_type());
+                    CbLoanConfigBean cbLoanConfigBean = cbLoanConfigControl.findOneByLoanCode(cbLoanAccountBean.getLoan_type());
 
                     BranchControl branchControl = new BranchControl();
                     BranchBean branchBean = branchControl.getData();
@@ -697,7 +697,7 @@ public final class PrintCOM extends BaseControl {
                     SimpleDateFormat sTime = new SimpleDateFormat("HH:mm:ss");
 
                     ProfileControl profileControl = new ProfileControl();
-                    ProfileBean profileBean = profileControl.listCbProfile(cbTransactionLoanBean.getT_custcode());
+                    ProfileBean profileBean = profileControl.findOneByCustCode(cbTransactionLoanBean.getT_custcode());
 
                     try {
                         p("     ใบเสร็จรับเงินชำระเงินกู้");
@@ -747,7 +747,7 @@ public final class PrintCOM extends BaseControl {
     public boolean printMemberFee(String custCode, String feeMember, String docno, String feeProject) {
         boolean isPrint = false;
         ConfigControl cc = new ConfigControl();
-        ConfigBean cBean = cc.getConfigBean();
+        ConfigBean cBean = cc.findOne();
 
         if (cBean.getPrintSlipPort() == null || cBean.getPrintSlipPort().equals("")) {
             MessageAlert.infoPopup(this.getClass(), "กรุณาติดตั้ง Comport สำหรับปริ้นเตอร์ !!!");
@@ -766,7 +766,7 @@ public final class PrintCOM extends BaseControl {
         CbFeeControl cbFeeControl = new CbFeeControl();
         if (feeProjectAmt > 0) {
             CbFeeTransactionBean feeBean = new CbFeeTransactionBean();
-            CbFeeBean fBean = cbFeeControl.listExpense("4");
+            CbFeeBean fBean = cbFeeControl.findOneByExpId("4");
             if (fBean != null) {
                 feeBean.setFee_code(fBean.getExp_id());
                 feeBean.setFee_desc(fBean.getExp_desc());
@@ -780,7 +780,7 @@ public final class PrintCOM extends BaseControl {
         }
         if (feeMemberAmt > 0) {
             CbFeeTransactionBean feeBean = new CbFeeTransactionBean();
-            CbFeeBean fBean = cbFeeControl.listExpense("1");
+            CbFeeBean fBean = cbFeeControl.findOneByExpId("1");
             if (fBean != null) {
                 feeBean.setFee_code(fBean.getExp_id());
                 feeBean.setFee_desc(fBean.getExp_desc());
@@ -823,10 +823,10 @@ public final class PrintCOM extends BaseControl {
                     SimpleDateFormat ss = new SimpleDateFormat("dd/MM/yyyy");
                     SimpleDateFormat tt = new SimpleDateFormat("hh:mm");
                     ProfileControl pc = new ProfileControl();
-                    ProfileBean pBean = pc.listCbProfile(custCode);
+                    ProfileBean pBean = pc.findOneByCustCode(custCode);
 
-                    CbFeeBean fBean = cbFeeControl.listExpense("1");
-                    CbFeeBean fBean2 = cbFeeControl.listExpense("4");
+                    CbFeeBean fBean = cbFeeControl.findOneByExpId("1");
+                    CbFeeBean fBean2 = cbFeeControl.findOneByExpId("4");
 
                     try {
                         p("ใบบันทึกรายการรับชำระค่าธรรมเนียม");
@@ -894,7 +894,7 @@ public final class PrintCOM extends BaseControl {
 
     public boolean printFeeOpen(String custCode, String feeOpenAcc) {
         ConfigControl cc = new ConfigControl();
-        ConfigBean bean = cc.getConfigBean();
+        ConfigBean bean = cc.findOne();
         String docNo;
         if (bean.getBranchPrefix().equals("Y")) {
             BranchControl branchControl = new BranchControl();
@@ -904,7 +904,7 @@ public final class PrintCOM extends BaseControl {
             docNo = bean.getSaveDocPrefix() + getRunning(bean.getFeeRunning());
         }
         boolean isPrint = false;
-        ConfigBean cBean = cc.getConfigBean();
+        ConfigBean cBean = cc.findOne();
 
         if (cBean.getPrintSlipPort() == null || cBean.getPrintSlipPort().equals("")) {
             MessageAlert.infoPopup(this.getClass(), "กรุณาติดตั้ง Comport สำหรับปริ้นเตอร์ !!!");
@@ -920,7 +920,7 @@ public final class PrintCOM extends BaseControl {
         // สำหรับค่าธรรมเนียมการเปิดบัญชีเงินฝาก
         CbFeeControl cbFeeControl = new CbFeeControl();
         CbFeeTransactionBean feeBean = new CbFeeTransactionBean();
-        CbFeeBean fBean = cbFeeControl.listExpense("2");
+        CbFeeBean fBean = cbFeeControl.findOneByExpId("2");
         feeBean.setFee_code(fBean.getExp_id());
         feeBean.setFee_desc(fBean.getExp_desc());
         feeBean.setFee_amount(feeOpenAmt);
@@ -958,7 +958,7 @@ public final class PrintCOM extends BaseControl {
                     SimpleDateFormat ss = new SimpleDateFormat("dd/MM/yyyy");
                     SimpleDateFormat tt = new SimpleDateFormat("hh:mm");
                     ProfileControl pc = new ProfileControl();
-                    ProfileBean pBean = pc.listCbProfile(custCode);
+                    ProfileBean pBean = pc.findOneByCustCode(custCode);
 
                     try {
                         p("ใบบันทึกรายการรับชำระค่าธรรมเนียม");
@@ -1004,7 +1004,7 @@ public final class PrintCOM extends BaseControl {
 
     public boolean printFeeLoanOpen(String custCode, String feeLoanOpen) {
         ConfigControl cc = new ConfigControl();
-        ConfigBean bean = cc.getConfigBean();
+        ConfigBean bean = cc.findOne();
         String docNo;
         if (bean.getBranchPrefix().equals("Y")) {
             BranchControl branchControl = new BranchControl();
@@ -1014,7 +1014,7 @@ public final class PrintCOM extends BaseControl {
             docNo = bean.getSaveDocPrefix() + getRunning(bean.getFeeRunning());
         }
         boolean isPrint = false;
-        ConfigBean cBean = cc.getConfigBean();
+        ConfigBean cBean = cc.findOne();
 
         if (cBean.getPrintSlipPort() == null || cBean.getPrintSlipPort().equals("")) {
             MessageAlert.infoPopup(this.getClass(), "กรุณาติดตั้ง Comport สำหรับปริ้นเตอร์ !!!");
@@ -1030,7 +1030,7 @@ public final class PrintCOM extends BaseControl {
         // สำหรับค่าธรรมเนียมการเปิดบัญชีเงินฝาก
         CbFeeControl cbFeeControl = new CbFeeControl();
         CbFeeTransactionBean feeBean = new CbFeeTransactionBean();
-        CbFeeBean fBean = cbFeeControl.listExpense("3");
+        CbFeeBean fBean = cbFeeControl.findOneByExpId("3");
         feeBean.setFee_code(fBean.getExp_id());
         feeBean.setFee_desc(fBean.getExp_desc());
         feeBean.setFee_amount(feeLoanOpenAmt);
@@ -1068,7 +1068,7 @@ public final class PrintCOM extends BaseControl {
                     SimpleDateFormat ss = new SimpleDateFormat("dd/MM/yyyy");
                     SimpleDateFormat tt = new SimpleDateFormat("hh:mm");
                     ProfileControl pc = new ProfileControl();
-                    ProfileBean pBean = pc.listCbProfile(custCode);
+                    ProfileBean pBean = pc.findOneByCustCode(custCode);
 
                     try {
                         p("ใบบันทึกรายการรับชำระค่าธรรมเนียม");

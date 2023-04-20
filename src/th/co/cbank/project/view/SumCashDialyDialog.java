@@ -12,6 +12,7 @@ public class SumCashDialyDialog extends javax.swing.JDialog {
     public SumCashDialyDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("SumCashDialyDialog init");
 
         initTable();
     }

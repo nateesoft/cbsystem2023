@@ -10,6 +10,7 @@ public class UpdateVersionDialog extends BaseDialogSwing {
     public UpdateVersionDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("UpdateVersionDialog init");
 
         lbVersion.setText(parent.getTitle());
     }
@@ -189,6 +190,6 @@ public class UpdateVersionDialog extends BaseDialogSwing {
     // End of variables declaration//GEN-END:variables
 
     private void downloadSoftwareUpdate() {
-
+        // TO BE CONTINUE...
     }
 }

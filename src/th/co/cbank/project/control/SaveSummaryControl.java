@@ -10,7 +10,7 @@ public class SaveSummaryControl extends BaseControl {
 
     private final Logger logger = Logger.getLogger(SaveSummaryControl.class);
 
-    public SaveSummaryBean getSaveData() {
+    public SaveSummaryBean findOneSummary() {
         SaveSummaryBean bean = new SaveSummaryBean();
         try {
             String sql = "select count(b_cust_code) total, "
@@ -32,7 +32,7 @@ public class SaveSummaryControl extends BaseControl {
                 bean.setAccountToday(rs.getInt(1));
             }
             String sql2 = "select count(*) from cb_transaction_save "
-                    + "where t_status='8' and t_date=curdate();";
+                    + "where t_status='" + AppConstants.CB_STATUS_CLOSE_SAVE + "' and t_date=curdate();";
             rs = MySQLConnect.getResultSet(sql2);
             if (rs.next()) {
                 bean.setCloseToday(rs.getInt(1));
@@ -40,7 +40,7 @@ public class SaveSummaryControl extends BaseControl {
 
             String sql3 = "select sum(money_in) money_in, sum(money_out) money_out, sum(money_in-money_out) balance "
                     + "from cb_transaction_save "
-                    + "where t_status in('2','3','8') and t_date=curdate() "
+                    + "where t_status in('" + AppConstants.CB_STATUS_SAVE + "','" + AppConstants.CB_STATUS_WITHDRAW + "','" + AppConstants.CB_STATUS_CLOSE_SAVE + "') and t_date=curdate() "
                     + "group by t_status;";
             rs = MySQLConnect.getResultSet(sql3);
             double save1 = 0;
@@ -70,7 +70,8 @@ public class SaveSummaryControl extends BaseControl {
                 bean.setHoon_value_amount_all(rs.getDouble(2));
             }
             String h2 = "select t_status, sum(t_amount) from cb_transaction_save "
-                    + "where t_status in('4','5','9') and t_date=curdate() "
+                    + "where t_status in('" + AppConstants.CB_STATUS_BUY_HOON + "','" + AppConstants.CB_STATUS_SALE_HOON + "','" + AppConstants.CB_STATUS_TRANS_HOON + "') "
+                    + "and t_date=curdate() "
                     + "group by t_status;";
             rs = MySQLConnect.getResultSet(h2);
             int h4 = 0;
@@ -104,7 +105,7 @@ public class SaveSummaryControl extends BaseControl {
             String l2 = "select t_status,count(*),sum(t_amount),sum(t_fee) "
                     + "from cb_transaction_save "
                     + "where t_date=curdate() "
-                    + "and t_status in('10','7') "
+                    + "and t_status in('" + AppConstants.CB_STATUS_LOAN + "','" + AppConstants.CB_STATUS_PAYMENT + "') "
                     + "group by t_status;";
             rs = MySQLConnect.getResultSet(l2);
             double l10 = 0.00;

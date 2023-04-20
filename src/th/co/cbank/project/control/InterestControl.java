@@ -4,15 +4,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
-import org.apache.log4j.Logger;
 import th.co.cbank.project.model.CbLoanAccountBean;
 import th.co.cbank.project.model.CbLoanConfigBean;
 import th.co.cbank.util.DateUtil;
 import th.co.cbank.util.NumberFormat;
 
 public class InterestControl {
-
-    private final Logger logger = Logger.getLogger(InterestControl.class);
 
     public static double defaultINT(double money1, double intPerYear, int dayAll) {
         double perMonth = intPerYear / 12;
@@ -67,9 +64,9 @@ public class InterestControl {
     //คำนวณแบบ Flat Rate
     public double totalBalanceIntRate(String AccCode) {
         CbLoanAccountControl la = new CbLoanAccountControl();
-        CbLoanAccountBean lBean = la.listLoanAccount(AccCode);
+        CbLoanAccountBean lBean = la.findOneByLoanDocNo(AccCode);
         CbLoanConfigControl loanConfig = new CbLoanConfigControl();
-        CbLoanConfigBean cBean = loanConfig.listLoanConfig(lBean.getLoan_type());
+        CbLoanConfigBean cBean = loanConfig.findOneByLoanCode(lBean.getLoan_type());
         double balance;
         if (cBean.getIntFixed().equals("F")) {
             int period = cBean.getLoanPerMonth();
@@ -85,7 +82,7 @@ public class InterestControl {
 
     private double totalBalanceEffecRate(String AccCode) {
         CbLoanAccountControl la = new CbLoanAccountControl();
-        CbLoanAccountBean lBean = la.listLoanAccount(AccCode);
+        CbLoanAccountBean lBean = la.findOneByLoanDocNo(AccCode);
         double INTEREST = lBean.getLoan_interest();
         double BALANCE = lBean.getLoan_amount();
 

@@ -3,12 +3,9 @@ package th.co.cbank.util;
 import java.util.*;
 import javax.mail.*;
 import javax.mail.internet.*;
-import org.apache.log4j.Logger;
 import th.co.cbank.project.control.BranchControl;
 
 public class SendEmail {
-
-    private final Logger logger = Logger.getLogger(SendEmail.class);
 
     public boolean sendEmailBug(String email, String pass, String subject, String msg) {
         final String username = email;

@@ -37,7 +37,7 @@ public class CbExpenseControl extends BaseControl {
         }
     }
 
-    public CbExpenseBean listExpense(String exp_id) {
+    public CbExpenseBean findOneByExpId(String exp_id) {
         try {
             String sql = "select * from cb_expense where exp_id='" + exp_id + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);

@@ -36,7 +36,7 @@ public class CbHoonSummaryControl extends BaseControl {
         return listBean;
     }
 
-    public CbHoonSummaryBean getData(String year) {
+    public CbHoonSummaryBean findOneByYear(String year) {
         try {
             String sql = "select * from cb_hoon_summary where year_at='" + year + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);

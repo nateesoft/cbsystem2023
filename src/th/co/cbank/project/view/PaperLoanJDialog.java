@@ -30,6 +30,7 @@ public class PaperLoanJDialog extends BaseDialogSwing {
     public PaperLoanJDialog(java.awt.Frame parent, boolean modal, String loanAccountCode) {
         super(parent, modal);
         initComponents();
+        logger.debug("PaperLoanJDialog init");
 
         this.loanAccountCode = loanAccountCode;
         initLoad();
@@ -168,8 +169,8 @@ public class PaperLoanJDialog extends BaseDialogSwing {
         params.put("p4", simp.format(loanAccountBean.getLoan_docdate()));
         params.put("p5", loanAccountBean.getLoan_docno());
 
-        ProfileBean profileBean = getProfileControl().listCbProfile(loanAccountBean.getCust_code());
-        AddressBean addressBean = getAddressControl().listProfileAddress(profileBean.getP_custCode(), "1");
+        ProfileBean profileBean = getProfileControl().findOneByCustCode(loanAccountBean.getCust_code());
+        AddressBean addressBean = getAddressControl().findOneByCustCodeAddrType(profileBean.getP_custCode(), "1");
 
         params.put("p6", profileBean.getP_custName() + " " + profileBean.getP_custSurname());
         params.put("p7", "" + profileBean.getP_custAge());
@@ -188,7 +189,7 @@ public class PaperLoanJDialog extends BaseDialogSwing {
         params.put("p20", bBean.getName());
         params.put("p21", "-");
 
-        CbLoanConfigBean cBean = getLoanConfigControl().listLoanConfig(loanAccountBean.getLoan_type());
+        CbLoanConfigBean cBean = getLoanConfigControl().findOneByLoanCode(loanAccountBean.getLoan_type());
         params.put("p22", cBean.getLoanName());
         params.put("p23", NumberFormat.showDouble2(loanAccountBean.getLoan_amount()));
         BigDecimal bg = new BigDecimal(loanAccountBean.getLoan_amount());
@@ -231,14 +232,14 @@ public class PaperLoanJDialog extends BaseDialogSwing {
         params.put("p4", simp.format(loanAccountBean.getLoan_docdate()));
 
         List<CbBondsmanBean> listBondsman = getCbBondsmanControl().listCbBondsman(loanAccountCode);
-        ProfileBean profileBean = getProfileControl().listCbProfile(loanAccountBean.getCust_code());
+        ProfileBean profileBean = getProfileControl().findOneByCustCode(loanAccountBean.getCust_code());
         if (listBondsman.size() > 0) {
             CbBondsmanBean bondsmanBean = (CbBondsmanBean) listBondsman.get(0);
-            ProfileBean pBean1 = getProfileControl().listCbProfile(bondsmanBean.getIdcard());
+            ProfileBean pBean1 = getProfileControl().findOneByCustCode(bondsmanBean.getIdcard());
             params.put("p5", pBean1.getP_custName() + " " + pBean1.getP_custSurname());
             params.put("p6", "" + pBean1.getP_custAge());
             params.put("p7", "" + pBean1.getP_custNation());
-            AddressBean bean1 = getAddressControl().listProfileAddress(pBean1.getP_custCode(), "1");
+            AddressBean bean1 = getAddressControl().findOneByCustCodeAddrType(pBean1.getP_custCode(), "1");
             params.put("p8", "" + bean1.getAddr_No());
             params.put("p9", "" + bean1.getAddr_Moo());
             params.put("p10", "" + bean1.getAddr_Soi());
@@ -253,11 +254,11 @@ public class PaperLoanJDialog extends BaseDialogSwing {
 
             if (listBondsman.size() > 1) {
                 CbBondsmanBean bondsmanBean2 = (CbBondsmanBean) listBondsman.get(1);
-                ProfileBean pBean2 = getProfileControl().listCbProfile(bondsmanBean2.getIdcard());
+                ProfileBean pBean2 = getProfileControl().findOneByCustCode(bondsmanBean2.getIdcard());
                 params.put("p19", pBean2.getP_custName() + " " + pBean2.getP_custSurname());
                 params.put("p20", "" + pBean2.getP_custAge());
                 params.put("p21", "" + pBean2.getP_custNation());
-                AddressBean bean2 = getAddressControl().listProfileAddress(pBean2.getP_custCode(), "1");
+                AddressBean bean2 = getAddressControl().findOneByCustCodeAddrType(pBean2.getP_custCode(), "1");
                 params.put("p22", "" + bean2.getAddr_No());
                 params.put("p23", "" + bean2.getAddr_Moo());
                 params.put("p24", "" + bean2.getAddr_Soi());
@@ -295,6 +296,6 @@ public class PaperLoanJDialog extends BaseDialogSwing {
     }
 
     private void initLoad() {
-        loanAccountBean = getLoanAccountControl().listLoanAccount(loanAccountCode);
+        loanAccountBean = getLoanAccountControl().findOneByLoanDocNo(loanAccountCode);
     }
 }

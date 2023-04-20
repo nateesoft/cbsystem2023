@@ -55,6 +55,7 @@ public class SavingDialog extends BaseDialogSwing {
         super(parent, modal);
         this.parent = parent;
         initComponents();
+        logger.debug("SavingDialog init");
 
         this.isRegister = isRegister;
         this.profileCode = profileCode;
@@ -2687,7 +2688,7 @@ public class SavingDialog extends BaseDialogSwing {
     }//GEN-LAST:event_btnExitActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        ConfigBean cBean = getConfigControl().getConfigBean();
+        ConfigBean cBean = getConfigControl().findOne();
         txtFeeMember.setText(NumberFormat.showDouble2(cBean.getFeeAmt()));
     }//GEN-LAST:event_jButton4ActionPerformed
 
@@ -2994,7 +2995,7 @@ public class SavingDialog extends BaseDialogSwing {
             if (isRegister) {
                 bean.setStatus("ยังไม่เปิดบัญชี");
             } else {
-                ProfileBean bbBean = getProfileControl().listCbProfile(bean.getP_custCode());
+                ProfileBean bbBean = getProfileControl().findOneByCustCode(bean.getP_custCode());
                 bean.setStatus(bbBean.getStatus());
             }
             bean.setP_custOccupation(txtOccupation.getText());
@@ -3052,7 +3053,7 @@ public class SavingDialog extends BaseDialogSwing {
                     System.out.println(e.getMessage());
                 }
             } else {
-                ProfileBean bbBean = getProfileControl().listCbProfile(bean.getP_custCode());
+                ProfileBean bbBean = getProfileControl().findOneByCustCode(bean.getP_custCode());
                 if (bbBean != null) {
                     bean.setP_cust_pic_url(bbBean.getP_cust_pic_url());
                 } else {
@@ -3223,7 +3224,7 @@ public class SavingDialog extends BaseDialogSwing {
 
     private void init() {
         txtIndex.setText("");
-        ConfigBean cBean = getConfigControl().getConfigBean();
+        ConfigBean cBean = getConfigControl().findOne();
         txtFeeMember.setText(NumberFormat.showDouble2(cBean.getFeeAmt()));
 
         tbListPersonApp.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
@@ -3239,7 +3240,7 @@ public class SavingDialog extends BaseDialogSwing {
     }
 
     private void loadCustomerEdit() {
-        ProfileBean profileBean = getProfileControl().listCbProfile(txtCode.getText());
+        ProfileBean profileBean = getProfileControl().findOneByCustCode(txtCode.getText());
         if (profileBean != null) {
             txtIndex.setText("" + profileBean.getP_index());
             txtCode.setText(profileBean.getP_custCode());
@@ -3308,7 +3309,7 @@ public class SavingDialog extends BaseDialogSwing {
             txtFeeTotal.setText("" + (profileBean.getP_fee() + profileBean.getP_down_fee()));
 
             //show Address
-            AddressBean aBean1 = getAddressControl().listProfileAddress(profileBean.getP_custCode(), "1");
+            AddressBean aBean1 = getAddressControl().findOneByCustCodeAddrType(profileBean.getP_custCode(), "1");
             txtAddNo1.setText(aBean1.getAddr_No());
             txtAddrMoo1.setText(aBean1.getAddr_Moo());
             txtAddrMooName1.setText(aBean1.getAddr_MooName());
@@ -3321,7 +3322,7 @@ public class SavingDialog extends BaseDialogSwing {
             txtAddrMobile1.setText(aBean1.getAddr_Mobile());
             txtAddrTel1.setText(aBean1.getAddr_Tel());
 
-            AddressBean aBean = getAddressControl().listProfileAddress(profileBean.getP_custCode(), "2");
+            AddressBean aBean = getAddressControl().findOneByCustCodeAddrType(profileBean.getP_custCode(), "2");
             txtAddrNo2.setText(aBean.getAddr_No());
             txtAddrMoo2.setText(aBean.getAddr_Moo());
             txtAddrMooName2.setText(aBean.getAddr_MooName());
@@ -3332,7 +3333,7 @@ public class SavingDialog extends BaseDialogSwing {
             txtAddrProvince2.setText(aBean.getAddr_Province());
             txtAddrPost2.setText(aBean.getAddr_Post());
 
-            AddressBean aBean3 = getAddressControl().listProfileAddress(profileBean.getP_custCode(), "3");
+            AddressBean aBean3 = getAddressControl().findOneByCustCodeAddrType(profileBean.getP_custCode(), "3");
             txtAddr3ComName.setText(aBean3.getCompany_Name());
             txtAddrNo3.setText(aBean3.getAddr_No());
             txtAddrMoo3.setText(aBean3.getAddr_Moo());
@@ -3344,7 +3345,7 @@ public class SavingDialog extends BaseDialogSwing {
             txtAddrProvince3.setText(aBean3.getAddr_Province());
             txtAddrPost3.setText(aBean3.getAddr_Post());
 
-            AddressBean aBean4 = getAddressControl().listProfileAddress(profileBean.getP_custCode(), "4");
+            AddressBean aBean4 = getAddressControl().findOneByCustCodeAddrType(profileBean.getP_custCode(), "4");
             if (aBean4 != null) {
                 String pjName = aBean4.getCompany_Name();
                 if (pjName == null) {
@@ -3447,7 +3448,7 @@ public class SavingDialog extends BaseDialogSwing {
 
     private void printFee() {
         PrintCOM pc = new PrintCOM();
-        ConfigBean bean = getConfigControl().getConfigBean();
+        ConfigBean bean = getConfigControl().findOne();
         String docNo;
         if (bean.getBranchPrefix().equals("Y")) {
             BranchBean bBean = getBranchControl().getData();
@@ -3515,7 +3516,7 @@ public class SavingDialog extends BaseDialogSwing {
 
     private void addPersonAllow() {
         if (!txtCustAppCode.getText().equals("")) {
-            ProfileBean pBean = getProfileControl().listCbProfile(txtCustAppCode.getText());
+            ProfileBean pBean = getProfileControl().findOneByCustCode(txtCustAppCode.getText());
 
             if (pBean != null) {
                 CbWithdrawAllowBean wBean = new CbWithdrawAllowBean();

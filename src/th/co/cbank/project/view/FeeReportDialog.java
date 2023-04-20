@@ -8,7 +8,6 @@ import java.util.Map;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import org.apache.log4j.Logger;
-import th.co.cbank.util.JTableUtil;
 import th.co.cbank.util.DateFormat;
 import th.co.cbank.util.NumberFormat;
 import th.co.cbank.project.constants.AppConstants;
@@ -23,6 +22,7 @@ public class FeeReportDialog extends BaseDialogSwing {
     public FeeReportDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("FeeReportDialog init");
 
         loadData();
 
@@ -183,11 +183,11 @@ public class FeeReportDialog extends BaseDialogSwing {
         DefaultTableModel model = (DefaultTableModel) jTable1.getModel();
         TableUtil.clearModel(model);
 
-        JTableUtil.alignCenter(jTable1, 0);
-        JTableUtil.alignCenter(jTable1, 3);
-        JTableUtil.alignCenter(jTable1, 4);
-        JTableUtil.alignCenter(jTable1, 5);
-        JTableUtil.alignRight(jTable1, 2);
+        TableUtil.alignCenter(jTable1, 0);
+        TableUtil.alignCenter(jTable1, 3);
+        TableUtil.alignCenter(jTable1, 4);
+        TableUtil.alignCenter(jTable1, 5);
+        TableUtil.alignRight(jTable1, 2);
 
         double total = 0.00;
         List<CbFeeTransactionBean> listFee = getCbFeeTransactionControl().listCbFeeTransaction();

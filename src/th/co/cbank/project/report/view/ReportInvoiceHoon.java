@@ -28,6 +28,7 @@ public class ReportInvoiceHoon extends javax.swing.JDialog {
     public ReportInvoiceHoon(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("ReportInvoiceHoon init");
 
         model = (DefaultTableModel) tableData.getModel();
         initTable();

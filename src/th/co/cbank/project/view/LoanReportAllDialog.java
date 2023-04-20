@@ -32,6 +32,7 @@ public class LoanReportAllDialog extends BaseDialogSwing {
     public LoanReportAllDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("LoanReportAllDialog init");
 
         this.parent = parent;
 
@@ -468,7 +469,6 @@ public class LoanReportAllDialog extends BaseDialogSwing {
         DefaultTableCellRenderer rightRenderer = new DefaultTableCellRenderer();
         rightRenderer.setHorizontalAlignment(SwingConstants.RIGHT);
 
-        DefaultTableCellRenderer leftRenderer = new DefaultTableCellRenderer();
         rightRenderer.setHorizontalAlignment(SwingConstants.LEFT);
 
         DefaultTableCellRenderer centerRenderer = new DefaultTableCellRenderer();

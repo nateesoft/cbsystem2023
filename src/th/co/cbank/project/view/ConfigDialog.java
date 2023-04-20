@@ -22,6 +22,7 @@ public class ConfigDialog extends BaseDialogSwing {
     public ConfigDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("ConfigDialog init");
 
         initChk();
         loadListGroup();

@@ -16,6 +16,7 @@ public class InputWithdrawDialog extends BaseDialogSwing {
     public InputWithdrawDialog(java.awt.Frame parent, boolean modal, List<CbWithdrawAllowBean> listBean) {
         super(parent, modal);
         initComponents();
+        logger.debug("InputWithdrawDialog init");
 
         this.listBean = listBean;
     }
@@ -305,7 +306,7 @@ public class InputWithdrawDialog extends BaseDialogSwing {
 
     private void custCust1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_custCust1KeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            ProfileBean profile = getProfileControl().listCbProfile(custCust1.getText());
+            ProfileBean profile = getProfileControl().findOneByCustCode(custCust1.getText());
             if (profile != null) {
                 if (!profile.getP_cust_pic_url().equals("")) {
                     pic1.setIcon(new javax.swing.ImageIcon(profile.getP_cust_pic_url()));
@@ -320,7 +321,7 @@ public class InputWithdrawDialog extends BaseDialogSwing {
 
     private void custCust2KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_custCust2KeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            ProfileBean profile = getProfileControl().listCbProfile(custCust2.getText());
+            ProfileBean profile = getProfileControl().findOneByCustCode(custCust2.getText());
             if (profile != null) {
                 if (!profile.getP_cust_pic_url().equals("")) {
                     pic2.setIcon(new javax.swing.ImageIcon(profile.getP_cust_pic_url()));
@@ -335,7 +336,7 @@ public class InputWithdrawDialog extends BaseDialogSwing {
 
     private void custCust3KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_custCust3KeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            ProfileBean profile = getProfileControl().listCbProfile(custCust3.getText());
+            ProfileBean profile = getProfileControl().findOneByCustCode(custCust3.getText());
             if (profile != null) {
                 if (!profile.getP_cust_pic_url().equals("")) {
                     pic3.setIcon(new javax.swing.ImageIcon(profile.getP_cust_pic_url()));
@@ -350,7 +351,7 @@ public class InputWithdrawDialog extends BaseDialogSwing {
 
     private void custCust4KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_custCust4KeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            ProfileBean profile = getProfileControl().listCbProfile(custCust4.getText());
+            ProfileBean profile = getProfileControl().findOneByCustCode(custCust4.getText());
             if (profile != null) {
                 if (!profile.getP_cust_pic_url().equals("")) {
                     pic4.setIcon(new javax.swing.ImageIcon(profile.getP_cust_pic_url()));
@@ -365,7 +366,7 @@ public class InputWithdrawDialog extends BaseDialogSwing {
 
     private void custCust5KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_custCust5KeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            ProfileBean profile = getProfileControl().listCbProfile(custCust5.getText());
+            ProfileBean profile = getProfileControl().findOneByCustCode(custCust5.getText());
             if (profile != null) {
                 if (!profile.getP_cust_pic_url().equals("")) {
                     pic5.setIcon(new javax.swing.ImageIcon(profile.getP_cust_pic_url()));
@@ -388,7 +389,7 @@ public class InputWithdrawDialog extends BaseDialogSwing {
 
     private void custCust6KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_custCust6KeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            ProfileBean profile = getProfileControl().listCbProfile(custCust6.getText());
+            ProfileBean profile = getProfileControl().findOneByCustCode(custCust6.getText());
             if (profile != null) {
                 if (!profile.getP_cust_pic_url().equals("")) {
                     pic6.setIcon(new javax.swing.ImageIcon(profile.getP_cust_pic_url()));

@@ -1,6 +1,6 @@
 server=localhost
-database=cbsystem_20230329
-database_member=cbsystem_20230329
+database=cbsystem
+database_member=cbsystem
 username=root
 password=
 charset=tis-620

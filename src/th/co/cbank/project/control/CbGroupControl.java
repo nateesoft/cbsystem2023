@@ -50,7 +50,7 @@ public class CbGroupControl extends BaseControl {
         }
     }
 
-    public CbGroupBean getCbGroup(String groupcode) {
+    public CbGroupBean findOneByGroupCode(String groupcode) {
         try {
             String sql = "select * from cb_group where groupcode='" + groupcode + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);

@@ -17,6 +17,7 @@ public class FeeDialog extends BaseDialogSwing {
     public FeeDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("FeeDialog init");
 
         initTable();
         loadExpenseData();
@@ -244,7 +245,7 @@ public class FeeDialog extends BaseDialogSwing {
         if (evt.getClickCount() == 2) {
             int rows = tbExpend.getSelectedRow();
             if (rows != -1) {
-                CbFeeBean bean = getCbFeeControl().listExpense("" + tbExpend.getValueAt(rows, 0));
+                CbFeeBean bean = getCbFeeControl().findOneByExpId("" + tbExpend.getValueAt(rows, 0));
                 txtExpendId.setText(bean.getExp_id());
                 txtExpendName.setText(bean.getExp_desc());
 
@@ -296,7 +297,6 @@ public class FeeDialog extends BaseDialogSwing {
     private void resetData() {
         txtExpendId.setText("");
         txtExpendName.setText("");
-
         txtExpendId.setEditable(true);
         txtExpendId.requestFocus();
     }

@@ -8,7 +8,6 @@ import java.awt.event.KeyEvent;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.Locale;
 import javax.swing.JSpinner;
 import javax.swing.JTable;
@@ -20,13 +19,10 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
-import org.apache.log4j.Logger;
 import th.co.cbank.project.constants.AppConstants;
 
 public final class DateChooseDialog extends javax.swing.JDialog {
 
-    private final Logger logger = Logger.getLogger(DateChooseDialog.class);
-    private GregorianCalendar curDay;
     private final SimpleDateFormat df = new SimpleDateFormat("dd/MM/yyyy");
     private boolean ok;
     private Timer time;
@@ -52,7 +48,6 @@ public final class DateChooseDialog extends javax.swing.JDialog {
 
         initTable(tblCalendar);
 
-        curDay = (GregorianCalendar) Calendar.getInstance();
         lbToday.setText("วันนี้ : " + df.format(new Date()));
         time = new Timer(1000, new TimeShow());
         time.start();
@@ -515,7 +510,6 @@ private void cbMonthKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_c
 
     private void doInputAction() {
         int year = NumberFormat.toInt(String.valueOf(spYear.getValue()));
-        curDay = new GregorianCalendar(year, monthSelected - 1, 1);
         showCalendar();
     }
 

@@ -57,6 +57,8 @@ public class MainDialog extends BaseSwing {
 
     public MainDialog(java.awt.Frame parent, boolean modal) {
         initComponents();
+        logger.debug("MainDialog init");
+        
         setExtendedState(JFrame.MAXIMIZED_BOTH);
         System.out.println(this.getTitle());
         try {
@@ -258,7 +260,7 @@ public class MainDialog extends BaseSwing {
         jMenuItem37 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle("ระบบบริหารธนาคารชุมชน V 1.1-2023.04.06");
+        setTitle("ระบบบริหารธนาคารชุมชน V 1.2");
         setBackground(new java.awt.Color(255, 255, 255));
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -1725,31 +1727,31 @@ public class MainDialog extends BaseSwing {
                 setTabComponentAt(ApplicationTab.NEW_DEPOSIT);
                 break;
             case 2:
-                saveAccountBean = getSaveAccountControl().getSaveAccountBean(listMenuDialog.getAccountCode());
+                saveAccountBean = getSaveAccountControl().findOneByAccountCode(listMenuDialog.getAccountCode());
                 loanAccountBean = null;
                 txtAccCode.setText(saveAccountBean.getAccount_code());
                 txtAccCode.setEditable(false);
                 setTabComponentAt(ApplicationTab.DEPOSIT);
                 break;
             case 3:
-                saveAccountBean = getSaveAccountControl().getSaveAccountBean(listMenuDialog.getAccountCode());
+                saveAccountBean = getSaveAccountControl().findOneByAccountCode(listMenuDialog.getAccountCode());
                 loanAccountBean = null;
                 txtAccCode.setText(saveAccountBean.getAccount_code());
                 txtAccCode.setEditable(false);
                 setTabComponentAt(ApplicationTab.WITHDRAW);
                 break;
             case 5:
-                saveAccountBean = getSaveAccountControl().getSaveAccountBean(listMenuDialog.getAccountCode());
+                saveAccountBean = getSaveAccountControl().findOneByAccountCode(listMenuDialog.getAccountCode());
                 loanAccountBean = null;
                 setTabComponentAt(ApplicationTab.BUY_HOON);
                 break;
             case 6:
-                saveAccountBean = getSaveAccountControl().getSaveAccountBean(listMenuDialog.getAccountCode());
+                saveAccountBean = getSaveAccountControl().findOneByAccountCode(listMenuDialog.getAccountCode());
                 loanAccountBean = null;
                 setTabComponentAt(ApplicationTab.SELL_HOON);
                 break;
             case 7:
-                saveAccountBean = getSaveAccountControl().getSaveAccountBean(listMenuDialog.getAccountCode());
+                saveAccountBean = getSaveAccountControl().findOneByAccountCode(listMenuDialog.getAccountCode());
                 loanAccountBean = null;
                 setTabComponentAt(ApplicationTab.TRANSFER_HOON);
                 break;
@@ -1758,7 +1760,7 @@ public class MainDialog extends BaseSwing {
                 setTabComponentAt(ApplicationTab.NEW_LOAN);
                 break;
             case 9:
-                loanAccountBean = getLoanAccountControl().getLoanAccount(listMenuDialog.getAccountCode(), profileBean.getP_custCode());
+                loanAccountBean = getLoanAccountControl().findOneByLoanDocNoAndCustCode(listMenuDialog.getAccountCode(), profileBean.getP_custCode());
                 saveAccountBean = null;
                 txtAccCode.setText(loanAccountBean.getLoan_docno());
                 txtAccCode.setEditable(false);
@@ -1840,24 +1842,19 @@ public class MainDialog extends BaseSwing {
         selectAccountType = "";
         if ("deposit".equals(customerDialog.getAccountType())) {
             selectAccountType = "deposit";
-            saveAccountBean = getSaveAccountControl().getSaveAccountBean(customerDialog.getAccountCode());
+            saveAccountBean = getSaveAccountControl().findOneByAccountCode(customerDialog.getAccountCode());
             loanAccountBean = null;
             txtAccCode.setText(saveAccountBean.getAccount_code());
             txtAccCode.setEditable(false);
         }
         if ("loan".equals(customerDialog.getAccountType())) {
             selectAccountType = "loan";
-            loanAccountBean = getLoanAccountControl().getLoanAccount(customerDialog.getAccountCode(), profileBean.getP_custCode());
+            loanAccountBean = getLoanAccountControl().findOneByLoanDocNoAndCustCode(customerDialog.getAccountCode(), profileBean.getP_custCode());
             saveAccountBean = null;
             txtAccCode.setText(loanAccountBean.getLoan_docno());
             txtAccCode.setEditable(false);
         }
         showListSelect();
-    }
-
-    public void updateInterest() {
-        WaitDialog waitDialog = new WaitDialog(this, true);
-        waitDialog.setVisible(true);
     }
 
     private void txtProfileCodeKeyPressedAction(java.awt.event.KeyEvent evt) {
@@ -1871,7 +1868,7 @@ public class MainDialog extends BaseSwing {
                 break;
             case KeyEvent.VK_ENTER:
                 if (StringUtil.isNotNullString(txtProfileCode.getText())) {
-                    profileBean = getProfileControl().listCbProfile(txtProfileCode.getText());
+                    profileBean = getProfileControl().findOneByCustCode(txtProfileCode.getText());
                     if (profileBean == null) {
                         MessageAlert.warningPopup(this, "ไม่พบข้อมูลลูกค้าในระบบ กรุณาตรวจสอบ");
                         txtProfileCode.selectAll();
@@ -1915,19 +1912,19 @@ public class MainDialog extends BaseSwing {
                 txtAccCode.requestFocus();
                 return;
             }
-            saveAccountBean = getSaveAccountControl().getSaveAccountBean(txtAccCode.getText());
+            saveAccountBean = getSaveAccountControl().findOneByAccountCode(txtAccCode.getText());
             loanAccountBean = null;
             if (saveAccountBean != null) {
-                profileBean = getProfileControl().listCbProfile(saveAccountBean.getB_CUST_CODE());
+                profileBean = getProfileControl().findOneByCustCode(saveAccountBean.getB_CUST_CODE());
                 selectAccountType = "deposit";
                 loadProfileCustomer();
                 showListSelect();
                 return;
             }
-            loanAccountBean = getLoanAccountControl().listLoanAccount(txtAccCode.getText());
+            loanAccountBean = getLoanAccountControl().findOneByLoanDocNo(txtAccCode.getText());
             saveAccountBean = null;
             if (loanAccountBean != null) {
-                profileBean = getProfileControl().listCbProfile(loanAccountBean.getCust_code());
+                profileBean = getProfileControl().findOneByCustCode(loanAccountBean.getCust_code());
                 selectAccountType = "loan";
                 loadProfileCustomer();
                 showListSelect();

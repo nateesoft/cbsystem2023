@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 import org.apache.log4j.Logger;
+import th.co.cbank.project.constants.AppConstants;
 import th.co.cbank.util.DateFormat;
 import th.co.cbank.util.ThaiUtil;
 import th.co.cbank.project.model.BalanceBean;
@@ -138,7 +139,8 @@ public class CbSaveAccountControl extends BaseControl {
             String sql = "select t_custcode, t_acccode "
                     + "from cb_transaction_save "
                     + "where update_interest<curdate() "
-                    + "and t_status in('2','3','8') "
+                    + "and t_status "
+                    + "in('" + AppConstants.CB_STATUS_SAVE + "','" + AppConstants.CB_STATUS_WITHDRAW + "','" + AppConstants.CB_STATUS_CLOSE_SAVE + "') "
                     + "and t_custcode<>'null' "
                     + "and t_acccode<>'' "
                     + "group by t_custcode, t_acccode "
@@ -208,7 +210,7 @@ public class CbSaveAccountControl extends BaseControl {
         return listBean;
     }
 
-    public CbSaveAccountBean getSaveAccountBean(String account_code) {
+    public CbSaveAccountBean findOneByAccountCode(String account_code) {
         try {
             String sql = "select * from cb_save_account where Account_code='" + account_code + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);
@@ -226,7 +228,7 @@ public class CbSaveAccountControl extends BaseControl {
 
     }
 
-    public CbSaveAccountBean getSaveAccount(String where) {
+    public CbSaveAccountBean findOneByConditionWhere(String where) {
         try {
             String sql = "select * from cb_save_account where 1=1 ";
             if (StringUtil.isNotNullString(where)) {
@@ -371,7 +373,7 @@ public class CbSaveAccountControl extends BaseControl {
                     + "from cb_save_config c, cb_save_account s, cb_transaction_save t "
                     + "where c.typecode=s.account_type "
                     + "and s.account_code=t.t_acccode "
-                    + "and t_status in('2','3','8') ";
+                    + "and t_status in('" + AppConstants.CB_STATUS_SAVE + "','" + AppConstants.CB_STATUS_WITHDRAW + "','" + AppConstants.CB_STATUS_CLOSE_SAVE + "') ";
             if (custCode.equals("") && accoutCode.equals("")) {
                 sql += " and update_interest<curdate() ";
             } else {
@@ -579,7 +581,7 @@ public class CbSaveAccountControl extends BaseControl {
             String sql1 = "select t_custcode, sum(t_amount) t_amount,sum(t_interest) t_interest "
                     + "from cb_transaction_save "
                     + "where t_custcode='" + tempCust + "' "
-                    + "and t_status in('2','3','8') "
+                    + "and t_status in('" + AppConstants.CB_STATUS_SAVE + "','" + AppConstants.CB_STATUS_WITHDRAW + "','" + AppConstants.CB_STATUS_CLOSE_SAVE + "') "
                     + "and t_acccode='" + t_acccode + "' "
                     + "group by t_custcode";
             try (ResultSet rs1 = MySQLConnect.getResultSet(sql1)) {
@@ -600,7 +602,7 @@ public class CbSaveAccountControl extends BaseControl {
         try {
             String sql = "select t_date,t_time,t_acccode,t_custcode,t_amount, t_interest,t_balance "
                     + "from cb_transaction_save "
-                    + "where t_status in('2','3','8') "
+                    + "where t_status in('" + AppConstants.CB_STATUS_SAVE + "','" + AppConstants.CB_STATUS_WITHDRAW + "','" + AppConstants.CB_STATUS_CLOSE_SAVE + "') "
                     + "order by t_custcode, t_date, t_time;";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             double totalAmount = 0;
@@ -629,7 +631,7 @@ public class CbSaveAccountControl extends BaseControl {
                             + "where t_custcode='" + rs.getString("t_custcode") + "' "
                             + "and t_acccode='" + rs.getString("t_acccode") + "' "
                             + "and t_time='" + rs.getString("t_time") + "' "
-                            + "and t_status in('2','3','8') ";
+                            + "and t_status in('" + AppConstants.CB_STATUS_SAVE + "','" + AppConstants.CB_STATUS_WITHDRAW + "','" + AppConstants.CB_STATUS_CLOSE_SAVE + "') ";
                     update(sqlUpd);
                 }
             }
@@ -685,7 +687,7 @@ public class CbSaveAccountControl extends BaseControl {
         try {
             String sql = "select t_custcode, t_acccode, sum(t_amount) t_amount "
                     + "from cb_transaction_save "
-                    + "where t_status in('2','3','8') "
+                    + "where t_status in('" + AppConstants.CB_STATUS_SAVE + "','" + AppConstants.CB_STATUS_WITHDRAW + "','" + AppConstants.CB_STATUS_CLOSE_SAVE + "') "
                     + "group by t_acccode, t_custcode";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             while (rs.next()) {
@@ -709,7 +711,7 @@ public class CbSaveAccountControl extends BaseControl {
         try {
             String sql = "select t_custcode, t_acccode, t_amount, LineNo, t_index,t_balance "
                     + "from cb_transaction_save "
-                    + "where t_status in('2','3','8') "
+                    + "where t_status in('" + AppConstants.CB_STATUS_SAVE + "','" + AppConstants.CB_STATUS_WITHDRAW + "','" + AppConstants.CB_STATUS_CLOSE_SAVE + "') "
                     + "order by t_custcode, t_acccode, t_date, t_time;";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             double totalAmt = 0.00;
@@ -825,20 +827,18 @@ public class CbSaveAccountControl extends BaseControl {
         }
     }
 
-    public BalanceBean getBalance(String Cust_Code) {
+    public BalanceBean findBalanceBeanByCustCode(String Cust_Code) {
         BalanceBean bean = new BalanceBean();
-        try {
-            String sql = "select * from cb_save_account "
-                    + "where B_Cust_Code='" + Cust_Code + "' ";
-            try (ResultSet rs = MySQLConnect.getResultSet(sql)) {
-                if (rs.next()) {
-                    bean.setB_CUST_CODE(rs.getString("B_CUST_CODE"));
-                    bean.setB_CUST_NAME(ThaiUtil.ASCII2Unicode(rs.getString("B_CUST_NAME")));
-                    bean.setB_CUST_LASTNAME(ThaiUtil.ASCII2Unicode(rs.getString("B_CUST_LASTNAME")));
-                    bean.setB_BALANCE(rs.getDouble("B_BALANCE"));
-                    bean.setB_INTEREST(rs.getDouble("B_INTEREST"));
-                    bean.setB_START(rs.getDate("B_START"));
-                }
+        String sql = "select * from cb_save_account "
+                + "where B_Cust_Code='" + Cust_Code + "' ";
+        try (ResultSet rs = MySQLConnect.getResultSet(sql)) {
+            if (rs.next()) {
+                bean.setB_CUST_CODE(rs.getString("B_CUST_CODE"));
+                bean.setB_CUST_NAME(ThaiUtil.ASCII2Unicode(rs.getString("B_CUST_NAME")));
+                bean.setB_CUST_LASTNAME(ThaiUtil.ASCII2Unicode(rs.getString("B_CUST_LASTNAME")));
+                bean.setB_BALANCE(rs.getDouble("B_BALANCE"));
+                bean.setB_INTEREST(rs.getDouble("B_INTEREST"));
+                bean.setB_START(rs.getDate("B_START"));
             }
         } catch (Exception e) {
             logger.error(e.getMessage());
@@ -869,8 +869,8 @@ public class CbSaveAccountControl extends BaseControl {
         SimpleDateFormat sToday = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
         dateEnd = sToday.format(new Date());
 
-        CalendarBean c1 = getDateInt(dateString);
-        CalendarBean c2 = getDateInt(dateEnd);
+        CalendarBean c1 = findCalendarBeanByDate(dateString);
+        CalendarBean c2 = findCalendarBeanByDate(dateEnd);
 
         Calendar cStart = Calendar.getInstance();
         Calendar cEnd = Calendar.getInstance();
@@ -893,7 +893,7 @@ public class CbSaveAccountControl extends BaseControl {
         return dayRunning;
     }
 
-    public CalendarBean getDateInt(String date) {
+    public CalendarBean findCalendarBeanByDate(String date) {
         String[] arr = date.split("-");
         String year = arr[0];
         String month = arr[1];
@@ -972,12 +972,12 @@ public class CbSaveAccountControl extends BaseControl {
         SimpleDateFormat simp = new SimpleDateFormat("dd/MM/yyyy", Locale.ENGLISH);
         SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd", Locale.ENGLISH);
 
-        CalendarBean c1 = getDateInt(dIn1);
+        CalendarBean c1 = findCalendarBeanByDate(dIn1);
         CalendarBean c2;
         if (dIn2.equals("now")) {
-            c2 = getDateInt(s.format(new Date()));
+            c2 = findCalendarBeanByDate(s.format(new Date()));
         } else {
-            c2 = getDateInt(dIn2);
+            c2 = findCalendarBeanByDate(dIn2);
         }
 
         Calendar cStart = Calendar.getInstance(Locale.ENGLISH);
@@ -1028,7 +1028,7 @@ public class CbSaveAccountControl extends BaseControl {
             ResultSet rs = MySQLConnect.getResultSet(sql);
 
             SettingFingerControl sc = new SettingFingerControl();
-            SettingBean sb = sc.getData();
+            SettingBean sb = sc.findOne();
             double Vat = 0.00;
             double IC = 0.00;
             if (sb != null) {
@@ -1044,8 +1044,8 @@ public class CbSaveAccountControl extends BaseControl {
                 String bCustCode = rs.getString("B_CUST_CODE");
                 String bStart = rs.getString("B_START");
 
-                CalendarBean c1 = getDateInt(bStart);
-                CalendarBean c2 = getDateInt(s.format(new Date()));
+                CalendarBean c1 = findCalendarBeanByDate(bStart);
+                CalendarBean c2 = findCalendarBeanByDate(s.format(new Date()));
                 Calendar cStart = Calendar.getInstance(Locale.ENGLISH);
                 cStart.set(c1.getYear(), c1.getMonth(), c1.getDay());
                 Calendar cEnd = Calendar.getInstance(Locale.ENGLISH);
@@ -1222,11 +1222,13 @@ public class CbSaveAccountControl extends BaseControl {
         try {
             String sql1 = "select ifnull(("
                     + "select sum(t_amount) sum_in from cb_transaction_save t1 	"
-                    + "where t_custcode=s.b_cust_code and t_acccode=s.account_code and t_status in(2,11) "
+                    + "where t_custcode=s.b_cust_code and t_acccode=s.account_code "
+                    + "and t_status in('" + AppConstants.CB_STATUS_SAVE + "','" + AppConstants.CB_STATUS_ADD_INT + "') "
                     + "order by t_date, t_time"
                     + "),0)+ifnull(("
                     + "select sum(t_amount) sum_out from cb_transaction_save t2 "
-                    + "where t_custcode=s.b_cust_code and t_acccode=s.account_code and t_status in(3, 8) order by t_date, t_time"
+                    + "where t_custcode=s.b_cust_code and t_acccode=s.account_code "
+                    + "and t_status in('" + AppConstants.CB_STATUS_WITHDRAW + "', '" + AppConstants.CB_STATUS_CLOSE_SAVE + "') order by t_date, t_time"
                     + "),0) total_balance "
                     + "from cb_save_account s where s.b_cust_code='" + custCode + "' and s.account_code='" + accCode + "';";
             double totalBalance;
@@ -1255,8 +1257,10 @@ public class CbSaveAccountControl extends BaseControl {
         try {
             String sql = "update cb_save_account ss set "
                     + "b_balance=("
-                    + "(select sum(t_amount) sum_in from cb_transaction_save where t_status in(2,11) and t_custcode=ss.b_cust_code and t_acccode=ss.account_code)+"
-                    + "(select sum(t_amount) sum_out from cb_transaction_save where t_status in(3,8) and t_custcode=ss.b_cust_code and t_acccode=ss.account_code)"
+                    + "(select sum(t_amount) sum_in from cb_transaction_save "
+                    + "where t_status in('" + AppConstants.CB_STATUS_SAVE + "','" + AppConstants.CB_STATUS_ADD_INT + "') and t_custcode=ss.b_cust_code and t_acccode=ss.account_code)+"
+                    + "(select sum(t_amount) sum_out from cb_transaction_save "
+                    + "where t_status in('" + AppConstants.CB_STATUS_WITHDRAW + "', '" + AppConstants.CB_STATUS_CLOSE_SAVE + "') and t_custcode=ss.b_cust_code and t_acccode=ss.account_code)"
                     + ") where ss.account_code <> ''";
             logger.info(sql);
             return MySQLConnect.exeUpdate(sql);
@@ -1270,7 +1274,8 @@ public class CbSaveAccountControl extends BaseControl {
     public void updateSaveAccountAndProfile(double netBalance, double textInt, String custCode, String accCode) {
         try {
             String sql = "update cb_save_account "
-                    + "set b_balance='" + netBalance + "',b_interest='" + textInt + "' "
+                    + "set b_balance='" + netBalance + "',"
+                    + "b_interest='" + textInt + "' "
                     + "where b_cust_code='" + custCode + "' and account_code='" + accCode + "'";
             MySQLConnect.exeUpdate(sql);
         } catch (Exception e) {
@@ -1300,6 +1305,17 @@ public class CbSaveAccountControl extends BaseControl {
                     + "B_Update=curdate(),"
                     + "account_status='" + CB_STATUS_CLOSE_SAVE + "',"
                     + "remark='" + ThaiUtil.Unicode2ASCII(remark) + "' "
+                    + "where account_code='" + account_code + "'";
+            MySQLConnect.exeUpdate(sql);
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+    }
+
+    public void updateBalanceByAccountCode(String dMoney, String account_code) {
+        try {
+            String sql = "update cb_save_account set B_Balance = B_Balance+" + dMoney + " "
                     + "where account_code='" + account_code + "'";
             MySQLConnect.exeUpdate(sql);
         } catch (Exception e) {

@@ -30,7 +30,6 @@ import th.co.cbank.project.model.ProfileBean;
 import th.co.cbank.project.view.PrintLoanBookDialog;
 import th.co.cbank.util.DateChooseDialog;
 import th.co.cbank.util.DateFormat;
-import th.co.cbank.util.JTableUtil;
 import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.NumberFormat;
 import th.co.cbank.util.TableUtil;
@@ -50,6 +49,7 @@ public class LoanPaymentPanel extends javax.swing.JPanel {
 
     public LoanPaymentPanel(ProfileBean profileBean, CbLoanAccountBean loanAccountBean) {
         initComponents();
+        logger.debug("LoanPaymentPanel init");
 
         initLoadTable();
 
@@ -753,7 +753,7 @@ public class LoanPaymentPanel extends javax.swing.JPanel {
         txtPrincipleBalance.setText(NumberFormat.showDouble2(loanAccountBean.getLoan_amount()));
 
         //compute interest
-        CbLoanConfigBean loanConfigBean = loanConfigControl.listLoanConfig(loanAccountBean.getLoan_type());
+        CbLoanConfigBean loanConfigBean = loanConfigControl.findOneByLoanCode(loanAccountBean.getLoan_type());
         if (loanConfigBean.getIntFixed().equals("E")) {
             isEffitiveRate = true;
             txtPaymentDate.setEditable(false);
@@ -907,7 +907,7 @@ public class LoanPaymentPanel extends javax.swing.JPanel {
         cbTransactionLoanBean.setT_empcode(Value.USER_CODE);
 
         String paymentDocNo;
-        ConfigBean configBean = configControl.getConfigBean();
+        ConfigBean configBean = configControl.findOne();
         if (configBean.getBranchPrefix().equals("Y")) {
             BranchBean branchBean = branchControl.getData();
             paymentDocNo = branchBean.getCode() + configBean.getPaymentDocPrefix() + getRunning(configBean.getPaymentDocRunning());
@@ -961,12 +961,12 @@ public class LoanPaymentPanel extends javax.swing.JPanel {
         DefaultTableModel model = (DefaultTableModel) tbHistoryPayment.getModel();
         TableUtil.clearModel(model);
 
-        JTableUtil.alignRight(tbHistoryPayment, 2);
-        JTableUtil.alignRight(tbHistoryPayment, 3);
-        JTableUtil.alignRight(tbHistoryPayment, 4);
-        JTableUtil.alignRight(tbHistoryPayment, 5);
-        JTableUtil.alignRight(tbHistoryPayment, 6);
-        JTableUtil.alignRight(tbHistoryPayment, 7);
+        TableUtil.alignRight(tbHistoryPayment, 2);
+        TableUtil.alignRight(tbHistoryPayment, 3);
+        TableUtil.alignRight(tbHistoryPayment, 4);
+        TableUtil.alignRight(tbHistoryPayment, 5);
+        TableUtil.alignRight(tbHistoryPayment, 6);
+        TableUtil.alignRight(tbHistoryPayment, 7);
 
         for (int i = 0; i < listLoan.size(); i++) {
             CbTransactionLoanBean bean = (CbTransactionLoanBean) listLoan.get(i);

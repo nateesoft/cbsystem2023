@@ -49,7 +49,7 @@ public class CbFeeControl extends BaseControl {
         }
     }
 
-    public CbFeeBean getCbFee(String exp_id) {
+    public CbFeeBean findOneByExpId(String exp_id) {
         try {
             String sql = "select * from cb_fee where exp_id='" + exp_id + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);
@@ -104,22 +104,6 @@ public class CbFeeControl extends BaseControl {
             logger.error(e.getMessage());
             MessageAlert.errorPopup(this.getClass(), e.getMessage());
             return new ArrayList();
-        }
-    }
-
-    public CbFeeBean listExpense(String exp_id) {
-        try {
-            String sql = "select * from cb_fee where exp_id='" + exp_id + "'";
-            ResultSet rs = MySQLConnect.getResultSet(sql);
-            List<CbFeeBean> listBean = mappingBean(rs);
-            if (listBean.isEmpty()) {
-                return null;
-            }
-            return listBean.get(0);
-        } catch (Exception e) {
-            logger.error(e.getMessage());
-            MessageAlert.errorPopup(this.getClass(), e.getMessage());
-            return null;
         }
     }
 

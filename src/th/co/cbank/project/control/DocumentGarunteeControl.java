@@ -52,7 +52,7 @@ public class DocumentGarunteeControl extends BaseControl {
         }
     }
 
-    public DocumentGarunteeBean getDocumentGaruntee(String docNo) {
+    public DocumentGarunteeBean findOneByDocNo(String docNo) {
         try {
             String sql = "select * from document_garuntee where DOC_NO='" + docNo + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);

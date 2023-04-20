@@ -26,11 +26,9 @@ import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
-import org.apache.log4j.Logger;
 
 public class FTPUtility {
 
-    private final Logger logger = Logger.getLogger(FTPUtility.class);
     private FTPClient ftp;
     private final Frame frame = new Frame();
     private JLabel lb;

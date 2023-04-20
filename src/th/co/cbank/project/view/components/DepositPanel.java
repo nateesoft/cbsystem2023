@@ -38,7 +38,6 @@ import th.co.cbank.project.view.TransactionAdvanceDialog;
 import th.co.cbank.project.view.TransactionAdvanceMethod;
 import th.co.cbank.util.DateChooseDialog;
 import th.co.cbank.util.DateFormat;
-import th.co.cbank.util.JTableUtil;
 import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.MoneyToWord;
 import th.co.cbank.util.NumberFormat;
@@ -62,13 +61,14 @@ public class DepositPanel extends javax.swing.JPanel {
 
     public DepositPanel(ProfileBean profileBean, CbSaveAccountBean saveAccountBean, int selectIndex) {
         initComponents();
+        logger.debug("DepositPanel init");
 
         initLoadTable();
 
         this.profileBean = profileBean;
         this.saveAccountBean = saveAccountBean;
-        cbSaveConfigBean = saveConfigControl.getConfigByTypeCode(saveAccountBean.getAccount_type());
-        configBean = configControl.getConfigBean();
+        cbSaveConfigBean = saveConfigControl.findOneByTypeCode(saveAccountBean.getAccount_type());
+        configBean = configControl.findOne();
 
         jTabbedPane8.setEnabledAt(0, false);
         jTabbedPane8.setEnabledAt(1, false);
@@ -1862,15 +1862,9 @@ public class DepositPanel extends javax.swing.JPanel {
 
         if (cbTransactionSaveControl.saveCbTransactionSave(transactionSaveBean)) {
             txtDepCode.setText(newDepositNo);
-
-            String sql = "update cb_save_account set B_Balance = B_Balance+" + dMoney + " where account_code='" + saveAccountBean.getAccount_code() + "'";
-            saveAccountControl.update(sql);
-
-            String sql2 = "update cb_profile set Save_Balance=Save_Balance+" + dMoney + " where P_CustCode='" + profileBean.getP_custCode() + "'";
-            profileControl.update(sql2);
-
-            sql = "update cb_config set SaveDocRunning=SaveDocRunning+1";
-            configControl.update(sql);
+            saveAccountControl.updateBalanceByAccountCode(dMoney, saveAccountBean.getAccount_code());
+            profileControl.updateSaveBalanceByCustCode(dMoney, profileBean.getP_custCode());
+            configControl.updateSaveDocRunning();
 
             MessageAlert.infoPopup(this, "บันทึกข้อมูลการฝากเงินเรียบร้อยแล้ว");
             TransactionAdvanceMethod.updateSaveAccountAndProfile(profileBean.getP_custCode(), saveAccountBean.getAccount_code(), transactionSaveBean.getT_balance(), transactionSaveBean.getT_interest());
@@ -1906,15 +1900,12 @@ public class DepositPanel extends javax.swing.JPanel {
         }
     }
 
-    public void loadTransactionPerson(String accoutCode) {
-        String where = " and t_acccode='" + accoutCode + "' "
-                + "and t_status in('2','3','8','11') "
-                + "order by t_date desc,t_time desc ";
-        List<CbTransactionSaveBean> listSave = cbTransactionSaveControl.listTransactionSave(where);
+    public void loadTransactionPerson(String accountCode) {
+        List<CbTransactionSaveBean> listSave = cbTransactionSaveControl.listTransactionSave(accountCode);
         DefaultTableModel modelTbTransSave = (DefaultTableModel) tbTransSave.getModel();
-        JTableUtil.alignRight(tbTransSave, 3);
-        JTableUtil.alignRight(tbTransSave, 4);
-        JTableUtil.alignRight(tbTransSave, 5);
+        TableUtil.alignRight(tbTransSave, 3);
+        TableUtil.alignRight(tbTransSave, 4);
+        TableUtil.alignRight(tbTransSave, 5);
         TableUtil.clearModel(modelTbTransSave);
         String type = "";
         for (CbTransactionSaveBean sBean : listSave) {
@@ -1957,14 +1948,6 @@ public class DepositPanel extends javax.swing.JPanel {
                 desc
             });
         }
-    }
-
-    private void resetDepositMoney() {
-        txtDepositBaht.setText("0.00");
-        lbMoneyText.setText("(...)");
-        txtAccCodeLoad.setText("");
-
-        txtDepositBaht.requestFocus();
     }
 
     private void showDocAuto3() {
@@ -2139,7 +2122,7 @@ public class DepositPanel extends javax.swing.JPanel {
     }
 
     private void clearWithdraw() {
-        saveAccountBean = saveAccountControl.getSaveAccountBean(saveAccountBean.getAccount_code());
+        saveAccountBean = saveAccountControl.findOneByAccountCode(saveAccountBean.getAccount_code());
         txtBalanceTotal.setText(NumberFormat.showDouble2(saveAccountBean.getB_BALANCE()));
         txtWithdrawalBaht.setText("0.00");
         txtRemark2.setText("");
@@ -2223,7 +2206,7 @@ public class DepositPanel extends javax.swing.JPanel {
     }
 
     private void loadSummary() {
-        SaveSummaryBean saveSummaryBean = saveSummaryControl.getSaveData();
+        SaveSummaryBean saveSummaryBean = saveSummaryControl.findOneSummary();
 
         jTextField2.setText("" + saveSummaryBean.getAccountAll());
         jTextField3.setText(NumberFormat.showDouble2(saveSummaryBean.getSaveAll()));
@@ -2246,7 +2229,7 @@ public class DepositPanel extends javax.swing.JPanel {
     }
 
     private void clearDeposit() {
-        saveAccountBean = saveAccountControl.getSaveAccountBean(saveAccountBean.getAccount_code());
+        saveAccountBean = saveAccountControl.findOneByAccountCode(saveAccountBean.getAccount_code());
         txtBalance.setText(NumberFormat.showDouble2(saveAccountBean.getB_BALANCE()));
         txtBalanceInterest.setText(NumberFormat.showDouble2(saveAccountBean.getB_INTEREST()));
 

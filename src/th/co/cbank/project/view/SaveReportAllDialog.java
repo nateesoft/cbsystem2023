@@ -13,7 +13,6 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.JTableHeader;
 import org.apache.log4j.Logger;
-import th.co.cbank.util.JTableUtil;
 import th.co.cbank.util.DateFormat;
 import th.co.cbank.project.constants.AppConstants;
 import th.co.cbank.project.control.ViewReport;
@@ -33,6 +32,7 @@ public class SaveReportAllDialog extends BaseDialogSwing {
     public SaveReportAllDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("SaveReportAllDialog init");
 
         this.parent = parent;
 
@@ -626,9 +626,9 @@ public class SaveReportAllDialog extends BaseDialogSwing {
             logger.error(e.getMessage());
         }
 
-        JTableUtil.sortDouble(tbTransaction, 5);
-        JTableUtil.sortDouble(tbTransaction, 6);
-        JTableUtil.sortDouble(tbTransaction, 7);
+        TableUtil.sortDouble(tbTransaction, 5);
+        TableUtil.sortDouble(tbTransaction, 6);
+        TableUtil.sortDouble(tbTransaction, 7);
     }
 
     private void exportReport() {

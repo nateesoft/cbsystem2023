@@ -15,7 +15,7 @@ import th.co.cbank.util.NumberFormat;
 
 public class MySQLConnect {
 
-    private static final Logger logger = Logger.getLogger(MySQLConnect.class);
+    private static final Logger LOGGER = Logger.getLogger(MySQLConnect.class);
     private static String CLASS_NAME;
     public static String SERVER;
     public static boolean USE_FINGER = false;
@@ -61,7 +61,7 @@ public class MySQLConnect {
             }
             input.close();
         } catch (IOException e) {
-            logger.error(e.getMessage());
+            LOGGER.error(e.getMessage());
             MessageAlert.errorPopup(MySQLConnect.class, e.getMessage());
         }
 
@@ -89,6 +89,7 @@ public class MySQLConnect {
     }
 
     public static ResultSet getResultSet(String sql) throws Exception {
+        LOGGER.debug(sql);
         if (conn == null) {
             connect();
             return getStatement().executeQuery(sql);
@@ -98,6 +99,7 @@ public class MySQLConnect {
     }
 
     public static int exeUpdate(String sql) throws Exception {
+        LOGGER.debug(sql);
         if (conn == null) {
             connect();
             return conn.createStatement().executeUpdate(sql);
@@ -112,7 +114,7 @@ public class MySQLConnect {
                 conn.close();
             }
         } catch (SQLException e) {
-            logger.error(e.getMessage());
+            LOGGER.error(e.getMessage());
             MessageAlert.errorPopup(MySQLConnect.class, e.getMessage());
         }
     }

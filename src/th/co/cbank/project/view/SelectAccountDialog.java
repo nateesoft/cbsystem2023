@@ -15,6 +15,7 @@ public class SelectAccountDialog extends BaseDialogSwing {
     public SelectAccountDialog(java.awt.Frame parent, boolean modal, String selectAccountType, List<CbSaveAccountBean> listSaveAccounts, List<CbLoanAccountBean> listLoanAccounts) {
         super(parent, modal);
         initComponents();
+        logger.debug("SelectAccountDialog init");
 
         ltAccountList.removeAll();
         if (selectAccountType.equals("deposit")) {//บัญชีเงินฝาก

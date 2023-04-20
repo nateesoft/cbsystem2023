@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;
+import th.co.cbank.project.constants.AppConstants;
 import th.co.cbank.util.DateFormat;
 import th.co.cbank.project.model.CbTransactionLoanBean;
 import th.co.cbank.util.MessageAlert;
@@ -45,8 +46,6 @@ public class CbTransactionLoanControl extends BaseControl {
             bean.setT_interest(rs.getDouble("T_interest"));
             bean.setT_fee(rs.getDouble("T_fee"));
             bean.setT_status(rs.getString("T_status"));
-
-            //เพิ่มใหม่
             bean.setT_loan_int_ar_lost(rs.getDouble("t_loan_int_ar_lost"));
             bean.setT_loan_int_ar_mgr(rs.getDouble("t_loan_int_ar_mgr"));
             bean.setT_loan_int_ar_int(rs.getDouble("t_loan_int_ar_int"));
@@ -70,8 +69,12 @@ public class CbTransactionLoanControl extends BaseControl {
         }
     }
 
-    public List<CbTransactionLoanBean> listTransactionLoan(String where) {
+    public List<CbTransactionLoanBean> listTransactionLoan(String accountCode, String loanDocPrefix, String paymentDocPrefix) {
         try {
+            String where = " and t_acccode='" + accountCode + "' "
+                    + "and printchk='N' and LineNo>0 and t_booktype "
+                    + "in ('" + loanDocPrefix + "','" + paymentDocPrefix + "') "
+                    + "order by t_index ";
             String sql = "select * from cb_transaction_loan where 1=1 ";
             if (StringUtil.isNotNullString(where)) {
                 sql += where;
@@ -85,7 +88,7 @@ public class CbTransactionLoanControl extends BaseControl {
         }
     }
 
-    public List<CbTransactionLoanBean> listCbTransactionLoan(String t_acccode) {
+    public List<CbTransactionLoanBean> listByAccountCode(String t_acccode) {
         try {
             String sql = "select * from cb_transaction_loan "
                     + "where t_acccode='" + t_acccode + "' order by LineNo";
@@ -103,7 +106,7 @@ public class CbTransactionLoanControl extends BaseControl {
             String sql = "select * from cb_transaction_loan "
                     + "where t_acccode='" + t_acccode + "' "
                     + "and t_custcode='" + custCode + "' "
-                    + "and t_status in('7') order by LineNo";
+                    + "and t_status in('" + AppConstants.CB_STATUS_PAYMENT + "') order by LineNo";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             return mappingBean(rs);
         } catch (Exception e) {
@@ -123,7 +126,8 @@ public class CbTransactionLoanControl extends BaseControl {
                     + "where t_acccode='" + accCode + "' "
                     + "and LineNo>0 "
                     + addSql
-                    + "and t_status in('10','7') order by t_index";
+                    + "and t_status in('" + AppConstants.CB_STATUS_LOAN + "','" + AppConstants.CB_STATUS_PAYMENT + "') "
+                    + "order by t_index";
             ResultSet rs = MySQLConnect.getResultSet(sql);
             return mappingBean(rs);
         } catch (Exception e) {
@@ -133,7 +137,7 @@ public class CbTransactionLoanControl extends BaseControl {
         }
     }
 
-    public CbTransactionLoanBean getCbTransactionLoan(String t_date) {
+    public CbTransactionLoanBean findOneByTDate(String t_date) {
         try {
             String sql = "select * from cb_transaction_loan where t_date='" + t_date + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);
@@ -274,7 +278,7 @@ public class CbTransactionLoanControl extends BaseControl {
                     + "SET PrintChk= 'N' "
                     + "WHERE t_acccode='" + bean.getT_acccode() + "' "
                     + "AND LineNo='" + bean.getLineNo() + "' "
-                    + "and t_status in('10','7') "
+                    + "and t_status in('" + AppConstants.CB_STATUS_LOAN + "','" + AppConstants.CB_STATUS_PAYMENT + "') "
                     + "AND t_docno='" + bean.getT_docno() + "' "
                     + "AND t_booktype='" + bean.getT_booktype() + "'";
             return MySQLConnect.exeUpdate(sql) > 0;

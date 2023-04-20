@@ -20,6 +20,7 @@ public class SaveAccountDialog extends BaseDialogSwing {
     public SaveAccountDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("SaveAccountDialog init");
 
         initTable();
     }

@@ -9,6 +9,7 @@ public class FormCashDialyDialog extends javax.swing.JDialog {
     public FormCashDialyDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("FormCashDialyDialog init");
     }
 
     @SuppressWarnings("unchecked")

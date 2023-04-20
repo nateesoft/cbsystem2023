@@ -52,7 +52,7 @@ public class CbBondsmanControl extends BaseControl {
         }
     }
 
-    public CbBondsmanBean getCbBondsman(String loan_docno) {
+    public CbBondsmanBean findOneByLoanDocNo(String loan_docno) {
         try {
             String sql = "select * from cb_bondsman where loan_docno='" + loan_docno + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);

@@ -69,7 +69,7 @@ public class CbLoanTablePaymentControl extends BaseControl {
         }
     }
 
-    public CbLoanTablePaymentBean tablePayment(String loan_doc_no) {
+    public CbLoanTablePaymentBean findOneByLoanDocNoBalanceAmountMoreThanZero(String loan_doc_no) {
         try {
             String sql = "select * from cb_loan_table_payment "
                     + "where loan_doc_no='" + loan_doc_no + "' "
@@ -87,7 +87,7 @@ public class CbLoanTablePaymentControl extends BaseControl {
         }
     }
 
-    public CbLoanTablePaymentBean getCbLoanTablePayment(String loan_doc_no) {
+    public CbLoanTablePaymentBean findOneByLoanDocNo(String loan_doc_no) {
         try {
             String sql = "select * from cb_loan_table_payment where loan_doc_no='" + loan_doc_no + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);
@@ -172,7 +172,7 @@ public class CbLoanTablePaymentControl extends BaseControl {
         }
     }
 
-    public CbLoanTablePaymentBean initBean() {
+    public CbLoanTablePaymentBean getInitialBean() {
         CbLoanTablePaymentBean lb = new CbLoanTablePaymentBean();
         lb.setLoan_index(1);
         lb.setSys_date(new Date());

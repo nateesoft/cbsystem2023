@@ -1,10 +1,12 @@
 package th.co.cbank.project.view;
 
+import th.co.cbank.project.model.ItemRows;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import th.co.cbank.project.constants.AppConstants;
 import th.co.cbank.project.control.CbSaveAccountControl;
 import th.co.cbank.project.control.CbSaveConfigControl;
 import th.co.cbank.project.control.CbTransactionLoanControl;
@@ -36,7 +38,7 @@ public class TransactionAdvanceMethod {
     public static double profitSummary = 0.00;
     public static double netBalanceSummary = 0.00;
 
-    public static List findData(String custCode, String accCode, boolean addModel, String accountType) {
+    public static List findData(String custCode, String accCode, boolean addModel, String accountType, boolean showTranAll) {
         double show1 = 0.00;//ฝาก
         double show2 = 0.00;//ถอน
         double show3 = 0.00;//คงเหลือ
@@ -48,7 +50,7 @@ public class TransactionAdvanceMethod {
 
         List modelList = new ArrayList<>();
         String date = "";
-        List<CbTransactionSaveBean> listTransactionSaveReport = tranSaveControl.getTdateList(custCode, accCode);
+        List<CbTransactionSaveBean> listTransactionSaveReport = tranSaveControl.getTdateList(custCode, accCode, showTranAll);
         for (CbTransactionSaveBean bean : listTransactionSaveReport) {
             date += DateFormat.getLocale_ddMMyyyy(bean.getT_date()) + ",";
         }
@@ -210,7 +212,7 @@ public class TransactionAdvanceMethod {
                     bean.setBranchCode(Value.BRANCH_CODE);
                     bean.setT_interest(0);
                     bean.setT_fee(0);
-                    bean.setT_status("11");
+                    bean.setT_status(AppConstants.CB_STATUS_ADD_INT);
 
                     if (bean.getT_amount() > 0) {
                         tranSaveControl.saveCbTransactionSave(bean);
@@ -283,7 +285,7 @@ public class TransactionAdvanceMethod {
                     bean.setBranchCode(Value.BRANCH_CODE);
                     bean.setT_interest(0);
                     bean.setT_fee(0);
-                    bean.setT_status("11");
+                    bean.setT_status(AppConstants.CB_STATUS_ADD_INT);
                     if (bean.getT_amount() > 0) {
                         tranSaveControl.saveCbTransactionSave(bean);
                     }
@@ -358,7 +360,7 @@ public class TransactionAdvanceMethod {
     }
 
     private static CbSaveConfigBean getSaveConfigByDateFromDB(Date dateCheck, String typeCode) {
-        CbSaveConfigBean saveConfigBean = saveConfigControl.getLastConfigHistory(dateCheck, typeCode);
+        CbSaveConfigBean saveConfigBean = saveConfigControl.findOneByUpdateDateTypeCode(dateCheck, typeCode);
         return saveConfigBean;
     }
 }

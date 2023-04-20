@@ -5,6 +5,20 @@ public class AppConstants {
     public static final String BOOKTYPE_PAYMENT = "PM";
 
     /* status from database */
+ /*
+    exp_id	exp_desc
+1	เปิดบัญชีเงินฝาก
+2	ฝากเงิน
+3	ถอนเงิน
+4	ซื้อหุ้น
+5	ขายหุ้น
+6	เปิดบัญชีเงินกู้
+7	รับชำระเงินกู้
+8	ปิดบัญชี
+9	โอนหุ้น
+10	กู้เงิน
+
+     */
     public static final String CB_STATUS_OPEN_SAVE = "1";
     public static final String CB_STATUS_SAVE = "2";
     public static final String CB_STATUS_WITHDRAW = "3";
@@ -56,4 +70,7 @@ public class AppConstants {
     public static final String JASPER_LOAN_PAPER_GARUNTEE_REPORT = JASPER_ROOT_PATH + "LoanPaperGaruntee" + JASPER_FILE;
     public static final String JASPER_LOAN_PAPER_GARUNTEE_REPORT_2 = JASPER_ROOT_PATH + "LoanPaperGaruntee2" + JASPER_FILE;
 
+    public static final String ADDRESS_CURRENT = "1";
+    public static final String ADDRESS_ON_CID = "2";
+    public static final String ADDRESS_OFFICE = "3";
 }

@@ -74,7 +74,7 @@ public class ConfigControl extends BaseControl {
         }
     }
 
-    public ConfigBean getConfigBean() {
+    public ConfigBean findOne() {
         try {
             String sql = "select * from cb_config";
             ResultSet rs = MySQLConnect.getResultSet(sql);
@@ -247,6 +247,15 @@ public class ConfigControl extends BaseControl {
     public void updateWithdrawDocRunning() {
         try {
             MySQLConnect.exeUpdate("update cb_config set WithdrawDocRunning=WithdrawDocRunning+1");
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            MessageAlert.errorPopup(this.getClass(), e.getMessage());
+        }
+    }
+
+    public void updateSaveDocRunning() {
+        try {
+            MySQLConnect.exeUpdate("update cb_config set SaveDocRunning=SaveDocRunning+1");
         } catch (Exception e) {
             logger.error(e.getMessage());
             MessageAlert.errorPopup(this.getClass(), e.getMessage());

@@ -55,7 +55,7 @@ public class CbFeeTransactionControl extends BaseControl {
         }
     }
 
-    public CbFeeTransactionBean getCbFeeTransaction(String fee_code) {
+    public CbFeeTransactionBean findOneByFeeCode(String fee_code) {
         try {
             String sql = "select * from cb_fee_transaction where fee_code='" + fee_code + "'";
             ResultSet rs = MySQLConnect.getResultSet(sql);

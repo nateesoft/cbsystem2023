@@ -42,6 +42,7 @@ public class ReportPersonDetail extends javax.swing.JDialog {
     public ReportPersonDetail(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("ReportPersonDetail init");
 
         initTable();
     }

@@ -19,6 +19,7 @@ public class ApproveDialog extends BaseDialogSwing {
     public ApproveDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("ApproveDialog init");
 
         initTable();
         txtSearch.requestFocus();

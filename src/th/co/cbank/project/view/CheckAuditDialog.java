@@ -23,48 +23,10 @@ public class CheckAuditDialog extends BaseDialogSwing {
     public CheckAuditDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        logger.debug("CheckAuditDialog init");
 
         clearAllModel();
-
-        tbProfile.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
-        tbSaveAccount.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
-        tbTransaction.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
-        tbTransactionLoan.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
-
-        tbProfile.setRowHeight(30);
-        tbSaveAccount.setRowHeight(30);
-        tbTransaction.setRowHeight(30);
-        tbTransactionLoan.setRowHeight(30);
-
-        JTableHeader h1 = tbProfile.getTableHeader();
-        h1.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, 12));
-
-        JTableHeader h2 = tbSaveAccount.getTableHeader();
-        h2.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, 12));
-
-        JTableHeader h3 = tbTransaction.getTableHeader();
-        h3.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, 12));
-
-        JTableHeader h4 = tbTransactionLoan.getTableHeader();
-        h4.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, 12));
-
-        // init table
-        TableUtil.alignTable(tbProfile, 3, SwingConstants.RIGHT);
-        TableUtil.alignTable(tbProfile, 4, SwingConstants.RIGHT);
-        TableUtil.alignTable(tbProfile, 5, SwingConstants.RIGHT);
-
-        TableUtil.alignTable(tbTransaction, 3, SwingConstants.RIGHT);
-        TableUtil.alignTable(tbTransaction, 4, SwingConstants.RIGHT);
-        TableUtil.alignTable(tbTransaction, 5, SwingConstants.RIGHT);
-        TableUtil.alignTable(tbTransaction, 6, SwingConstants.RIGHT);
-        TableUtil.alignTable(tbTransaction, 7, SwingConstants.RIGHT);
-
-        TableUtil.alignTable(tbSaveAccount, 2, SwingConstants.RIGHT);
-        TableUtil.alignTable(tbSaveAccount, 3, SwingConstants.RIGHT);
-
-        TableUtil.alignTable(tbTransactionLoan, 3, SwingConstants.RIGHT);
-        TableUtil.alignTable(tbTransactionLoan, 4, SwingConstants.RIGHT);
-        TableUtil.alignTable(tbTransactionLoan, 5, SwingConstants.RIGHT);
+        initTable();
 
         tbProfile.requestFocus();
     }
@@ -98,6 +60,7 @@ public class CheckAuditDialog extends BaseDialogSwing {
         tbTransactionLoan = new javax.swing.JTable();
         jLabel10 = new javax.swing.JLabel();
         btnReProcess = new javax.swing.JButton();
+        chkAllTransaction = new javax.swing.JCheckBox();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("รายงานความเคลื่อนไหวรายบุคคล");
@@ -316,6 +279,9 @@ public class CheckAuditDialog extends BaseDialogSwing {
             }
         });
 
+        chkAllTransaction.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        chkAllTransaction.setText("เลือกตั้งแต่เริ่มกิจการ");
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -332,7 +298,9 @@ public class CheckAuditDialog extends BaseDialogSwing {
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(btnReProcess, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnReProcess, javax.swing.GroupLayout.PREFERRED_SIZE, 204, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(chkAllTransaction))))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -374,7 +342,10 @@ public class CheckAuditDialog extends BaseDialogSwing {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnReProcess, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(btnReProcess, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(chkAllTransaction)))
                         .addGap(0, 12, Short.MAX_VALUE))
                     .addComponent(jScrollPane4, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap())
@@ -430,6 +401,7 @@ public class CheckAuditDialog extends BaseDialogSwing {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnExit;
     private javax.swing.JButton btnReProcess;
+    private javax.swing.JCheckBox chkAllTransaction;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel2;
@@ -482,8 +454,6 @@ public class CheckAuditDialog extends BaseDialogSwing {
         TableUtil.clearModel(model4);
 
         String custCode = "" + tbProfile.getValueAt(tbProfile.getSelectedRow(), 1);
-        CbSaveAccountControl saveAccountControl = new CbSaveAccountControl();
-
         List<Object[]> listModel2 = saveAccountControl.getAccountWhereCustCode(custCode);
         for (Object[] data : listModel2) {
             model2.addRow(data);
@@ -516,9 +486,9 @@ public class CheckAuditDialog extends BaseDialogSwing {
 
         int colAccount = tbSaveAccount.getSelectedColumn();
         String accCode = tbSaveAccount.getValueAt(colAccount, 1).toString();
-        CbSaveAccountBean saveAccBean = saveAccountControl.getSaveAccountBean(accCode);
+        CbSaveAccountBean saveAccBean = saveAccountControl.findOneByAccountCode(accCode);
         this.setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
-        TransactionAdvanceMethod.findData(profileCode, accCode, false, saveAccBean.getAccount_type());
+        TransactionAdvanceMethod.findData(profileCode, accCode, false, saveAccBean.getAccount_type(), chkAllTransaction.isSelected());
         double all_balance = TransactionAdvanceMethod.balanceAmount;
         double all_interest = TransactionAdvanceMethod.interestAmount;
         TransactionAdvanceMethod.updateSaveAccountAndProfile(profileCode, accCode, all_balance, all_interest);
@@ -527,5 +497,47 @@ public class CheckAuditDialog extends BaseDialogSwing {
 
         // reload data
         clearAllModel();
+    }
+
+    private void initTable() {
+        tbProfile.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
+        tbSaveAccount.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
+        tbTransaction.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
+        tbTransactionLoan.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
+
+        tbProfile.setRowHeight(30);
+        tbSaveAccount.setRowHeight(30);
+        tbTransaction.setRowHeight(30);
+        tbTransactionLoan.setRowHeight(30);
+
+        JTableHeader h1 = tbProfile.getTableHeader();
+        h1.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, 12));
+
+        JTableHeader h2 = tbSaveAccount.getTableHeader();
+        h2.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, 12));
+
+        JTableHeader h3 = tbTransaction.getTableHeader();
+        h3.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, 12));
+
+        JTableHeader h4 = tbTransactionLoan.getTableHeader();
+        h4.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, 12));
+
+        // init table
+        TableUtil.alignTable(tbProfile, 3, SwingConstants.RIGHT);
+        TableUtil.alignTable(tbProfile, 4, SwingConstants.RIGHT);
+        TableUtil.alignTable(tbProfile, 5, SwingConstants.RIGHT);
+
+        TableUtil.alignTable(tbTransaction, 3, SwingConstants.RIGHT);
+        TableUtil.alignTable(tbTransaction, 4, SwingConstants.RIGHT);
+        TableUtil.alignTable(tbTransaction, 5, SwingConstants.RIGHT);
+        TableUtil.alignTable(tbTransaction, 6, SwingConstants.RIGHT);
+        TableUtil.alignTable(tbTransaction, 7, SwingConstants.RIGHT);
+
+        TableUtil.alignTable(tbSaveAccount, 2, SwingConstants.RIGHT);
+        TableUtil.alignTable(tbSaveAccount, 3, SwingConstants.RIGHT);
+
+        TableUtil.alignTable(tbTransactionLoan, 3, SwingConstants.RIGHT);
+        TableUtil.alignTable(tbTransactionLoan, 4, SwingConstants.RIGHT);
+        TableUtil.alignTable(tbTransactionLoan, 5, SwingConstants.RIGHT);
     }
 }
