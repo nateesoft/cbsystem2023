@@ -1,6 +1,5 @@
 package th.co.cbank.project.view;
 
-import java.awt.event.KeyEvent;
 import org.apache.log4j.Logger;
 
 public class UpdateVersionDialog extends BaseDialogSwing {
@@ -21,8 +20,6 @@ public class UpdateVersionDialog extends BaseDialogSwing {
 
         jPanel1 = new javax.swing.JPanel();
         lbVersion = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        txtVersionDesc = new javax.swing.JTextArea();
         jScrollPane2 = new javax.swing.JScrollPane();
         txtVersionDesc1 = new javax.swing.JTextArea();
         jLabel2 = new javax.swing.JLabel();
@@ -31,6 +28,8 @@ public class UpdateVersionDialog extends BaseDialogSwing {
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
         lbLogo = new javax.swing.JLabel();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("อัพเดตโปรแกรม");
@@ -42,18 +41,6 @@ public class UpdateVersionDialog extends BaseDialogSwing {
         lbVersion.setForeground(new java.awt.Color(255, 102, 0));
         lbVersion.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         lbVersion.setText("V 0.0.0.0");
-
-        txtVersionDesc.setEditable(false);
-        txtVersionDesc.setColumns(20);
-        txtVersionDesc.setFont(new java.awt.Font("Tahoma", 0, 14)); // NOI18N
-        txtVersionDesc.setRows(5);
-        txtVersionDesc.setText("1. เพิ่มระบบอัพเดตโปรแกรมผ่านระบบเครือข่าย");
-        txtVersionDesc.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtVersionDescKeyPressed(evt);
-            }
-        });
-        jScrollPane1.setViewportView(txtVersionDesc);
 
         txtVersionDesc1.setEditable(false);
         txtVersionDesc1.setColumns(20);
@@ -98,6 +85,19 @@ public class UpdateVersionDialog extends BaseDialogSwing {
         lbLogo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/img/LOGO-CB-System(250).jpg"))); // NOI18N
         lbLogo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
 
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {"1.2.1", "printer driver"}
+            },
+            new String [] {
+                "version", "detail"
+            }
+        ));
+        jScrollPane3.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(1).setPreferredWidth(250);
+        }
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -105,7 +105,7 @@ public class UpdateVersionDialog extends BaseDialogSwing {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
+                    .addComponent(jScrollPane3)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jButton1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -116,7 +116,7 @@ public class UpdateVersionDialog extends BaseDialogSwing {
                         .addComponent(jLabel2)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(lbVersionUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(lbLogo, javax.swing.GroupLayout.DEFAULT_SIZE, 450, Short.MAX_VALUE)
+                    .addComponent(lbLogo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(lbVersion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -132,7 +132,7 @@ public class UpdateVersionDialog extends BaseDialogSwing {
                     .addComponent(jLabel2)
                     .addComponent(lbVersionUpdate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 240, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -156,12 +156,6 @@ public class UpdateVersionDialog extends BaseDialogSwing {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtVersionDescKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtVersionDescKeyPressed
-        if (evt.getKeyCode() == KeyEvent.VK_ESCAPE) {
-            dispose();
-        }
-    }//GEN-LAST:event_txtVersionDescKeyPressed
-
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         downloadSoftwareUpdate();
     }//GEN-LAST:event_jButton2ActionPerformed
@@ -180,12 +174,12 @@ public class UpdateVersionDialog extends BaseDialogSwing {
     private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JTable jTable1;
     private javax.swing.JLabel lbLogo;
     private javax.swing.JLabel lbVersion;
     private javax.swing.JLabel lbVersionUpdate;
-    private javax.swing.JTextArea txtVersionDesc;
     private javax.swing.JTextArea txtVersionDesc1;
     // End of variables declaration//GEN-END:variables
 
