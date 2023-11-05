@@ -143,7 +143,7 @@
 			<textField>
 				<reportElement style="Detail" x="118" y="0" width="114" height="15" forecolor="#000000" uuid="8f3b6d81-09bf-4301-aa23-bc791393160d"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="TH SarabunPSK"/>
+					<font fontName="TH SarabunPSK" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[th.co.cbank.util.ThaiUtil.ASCII2Unicode($F{fee_desc})]]></textFieldExpression>
 			</textField>

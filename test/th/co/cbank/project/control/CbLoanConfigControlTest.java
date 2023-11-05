@@ -107,7 +107,7 @@ public class CbLoanConfigControlTest {
         String loanCode = "";
         CbLoanConfigControl instance = new CbLoanConfigControl();
         CbLoanConfigBean expResult = null;
-        CbLoanConfigBean result = instance.findOneByLoanCode(loanCode);
+        CbLoanConfigBean result = instance.findOneByLoanTypeCode(loanCode);
         assertEquals(expResult, result);
         // TODO review the generated test code and remove the default call to fail.
         fail("The test case is a prototype.");

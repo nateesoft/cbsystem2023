@@ -13,7 +13,7 @@ import th.co.cbank.util.DateFormat;
 import th.co.cbank.project.control.Value;
 import th.co.cbank.util.ReadText;
 import th.co.cbank.util.ScrollText;
-import th.co.cbank.project.control.PrintCOM;
+import th.co.cbank.project.control.PrintDriver;
 import th.co.cbank.project.model.BranchBean;
 import th.co.cbank.project.model.CbGroupBean;
 import th.co.cbank.project.model.CbUserBean;
@@ -361,9 +361,6 @@ public class LoginDialog extends BaseDialogSwing {
         CbGroupBean groupBean = userControl.findGroupPermissionByUser(userBean.getUsername());
         String[] per = groupBean.getPermission().split(",");
         System.arraycopy(per, 0, Value.ACCESS, 0, per.length);
-
-        PrintCOM printCom = new PrintCOM();
-        printCom.printLOG("Login by ... " + Value.USER_CODE + "   Start time: " + DateFormat.getLocale_ddMMyyyy(new Date()));
 
         // process total balance all account
         final SimpleDateFormat simp = new SimpleDateFormat("ddMMyyyy");

@@ -2,7 +2,7 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3cec327e-1b59-4754-b969-8dcd91594fd7">
 	<property name="ireport.zoom" value="1.6105100000000014"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="497"/>
+	<property name="ireport.y" value="996"/>
 	<parameter name="p42" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[select * from cb_passbook_default limit 0,1]]>
@@ -215,7 +215,7 @@
 			<textField isBlankWhenNull="true">
 				<reportElement x="43" y="250" width="156" height="20" uuid="16e0665d-fe31-4152-954b-eca14a4e8db6"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="TH SarabunPSK" size="14" isBold="true" isUnderline="true"/>
+					<font fontName="TH SarabunPSK" size="14" isBold="false" isUnderline="true" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{p42}]]></textFieldExpression>
 			</textField>

@@ -14,6 +14,8 @@ public class ThaiUtil {
             if ((0xE01 <= code) && (code <= 0xE5B)) {
                 ascii.setCharAt(i, (char) (code - 0xD60));
                 saveAscii += (char) (code - 0xD60);
+            } else {
+                saveAscii += (char) code;
             }
         }
         return saveAscii;

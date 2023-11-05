@@ -20,7 +20,6 @@ import org.apache.log4j.PropertyConfigurator;
 import th.co.cbank.util.DateFormat;
 import th.co.cbank.util.NumberFormat;
 import th.co.cbank.project.constants.AppConstants;
-import th.co.cbank.project.control.PrintCOM;
 import th.co.cbank.project.control.Value;
 import th.co.cbank.project.model.CbLoanAccountBean;
 import th.co.cbank.project.model.CbSaveAccountBean;
@@ -104,7 +103,7 @@ public class MainDialog extends BaseSwing {
                 break;
             case NEW_DEPOSIT:
                 mainTabbedPane.setTitleAt(0, "<html><font color=white bgcolor=green>เปิดบัญชีเงินฝาก</font></html>");
-                mainTabbedPane.setComponentAt(0, new NewDepositPanel(profileBean));
+                mainTabbedPane.setComponentAt(0, new NewDepositPanel(profileBean, Value.USER_CODE));
                 break;
             case DEPOSIT:
                 mainTabbedPane.setTitleAt(0, "<html><font color=white bgcolor=green>ฝาก/ถอน/ปิดบัญชี</font></html>");
@@ -260,7 +259,7 @@ public class MainDialog extends BaseSwing {
         jMenuItem37 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle("ระบบบริหารธนาคารชุมชน V 1.2.1");
+        setTitle("ระบบบริหารธนาคารชุมชน V 1.2.4");
         setBackground(new java.awt.Color(255, 255, 255));
         setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
@@ -1667,8 +1666,6 @@ public class MainDialog extends BaseSwing {
         if (ic == MessageAlert.YES_OPTION) {
             Value.clear();
             new File("cbanksystem.running").delete();
-            PrintCOM printCom = new PrintCOM();
-            printCom.printLOG("Logout by ... " + Value.CUST_CODE + "   End time: " + DateFormat.getLocale_ddMMyyyy(new Date()));
             System.exit(0);
         }
     }

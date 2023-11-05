@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="CloseAccountReport" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="0419807f-cf8a-4152-8178-750d187f3944">
 	<property name="ireport.zoom" value="1.6105100000000008"/>
-	<property name="ireport.x" value="0"/>
+	<property name="ireport.x" value="187"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" forecolor="#FFFFFF" fontName="Arial" fontSize="26" isBold="true" pdfFontName="Helvetica-Bold"/>
 	<style name="SubTitle" forecolor="#666666" fontName="Arial" fontSize="18"/>
@@ -28,14 +28,14 @@
 			<staticText>
 				<reportElement style="Title" x="0" y="5" width="263" height="33" forecolor="#000000" uuid="85ba3217-25dd-40b6-8d4d-6eefc2f30ae7"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="TH SarabunPSK" size="28"/>
+					<font fontName="TH SarabunPSK" size="28" isBold="false"/>
 				</textElement>
 				<text><![CDATA[รายงานการปิดบัญชี]]></text>
 			</staticText>
 			<textField>
 				<reportElement x="23" y="38" width="529" height="20" forecolor="#000000" uuid="886a4dbd-bec3-4348-99c4-cef4d2b46093"/>
 				<textElement>
-					<font fontName="TH SarabunPSK" size="16" isBold="true"/>
+					<font fontName="TH SarabunPSK" size="16" isBold="false" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{BranchName}]]></textFieldExpression>
 			</textField>
@@ -138,7 +138,7 @@
 			<textField pattern="#,##0.00">
 				<reportElement style="Detail" x="102" y="0" width="105" height="15" forecolor="#000000" uuid="a8319e81-f3b5-49d9-a230-bfd807279d71"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="TH SarabunPSK" pdfFontName="THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+					<font fontName="TH SarabunPSK" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[th.co.cbank.util.ThaiUtil.ASCII2Unicode($F{cust_name})]]></textFieldExpression>
 			</textField>
@@ -194,7 +194,7 @@
 			<textField>
 				<reportElement style="Column header" x="433" y="0" width="80" height="20" forecolor="#000000" uuid="28143865-a2b2-4238-aa06-b8bdc720bb8a"/>
 				<textElement textAlignment="Right">
-					<font fontName="TH SarabunPSK" size="10" isBold="false"/>
+					<font fontName="TH SarabunPSK" size="10" isBold="false" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA["หน้า "+$V{PAGE_NUMBER}+" ถึง"]]></textFieldExpression>
 			</textField>

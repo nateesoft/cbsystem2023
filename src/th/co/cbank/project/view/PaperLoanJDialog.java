@@ -189,7 +189,7 @@ public class PaperLoanJDialog extends BaseDialogSwing {
         params.put("p20", bBean.getName());
         params.put("p21", "-");
 
-        CbLoanConfigBean cBean = getLoanConfigControl().findOneByLoanCode(loanAccountBean.getLoan_type());
+        CbLoanConfigBean cBean = getLoanConfigControl().findOneByLoanTypeCode(loanAccountBean.getLoan_type());
         params.put("p22", cBean.getLoanName());
         params.put("p23", NumberFormat.showDouble2(loanAccountBean.getLoan_amount()));
         BigDecimal bg = new BigDecimal(loanAccountBean.getLoan_amount());

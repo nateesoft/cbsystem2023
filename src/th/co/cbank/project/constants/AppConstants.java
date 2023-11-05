@@ -73,4 +73,9 @@ public class AppConstants {
     public static final String ADDRESS_CURRENT = "1";
     public static final String ADDRESS_ON_CID = "2";
     public static final String ADDRESS_OFFICE = "3";
+    
+    public static final String JASPER_PRINT_SLIP = JASPER_ROOT_PATH + "PaymentPaperSlip" + JASPER_FILE;
+    public static final String JASPER_FEE_SLIP = JASPER_ROOT_PATH + "FeeSlip" + JASPER_FILE;
+    
+    public static final String JASPER_PRINT_TEST_FILE = JASPER_ROOT_PATH + "TestPrinter" + JASPER_FILE;
 }
