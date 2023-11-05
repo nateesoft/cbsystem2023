@@ -33,7 +33,7 @@ public class CustomerDialog extends BaseDialogSwing {
         logger.debug("CustomerDialog init");
 
         initTable();
-        findCustomer();
+        findCustomer("");
 
         txtSearch.requestFocus();
     }
@@ -264,7 +264,10 @@ public class CustomerDialog extends BaseDialogSwing {
         if (evt.getKeyCode() == KeyEvent.VK_DOWN) {
             tbCustomer.requestFocus();
         } else {
-            findCustomer();
+            if(txtSearch.getText().equals("")){
+                return;
+            }
+            findCustomer(txtSearch.getText());
         }
     }//GEN-LAST:event_txtSearchKeyReleased
 
@@ -406,10 +409,9 @@ public class CustomerDialog extends BaseDialogSwing {
 
     private List<ProfileBean> listProfiles = null;
 
-    private void findCustomer() {
+    private void findCustomer(String search) {
         TableUtil.clearModel(model);
-
-        listProfiles = getProfileControl().search(txtSearch.getText());
+        listProfiles = getProfileControl().search(search);
         for (int i = 0; i < listProfiles.size(); i++) {
             ProfileBean bean = (ProfileBean) listProfiles.get(i);
 

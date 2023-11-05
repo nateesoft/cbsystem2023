@@ -1306,7 +1306,7 @@
                               <Component id="txtLoanFee" alignment="0" min="-2" pref="89" max="-2" attributes="0"/>
                               <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                                      <Component id="txtLoanDocCode" alignment="0" max="32767" attributes="0"/>
+                                      <Component id="txtLoanDocNo" alignment="0" max="32767" attributes="0"/>
                                       <Group type="102" alignment="0" attributes="0">
                                           <Component id="txtLoanPenaltyINT" min="-2" pref="61" max="-2" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
@@ -1319,7 +1319,7 @@
                                       <Component id="txtFeeRateName" alignment="0" max="32767" attributes="0"/>
                                       <Component id="txtIntFixedName" alignment="0" max="32767" attributes="0"/>
                                       <Group type="102" alignment="1" attributes="0">
-                                          <Component id="txtStartLoanDate" max="32767" attributes="0"/>
+                                          <Component id="txtLoanDocDate" max="32767" attributes="0"/>
                                           <EmptySpace max="-2" attributes="0"/>
                                           <Component id="jButton18" min="-2" pref="35" max="-2" attributes="0"/>
                                       </Group>
@@ -1355,12 +1355,12 @@
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel55" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="txtLoanDocCode" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                              <Component id="txtLoanDocNo" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="3" attributes="0">
                               <Component id="jLabel211" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="txtStartLoanDate" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
+                              <Component id="txtLoanDocDate" alignment="3" min="-2" pref="25" max="-2" attributes="0"/>
                               <Component id="jButton18" alignment="3" min="-2" pref="28" max="-2" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
@@ -1721,7 +1721,7 @@
                     <Property name="text" type="java.lang.String" value="&#xe27;&#xe31;&#xe19;&#xe17;&#xe35;&#xe48;&#xe2d;&#xe2d;&#xe01;&#xe2a;&#xe31;&#xe0d;&#xe0d;&#xe32;"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="txtStartLoanDate">
+                <Component class="javax.swing.JTextField" name="txtLoanDocDate">
                   <Properties>
                     <Property name="editable" type="boolean" value="false"/>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
@@ -1737,8 +1737,8 @@
                     </Property>
                   </Properties>
                   <Events>
-                    <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtStartLoanDateFocusGained"/>
-                    <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtStartLoanDateKeyPressed"/>
+                    <EventHandler event="focusGained" listener="java.awt.event.FocusListener" parameters="java.awt.event.FocusEvent" handler="txtLoanDocDateFocusGained"/>
+                    <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtLoanDocDateKeyPressed"/>
                   </Events>
                 </Component>
                 <Component class="javax.swing.JButton" name="jButton18">
@@ -1760,8 +1760,9 @@
                     <Property name="text" type="java.lang.String" value="&#xe40;&#xe25;&#xe02;&#xe17;&#xe35;&#xe48;&#xe2a;&#xe31;&#xe0d;&#xe0d;&#xe32;"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="txtLoanDocCode">
+                <Component class="javax.swing.JTextField" name="txtLoanDocNo">
                   <Properties>
+                    <Property name="editable" type="boolean" value="false"/>
                     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
                       <Color blue="cc" green="ff" red="ff" type="rgb"/>
                     </Property>
@@ -1778,7 +1779,7 @@
                     </Property>
                   </Properties>
                   <Events>
-                    <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtLoanDocCodeKeyPressed"/>
+                    <EventHandler event="keyPressed" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtLoanDocNoKeyPressed"/>
                   </Events>
                 </Component>
               </SubComponents>
@@ -2117,12 +2118,10 @@
                                   <Component id="jLabel197" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="jScrollPane7" alignment="0" min="-2" pref="291" max="-2" attributes="0"/>
                                   <Group type="102" alignment="0" attributes="0">
-                                      <Group type="103" groupAlignment="0" attributes="0">
-                                          <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                                              <Component id="txtImg3" pref="212" max="32767" attributes="0"/>
-                                              <Component id="txtImg2" max="32767" attributes="0"/>
-                                          </Group>
-                                          <Component id="txtImg1" alignment="0" min="-2" pref="191" max="-2" attributes="0"/>
+                                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                                          <Component id="txtImg3" pref="212" max="32767" attributes="0"/>
+                                          <Component id="txtImg2" max="32767" attributes="0"/>
+                                          <Component id="txtImg1" max="32767" attributes="0"/>
                                       </Group>
                                       <EmptySpace max="-2" attributes="0"/>
                                       <Group type="103" groupAlignment="0" attributes="0">
@@ -2135,7 +2134,7 @@
                           </Group>
                           <Component id="jPanel50" alignment="0" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace max="32767" attributes="0"/>
+                      <EmptySpace pref="169" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -2429,7 +2428,7 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
               <SubComponents>
-                <Component class="javax.swing.JTable" name="tbGuarantor">
+                <Component class="javax.swing.JTable" name="tbBondsman">
                   <Properties>
                     <Property name="model" type="javax.swing.table.TableModel" editor="org.netbeans.modules.form.editors2.TableModelEditor">
                       <Table columnCount="5" rowCount="0">

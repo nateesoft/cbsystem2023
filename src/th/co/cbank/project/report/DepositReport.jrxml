@@ -278,21 +278,21 @@
 			<textField>
 				<reportElement x="12" y="2" width="292" height="22" forecolor="#FFFFFF" uuid="d524234e-95ac-4d5f-b752-116a060fe21a"/>
 				<textElement>
-					<font fontName="TH SarabunPSK" size="18" isBold="true"/>
+					<font fontName="TH SarabunPSK" size="18" isBold="true" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{COM_NAME}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="12" y="24" width="292" height="20" forecolor="#FFFFFF" uuid="75f70810-166f-479e-9b9f-a0ba05cf9f4a"/>
 				<textElement>
-					<font fontName="TH SarabunPSK" size="16"/>
+					<font fontName="TH SarabunPSK" size="16" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{COM_ADDR}]]></textFieldExpression>
 			</textField>
 			<textField>
 				<reportElement x="316" y="4" width="236" height="40" forecolor="#FFFFFF" uuid="26967146-c6f8-40f5-b2ce-f721074e7696"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="TH SarabunPSK" size="20" isBold="true" isItalic="true"/>
+					<font fontName="TH SarabunPSK" size="20" isBold="true" isItalic="true" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{HEAD_TEXT}]]></textFieldExpression>
 			</textField>
@@ -448,7 +448,7 @@
 			<textField>
 				<reportElement x="5" y="125" width="176" height="29" uuid="526cda48-36e3-4fb2-9c96-ed5997a7df77"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="TH SarabunPSK" size="20" isBold="true"/>
+					<font fontName="TH SarabunPSK" size="20" isBold="true" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{CUST_NAME}]]></textFieldExpression>
 			</textField>
@@ -469,7 +469,7 @@
 			<textField>
 				<reportElement x="145" y="157" width="175" height="33" uuid="bff2cc0a-ecaf-4f5d-9663-e0da5e132cf5"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="TH SarabunPSK" size="20" isBold="true"/>
+					<font fontName="TH SarabunPSK" size="20" isBold="true" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{TEXT_MONEY}]]></textFieldExpression>
 			</textField>
@@ -483,7 +483,7 @@
 			<textField>
 				<reportElement x="57" y="3" width="259" height="30" uuid="26e1c217-08d7-4190-a05b-487c651d38d7"/>
 				<textElement verticalAlignment="Bottom">
-					<font fontName="TH SarabunPSK" size="18" isBold="true"/>
+					<font fontName="TH SarabunPSK" size="18" isBold="true" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$P{BRANCH_NAME}]]></textFieldExpression>
 			</textField>

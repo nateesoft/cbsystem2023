@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="รายงานทะเบียนลูกค้า" pageWidth="842" pageHeight="595" orientation="Landscape" whenNoDataType="BlankPage" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5f67c220-a4ac-48da-a982-85cd9255545d">
 	<property name="ireport.zoom" value="2.0"/>
-	<property name="ireport.x" value="578"/>
+	<property name="ireport.x" value="904"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Title" fontName="Times New Roman" fontSize="50" isBold="true" pdfFontName="Times-Bold"/>
 	<style name="SubTitle" forecolor="#736343" fontName="Arial" fontSize="18"/>
@@ -55,7 +55,7 @@
 			<staticText>
 				<reportElement style="Title" x="229" y="0" width="404" height="62" uuid="266000c2-3c30-4af2-9581-843b6a099eda"/>
 				<textElement verticalAlignment="Middle">
-					<font fontName="TH SarabunPSK" size="38" pdfFontName="Times-Roman"/>
+					<font fontName="TH SarabunPSK" size="38" isBold="false" pdfFontName="Times-Roman"/>
 				</textElement>
 				<text><![CDATA[รายงานทะเบียนลูกค้า]]></text>
 			</staticText>
@@ -165,7 +165,7 @@
 				<textField isStretchWithOverflow="true">
 					<reportElement style="Detail" x="107" y="0" width="111" height="15" uuid="c17115e2-82ce-4397-96be-13a693a18bd8"/>
 					<textElement>
-						<font fontName="TH SarabunPSK"/>
+						<font fontName="TH SarabunPSK" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
 					</textElement>
 					<textFieldExpression><![CDATA[th.co.cbank.util.ThaiUtil.ASCII2Unicode($F{p_custName})]]></textFieldExpression>
 				</textField>

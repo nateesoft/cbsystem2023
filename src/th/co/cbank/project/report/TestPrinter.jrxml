@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Print Account Book" pageWidth="425" pageHeight="510" columnWidth="425" leftMargin="0" rightMargin="0" topMargin="62" bottomMargin="0" uuid="0d43f8ba-45b7-4fe9-b7d7-8e8588a353c5">
+	<property name="ireport.zoom" value="2.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="AccountCode" class="java.lang.String"/>
+	<parameter name="AccountName" class="java.lang.String"/>
+	<parameter name="BookNo" class="java.lang.String"/>
+	<parameter name="BARCODE" class="java.lang.String"/>
+	<parameter name="AccountType" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select id from cb_passbook_default limit 0,1]]>
+	</queryString>
+	<field name="id" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<detail>
+		<band height="215" splitType="Stretch">
+			<staticText>
+				<reportElement x="14" y="11" width="191" height="20" uuid="0567d8f5-2e56-499d-a0f8-9ea8e4424f97"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[TH SarabunPSK]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="215" y="11" width="191" height="20" uuid="8bdea887-c73f-42f0-95be-7780ea132984"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TH SarabunPSK Bold]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="215" y="31" width="191" height="20" uuid="d86800d9-e95f-4f0a-be67-cd188c0c199f"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[TH SarabunPSK ทดสอบภาษาไทย พยัญชนะดี]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="14" y="31" width="191" height="20" uuid="03457778-aa97-45e4-bbe9-850e3c074280"/>
+				<textElement>
+					<font fontName="TH SarabunPSK" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[TH SarabunPSK ทดสอบภาษาไทย พยัญชนะดี]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="215" y="59" width="191" height="20" uuid="fbfafe10-59b9-4bb5-bf4d-5f035d78ed26"/>
+				<textElement>
+					<font fontName="Tahoma" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tahoma Bold]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="215" y="79" width="191" height="20" uuid="7f124b77-e54e-487e-964b-6fc3f687e448"/>
+				<textElement>
+					<font fontName="Tahoma" size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Tahoma ทดสอบภาษาไทย พยัญชนะดี]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="14" y="59" width="191" height="20" uuid="0b577dcd-6bba-4e50-9009-21b6c45956c2"/>
+				<textElement>
+					<font fontName="Tahoma" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Tahoma]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="14" y="79" width="191" height="20" uuid="cd910f89-cadf-4592-8835-59302ba167be"/>
+				<textElement>
+					<font fontName="Tahoma" size="10" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Tahoma ทดสอบภาษาไทย พยัญชนะดี]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="215" y="107" width="191" height="20" uuid="bfe0f4ec-a081-4f01-976b-4e8776ebc51b"/>
+				<textElement>
+					<font fontName="Angsana New" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Angsana New Bold]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="215" y="127" width="191" height="20" uuid="dc42361a-df64-4903-b31c-62b788d8c2a7"/>
+				<textElement>
+					<font fontName="Angsana New" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Angsana New ทดสอบภาษาไทย พยัญชนะดี]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="14" y="107" width="191" height="20" uuid="62d0efaf-b87c-4e43-9764-0d9b8c8e5930"/>
+				<textElement>
+					<font fontName="Angsana New" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Angsana New]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="14" y="127" width="191" height="20" uuid="1a5f0d6e-918d-457d-864a-d701d75d5679"/>
+				<textElement>
+					<font fontName="Angsana New" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Angsana New ทดสอบภาษาไทย พยัญชนะดี]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="215" y="178" width="191" height="20" uuid="b6982c8b-6f1e-4dce-9719-ff99302ba1dc"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Browallia New ทดสอบภาษาไทย พยัญชนะดี]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="14" y="178" width="191" height="20" uuid="3da196a8-6879-42eb-bdf6-a6c84a19511b"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Browallia New ทดสอบภาษาไทย พยัญชนะดี]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="14" y="158" width="191" height="20" uuid="a0f42145-a6b4-4461-9d78-9f4595dc05e8"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Browallia New]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="215" y="158" width="191" height="20" uuid="12a99c0d-b7d3-4cb7-95ce-2cf419598f89"/>
+				<textElement>
+					<font fontName="Browallia New" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Browallia New Bold]]></text>
+			</staticText>
+		</band>
+	</detail>
+</jasperReport>

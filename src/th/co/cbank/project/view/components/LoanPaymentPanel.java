@@ -17,7 +17,7 @@ import th.co.cbank.project.control.CbLoanConfigControl;
 import th.co.cbank.project.control.CbLoanTablePaymentControl;
 import th.co.cbank.project.control.CbTransactionLoanControl;
 import th.co.cbank.project.control.ConfigControl;
-import th.co.cbank.project.control.PrintCOM;
+import th.co.cbank.project.control.PrintDriver;
 import th.co.cbank.project.control.ProfileControl;
 import th.co.cbank.project.control.Value;
 import th.co.cbank.project.model.BranchBean;
@@ -28,6 +28,7 @@ import th.co.cbank.project.model.CbTransactionLoanBean;
 import th.co.cbank.project.model.ConfigBean;
 import th.co.cbank.project.model.ProfileBean;
 import th.co.cbank.project.view.PrintLoanBookDialog;
+import th.co.cbank.project.view.popup.ReviewLoanContact;
 import th.co.cbank.util.DateChooseDialog;
 import th.co.cbank.util.DateFormat;
 import th.co.cbank.util.MessageAlert;
@@ -106,6 +107,7 @@ public class LoanPaymentPanel extends javax.swing.JPanel {
         btnConfirmPayment = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         txtPaymentDocNo = new javax.swing.JTextField();
+        btnReviewContact = new javax.swing.JButton();
         jPanel13 = new javax.swing.JPanel();
         jScrollPane3 = new javax.swing.JScrollPane();
         tbHistoryPayment = new javax.swing.JTable();
@@ -521,6 +523,15 @@ public class LoanPaymentPanel extends javax.swing.JPanel {
         txtPaymentDocNo.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtPaymentDocNo.setText("สร้างอัตโนมัติ");
 
+        btnReviewContact.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnReviewContact.setForeground(new java.awt.Color(0, 153, 153));
+        btnReviewContact.setText("Review สัญญาเงินกู้");
+        btnReviewContact.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnReviewContactActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
@@ -536,21 +547,25 @@ public class LoanPaymentPanel extends javax.swing.JPanel {
                             .addComponent(jPanel34, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel4Layout.createSequentialGroup()
                                 .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 6, Short.MAX_VALUE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(txtPaymentDocNo, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addGap(435, 435, 435))
+                .addGap(18, 18, 18)
+                .addComponent(btnReviewContact)
+                .addGap(344, 344, 344))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel34, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(jPanel34, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(btnReviewContact))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -589,7 +604,7 @@ public class LoanPaymentPanel extends javax.swing.JPanel {
         jPanel13.setLayout(jPanel13Layout);
         jPanel13Layout.setHorizontalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 1147, Short.MAX_VALUE)
+            .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 1233, Short.MAX_VALUE)
         );
         jPanel13Layout.setVerticalGroup(
             jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -687,10 +702,16 @@ public class LoanPaymentPanel extends javax.swing.JPanel {
         txtPaymentAmountCash.selectAll();
     }//GEN-LAST:event_txtPaymentAmountCashFocusGained
 
+    private void btnReviewContactActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReviewContactActionPerformed
+        ReviewLoanContact review = new ReviewLoanContact(null, true, profileBean, txtPaymentAccountNo.getText());
+        review.setVisible(true);
+    }//GEN-LAST:event_btnReviewContactActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConfirmPayment;
     private javax.swing.JButton btnDatePayment;
+    private javax.swing.JButton btnReviewContact;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel100;
     private javax.swing.JLabel jLabel101;
@@ -753,7 +774,7 @@ public class LoanPaymentPanel extends javax.swing.JPanel {
         txtPrincipleBalance.setText(NumberFormat.showDouble2(loanAccountBean.getLoan_amount()));
 
         //compute interest
-        CbLoanConfigBean loanConfigBean = loanConfigControl.findOneByLoanCode(loanAccountBean.getLoan_type());
+        CbLoanConfigBean loanConfigBean = loanConfigControl.findOneByLoanTypeCode(loanAccountBean.getLoan_type());
         if (loanConfigBean.getIntFixed().equals("E")) {
             isEffitiveRate = true;
             txtPaymentDate.setEditable(false);
@@ -934,7 +955,7 @@ public class LoanPaymentPanel extends javax.swing.JPanel {
             MessageAlert.infoPopup(this, "บันทึกข้อมูลเรียบร้อยแล้ว");
 
             //printer out to printer
-            PrintCOM printCOM = new PrintCOM();
+            PrintDriver printCOM = new PrintDriver();
             printCOM.printPaymentLoan(cbTransactionLoanBean);
 
             txtPaymentDate.setText("");
@@ -1174,7 +1195,7 @@ public class LoanPaymentPanel extends javax.swing.JPanel {
 
         //printer out to printer
         try {
-            PrintCOM pc = new PrintCOM();
+            PrintDriver pc = new PrintDriver();
             pc.printPaymentLoan(loanBean);
         } catch (Exception e) {
             System.err.println(e);

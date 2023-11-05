@@ -45,8 +45,7 @@ public class PassBook_PSiPR9 {
 
         Map m = new HashMap();
         //convert line to in
-        int lineInt = 1;
-        lineInt = NumberFormat.toInt(line);
+        int lineInt = NumberFormat.toInt(line);
         for (int i = 1; i < lineInt; i++) {
             m.put("p" + i, "");
         }

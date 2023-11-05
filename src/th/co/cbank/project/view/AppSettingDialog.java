@@ -1,6 +1,5 @@
 package th.co.cbank.project.view;
 
-import gnu.io.CommPortIdentifier;
 import java.awt.Font;
 import java.awt.HeadlessException;
 import java.awt.event.KeyEvent;
@@ -8,7 +7,6 @@ import java.awt.print.PrinterJob;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Enumeration;
 import java.util.List;
 import java.util.Locale;
 import javax.print.PrintService;
@@ -17,8 +15,8 @@ import javax.swing.table.JTableHeader;
 import org.apache.log4j.Logger;
 import th.co.cbank.util.NumberFormat;
 import th.co.cbank.project.constants.AppConstants;
+import th.co.cbank.project.control.PrintDriver;
 import th.co.cbank.project.model.ConfigBean;
-import th.co.cbank.project.control.PrintCOM;
 import th.co.cbank.project.model.CbHoonConfigBean;
 import th.co.cbank.project.model.CbLoanConfigBean;
 import th.co.cbank.project.model.CbSaveConfigBean;
@@ -117,9 +115,7 @@ public class AppSettingDialog extends BaseDialogSwing {
         jPanel12 = new javax.swing.JPanel();
         cbPrintSlipDriver = new javax.swing.JComboBox();
         rd1 = new javax.swing.JRadioButton();
-        rd2 = new javax.swing.JRadioButton();
-        cbPrinterDirect = new javax.swing.JComboBox();
-        btnTestPrint = new javax.swing.JButton();
+        btnTestPrinter = new javax.swing.JButton();
         btnPrintTransaction4 = new javax.swing.JButton();
         jPanel13 = new javax.swing.JPanel();
         chkManual1 = new javax.swing.JRadioButton();
@@ -927,18 +923,11 @@ public class AppSettingDialog extends BaseDialogSwing {
         rd1.setSelected(true);
         rd1.setText(" Driver");
 
-        rd2.setBackground(new java.awt.Color(255, 255, 255));
-        buttonGroup5.add(rd2);
-        rd2.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        rd2.setText(" Direct");
-
-        cbPrinterDirect.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-
-        btnTestPrint.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        btnTestPrint.setText("Test Print");
-        btnTestPrint.addActionListener(new java.awt.event.ActionListener() {
+        btnTestPrinter.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        btnTestPrinter.setText("Test Printer");
+        btnTestPrinter.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnTestPrintActionPerformed(evt);
+                btnTestPrinterActionPerformed(evt);
             }
         });
 
@@ -948,17 +937,11 @@ public class AppSettingDialog extends BaseDialogSwing {
             jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel12Layout.createSequentialGroup()
                 .addContainerGap()
+                .addComponent(rd1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel12Layout.createSequentialGroup()
-                        .addComponent(rd2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cbPrinterDirect, javax.swing.GroupLayout.PREFERRED_SIZE, 168, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnTestPrint))
-                    .addGroup(jPanel12Layout.createSequentialGroup()
-                        .addComponent(rd1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(cbPrintSlipDriver, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(btnTestPrinter)
+                    .addComponent(cbPrintSlipDriver, javax.swing.GroupLayout.PREFERRED_SIZE, 333, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel12Layout.setVerticalGroup(
@@ -968,12 +951,9 @@ public class AppSettingDialog extends BaseDialogSwing {
                 .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(rd1)
                     .addComponent(cbPrintSlipDriver, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(rd2)
-                    .addComponent(cbPrinterDirect, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnTestPrint, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnTestPrinter, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         btnPrintTransaction4.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -3134,7 +3114,6 @@ public class AppSettingDialog extends BaseDialogSwing {
             bean.setPrintSlipType("DR");
         }
         bean.setPrintSlipDriverName(cbPrintSlipDriver.getSelectedItem().toString());
-        bean.setPrintSlipPort("" + cbPrinterDirect.getSelectedItem());
 
         if (chkManual1.isSelected()) {
             bean.setAccountDocType("M");
@@ -3395,11 +3374,6 @@ public class AppSettingDialog extends BaseDialogSwing {
             txtIntNormal.requestFocus();
         }
     }//GEN-LAST:event_txtIntTurnoverKeyPressed
-
-    private void btnTestPrintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTestPrintActionPerformed
-        PrintCOM pc = new PrintCOM();
-        pc.printTest("" + cbPrinterDirect.getSelectedItem());
-    }//GEN-LAST:event_btnTestPrintActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         if (!txtLoanCode.getText().equals("")) {
@@ -3973,12 +3947,17 @@ public class AppSettingDialog extends BaseDialogSwing {
         // TODO add your handling code here:
     }//GEN-LAST:event_tbLoanConfigHistoryMouseClicked
 
+    private void btnTestPrinterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnTestPrinterActionPerformed
+        PrintDriver printerDriver = new PrintDriver();
+        printerDriver.printTestFonts();
+    }//GEN-LAST:event_btnTestPrinterActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCancelType;
     private javax.swing.JButton btnPrintTransaction4;
     private javax.swing.JButton btnSaveType;
     private javax.swing.JButton btnSaveType1;
-    private javax.swing.JButton btnTestPrint;
+    private javax.swing.JButton btnTestPrinter;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup10;
     private javax.swing.ButtonGroup buttonGroup11;
@@ -4001,7 +3980,6 @@ public class AppSettingDialog extends BaseDialogSwing {
     private javax.swing.JComboBox cbPayType6;
     private javax.swing.JComboBox cbPayType7;
     private javax.swing.JComboBox cbPrintSlipDriver;
-    private javax.swing.JComboBox cbPrinterDirect;
     private javax.swing.JComboBox cbPrinterPassBookName;
     private javax.swing.JComboBox cbRDType2;
     private javax.swing.JRadioButton chkAuto1;
@@ -4144,7 +4122,6 @@ public class AppSettingDialog extends BaseDialogSwing {
     private javax.swing.JTabbedPane jTabbedPane3;
     private javax.swing.JTabbedPane jTabbedPane4;
     private javax.swing.JRadioButton rd1;
-    private javax.swing.JRadioButton rd2;
     private javax.swing.JRadioButton rdPayINT1;
     private javax.swing.JRadioButton rdPayINT2;
     private javax.swing.JRadioButton rdPayINT3;
@@ -4257,7 +4234,6 @@ public class AppSettingDialog extends BaseDialogSwing {
         loanConfigHeaderHistory.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, AppConstants.DEFAULT_FONT_SIZE));
 
         loadPrinterDriver();
-        loadPort();
     }
 
     private void loadPrinterDriver() {
@@ -4267,18 +4243,6 @@ public class AppSettingDialog extends BaseDialogSwing {
         for (PrintService printService1 : printService) {
             cbPrinterPassBookName.addItem(printService1.getName());
             cbPrintSlipDriver.addItem(printService1.getName());
-        }
-    }
-
-    private void loadPort() {
-        CommPortIdentifier portId;
-        cbPrinterDirect.removeAllItems();
-        Enumeration portList = CommPortIdentifier.getPortIdentifiers();
-        while (portList.hasMoreElements()) {
-            portId = (CommPortIdentifier) portList.nextElement();
-            if (portId.getPortType() == CommPortIdentifier.PORT_SERIAL) {
-                cbPrinterDirect.addItem(portId.getName());
-            }
         }
     }
 
@@ -4327,7 +4291,6 @@ public class AppSettingDialog extends BaseDialogSwing {
 
         cbPrinterPassBookName.setSelectedItem("" + bean.getPrinterPassBook());
         cbPrintSlipDriver.setSelectedItem("" + bean.getPrintSlipDriverName());
-        cbPrinterDirect.setSelectedItem("" + bean.getPrintSlipPort());
 
         if (bean.getPrintSlipType().equals("DV")) {
             rd1.setSelected(true);
@@ -4592,7 +4555,7 @@ public class AppSettingDialog extends BaseDialogSwing {
     }
 
     private void loadDataLoanConfig(String LoanCode) {
-        CbLoanConfigBean bean = getLoanConfigControl().findOneByLoanCode(LoanCode);
+        CbLoanConfigBean bean = getLoanConfigControl().findOneByLoanTypeCode(LoanCode);
         if (bean != null) {
             txtLoanCode.setText(bean.getLoanCode());
             txtLoanName.setText(bean.getLoanName());

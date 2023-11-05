@@ -338,7 +338,7 @@ public class PrintLoanBookDialog extends BaseDialogSwing {
         CbLoanAccountBean loanBean = getLoanAccountControl().findOneByLoanDocNo(txtLoanCode.getText());
         ProfileBean pBean = getProfileControl().findOneByCustCode(loanBean.getCust_code());
 
-        CbLoanConfigBean lBean = getLoanConfigControl().findOneByLoanCode(loanBean.getLoan_type());
+        CbLoanConfigBean lBean = getLoanConfigControl().findOneByLoanTypeCode(loanBean.getLoan_type());
 
         String accCode = txtLoanCode.getText();
         String accName = pBean.getP_custName() + "  " + pBean.getP_custSurname();

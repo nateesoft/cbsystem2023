@@ -11,7 +11,7 @@ import th.co.cbank.project.control.CbSaveAccountControl;
 import th.co.cbank.project.control.CbSaveConfigControl;
 import th.co.cbank.project.control.ConfigControl;
 import th.co.cbank.project.control.PassBook_PSiPR9;
-import th.co.cbank.project.control.PrintCOM;
+import th.co.cbank.project.control.PrintDriver;
 import th.co.cbank.project.control.ProfileControl;
 import th.co.cbank.project.control.Value;
 import th.co.cbank.project.model.BranchBean;
@@ -28,6 +28,7 @@ public class NewDepositPanel extends javax.swing.JPanel {
 
     private final Logger logger = Logger.getLogger(NewDepositPanel.class);
     private ProfileBean profileBean;
+    private String empCode;
     private final CbSaveConfigControl saveConfigControl = new CbSaveConfigControl();
     private final ConfigControl configControl = new ConfigControl();
     private final BranchControl branchControl = new BranchControl();
@@ -36,11 +37,12 @@ public class NewDepositPanel extends javax.swing.JPanel {
     private final CbFeeControl cbFeeControl = new CbFeeControl();
     private final CbFeeTransactionControl cbFeeTransactionControl = new CbFeeTransactionControl();
 
-    public NewDepositPanel(ProfileBean profileBean) {
+    public NewDepositPanel(ProfileBean profileBean, String empCode) {
         initComponents();
         logger.debug("NewDepositPanel init");
 
         this.profileBean = profileBean;
+        this.empCode = empCode;
 
         initLoad();
     }
@@ -286,8 +288,8 @@ public class NewDepositPanel extends javax.swing.JPanel {
 
     private void btnPrintSliplOpenAccActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintSliplOpenAccActionPerformed
         if (cbAccType.getItemCount() > 0) {
-            PrintCOM pc = new PrintCOM();
-            pc.printFeeOpen(profileBean.getP_custCode(), txtSaveFee.getText());
+            PrintDriver pc = new PrintDriver();
+            pc.printFeeOpen(profileBean.getP_custCode(), txtSaveFee.getText(), empCode);
         }
     }//GEN-LAST:event_btnPrintSliplOpenAccActionPerformed
 

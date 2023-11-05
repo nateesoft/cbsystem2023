@@ -54,7 +54,6 @@ public class NewLoanPanel extends javax.swing.JPanel {
 
     private final Logger logger = Logger.getLogger(NewLoanPanel.class);
     private ProfileBean profileBean;
-    private String profileName;
     private String empCode;
     private final CbLoanAccountControl loanAccountControl = new CbLoanAccountControl();
     private final BranchControl branchControl = new BranchControl();
@@ -169,10 +168,10 @@ public class NewLoanPanel extends javax.swing.JPanel {
         txtLoanPerMonth = new javax.swing.JTextField();
         jLabel209 = new javax.swing.JLabel();
         jLabel211 = new javax.swing.JLabel();
-        txtStartLoanDate = new javax.swing.JTextField();
+        txtLoanDocDate = new javax.swing.JTextField();
         jButton18 = new javax.swing.JButton();
         jLabel55 = new javax.swing.JLabel();
-        txtLoanDocCode = new javax.swing.JTextField();
+        txtLoanDocNo = new javax.swing.JTextField();
         jLabel50 = new javax.swing.JLabel();
         txtIntBadDebt = new javax.swing.JTextField();
         jLabel198 = new javax.swing.JLabel();
@@ -207,7 +206,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
         txtLoanCustName = new javax.swing.JTextField();
         lbLimitApprovePerson = new javax.swing.JLabel();
         jScrollPane6 = new javax.swing.JScrollPane();
-        tbGuarantor = new javax.swing.JTable();
+        tbBondsman = new javax.swing.JTable();
         jLabel196 = new javax.swing.JLabel();
         jScrollPane7 = new javax.swing.JScrollPane();
         txtAssetGaruntee1 = new javax.swing.JTextArea();
@@ -935,18 +934,18 @@ public class NewLoanPanel extends javax.swing.JPanel {
         jLabel211.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel211.setText("วันที่ออกสัญญา");
 
-        txtStartLoanDate.setEditable(false);
-        txtStartLoanDate.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        txtStartLoanDate.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txtStartLoanDate.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
-        txtStartLoanDate.addFocusListener(new java.awt.event.FocusAdapter() {
+        txtLoanDocDate.setEditable(false);
+        txtLoanDocDate.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        txtLoanDocDate.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtLoanDocDate.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        txtLoanDocDate.addFocusListener(new java.awt.event.FocusAdapter() {
             public void focusGained(java.awt.event.FocusEvent evt) {
-                txtStartLoanDateFocusGained(evt);
+                txtLoanDocDateFocusGained(evt);
             }
         });
-        txtStartLoanDate.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtLoanDocDate.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtStartLoanDateKeyPressed(evt);
+                txtLoanDocDateKeyPressed(evt);
             }
         });
 
@@ -961,13 +960,14 @@ public class NewLoanPanel extends javax.swing.JPanel {
         jLabel55.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         jLabel55.setText("เลขที่สัญญา");
 
-        txtLoanDocCode.setBackground(new java.awt.Color(255, 255, 204));
-        txtLoanDocCode.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        txtLoanDocCode.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        txtLoanDocCode.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
-        txtLoanDocCode.addKeyListener(new java.awt.event.KeyAdapter() {
+        txtLoanDocNo.setEditable(false);
+        txtLoanDocNo.setBackground(new java.awt.Color(255, 255, 204));
+        txtLoanDocNo.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        txtLoanDocNo.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtLoanDocNo.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(153, 153, 153)));
+        txtLoanDocNo.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtLoanDocCodeKeyPressed(evt);
+                txtLoanDocNoKeyPressed(evt);
             }
         });
 
@@ -1003,7 +1003,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
                     .addComponent(txtLoanFee, javax.swing.GroupLayout.PREFERRED_SIZE, 89, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(jPanel25Layout.createSequentialGroup()
                         .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(txtLoanDocCode, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtLoanDocNo, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel25Layout.createSequentialGroup()
                                 .addComponent(txtLoanPenaltyINT, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -1015,7 +1015,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
                             .addComponent(txtFeeRateName, javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txtIntFixedName, javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPanel25Layout.createSequentialGroup()
-                                .addComponent(txtStartLoanDate)
+                                .addComponent(txtLoanDocDate)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton18, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel25Layout.createSequentialGroup()
@@ -1041,11 +1041,11 @@ public class NewLoanPanel extends javax.swing.JPanel {
                 .addContainerGap()
                 .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel55)
-                    .addComponent(txtLoanDocCode, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtLoanDocNo, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel211)
-                    .addComponent(txtStartLoanDate, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtLoanDocDate, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jButton18, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel25Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -1481,7 +1481,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        tbGuarantor.setModel(new javax.swing.table.DefaultTableModel(
+        tbBondsman.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
@@ -1497,13 +1497,13 @@ public class NewLoanPanel extends javax.swing.JPanel {
                 return canEdit [columnIndex];
             }
         });
-        tbGuarantor.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
-        jScrollPane6.setViewportView(tbGuarantor);
-        if (tbGuarantor.getColumnModel().getColumnCount() > 0) {
-            tbGuarantor.getColumnModel().getColumn(1).setPreferredWidth(130);
-            tbGuarantor.getColumnModel().getColumn(2).setPreferredWidth(130);
-            tbGuarantor.getColumnModel().getColumn(3).setPreferredWidth(150);
-            tbGuarantor.getColumnModel().getColumn(4).setPreferredWidth(150);
+        tbBondsman.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        jScrollPane6.setViewportView(tbBondsman);
+        if (tbBondsman.getColumnModel().getColumnCount() > 0) {
+            tbBondsman.getColumnModel().getColumn(1).setPreferredWidth(130);
+            tbBondsman.getColumnModel().getColumn(2).setPreferredWidth(130);
+            tbBondsman.getColumnModel().getColumn(3).setPreferredWidth(150);
+            tbBondsman.getColumnModel().getColumn(4).setPreferredWidth(150);
         }
 
         jLabel196.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
@@ -1564,18 +1564,17 @@ public class NewLoanPanel extends javax.swing.JPanel {
                             .addComponent(jLabel197)
                             .addComponent(jScrollPane7, javax.swing.GroupLayout.PREFERRED_SIZE, 291, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel44Layout.createSequentialGroup()
-                                .addGroup(jPanel44Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPanel44Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(txtImg3, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
-                                        .addComponent(txtImg2))
-                                    .addComponent(txtImg1, javax.swing.GroupLayout.PREFERRED_SIZE, 191, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGroup(jPanel44Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(txtImg3, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)
+                                    .addComponent(txtImg2)
+                                    .addComponent(txtImg1))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPanel44Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(btn4)
                                     .addComponent(btn6)
                                     .addComponent(btn5)))))
                     .addComponent(jPanel50, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(169, Short.MAX_VALUE))
         );
         jPanel44Layout.setVerticalGroup(
             jPanel44Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1768,15 +1767,15 @@ public class NewLoanPanel extends javax.swing.JPanel {
         lbLoanCreditBalance.setText("วงเงินในการกู้คงเหลือ " + profileBean.getLoan_Credit_Balance() + " บาท");
     }//GEN-LAST:event_btnApproveMoreMoneyActionPerformed
 
-    private void txtLoanDocCodeKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLoanDocCodeKeyPressed
+    private void txtLoanDocNoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLoanDocNoKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            if (!"".equals(txtLoanDocCode.getText())) {
+            if (!"".equals(txtLoanDocNo.getText())) {
                 txtLoanFee.requestFocus();
                 return;
             }
-            txtLoanDocCode.selectAll();
+            txtLoanDocNo.selectAll();
         }
-    }//GEN-LAST:event_txtLoanDocCodeKeyPressed
+    }//GEN-LAST:event_txtLoanDocNoKeyPressed
 
     private void txtLoanFeeFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLoanFeeFocusGained
         txtLoanFee.selectAll();
@@ -1838,18 +1837,18 @@ public class NewLoanPanel extends javax.swing.JPanel {
         txtLoanPerMonthKeyPressedAction(evt);
     }//GEN-LAST:event_txtLoanPerMonthKeyPressed
 
-    private void txtStartLoanDateFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtStartLoanDateFocusGained
+    private void txtLoanDocDateFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtLoanDocDateFocusGained
         btnPrintLoanPaper.setEnabled(false);
-    }//GEN-LAST:event_txtStartLoanDateFocusGained
+    }//GEN-LAST:event_txtLoanDocDateFocusGained
 
-    private void txtStartLoanDateKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtStartLoanDateKeyPressed
+    private void txtLoanDocDateKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtLoanDocDateKeyPressed
         if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             txtLoanFee.requestFocus();
         }
-    }//GEN-LAST:event_txtStartLoanDateKeyPressed
+    }//GEN-LAST:event_txtLoanDocDateKeyPressed
 
     private void jButton18ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton18ActionPerformed
-        Point point = txtStartLoanDate.getLocationOnScreen();
+        Point point = txtLoanDocDate.getLocationOnScreen();
         point.setLocation(point.getX(), point.getY());
         DateChooseDialog dcd = new DateChooseDialog(null, true, point);
         dcd.setVisible(true);
@@ -1861,7 +1860,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
             txtLoanDateStart.setText(DateFormat.getLocale_ddMMyyyy(c.getTime()));
             computeBahtPerMonth();
 
-            txtStartLoanDate.setText(dcd.getDateString());
+            txtLoanDocDate.setText(dcd.getDateString());
             txtLoanPerMonth.requestFocus();
         }
     }//GEN-LAST:event_jButton18ActionPerformed
@@ -2005,7 +2004,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
     }//GEN-LAST:event_btnCancelSaveLoanAccountRegisterActionPerformed
 
     private void btnPrintLoanPaperActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPrintLoanPaperActionPerformed
-        btnPrintLoanPaper(txtLoanDocCode.getText());
+        btnPrintLoanPaper(txtLoanDocNo.getText());
     }//GEN-LAST:event_btnPrintLoanPaperActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -2097,7 +2096,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
     private javax.swing.JLabel lbLoanCreditBalance;
     private javax.swing.JLabel lblLoanPromiseTitle;
     private javax.swing.JTable tbArGroup1;
-    private javax.swing.JTable tbGuarantor;
+    private javax.swing.JTable tbBondsman;
     private javax.swing.JTextField txtAddNo1;
     private javax.swing.JTextField txtAddrAmphur1;
     private javax.swing.JTextField txtAddrMobile1;
@@ -2131,7 +2130,8 @@ public class NewLoanPanel extends javax.swing.JPanel {
     private javax.swing.JTextField txtLoanCustSurname;
     private javax.swing.JTextField txtLoanDateEnd;
     private javax.swing.JTextField txtLoanDateStart;
-    private javax.swing.JTextField txtLoanDocCode;
+    private javax.swing.JTextField txtLoanDocDate;
+    private javax.swing.JTextField txtLoanDocNo;
     private javax.swing.JTextField txtLoanFee;
     private javax.swing.JTextField txtLoanIntPercent;
     private javax.swing.JTextField txtLoanName;
@@ -2141,7 +2141,6 @@ public class NewLoanPanel extends javax.swing.JPanel {
     private javax.swing.JTextField txtLoanRegMember;
     private javax.swing.JTextField txtLoanSex;
     private javax.swing.JTextField txtPayPerMonth;
-    private javax.swing.JTextField txtStartLoanDate;
     // End of variables declaration//GEN-END:variables
 
     private void loadAddressLoan() {
@@ -2222,7 +2221,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
         String strTxtLoanAmtPerPerson = txtLoanAmt.getText();
         double txtLoanAmtPerPerson = NumberFormat.toDouble(strTxtLoanAmtPerPerson);
         String docType = getIDCombobox(cbLoanAcc);
-        CbLoanConfigBean lBean = loanConfigControl.findOneByLoanCode(docType);
+        CbLoanConfigBean lBean = loanConfigControl.findOneByLoanTypeCode(docType);
         double txtLoanFeeAmt = lBean.getLoanFee() * txtLoanAmtPerPerson / 100;
         txtLoanFee.setText(NumberFormat.showDouble2(txtLoanFeeAmt));
 
@@ -2232,14 +2231,14 @@ public class NewLoanPanel extends javax.swing.JPanel {
         txtLoanDateStart.setText(DateFormat.getLocale_ddMMyyyy(calendar2.getTime()));
         computeBahtPerMonth();
 
-        txtStartLoanDate.setText(DateFormat.getLocale_ddMMyyyy(new Date()));
+        txtLoanDocDate.setText(DateFormat.getLocale_ddMMyyyy(new Date()));
         txtLoanPerMonth.requestFocus();
     }
 
     private void cbLoanAccItemStateChangedAction(ItemEvent evt) {
         if (evt.getStateChange() == 1) {
             String id = getIDCombobox(cbLoanAcc);
-            CbLoanConfigBean loanBean = loanConfigControl.findOneByLoanCode(id);
+            CbLoanConfigBean loanBean = loanConfigControl.findOneByLoanTypeCode(id);
             if (loanBean != null) {
                 switch (loanBean.getIntFixed()) {
                     case AppConstants.INT_FLAT_RATE:
@@ -2286,19 +2285,19 @@ public class NewLoanPanel extends javax.swing.JPanel {
                 double intPerMonth4 = intPerYear4 / 12;
                 double intPerDay4 = intPerMonth4 / 30;
                 switch (cbLoanTypePayment.getSelectedIndex()) {
-                    case 0:
+                    case 0: // รายวัน
                         txtLoanIntPercent.setText(NumberFormat.showDouble2(intPerDay1));
                         txtIntBadDebt.setText(NumberFormat.showDouble3(intPerDay2));
                         txtIntTurnover.setText(NumberFormat.showDouble3(intPerDay3));
                         txtIntNormal.setText(NumberFormat.showDouble3(intPerDay4));
                         break;
-                    case 1:
+                    case 1: // รายเดือน
                         txtLoanIntPercent.setText(NumberFormat.showDouble3(intPerMonth1));
                         txtIntBadDebt.setText(NumberFormat.showDouble3(intPerMonth2));
                         txtIntTurnover.setText(NumberFormat.showDouble3(intPerMonth3));
                         txtIntNormal.setText(NumberFormat.showDouble3(intPerMonth4));
                         break;
-                    default:
+                    default: // รายปี
                         txtLoanIntPercent.setText(NumberFormat.showDouble3(intPerYear1));
                         txtIntBadDebt.setText(NumberFormat.showDouble3(intPerYear2));
                         txtIntTurnover.setText(NumberFormat.showDouble3(intPerYear3));
@@ -2311,7 +2310,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
 
     private void cbLoanTypePaymentItemStateChanged() {
         String id = getIDCombobox(cbLoanAcc);
-        CbLoanConfigBean cbLoanConfigBean = loanConfigControl.findOneByLoanCode(id);
+        CbLoanConfigBean cbLoanConfigBean = loanConfigControl.findOneByLoanTypeCode(id);
         if (cbLoanConfigBean != null) {
             double intPerYear = cbLoanConfigBean.getLoanINT();//ต่อปี
             double intPerMonth = intPerYear / 12;
@@ -2357,7 +2356,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
 
     private void computeBahtPerMonth() {
         String loanType = getIDCombobox(cbLoanAcc);
-        CbLoanConfigBean loanConfigBean = loanConfigControl.findOneByLoanCode(loanType);
+        CbLoanConfigBean loanConfigBean = loanConfigControl.findOneByLoanTypeCode(loanType);
         double loanAmt, loanInt, netTotal;
         int loanPerAmt;
         int _netTotal;
@@ -2516,10 +2515,9 @@ public class NewLoanPanel extends javax.swing.JPanel {
             }
         }
     }
-
-    private void txtLoanPerMonthKeyPressedAction(KeyEvent evt) {
-        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
-            if ("".equals(txtLoanPerMonth.getText().trim())) {
+    
+    private void autoCompleteLoanPerMonth() {
+        if ("".equals(txtLoanPerMonth.getText().trim())) {
                 txtLoanPerMonth.setText("1");
                 txtLoanPerMonth.requestFocus();
                 return;
@@ -2531,7 +2529,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
             }
 
             String docType = getIDCombobox(cbLoanAcc);
-            CbLoanConfigBean cbLoanConfigBean = loanConfigControl.findOneByLoanCode(docType);
+            CbLoanConfigBean cbLoanConfigBean = loanConfigControl.findOneByLoanTypeCode(docType);
             if (loanPerMonth > cbLoanConfigBean.getLoanPerMonth()) {
                 MessageAlert.warningPopup(this, "ท่านกู้เกินจำนวนงวดตามที่สัญญากำหนดไว้ ต้องไม่เกิน " + cbLoanConfigBean.getLoanPerMonth() + " งวด");
                 txtLoanPerMonth.selectAll();
@@ -2541,6 +2539,11 @@ public class NewLoanPanel extends javax.swing.JPanel {
             computeFinishPay();
             computeBahtPerMonth();
             jButton17.requestFocus();
+    }
+
+    private void txtLoanPerMonthKeyPressedAction(KeyEvent evt) {
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            autoCompleteLoanPerMonth();
         }
     }
 
@@ -2583,9 +2586,10 @@ public class NewLoanPanel extends javax.swing.JPanel {
     }
 
     private void btnSaveLoanAccountRegister() {
+        autoCompleteLoanPerMonth();
         if (validateDataLoan()) {
             //ตรวจสอบผู้ค้ำประกัน
-            if (tbGuarantor.getRowCount() == 0) {
+            if (tbBondsman.getRowCount() == 0) {
                 int confirm = MessageAlert.showConfirm(this, "ไม่พบข้อมูลผู้ค้ำประกัน ท่านต้องการเปิดบัญชีเงินกู้หรือไม่ ?");
                 if (confirm == MessageAlert.YES_OPTION) {
                     saveLoanForm();
@@ -2599,7 +2603,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
     private void saveLoanForm() {
         //update front book
         String docType = getIDCombobox(cbLoanAcc);
-        CbLoanConfigBean cbLoanConfigBean = loanConfigControl.findOneByLoanCode(docType);
+        CbLoanConfigBean cbLoanConfigBean = loanConfigControl.findOneByLoanTypeCode(docType);
         ConfigBean configBean = configControl.findOne();
         String loanDocNo;
         if (configBean.getBranchPrefix().equals("Y")) {
@@ -2612,7 +2616,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
         String loan_person1 = "";
         String loan_person2 = "";
 
-        txtLoanDocCode.setText(loanDocNo);
+        txtLoanDocNo.setText(loanDocNo);
 
         CbLoanAccountBean cbLoanAccountBean = new CbLoanAccountBean();
         cbLoanAccountBean.setCust_code(profileBean.getP_custCode());
@@ -2631,7 +2635,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
         cbLoanAccountBean.setLoanDayQty(0);
 
         BranchBean branchBean = branchControl.getData();
-        cbLoanAccountBean.setLoan_docdate(DateFormat.getLocal_ddMMyyyy(txtStartLoanDate.getText()));
+        cbLoanAccountBean.setLoan_docdate(DateFormat.getLocal_ddMMyyyy(txtLoanDocDate.getText()));
         cbLoanAccountBean.setBranch_code(branchBean.getCode());
         cbLoanAccountBean.setLoan_datePay(DateFormat.getLocal_ddMMyyyy(txtLoanDateStart.getText()));
         cbLoanAccountBean.setPay_user("");
@@ -2668,14 +2672,14 @@ public class NewLoanPanel extends javax.swing.JPanel {
             configControl.updateLoanDocRunning();
             int confrim = MessageAlert.showConfirm(this, "ท่านต้องการพิมพ์หน้าสมุดเงินกู้ใช่หรือไม่ ?");
             if (confrim == MessageAlert.YES_OPTION) {
-                printLoanFrontBook(loanDocNo);
+                printLoanFrontBook(loanDocNo, profileBean.getP_custName()+" "+profileBean.getP_custSurname());
             }
             isStep1 = true;
 
             //ถ้าข้อมูลถูกอัพเดตเรียบร้อย
             if (isStep1) {
                 CbTransactionLoanBean tLoanBean = new CbTransactionLoanBean();
-                tLoanBean.setT_date(DateFormat.getLocal_ddMMyyyy(txtStartLoanDate.getText()));
+                tLoanBean.setT_date(DateFormat.getLocal_ddMMyyyy(txtLoanDocDate.getText()));
                 tLoanBean.setT_acccode(loanDocNo);
                 tLoanBean.setT_custcode(profileBean.getP_custCode());
                 tLoanBean.setT_description("" + cbLoanAcc.getSelectedItem());
@@ -2744,7 +2748,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
                     btnPrintLoanPaper.setEnabled(true);
                 }
 
-                txtLoanDocCode.setText(loanDocNo);
+                txtLoanDocNo.setText(loanDocNo);
 
                 loadLoanDetail(loanDocNo);
 
@@ -2845,7 +2849,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
         txtLoanDateEnd.setText(DateFormat.getLocale_ddMMyyyy(new Date()));
         txtLoanAmt.setText("0.00");
         txtPayPerMonth.setText("0.00");
-        txtLoanDocCode.setText("");
+        txtLoanDocNo.setText("");
         txtPayPerMonth.setText("0.00");
         if (cbLoanAcc.getSelectedIndex() != -1) {
             cbLoanAcc.setSelectedIndex(0);
@@ -2873,7 +2877,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
         txtImg1.setText("");
         txtImg2.setText("");
         txtImg3.setText("");
-        DefaultTableModel model2 = (DefaultTableModel) tbGuarantor.getModel();
+        DefaultTableModel model2 = (DefaultTableModel) tbBondsman.getModel();
         TableUtil.clearModel(model2);
 
         txtLoanAmt.requestFocus();
@@ -2890,12 +2894,11 @@ public class NewLoanPanel extends javax.swing.JPanel {
         return "";
     }
 
-    private void printLoanFrontBook(String loanDocNo) {
+    private void printLoanFrontBook(String loanDocNo, String accName) {
         //print หน้าปกสมุด
         PassBook_PSiPR9 view = new PassBook_PSiPR9();
         String accCode = loanDocNo;
         String barcode = accCode;
-        String accName = profileName + " ";
         String accType = getNamCB(cbLoanAcc);
         CbLoanAccountBean cbLoanAccountBean = loanAccountControl.findOneByLoanDocNo(loanDocNo);
         String bookNo = "" + cbLoanAccountBean.getBook_no();
@@ -2923,7 +2926,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
             txtPayPerMonth.requestFocus();
             return false;
         }
-        if (StringUtil.isEmpty(txtStartLoanDate.getText())) {
+        if (StringUtil.isEmpty(txtLoanDocDate.getText())) {
             return false;
         }
 
@@ -2938,7 +2941,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
         }
 
         String docType = getIDCombobox(cbLoanAcc);
-        CbLoanConfigBean cbLoanConfigBean = loanConfigControl.findOneByLoanCode(docType);
+        CbLoanConfigBean cbLoanConfigBean = loanConfigControl.findOneByLoanTypeCode(docType);
         if (loanPerMonth > cbLoanConfigBean.getLoanPerMonth()) {
             MessageAlert.warningPopup(this, "ท่านกู้เกินจำนวนงวดตามที่สัญญากำหนดไว้ ต้องไม่เกิน " + cbLoanConfigBean.getLoanPerMonth() + " งวด");
             return false;
@@ -2970,7 +2973,7 @@ public class NewLoanPanel extends javax.swing.JPanel {
     }
 
     private void btnDelGuarantor() {
-        int rowSel = tbGuarantor.getSelectedRow();
+        int rowSel = tbBondsman.getSelectedRow();
         if (rowSel == -1) {
             MessageAlert.warningPopup(this, "กรุณาเลือกรายการผู้ค้ำประกันที่ท่านต้องการลบ ?");
             return;
@@ -3017,12 +3020,12 @@ public class NewLoanPanel extends javax.swing.JPanel {
         JTableHeader tTran = tbArGroup1.getTableHeader();
         tTran.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, AppConstants.DEFAULT_FONT_SIZE));
 
-        tbGuarantor.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
-        tbGuarantor.setRowHeight(30);
-        JTableHeader tTran2 = tbGuarantor.getTableHeader();
+        tbBondsman.setFont(new Font(AppConstants.DEFAULT_FONT, Font.PLAIN, AppConstants.DEFAULT_FONT_SIZE));
+        tbBondsman.setRowHeight(30);
+        JTableHeader tTran2 = tbBondsman.getTableHeader();
         tTran2.setFont(new Font(AppConstants.DEFAULT_FONT, Font.BOLD, AppConstants.DEFAULT_FONT_SIZE));
 
-        bonsmanModel = (DefaultTableModel) tbGuarantor.getModel();
+        bonsmanModel = (DefaultTableModel) tbBondsman.getModel();
     }
 
     private String generateAutoBookNo() {

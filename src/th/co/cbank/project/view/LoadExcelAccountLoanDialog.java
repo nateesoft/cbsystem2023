@@ -255,7 +255,7 @@ public class LoadExcelAccountLoanDialog extends BaseDialogSwing {
             while ((line = br.readLine()) != null) {
                 lbMsg.setText("Loading.. " + line);
                 taLog.append(lbMsg.getText() + "\n\n");
-                CbLoanConfigBean lBean = getLoanConfigControl().findOneByLoanCode(loanCode);
+                CbLoanConfigBean lBean = getLoanConfigControl().findOneByLoanTypeCode(loanCode);
 
                 idCard1 = line;
                 if (line.equals("")) {

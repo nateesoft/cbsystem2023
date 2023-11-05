@@ -77,7 +77,7 @@ public class ProfileControl extends BaseControl {
             bean.setP_custOccupation(ThaiUtil.ASCII2Unicode(rs.getString("P_custOccupation")));
             bean.setP_custNation(ThaiUtil.ASCII2Unicode(rs.getString("P_custNation")));
             bean.setP_cust_status(rs.getString("P_cust_status"));
-            bean.setP_cust_religion(rs.getString("P_cust_religion"));
+            bean.setP_cust_religion(ThaiUtil.ASCII2Unicode(rs.getString("P_cust_religion")));
             bean.setP_spouse_name(ThaiUtil.ASCII2Unicode(rs.getString("P_spouse_name")));
             bean.setP_spouse_surname(ThaiUtil.ASCII2Unicode(rs.getString("P_spouse_surname")));
             bean.setP_spouse_sex(rs.getString("P_spouse_sex"));
@@ -145,7 +145,7 @@ public class ProfileControl extends BaseControl {
             bean.setP_custOccupation(ThaiUtil.ASCII2Unicode(rs.getString("P_custOccupation")));
             bean.setP_custNation(ThaiUtil.ASCII2Unicode(rs.getString("P_custNation")));
             bean.setP_cust_status(rs.getString("P_cust_status"));
-            bean.setP_cust_religion(rs.getString("P_cust_religion"));
+            bean.setP_cust_religion(ThaiUtil.ASCII2Unicode(rs.getString("P_cust_religion")));
             bean.setP_spouse_name(ThaiUtil.ASCII2Unicode(rs.getString("P_spouse_name")));
             bean.setP_spouse_surname(ThaiUtil.ASCII2Unicode(rs.getString("P_spouse_surname")));
             bean.setP_spouse_sex(rs.getString("P_spouse_sex"));
@@ -395,7 +395,7 @@ public class ProfileControl extends BaseControl {
                     + "p_custOccupation='" + ThaiUtil.Unicode2ASCII(bean.getP_custOccupation()) + "', "
                     + "p_custNation='" + ThaiUtil.Unicode2ASCII(bean.getP_custNation()) + "', "
                     + "p_cust_status='" + bean.getP_cust_status() + "', "
-                    + "p_cust_religion='" + bean.getP_cust_religion() + "', "
+                    + "p_cust_religion='" + ThaiUtil.Unicode2ASCII(bean.getP_cust_religion()) + "', "
                     + "p_member_end='" + DateFormat.getMySQL_Date(bean.getP_member_end()) + "', "
                     + "p_spouse_name='" + ThaiUtil.Unicode2ASCII(bean.getP_spouse_name()) + "', "
                     + "p_spouse_surname='" + ThaiUtil.Unicode2ASCII(bean.getP_spouse_surname()) + "', "

@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="PaymentPaperSlip" pageWidth="425" pageHeight="510" columnWidth="425" leftMargin="0" rightMargin="0" topMargin="62" bottomMargin="0" uuid="0d43f8ba-45b7-4fe9-b7d7-8e8588a353c5">
+	<property name="ireport.zoom" value="1.5"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="585"/>
+	<parameter name="loanTypeName" class="java.lang.String"/>
+	<parameter name="loanAccountName" class="java.lang.String"/>
+	<parameter name="loanDocDate" class="java.lang.String"/>
+	<parameter name="loanDocNo" class="java.lang.String"/>
+	<parameter name="empName" class="java.lang.String"/>
+	<parameter name="interestRateAmt" class="java.lang.String"/>
+	<parameter name="feeAmt" class="java.lang.String"/>
+	<parameter name="totalNetAmt" class="java.lang.String"/>
+	<parameter name="balanceAmt" class="java.lang.String"/>
+	<parameter name="slipNumber" class="java.lang.String"/>
+	<parameter name="branchName" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="id" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<detail>
+		<band height="300" splitType="Stretch">
+			<rectangle>
+				<reportElement x="5" y="50" width="157" height="41" forecolor="#CCCCCC" uuid="d438c194-03bd-4757-8893-966253f13c9d"/>
+			</rectangle>
+			<textField>
+				<reportElement x="243" y="153" width="107" height="20" uuid="bf53e22b-dec7-442d-b606-fbe2f4db1943"/>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="12" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{feeAmt}+" บาท"]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="290" y="265" width="124" height="1" uuid="3014d8d5-0dcf-4e62-9d76-c40309c666eb"/>
+			</line>
+			<textField>
+				<reportElement x="290" y="229" width="124" height="20" uuid="5d602c41-3169-4d7c-acaa-af96068c1973"/>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="12" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ผู้ทำรายการ " + $P{empName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="243" y="133" width="107" height="20" uuid="c26c63e5-dee0-454f-8e53-d0ba8285fbde"/>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="12" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{interestRateAmt}+" บาท"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="68" y="173" width="120" height="20" uuid="8645e571-8648-48c0-aeef-80f24a384ee3"/>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="12" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[รวมยอดรับชำระ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="10" y="268" width="406" height="20" uuid="db6317d4-b0f0-45a1-8fe9-51dc70b12be3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="10" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[******** ขอบคุณที่ใช้บริการ ********]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="243" y="173" width="107" height="20" uuid="146ce9ef-8699-4a0d-a557-f81bc088cc9d"/>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="12" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{totalNetAmt}+" บาท"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="290" y="69" width="124" height="20" uuid="6bb1a169-724e-4db2-8d16-52d6adce644a"/>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="12" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["เลขที่สัญญากู้ " + $P{loanDocNo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="5" y="70" width="157" height="20" uuid="bdff7276-3819-44c4-8055-345521e96c1d"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ชื่อผู้กู้ "+$P{loanAccountName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="290" y="49" width="124" height="20" uuid="5c62ff29-13b6-4dec-a8a2-805666900f45"/>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="12" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["วันที่ " + $P{loanDocDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="243" y="193" width="107" height="20" uuid="fec55a06-e1f2-4d40-9552-095c3bb5c234"/>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="12" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{balanceAmt}+" บาท"]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="11" y="296" width="403" height="1" uuid="9563ab4e-e80a-477d-ac6a-86fd4e84ed53"/>
+				<graphicElement>
+					<pen lineStyle="Dashed"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="140" y="90" width="168" height="20" uuid="7ec11760-9f6d-417f-b077-d04c4c0c82bc"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12" isBold="false" isUnderline="false" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[รายละเอียดการชำระ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="68" y="153" width="120" height="20" uuid="921d4aa2-3f03-4c19-9c3f-9dab3162bdf8"/>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="12" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[ค่าธรรมเนียม/ค่าปรับ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="5" y="50" width="157" height="20" uuid="cd652c22-e68b-4e96-b028-27417ff058d5"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ประเภทสัญญา "+$P{loanTypeName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="118" y="28" width="190" height="20" uuid="4f0489c3-1eec-4ab9-8c8e-b4cc908db17d"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{branchName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="371" y="10" width="45" height="20" uuid="3ada9598-ac0c-4a82-8576-1108efbfdc33"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[ต้นฉบับ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="167" y="7" width="100" height="20" uuid="ea27b679-7a69-4964-b6de-56a717bda9ec"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12" isBold="false" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[ใบเสร็จรับเงินชำระเงินกู้]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="140" y="110" width="168" height="20" uuid="322efa46-726f-4bf1-8432-c3028984df78"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["เลขที่ใบเสร็จรับเงิน " + $P{slipNumber}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="68" y="133" width="120" height="20" uuid="37c592c3-5b3e-4a9a-b23b-fe810f95d69c"/>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="12" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[ดอกเบี้ย]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="68" y="193" width="120" height="20" uuid="9ff4609d-ee14-4007-91d7-10e190a87ed3"/>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="12" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[หนี้คงเหลือหลังชำระ]]></text>
+			</staticText>
+		</band>
+		<band height="300">
+			<staticText>
+				<reportElement x="371" y="10" width="45" height="20" uuid="6806d6ba-e4dd-4b6e-b7c2-84d54853d499"/>
+				<textElement textAlignment="Right" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[( สำเนา )]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="172" y="10" width="100" height="20" uuid="f91692cf-861a-4b1a-9233-f1afb02ac965"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12" isBold="false" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[ใบเสร็จรับเงินชำระเงินกู้]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="248" y="136" width="107" height="20" uuid="3040d844-c533-4f5a-bb79-a3eede13199f"/>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="12" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{interestRateAmt}+" บาท"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="73" y="156" width="120" height="20" uuid="7f6d4f82-54ee-494a-b072-88fd9cc84af4"/>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="12" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[ค่าธรรมเนียม/ค่าปรับ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="295" y="232" width="124" height="20" uuid="51a8c14a-d307-4406-9652-7808ba12194b"/>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="12" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ผู้ทำรายการ " + $P{empName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="10" y="271" width="411" height="20" uuid="86c121fb-8c62-4db5-9b50-a909c4cbc55a"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="10" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[******** ขอบคุณที่ใช้บริการ ********]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="73" y="196" width="120" height="20" uuid="009171b8-9f0a-41af-bf16-b786de7ecd5a"/>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="12" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[หนี้คงเหลือหลังชำระ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="248" y="196" width="107" height="20" uuid="18fc7228-44e4-4325-89df-ee9736f4a0a3"/>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="12" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{balanceAmt}+" บาท"]]></textFieldExpression>
+			</textField>
+			<rectangle>
+				<reportElement x="10" y="53" width="157" height="41" forecolor="#CCCCCC" uuid="418f3170-0336-411b-919a-95e12f6fc09e"/>
+			</rectangle>
+			<textField>
+				<reportElement x="248" y="176" width="107" height="20" uuid="1f7b9a1b-ebe6-4f5c-9c29-546de9828915"/>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="12" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{totalNetAmt}+" บาท"]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="295" y="52" width="124" height="20" uuid="338ce3f7-9a33-4058-a073-e5673728705d"/>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="12" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["วันที่ " + $P{loanDocDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="145" y="113" width="168" height="20" uuid="5e100032-0fd3-45e0-91a2-bada98f4ef2a"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["เลขที่ใบเสร็จรับเงิน " + $P{slipNumber}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="73" y="136" width="120" height="20" uuid="276230c0-ab54-417e-b455-1d0f34cebc97"/>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="12" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[ดอกเบี้ย]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="248" y="156" width="107" height="20" uuid="68fc5754-61d5-4839-a166-a48409e55db5"/>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="12" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{feeAmt}+" บาท"]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="73" y="176" width="120" height="20" uuid="203ead72-bc7c-4a53-b602-6b49831ce97b"/>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="12" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[รวมยอดรับชำระ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="123" y="31" width="190" height="20" uuid="0d14db0c-39b2-44b5-95fa-f7f57a1ff438"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{branchName}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="145" y="93" width="168" height="20" uuid="21ca221e-f338-4569-aa91-980370f28755"/>
+				<textElement textAlignment="Center">
+					<font fontName="TH SarabunPSK" size="12" isBold="false" isUnderline="false" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<text><![CDATA[รายละเอียดการชำระ]]></text>
+			</staticText>
+			<line>
+				<reportElement x="295" y="268" width="124" height="1" uuid="67868d0c-a5da-4d42-834c-58fa6832cac3"/>
+			</line>
+			<textField>
+				<reportElement x="10" y="73" width="157" height="20" uuid="23ef91a8-763d-4e65-8d36-3bcab354d5b1"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ชื่อผู้กู้ "+$P{loanAccountName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="10" y="53" width="157" height="20" uuid="01b30148-8860-4919-8578-da8f9ebd65d5"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="TH SarabunPSK" size="12" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["ประเภทสัญญา "+$P{loanTypeName}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="295" y="72" width="124" height="20" uuid="43f772e5-7776-459d-b76e-e681505ddae0"/>
+				<textElement textAlignment="Right">
+					<font fontName="TH SarabunPSK" size="12" pdfFontName="/fonts/THSarabun.ttf" pdfEncoding="Identity-H" isPdfEmbedded="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA["เลขที่สัญญากู้ " + $P{loanDocNo}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

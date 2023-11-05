@@ -66,7 +66,7 @@ public class InterestControl {
         CbLoanAccountControl la = new CbLoanAccountControl();
         CbLoanAccountBean lBean = la.findOneByLoanDocNo(AccCode);
         CbLoanConfigControl loanConfig = new CbLoanConfigControl();
-        CbLoanConfigBean cBean = loanConfig.findOneByLoanCode(lBean.getLoan_type());
+        CbLoanConfigBean cBean = loanConfig.findOneByLoanTypeCode(lBean.getLoan_type());
         double balance;
         if (cBean.getIntFixed().equals("F")) {
             int period = cBean.getLoanPerMonth();

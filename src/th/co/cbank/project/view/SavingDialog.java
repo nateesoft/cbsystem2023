@@ -28,7 +28,7 @@ import th.co.cbank.project.constants.AppConstants;
 import th.co.cbank.project.control.CbProfileControl;
 import th.co.cbank.project.control.ConfigControl;
 import th.co.cbank.project.model.ConfigBean;
-import th.co.cbank.project.control.PrintCOM;
+import th.co.cbank.project.control.PrintDriver;
 import th.co.cbank.project.model.AddressBean;
 import th.co.cbank.project.model.BranchBean;
 import th.co.cbank.project.model.CbWithdrawAllowBean;
@@ -3447,7 +3447,7 @@ public class SavingDialog extends BaseDialogSwing {
     }
 
     private void printFee() {
-        PrintCOM pc = new PrintCOM();
+        PrintDriver pc = new PrintDriver();
         ConfigBean bean = getConfigControl().findOne();
         String docNo;
         if (bean.getBranchPrefix().equals("Y")) {

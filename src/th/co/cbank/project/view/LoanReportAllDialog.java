@@ -18,6 +18,7 @@ import th.co.cbank.util.NumberFormat;
 import th.co.cbank.project.constants.AppConstants;
 import th.co.cbank.project.control.ViewReport;
 import th.co.cbank.project.report.model.LoanReportAllModel;
+import th.co.cbank.project.view.popup.PreviewTextPopup;
 import th.co.cbank.util.DateChooseDialog;
 import th.co.cbank.util.MessageAlert;
 import th.co.cbank.util.TableUtil;
@@ -102,6 +103,11 @@ public class LoanReportAllDialog extends BaseDialogSwing {
             }
         });
         tbTransaction.setAutoResizeMode(javax.swing.JTable.AUTO_RESIZE_OFF);
+        tbTransaction.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbTransactionMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tbTransaction);
         if (tbTransaction.getColumnModel().getColumnCount() > 0) {
             tbTransaction.getColumnModel().getColumn(0).setPreferredWidth(50);
@@ -429,6 +435,18 @@ public class LoanReportAllDialog extends BaseDialogSwing {
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         exportReport();
     }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void tbTransactionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbTransactionMouseClicked
+        if(evt.getClickCount()==2){
+            int rowSelect = tbTransaction.getSelectedRow();
+            if(rowSelect != -1){
+                String data = tbTransaction.getValueAt(rowSelect, tbTransaction.getSelectedColumn()).toString();
+                PreviewTextPopup preview = new PreviewTextPopup(null, true, data);
+                preview.setVisible(true);
+            }
+            
+        }
+    }//GEN-LAST:event_tbTransactionMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnReset;
